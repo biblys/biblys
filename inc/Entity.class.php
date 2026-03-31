@@ -373,15 +373,6 @@ class EntityManager
 
     public function count(array $where = [])
     {
-        if ($this->siteAgnostic === false) {
-            $globalSite = LegacyCodeHelper::getGlobalSite(ignoreDeprecation: true);
-            $where['site_id'] = $globalSite->get('id');
-        }
-
-        if (method_exists($this, 'addSiteFilters')) {
-            $where = $this->addSiteFilters($where);
-        }
-
         $q = EntityManager::buildSqlQuery($where);
 
         $queryWhere = '';
@@ -402,11 +393,6 @@ class EntityManager
      */
     public function getAll(array $where = array(), array $options = array(), $withJoins = true)
     {
-        if ($this->siteAgnostic === false && !isset($where['site_id'])) {
-            $globalSite = LegacyCodeHelper::getGlobalSite(ignoreDeprecation: true);
-            $where['site_id'] = $globalSite->get('id');
-        }
-
         $q = EntityManager::buildSqlQuery($where);
 
         return $this->getQuery($q['where'], $q['params'], $options, $withJoins);
@@ -494,12 +480,6 @@ class EntityManager
      */
     public function create(array $defaults = array())
     {
-        // If not site agnostic, add site id
-        if ($this->siteAgnostic === false) {
-            $globalSite = LegacyCodeHelper::getGlobalSite();
-            $defaults['site_id'] = $globalSite->get('id');
-        }
-
         $entity = new $this->object($defaults);
 
         // Preprocess
@@ -543,7 +523,7 @@ class EntityManager
 
         $new = $this->getById($id);
         if (!$new) {
-            // This error is probably caused by differents defaults in create and getAll methods
+            // This error is probably caused by different defaults in create and getAll methods
             throw new Exception(
                 "Cannot get new ".$this->object." with id ".$id." created with query \"".$qu."\" and params ".join($params)
             );

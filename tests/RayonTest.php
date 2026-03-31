@@ -43,7 +43,6 @@ class RayonTest extends PHPUnit\Framework\TestCase
         $rayon = $rm->create(['rayon_name' => 'Arts']);
 
         $this->assertInstanceOf('Rayon', $rayon);
-        $this->assertEquals($rayon->get('site_id'), $globalSite->get('id'));
         $this->assertEquals($rayon->get('sort_by'), 'id');
         $this->assertEquals($rayon->get('sort_by_order'), 0);
 

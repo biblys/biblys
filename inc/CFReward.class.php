@@ -79,7 +79,6 @@ class CFReward extends Entity
          */
         public function create(array $defaults = array())
         {
-          if (!isset($defaults['site_id'])) $defaults['site_id'] = $this->site['site_id'];
           return parent::create($defaults);
         }
 
@@ -91,8 +90,6 @@ class CFReward extends Entity
          */
         public function getAll(array $where = array(), array $options = array(), $withJoins = true): array
         {
-          $where['site_id'] = $this->site['site_id'];
-
           return parent::getAll($where, $options);
         }
 

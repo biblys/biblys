@@ -518,7 +518,7 @@ class OrderTest extends PHPUnit\Framework\TestCase
     {
         // given
         $GLOBALS["LEGACY_CURRENT_SITE"] = EntityFactory::createSite();
-        $reward = EntityFactory::createCrowdfundingReward(["site_id" => $GLOBALS["LEGACY_CURRENT_SITE"]->get("id")]);
+        $reward = EntityFactory::createCrowdfundingReward();
         $stock = EntityFactory::createStock(["reward_id" => $reward->get("id")]);
         $order = EntityFactory::createOrder();
         $om = new OrderManager();

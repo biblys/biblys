@@ -86,9 +86,6 @@ class EventManager extends EntityManager
     
     public function create(array $defaults = array())
     {
-        if (!isset($defaults['site_id'])) {
-            $defaults['site_id'] = $this->site['site_id'];
-        }
         return parent::create($defaults);
     }
 
@@ -97,11 +94,6 @@ class EventManager extends EntityManager
      */
     public function getAll(array $where = array(), array $options = array(), $withJoins = true)
     {
-        if ($this->siteAgnostic === false && !isset($where['site_id'])) {
-            $globalSite = LegacyCodeHelper::getGlobalSite(ignoreDeprecation: true);
-            $where['site_id'] = $globalSite->get('id');
-        }
-
         return parent::getAll($where, $options);
     }
 

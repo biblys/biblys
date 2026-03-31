@@ -49,7 +49,7 @@ class Supplier extends Entity
 
             // Get links for this suppliers
             $lm = new LinkManager();
-            $links = $lm->getAll(['site_id' => $globalSite->get('id'), 'publisher_id' => 'NOT NULL', 'supplier_id' => $this->get('id')], ['withJoins' => false]);
+            $links = $lm->getAll(['publisher_id' => 'NOT NULL', 'supplier_id' => $this->get('id')], ['withJoins' => false]);
 
             // Get publishers id from links
             $publisherIds = array_map(function($link) {
@@ -74,19 +74,11 @@ class Supplier extends Entity
 
         public function create(array $defaults = array())
         {
-            if (!isset($defaults['site_id']))
-            {
-                $defaults['site_id'] = $this->site['site_id'];
-            }
             return parent::create($defaults);
         }
 
         public function getAll(array $where = array(), array $options = array(), $withJoins = true)
         {
-            if (!isset($where['site_id']))
-            {
-                $where['site_id'] = $this->site['site_id'];
-            }
             return parent::getAll($where, $options);
         }
 

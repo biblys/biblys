@@ -103,9 +103,7 @@ class EntityFactory
     public static function createCart(array $attributes = []): Cart
     {
         $cm = new CartManager();
-        return $cm->create([
-            "site_id" => $attributes["site_id"] ?? 1,
-        ]);
+        return $cm->create();
     }
 
     /**

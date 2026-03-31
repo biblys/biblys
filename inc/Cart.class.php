@@ -227,17 +227,15 @@ class CartManager extends EntityManager
 {
     protected $prefix = 'cart',
         $table = 'carts',
-        $object = 'Cart',
-        $siteAgnostic = false;
+        $object = 'Cart';
 
     /**
      * @throws Exception
      */
     public function create(array $defaults = array()): Entity
     {
-        if (empty($defaults)) $defaults = array('site_id' => $this->site['site_id'], 'cart_uid' => md5(uniqid('', true)));
+        if (empty($defaults)) $defaults = array('cart_uid' => md5(uniqid('', true)));
 
-        if (!isset($defaults['site_id'])) $defaults['site_id'] = $this->site['site_id'];
         if (!isset($defaults['cart_uid'])) $defaults['cart_uid'] = md5(uniqid('', true));
 
         return parent::create($defaults);
@@ -576,9 +574,8 @@ class CartManager extends EntityManager
     private function _createANewCopy(StockManager $sm, Article|false|int|Entity $a): Entity
     {
         $this->db->beginTransaction();
-        $s = $sm->create(array('site_id' => $this->site['site_id']));
+        $s = $sm->create();
         $s->set('article_id', $a->get('id'));
-        $s->set('site_id', $this->site['site_id']);
         $s->set('stock_selling_price', $a->get('price'));
         $s->set('stock_weight', $a->get('weight'));
         return $s;

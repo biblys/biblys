@@ -148,7 +148,7 @@ class MainControllerTest extends TestCase
             "it should return HTTP 200"
         );
         $this->assertStringContainsString(
-            "Home",
+            "Bienvenue",
             $response->getContent(),
             "it should display the home page title message"
         );

@@ -280,7 +280,7 @@ class Article extends Entity
         $globalSite = LegacyCodeHelper::getGlobalSite();
 
         $result = array();
-        $rewards = $_SQL->query('SELECT * FROM `cf_rewards` WHERE `reward_articles` LIKE "%' . $this->get('id') . '%" AND `site_id` = "' . $globalSite->get('id') . '"');
+        $rewards = $_SQL->query('SELECT * FROM `cf_rewards` WHERE `reward_articles` LIKE "%' . $this->get('id') . '%"');
         while ($r = $rewards->fetch(PDO::FETCH_ASSOC)) {
             $result[] = new CFReward($r);
         }
@@ -487,7 +487,7 @@ class Article extends Entity
 
         if ($mode == 'available') {
             foreach ($stock as $s) {
-                if (!$s->get('purchase_date') || $s->get('selling_date') || $s->get('return_date') || $s->get('lost_date') || $s->get('site_id') != LegacyCodeHelper::getGlobalSite()['site_id']) {
+                if (!$s->get('purchase_date') || $s->get('selling_date') || $s->get('return_date') || $s->get('lost_date')) {
                     continue;
                 } else {
                     $uid = $s->get('selling_price') . '-' . $s->get('condition');
@@ -844,13 +844,10 @@ class Article extends Entity
             FROM `links`
             JOIN `rayons` USING(`rayon_id`)
             WHERE `article_id` = :article_id
-                AND `links`.`site_id` = :site_id
-                AND `rayons`.`site_id` = :site_id
             ORDER BY `rayon_name`
         ");
         $sql->execute([
             ':article_id' => $this->get('id'),
-            ':site_id' => LegacyCodeHelper::getGlobalSite()->get('id')
         ]);
         $rayons = $sql->fetchAll();
 
@@ -1170,32 +1167,6 @@ class ArticleManager extends EntityManager
     }
 
     /**
-     * Add site filters if any defined
-     * @param $where
-     * @return mixed
-     * @throws Exception
-     */
-    public function addSiteFilters($where): mixed
-    {
-        if ($this->ignoreSiteFilters) {
-            return $where;
-        }
-
-        $currentSite = LegacyCodeHelper::getGlobalSite(ignoreDeprecation: true);
-
-        $publisherFilter = $currentSite->getOpt('publisher_filter');
-        if ($publisherFilter && !array_key_exists('publisher_id', $where)) {
-            $where['publisher_id'] = explode(',', $publisherFilter);
-        }
-
-        $collectionFilterHide = $currentSite->getOpt('collection_filter_hide');
-        if ($collectionFilterHide && !array_key_exists('collection_id', $where)) {
-            $where['collection_id NOT IN'] = explode(',', $collectionFilterHide);
-        }
-        return $where;
-    }
-
-    /**
      * @throws Exception
      */
     public function getAll(array $where = array(), array $options = array(), $withJoins = true): array
@@ -1212,8 +1183,6 @@ class ArticleManager extends EntityManager
             $i++;
         }
 
-        $where = $this->addSiteFilters($where);
-
         if (!empty($query)) {
             $query = implode(' AND ', $query);
             return $this->getQuery($query, $params, $options, $withJoins);
@@ -1227,8 +1196,7 @@ class ArticleManager extends EntityManager
      */
     public function countAll()
     {
-        $where = $this->addSiteFilters([]);
-        $q = EntityManager::buildSqlQuery($where);
+        $q = EntityManager::buildSqlQuery();
         $query = 'SELECT COUNT(*) FROM `' . $this->table . '` WHERE ' . $q['where'];
         $res = $this->db->prepare($query);
         $res->execute($q['params']);
@@ -1240,8 +1208,7 @@ class ArticleManager extends EntityManager
      */
     public function countAllWithoutSearchTerms()
     {
-        $where = $this->addSiteFilters([]);
-        $q = EntityManager::buildSqlQuery($where);
+        $q = EntityManager::buildSqlQuery();
         $query = 'SELECT COUNT(*) FROM `' . $this->table . '` WHERE `article_keywords_generated` IS NULL AND `article_url` IS NOT NULL';
         if (!empty($q['where'])) {
             $query .= ' AND ' . $q['where'];
@@ -1330,13 +1297,6 @@ class ArticleManager extends EntityManager
     {
         $query = array();
         $params = array();
-
-        $filters = $this->addSiteFilters([]);
-        if (count($filters)) {
-            $filters = EntityManager::buildSqlQuery($filters);
-            $query[] = $filters['where'];
-            $params = array_merge($params, $filters['params']);
-        }
 
         $i = 0;
         $keywords = explode(' ', $keywords);
@@ -1444,13 +1404,13 @@ class ArticleManager extends EntityManager
         $lm = new LinkManager();
 
         // Check if article is already in rayon
-        $link = $lm->get(['site_id' => $globalSite->get('id'), 'rayon_id' => $rayon->get('id'), 'article_id' => $article->get('id')]);
+        $link = $lm->get(['rayon_id' => $rayon->get('id'), 'article_id' => $article->get('id')]);
         if ($link) {
             throw new ArticleAlreadyInRayonException($article->get("title"), $rayon->get("name"));
         }
 
         // Create link
-        $link = $lm->create(['site_id' => $globalSite->get('id'), 'rayon_id' => $rayon->get('id'), 'article_id' => $article->get('id')]);
+        $link = $lm->create(['rayon_id' => $rayon->get('id'), 'article_id' => $article->get('id')]);
 
         // Update article metadata
         $article_links = $article->get('links') . "[rayon:" . $rayon->get('id') . "]";
@@ -1557,11 +1517,6 @@ class ArticleManager extends EntityManager
         $rayons = $article->getLinked('rayon');
         foreach ($rayons as $rayon) {
             $links .= ' [rayon:' . $rayon->get('id') . ']';
-        }
-
-        $hides = $_SQL->query("SELECT `site_id` FROM `links` WHERE `article_id` = " . $article->get('id') . " AND `link_hide` = 1");
-        while ($h = $hides->fetch()) {
-            $links .= ' [hide:' . $h["site_id"] . ']';
         }
 
         // EANs of downloadable files
@@ -1749,8 +1704,6 @@ class ArticleManager extends EntityManager
      */
     private function _countAllForWhere(array $where): mixed
     {
-        $where = $this->addSiteFilters($where);
-
         $q = EntityManager::buildSqlQuery($where);
         $query = 'SELECT COUNT(*) FROM `' . $this->table . '` WHERE ' . $q['where'];
         $res = $this->db->prepare($query);
