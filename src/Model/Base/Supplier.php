@@ -73,7 +73,7 @@ abstract class Supplier implements ActiveRecordInterface
     /**
      * The value for the site_id field.
      *
-     * @var        int
+     * @var        int|null
      */
     protected $site_id;
 
@@ -387,7 +387,7 @@ abstract class Supplier implements ActiveRecordInterface
     /**
      * Get the [site_id] column value.
      *
-     * @return int
+     * @return int|null
      */
     public function getSiteId()
     {
@@ -575,7 +575,7 @@ abstract class Supplier implements ActiveRecordInterface
     /**
      * Set the value of [site_id] column.
      *
-     * @param int $v New value
+     * @param int|null $v New value
      * @return $this The current object (for fluent API support)
      */
     public function setSiteId($v)

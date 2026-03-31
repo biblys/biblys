@@ -79,7 +79,7 @@ abstract class SpecialOffer implements ActiveRecordInterface
     /**
      * The value for the site_id field.
      *
-     * @var        int
+     * @var        int|null
      */
     protected $site_id;
 
@@ -408,7 +408,7 @@ abstract class SpecialOffer implements ActiveRecordInterface
     /**
      * Get the [site_id] column value.
      *
-     * @return int
+     * @return int|null
      */
     public function getSiteId()
     {
@@ -576,7 +576,7 @@ abstract class SpecialOffer implements ActiveRecordInterface
     /**
      * Set the value of [site_id] column.
      *
-     * @param int $v New value
+     * @param int|null $v New value
      * @return $this The current object (for fluent API support)
      */
     public function setSiteId($v)
@@ -1749,7 +1749,7 @@ abstract class SpecialOffer implements ActiveRecordInterface
     /**
      * Declares an association between this object and a ChildSite object.
      *
-     * @param ChildSite $v
+     * @param ChildSite|null $v
      * @return $this The current object (for fluent API support)
      * @throws \Propel\Runtime\Exception\PropelException
      */
@@ -1778,7 +1778,7 @@ abstract class SpecialOffer implements ActiveRecordInterface
      * Get the associated ChildSite object
      *
      * @param ConnectionInterface $con Optional Connection object.
-     * @return ChildSite The associated ChildSite object.
+     * @return ChildSite|null The associated ChildSite object.
      * @throws \Propel\Runtime\Exception\PropelException
      */
     public function getSite(?ConnectionInterface $con = null)

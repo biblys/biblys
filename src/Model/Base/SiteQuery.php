@@ -3296,7 +3296,7 @@ abstract class SiteQuery extends ModelCriteria
      *
      * @return $this The current query, for fluid interface
      */
-    public function joinInvitation(?string $relationAlias = null, ?string $joinType = Criteria::INNER_JOIN)
+    public function joinInvitation(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Invitation');
@@ -3331,7 +3331,7 @@ abstract class SiteQuery extends ModelCriteria
      *
      * @return \Model\InvitationQuery A secondary query class using the current class as primary query
      */
-    public function useInvitationQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useInvitationQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         return $this
             ->joinInvitation($relationAlias, $joinType)
@@ -3352,7 +3352,7 @@ abstract class SiteQuery extends ModelCriteria
     public function withInvitationQuery(
         callable $callable,
         string $relationAlias = null,
-        ?string $joinType = Criteria::INNER_JOIN
+        ?string $joinType = Criteria::LEFT_JOIN
     ) {
         $relatedQuery = $this->useInvitationQuery(
             $relationAlias,
@@ -5026,7 +5026,7 @@ abstract class SiteQuery extends ModelCriteria
      *
      * @return $this The current query, for fluid interface
      */
-    public function joinSpecialOffer(?string $relationAlias = null, ?string $joinType = Criteria::INNER_JOIN)
+    public function joinSpecialOffer(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('SpecialOffer');
@@ -5061,7 +5061,7 @@ abstract class SiteQuery extends ModelCriteria
      *
      * @return \Model\SpecialOfferQuery A secondary query class using the current class as primary query
      */
-    public function useSpecialOfferQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useSpecialOfferQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         return $this
             ->joinSpecialOffer($relationAlias, $joinType)
@@ -5082,7 +5082,7 @@ abstract class SiteQuery extends ModelCriteria
     public function withSpecialOfferQuery(
         callable $callable,
         string $relationAlias = null,
-        ?string $joinType = Criteria::INNER_JOIN
+        ?string $joinType = Criteria::LEFT_JOIN
     ) {
         $relatedQuery = $this->useSpecialOfferQuery(
             $relationAlias,
@@ -5545,7 +5545,7 @@ abstract class SiteQuery extends ModelCriteria
      *
      * @return $this The current query, for fluid interface
      */
-    public function joinUser(?string $relationAlias = null, ?string $joinType = Criteria::INNER_JOIN)
+    public function joinUser(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('User');
@@ -5580,7 +5580,7 @@ abstract class SiteQuery extends ModelCriteria
      *
      * @return \Model\UserQuery A secondary query class using the current class as primary query
      */
-    public function useUserQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useUserQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         return $this
             ->joinUser($relationAlias, $joinType)
@@ -5601,7 +5601,7 @@ abstract class SiteQuery extends ModelCriteria
     public function withUserQuery(
         callable $callable,
         string $relationAlias = null,
-        ?string $joinType = Criteria::INNER_JOIN
+        ?string $joinType = Criteria::LEFT_JOIN
     ) {
         $relatedQuery = $this->useUserQuery(
             $relationAlias,
@@ -5718,7 +5718,7 @@ abstract class SiteQuery extends ModelCriteria
      *
      * @return $this The current query, for fluid interface
      */
-    public function joinAuthenticationMethod(?string $relationAlias = null, ?string $joinType = Criteria::INNER_JOIN)
+    public function joinAuthenticationMethod(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('AuthenticationMethod');
@@ -5753,7 +5753,7 @@ abstract class SiteQuery extends ModelCriteria
      *
      * @return \Model\AuthenticationMethodQuery A secondary query class using the current class as primary query
      */
-    public function useAuthenticationMethodQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useAuthenticationMethodQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         return $this
             ->joinAuthenticationMethod($relationAlias, $joinType)
@@ -5774,7 +5774,7 @@ abstract class SiteQuery extends ModelCriteria
     public function withAuthenticationMethodQuery(
         callable $callable,
         string $relationAlias = null,
-        ?string $joinType = Criteria::INNER_JOIN
+        ?string $joinType = Criteria::LEFT_JOIN
     ) {
         $relatedQuery = $this->useAuthenticationMethodQuery(
             $relationAlias,

@@ -632,7 +632,7 @@
   </table>
   <table name="invitations" idMethod="native" phpName="Invitation">
     <column name="id" phpName="Id" type="INTEGER" sqlType="int unsigned" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="site_id" phpName="SiteId" type="INTEGER" sqlType="int unsigned" required="true"/>
+    <column name="site_id" phpName="SiteId" type="INTEGER" sqlType="int unsigned" />
     <column name="email" phpName="Email" type="VARCHAR" size="256" required="true"/>
     <column name="code" phpName="Code" type="VARCHAR" size="8" required="true"/>
     <column name="allows_pre_download" phpName="AllowsPreDownload" type="BOOLEAN" size="1"/>
@@ -1358,7 +1358,7 @@
     </vendor>
   </table>
   <table name="sites" idMethod="native" phpName="Site">
-    <column name="site_id" phpName="Id" type="INTEGER" sqlType="int unsigned" primaryKey="true" autoIncrement="true" required="true"/>
+    <column name="site_id" phpName="Id" type="INTEGER" sqlType="int unsigned" primaryKey="true" autoIncrement="true" />
     <column name="site_name" phpName="Name" type="VARCHAR" size="16" defaultValue=""/>
     <column name="site_pass" phpName="Pass" type="VARCHAR" size="8" defaultValue=""/>
     <column name="site_title" phpName="Title" type="VARCHAR" size="32" defaultValue=""/>
@@ -1404,7 +1404,7 @@
   </table>
   <table name="special_offers" idMethod="native" phpName="SpecialOffer">
     <column name="id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="site_id" required="true" type="INTEGER"/>
+    <column name="site_id" type="INTEGER"/>
     <foreign-key foreignTable="sites" skipSql="true">
       <reference local="site_id" foreign="site_id"/>
     </foreign-key>
@@ -1556,7 +1556,7 @@
   </table>
   <table name="suppliers" idMethod="native" phpName="Supplier">
     <column name="supplier_id" phpName="Id" type="INTEGER" sqlType="int unsigned" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="site_id" phpName="SiteId" type="INTEGER" sqlType="int unsigned" required="true"/>
+    <column name="site_id" phpName="SiteId" type="INTEGER" sqlType="int unsigned" />
     <column name="supplier_name" phpName="Name" type="VARCHAR" size="256"/>
     <column name="supplier_gln" phpName="Gln" type="BIGINT"/>
     <column name="supplier_remise" phpName="Remise" type="INTEGER" sqlType="int unsigned"/>
@@ -1608,7 +1608,7 @@
   </table>
   <table name="users" idMethod="native" phpName="User">
     <column name="id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="site_id" phpName="SiteId" type="INTEGER" required="true"/>
+    <column name="site_id" phpName="SiteId" type="INTEGER" />
     <foreign-key foreignTable="sites" skipSql="true">
       <reference local="site_id" foreign="site_id"/>
     </foreign-key>
@@ -1619,7 +1619,7 @@
   </table>
   <table name="authentication_methods" idMethod="native" phpName="AuthenticationMethod">
     <column name="id" phpName="Id" type="INTEGER" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="site_id" phpName="SiteId" type="INTEGER" required="true"/>
+    <column name="site_id" phpName="SiteId" type="INTEGER" />
     <foreign-key foreignTable="sites" skipSql="true">
       <reference local="site_id" foreign="site_id"/>
     </foreign-key>

@@ -252,7 +252,7 @@ class InvitationTableMap extends TableMap
         $this->setUseIdGenerator(true);
         // columns
         $this->addPrimaryKey('id', 'Id', 'INTEGER', true, null, null);
-        $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', true, null, null);
+        $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', false, null, null);
         $this->addColumn('email', 'Email', 'VARCHAR', true, 256, null);
         $this->addColumn('code', 'Code', 'VARCHAR', true, 8, null);
         $this->addColumn('allows_pre_download', 'AllowsPreDownload', 'BOOLEAN', false, 1, null);

@@ -699,7 +699,7 @@ abstract class InvitationQuery extends ModelCriteria
      *
      * @return $this The current query, for fluid interface
      */
-    public function joinSite(?string $relationAlias = null, ?string $joinType = Criteria::INNER_JOIN)
+    public function joinSite(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
     {
         $tableMap = $this->getTableMap();
         $relationMap = $tableMap->getRelation('Site');
@@ -734,7 +734,7 @@ abstract class InvitationQuery extends ModelCriteria
      *
      * @return \Model\SiteQuery A secondary query class using the current class as primary query
      */
-    public function useSiteQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+    public function useSiteQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
     {
         return $this
             ->joinSite($relationAlias, $joinType)
@@ -755,7 +755,7 @@ abstract class InvitationQuery extends ModelCriteria
     public function withSiteQuery(
         callable $callable,
         string $relationAlias = null,
-        ?string $joinType = Criteria::INNER_JOIN
+        ?string $joinType = Criteria::LEFT_JOIN
     ) {
         $relatedQuery = $this->useSiteQuery(
             $relationAlias,

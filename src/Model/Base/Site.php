@@ -2931,9 +2931,10 @@ abstract class Site implements ActiveRecordInterface
 
             if ($this->invitationsScheduledForDeletion !== null) {
                 if (!$this->invitationsScheduledForDeletion->isEmpty()) {
-                    \Model\InvitationQuery::create()
-                        ->filterByPrimaryKeys($this->invitationsScheduledForDeletion->getPrimaryKeys(false))
-                        ->delete($con);
+                    foreach ($this->invitationsScheduledForDeletion as $invitation) {
+                        // need to save related object because we set the relation to null
+                        $invitation->save($con);
+                    }
                     $this->invitationsScheduledForDeletion = null;
                 }
             }
@@ -3110,9 +3111,10 @@ abstract class Site implements ActiveRecordInterface
 
             if ($this->specialOffersScheduledForDeletion !== null) {
                 if (!$this->specialOffersScheduledForDeletion->isEmpty()) {
-                    \Model\SpecialOfferQuery::create()
-                        ->filterByPrimaryKeys($this->specialOffersScheduledForDeletion->getPrimaryKeys(false))
-                        ->delete($con);
+                    foreach ($this->specialOffersScheduledForDeletion as $specialOffer) {
+                        // need to save related object because we set the relation to null
+                        $specialOffer->save($con);
+                    }
                     $this->specialOffersScheduledForDeletion = null;
                 }
             }
@@ -3163,9 +3165,10 @@ abstract class Site implements ActiveRecordInterface
 
             if ($this->usersScheduledForDeletion !== null) {
                 if (!$this->usersScheduledForDeletion->isEmpty()) {
-                    \Model\UserQuery::create()
-                        ->filterByPrimaryKeys($this->usersScheduledForDeletion->getPrimaryKeys(false))
-                        ->delete($con);
+                    foreach ($this->usersScheduledForDeletion as $user) {
+                        // need to save related object because we set the relation to null
+                        $user->save($con);
+                    }
                     $this->usersScheduledForDeletion = null;
                 }
             }
@@ -3180,9 +3183,10 @@ abstract class Site implements ActiveRecordInterface
 
             if ($this->authenticationMethodsScheduledForDeletion !== null) {
                 if (!$this->authenticationMethodsScheduledForDeletion->isEmpty()) {
-                    \Model\AuthenticationMethodQuery::create()
-                        ->filterByPrimaryKeys($this->authenticationMethodsScheduledForDeletion->getPrimaryKeys(false))
-                        ->delete($con);
+                    foreach ($this->authenticationMethodsScheduledForDeletion as $authenticationMethod) {
+                        // need to save related object because we set the relation to null
+                        $authenticationMethod->save($con);
+                    }
                     $this->authenticationMethodsScheduledForDeletion = null;
                 }
             }
@@ -7533,7 +7537,7 @@ abstract class Site implements ActiveRecordInterface
                 $this->invitationsScheduledForDeletion = clone $this->collInvitations;
                 $this->invitationsScheduledForDeletion->clear();
             }
-            $this->invitationsScheduledForDeletion[]= clone $invitation;
+            $this->invitationsScheduledForDeletion[]= $invitation;
             $invitation->setSite(null);
         }
 
@@ -10235,7 +10239,7 @@ abstract class Site implements ActiveRecordInterface
                 $this->specialOffersScheduledForDeletion = clone $this->collSpecialOffers;
                 $this->specialOffersScheduledForDeletion->clear();
             }
-            $this->specialOffersScheduledForDeletion[]= clone $specialOffer;
+            $this->specialOffersScheduledForDeletion[]= $specialOffer;
             $specialOffer->setSite(null);
         }
 
@@ -11134,7 +11138,7 @@ abstract class Site implements ActiveRecordInterface
                 $this->usersScheduledForDeletion = clone $this->collUsers;
                 $this->usersScheduledForDeletion->clear();
             }
-            $this->usersScheduledForDeletion[]= clone $user;
+            $this->usersScheduledForDeletion[]= $user;
             $user->setSite(null);
         }
 
@@ -11373,7 +11377,7 @@ abstract class Site implements ActiveRecordInterface
                 $this->authenticationMethodsScheduledForDeletion = clone $this->collAuthenticationMethods;
                 $this->authenticationMethodsScheduledForDeletion->clear();
             }
-            $this->authenticationMethodsScheduledForDeletion[]= clone $authenticationMethod;
+            $this->authenticationMethodsScheduledForDeletion[]= $authenticationMethod;
             $authenticationMethod->setSite(null);
         }
 
