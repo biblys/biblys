@@ -186,7 +186,6 @@ class ErrorController extends Controller
         }
 
         $redirection = RedirectionQuery::create()
-            ->filterBySiteId($currentSite->getSite()->getId())
             ->findOneByOldUrl($currentUrl);
         if ($redirection) {
             $redirection->setLastUsedAt(new DateTime());

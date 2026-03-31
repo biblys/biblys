@@ -123,7 +123,6 @@ class AddArticleToUserLibraryUsecaseTest extends TestCase
 
         // then
         $libraryItemsForArticle = StockQuery::create()
-            ->filterBySite($site)
             ->filterByUser($user)
             ->filterByArticle($article)
             ->count();
@@ -156,7 +155,6 @@ class AddArticleToUserLibraryUsecaseTest extends TestCase
 
         // then
         $libraryItem = StockQuery::create()
-            ->filterBySite($site)
             ->filterByUser($user)
             ->filterByArticle($article)
             ->findOne();
@@ -267,7 +265,6 @@ class AddArticleToUserLibraryUsecaseTest extends TestCase
 
         // then
         $libraryItem = StockQuery::create()
-            ->filterBySite($site)
             ->filterByUser($user)
             ->filterByArticle($article)
             ->findOne();

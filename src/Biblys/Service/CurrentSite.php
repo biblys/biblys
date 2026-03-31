@@ -73,7 +73,6 @@ class CurrentSite
     public function getOption(string $key, ?string $defaultValue = null): ?string
     {
         $option = OptionQuery::create()
-            ->filterBySite($this->site)
             ->filterByKey($key)
             ->findOne();
 
@@ -106,7 +105,6 @@ class CurrentSite
     public function setOption(string $key, string $value): void
     {
         $option = OptionQuery::create()
-            ->filterBySite($this->site)
             ->filterByKey($key)
             ->findOne();
 

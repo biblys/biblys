@@ -109,7 +109,6 @@ class RedirectionControllerTest extends TestCase
         // then
         $this->assertEquals(302, $response->getStatusCode());
         $redirectionWasCreated = RedirectionQuery::create()
-            ->filterBySiteId($currentSite->getId())
             ->filterByOldUrl("/old-url")
             ->filterByNewUrl("/new-url")
             ->exists();
@@ -194,7 +193,6 @@ class RedirectionControllerTest extends TestCase
         // then
         $this->assertEquals(302, $response->getStatusCode());
         $redirectionWasDeleted = !RedirectionQuery::create()
-            ->filterBySiteId($site->getId())
             ->filterByOldUrl("/old-url")
             ->filterByNewUrl("/new-url")
             ->exists();

@@ -52,7 +52,6 @@ class RedirectionController extends Controller
         $currentUser->authAdmin();
 
         $redirections = RedirectionQuery::create()
-            ->filterBySiteId($currentSite->getId())
             ->orderByOldUrl()
             ->find();
 
@@ -82,7 +81,6 @@ class RedirectionController extends Controller
         ]);
 
         $existingRedirectionForOldUrl = RedirectionQuery::create()
-            ->filterBySiteId($currentSite->getId())
             ->filterByOldUrl($bodyParamsService->get("old_url"))
             ->findOne();
 
@@ -117,7 +115,6 @@ class RedirectionController extends Controller
         $currentUser->authAdmin();
 
         $redirection = RedirectionQuery::create()
-            ->filterBySiteId($currentSite->getId())
             ->filterById($id)
             ->findOne();
         if ($redirection) {

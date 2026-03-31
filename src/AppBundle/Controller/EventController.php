@@ -50,7 +50,6 @@ class EventController extends Controller
         $queryParams->parse(["p" => ["type" => "numeric", "default" => 0]]);
 
         $eventQuery = EventQuery::create()
-            ->filterBySiteId($currentSite->getSite()->getId())
             ->filterByPublished()
             ->filterByStart(time() - 60 * 60 * 24, Criteria::GREATER_EQUAL);
 
@@ -83,10 +82,7 @@ class EventController extends Controller
         string $slug
     ): Response
     {
-        $event = EventQuery::create()
-            ->filterByUrl($slug)
-            ->filterBySiteId($currentSite->getId())
-            ->findOne();
+        $event = EventQuery::create()->filterByUrl($slug)->findOne();
         if (!$event) {
             throw new NotFoundHttpException("Event $slug not found.");
         }

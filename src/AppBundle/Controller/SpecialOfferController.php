@@ -56,7 +56,6 @@ class SpecialOfferController extends Controller
         $currentUser->authAdmin();
 
         $offers = SpecialOfferQuery::create()
-            ->filterBySite($currentSite->getSite())
             ->find();
 
         return $templateService->renderResponse('AppBundle:SpecialOffer:index.html.twig', [
@@ -113,7 +112,6 @@ class SpecialOfferController extends Controller
         $currentUser->authAdmin();
 
         $offer = SpecialOfferQuery::create()
-            ->filterBySite($currentSite->getSite())
             ->findOneById($id);
 
         if (!$offer) {

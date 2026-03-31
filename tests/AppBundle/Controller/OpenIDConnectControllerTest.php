@@ -326,11 +326,9 @@ class OpenIDConnectControllerTest extends TestCase
         $this->assertEquals(302, $response->getStatusCode());
 
         $user = UserQuery::create()
-            ->filterBySite($site)
             ->findOneByEmail($userEmail);
         $this->assertNotNull($user);
         $authenticationMethod = AuthenticationMethodQuery::create()
-            ->filterBySite($site)
             ->filterByUser($user)
             ->filterByIdentityProvider($identityProvider)
             ->filterByExternalId($externalId)
@@ -339,7 +337,6 @@ class OpenIDConnectControllerTest extends TestCase
 
         $importDateOption = OptionQuery::create()
             ->filterByUser($user)
-            ->filterBySite($site)
             ->findOneByKey("imported_from_axys");
         $this->assertNotNull($importDateOption);
         $this->assertEquals(date("Y-m-d"), $importDateOption->getValue());
@@ -464,7 +461,6 @@ class OpenIDConnectControllerTest extends TestCase
         $this->assertEquals(302, $response->getStatusCode());
 
         $user = UserQuery::create()
-            ->filterBySite($site)
             ->findOneByEmail($userEmail);
 
         $alert->reload();
@@ -531,7 +527,6 @@ class OpenIDConnectControllerTest extends TestCase
         $this->assertEquals(302, $response->getStatusCode());
 
         $user = UserQuery::create()
-            ->filterBySite($site)
             ->findOneByEmail($userEmail);
 
         $adminRightForOtherSite->reload();
@@ -598,7 +593,6 @@ class OpenIDConnectControllerTest extends TestCase
         $this->assertEquals(302, $response->getStatusCode());
 
         $user = UserQuery::create()
-            ->filterBySite($site)
             ->findOneByEmail($userEmail);
 
         $vote->reload();
@@ -662,7 +656,6 @@ class OpenIDConnectControllerTest extends TestCase
         $this->assertEquals(302, $response->getStatusCode());
 
         $user = UserQuery::create()
-            ->filterBySite($site)
             ->findOneByEmail($userEmail);
 
         $wishlist->reload();

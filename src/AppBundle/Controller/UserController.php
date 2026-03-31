@@ -121,7 +121,6 @@ class UserController extends Controller
         $currentUser->authAdmin();
 
         $user = UserQuery::create()
-            ->filterBySite($currentSite->getSite())
             ->findPk($id);
 
         return $templateService->renderResponse("AppBundle:User:admin_informations.html.twig", [
@@ -238,7 +237,6 @@ class UserController extends Controller
         }
 
         $userAccountExists = UserQuery::create()
-            ->filterBySite($currentSite->getSite())
             ->findOneByEmail($recipientEmail);
 
         $tokenAction = "login-by-email";
@@ -316,7 +314,6 @@ class UserController extends Controller
         }
 
         $existingUser = UserQuery::create()
-            ->filterBySite($currentSite->getSite())
             ->findOneByEmail($signupToken["email"]);
         if ($existingUser) {
             throw new BadRequestHttpException("Ce lien d'inscription est invalide.");
@@ -361,7 +358,6 @@ class UserController extends Controller
         try {
             $token = $tokenService->decodeLoginToken($token);
             $user = UserQuery::create()
-                ->filterBySite($currentSite->getSite())
                 ->findOneByEmail($token["email"]);
             if (!$user) {
                 throw new BadRequestHttpException("Ce lien de connexion est invalide.");
@@ -429,7 +425,6 @@ class UserController extends Controller
     ): Response
     {
         $hasAxysMethod = AuthenticationMethodQuery::create()
-            ->filterBySite($currentSite->getSite())
             ->filterByIdentityProvider("axys")
             ->filterByUser($currentUser->getUser())
             ->exists();

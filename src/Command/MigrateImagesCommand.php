@@ -70,17 +70,15 @@ class MigrateImagesCommand extends Command
 
         $contributorPortraitsQuery = ImageQuery::create()->select(["id"])->filterByType("portrait");
         $publisherLogosQuery = ImageQuery::create()->select(["id"])->filterByType("logo");
-        $stockItemPhotosQuery = ImageQuery::create()->select(["id"])->filterByType("photo")->filterBySite($this->currentSite->getSite());
+        $stockItemPhotosQuery = ImageQuery::create()->select(["id"])->filterByType("photo");
         $postIllustrationsQuery = ImageQuery::create()
             ->select(["id"])
             ->filterByType("illustration")
-            ->filterByPostId(null, Criteria::ISNOTNULL)
-            ->filterBySite($this->currentSite->getSite());
+            ->filterByPostId(null, Criteria::ISNOTNULL);
         $eventIllustrationsQuery = ImageQuery::create()
             ->select(["id"])
             ->filterByType("illustration")
-            ->filterByEventId(null, Criteria::ISNOTNULL)
-            ->filterBySite($this->currentSite->getSite());
+            ->filterByEventId(null, Criteria::ISNOTNULL);
         $articleCoversQuery = $this->_createArticleQuery();
 
         $output->writeln($contributorPortraitsQuery->count() . " contributor portraits to migrate");

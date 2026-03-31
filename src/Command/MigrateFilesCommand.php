@@ -56,7 +56,6 @@ class MigrateFilesCommand extends Command
     public function execute(InputInterface $input, OutputInterface $output): int
     {
         $filesToMigrate = FileQuery::create()
-            ->filterBySiteId(null, Criteria::ISNULL)
             ->leftJoinWithArticle()
             ->find();
 

@@ -692,7 +692,6 @@ class InvitationControllerTest extends TestCase
             "it consumes the invitation"
         );
         $articleInLibrary = StockQuery::create()
-            ->filterBySite($site)
             ->filterByArticle($article)
             ->findOneByUserId($user->getId());
         $this->assertNotNull($articleInLibrary, "it adds the article to the user's library");
@@ -742,12 +741,10 @@ class InvitationControllerTest extends TestCase
         // then
         $this->assertEquals(302, $response->getStatusCode());
         $newLibraryItem = StockQuery::create()
-            ->filterBySite($site)
             ->filterByArticle($validArticle)
             ->findOneByUserId($user->getId());
         $this->assertNotNull($newLibraryItem, "it adds the article to the user's library");
         $existingLibraryItemsCount = StockQuery::create()
-            ->filterBySite($site)
             ->filterByArticle($articleInLibrary)
             ->filterByUser($user)
             ->count();
@@ -795,7 +792,6 @@ class InvitationControllerTest extends TestCase
             "it consumes the invitation"
         );
         $articleInLibrary = StockQuery::create()
-            ->filterBySite($site)
             ->filterByArticle($article)
             ->findOneByUserId($user->getId());
         $this->assertNotNull($articleInLibrary, "it adds the article to the user's library");
@@ -857,7 +853,6 @@ class InvitationControllerTest extends TestCase
         );
 
         $articleInLibrary1 = StockQuery::create()
-            ->filterBySite($site)
             ->filterByArticle($article1)
             ->findOneByUserId($user->getId());
         $this->assertNotNull($articleInLibrary1, "it adds the article to the user's library");
@@ -865,7 +860,6 @@ class InvitationControllerTest extends TestCase
         $this->assertNotNull($articleInLibrary1->getSellingDate());
 
         $articleInLibrary2 = StockQuery::create()
-            ->filterBySite($site)
             ->filterByArticle($article2)
             ->findOneByUserId($user->getId());
         $this->assertNotNull($articleInLibrary2, "it adds the article to the user's library");
@@ -873,7 +867,6 @@ class InvitationControllerTest extends TestCase
         $this->assertNotNull($articleInLibrary2->getSellingDate());
 
         $articleInLibrary3 = StockQuery::create()
-            ->filterBySite($site)
             ->filterByArticle($article3)
             ->findOneByUserId($user->getId());
         $this->assertNotNull($articleInLibrary3, "it adds the article to the user's library");

@@ -61,7 +61,6 @@ class OrderController extends Controller
         ]);
 
         $orderQuery = OrderQuery::create()
-            ->filterBySite($currentSite->getSite())
             ->filterByCancelDate(null, Criteria::ISNULL);
 
         if ($queryParams->getInteger("status") === 2) {
