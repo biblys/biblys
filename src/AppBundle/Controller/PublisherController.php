@@ -391,7 +391,6 @@ class PublisherController extends Controller
         if (!$user) {
             $user = new User();
             $user->setEmail($userEmail);
-            $user->setSite($currentSite->getSite());
             $user->save();
             $session->getFlashBag()->add("success", "Le compte utilisateur $userEmail a été créé.");
         }
@@ -411,7 +410,6 @@ class PublisherController extends Controller
         $right = new Right();
         $right->setPublisher($publisher);
         $right->setUser($user);
-        $right->setSite($currentSite->getSite());
         $right->save();
 
         $session->getFlashBag()->add(

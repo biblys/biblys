@@ -166,11 +166,6 @@ class ShippingControllerTest extends TestCase
         $this->assertEquals(90, $fee["max_articles"]);
         $this->assertEquals("Expedition sous 72h", $fee["info"]);
         $createdFee = ShippingOptionQuery::create()->findPk($fee["id"]);
-        $this->assertEquals(
-            1,
-            $createdFee->getSiteId(),
-            "should have created ShippingFee with site id"
-        );
     }
 
     /**

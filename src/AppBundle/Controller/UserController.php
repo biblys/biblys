@@ -321,7 +321,6 @@ class UserController extends Controller
         }
 
         $user = new User();
-        $user->setSite($currentSite->getSite());
         $user->setEmail($signupToken["email"]);
         $user->save();
 
@@ -403,7 +402,6 @@ class UserController extends Controller
     {
         $session = new Session();
         $session->setUser($user);
-        $session->setSite($currentSite->getSite());
         $session->setToken(Session::generateToken());
         $session->setExpiresAt($sessionExpiresAt);
         $session->save();

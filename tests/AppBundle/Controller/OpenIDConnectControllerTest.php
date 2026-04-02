@@ -544,7 +544,6 @@ class OpenIDConnectControllerTest extends TestCase
 
         $publisherRight->reload();
         $this->assertEquals($user->getId(), $publisherRight->getUserId());
-        $this->assertEquals($site->getId(), $publisherRight->getSiteId());
         $this->assertFalse($publisherRight->isAdmin());
         $this->assertNull($publisherRight->getAxysAccountId());
     }
@@ -605,7 +604,6 @@ class OpenIDConnectControllerTest extends TestCase
 
         $vote->reload();
         $this->assertEquals($user->getId(), $vote->getUserId());
-        $this->assertEquals($site->getId(), $vote->getSiteId());
         $this->assertNull($vote->getAxysAccountId());
     }
 
@@ -668,12 +666,10 @@ class OpenIDConnectControllerTest extends TestCase
 
         $wishlist->reload();
         $this->assertEquals($user->getId(), $wishlist->getUserId());
-        $this->assertEquals($site->getId(), $wishlist->getSiteId());
         $this->assertNull($wishlist->getAxysAccountId());
 
         $wish->reload();
         $this->assertEquals($user->getId(), $wish->getUserId());
-        $this->assertEquals($site->getId(), $wish->getSiteId());
         $this->assertNull($wish->getAxysAccountId());
     }
 

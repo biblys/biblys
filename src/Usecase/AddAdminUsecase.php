@@ -42,7 +42,6 @@ class AddAdminUsecase
         if (!$user) {
             $user = new User();
             $user->setEmail($userEmail);
-            $user->setSite($this->currentSite->getSite());
             $user->save();
             $userWasCreated = true;
         }
@@ -54,7 +53,6 @@ class AddAdminUsecase
 
         $right = new Right();
         $right->setUser($user);
-        $right->setSite($this->currentSite->getSite());
         $right->setIsAdmin(true);
         $right->save();
 
