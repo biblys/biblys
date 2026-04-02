@@ -32,7 +32,7 @@ $request->attributes->set("page_title", "Gestion des évènements");
 
 $em = new EventManager();
 
-$where = array('events`.`site_id' => $globalSite->get("id"));
+$where = [];
 
 if (!LegacyCodeHelper::getGlobalVisitor()->isAdmin())
 {

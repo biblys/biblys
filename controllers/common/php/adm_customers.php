@@ -29,7 +29,6 @@ for ($y = date('Y'); $y >= 2010; $y--) {
     $years .= '<option value="?year='.$y.'" '.$sel.'>'.$y.'</option>';
 }
 
-$params = ["site_id" => $globalSite->get("id")];
 $query = NULL;
 if (!empty($_GET['year'])) {
     $query = " AND `stock_selling_date` LIKE :year ";
@@ -51,11 +50,11 @@ $query = '
            MAX(`stock_selling_date`) AS `DateVente`
     FROM `customers`
     LEFT JOIN `stock` ON `customers`.`customer_id` = `stock`.`customer_id`
-    WHERE `customers`.`site_id` = :site_id '.$query.'
+    WHERE '.$query.'
     GROUP BY `customers`.`customer_id`
     ORDER BY `CA` DESC
 ';
-$customers = EntityManager::prepareAndExecute($query, $params);
+$customers = EntityManager::prepareAndExecute($query, []);
 
 
 $content = '

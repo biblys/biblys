@@ -111,21 +111,7 @@ if (!LegacyCodeHelper::getGlobalVisitor()->isAdmin() && !LegacyCodeHelper::getGl
 	}
 	else
 	{	
-        
-        
-        // Stand LAL
-        if (LegacyCodeHelper::getGlobalSite()['site_id'] == 11 && LegacyCodeHelper::getGlobalVisitor()->isPublisher())
-        {
-            $sum = new SubscriptionManager();
-            if ($su = $sum->get(array('site_id' => 11, 'publisher_id' => LegacyCodeHelper::getGlobalVisitor()->getCurrentRight()->get('publisher_id'))))
-            {
-                if ($su->has('subscription_type'))
-                {
-                    $s->set('location', $su->get('subscription_type'));
-                }
-            }
-                    
-        }
+
         
 		$_ECHO .= '
 			<h1><i class="fa fa-pencil"></i> '.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'</h1>

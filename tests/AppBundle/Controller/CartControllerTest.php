@@ -233,7 +233,7 @@ class CartControllerTest extends TestCase
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("getOrCreateCart")->andReturn($cart);
 
-        $reward = ModelFactory::createCrowdfundingReward(["site_id" => $site->getId()]);
+        $reward = ModelFactory::createCrowdfundingReward();
 
         // when
         $response = $controller->addCrowdfundingRewardAction($currentUser, $reward->getId());

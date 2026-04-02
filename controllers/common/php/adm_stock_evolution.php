@@ -33,7 +33,7 @@ use Biblys\Legacy\LegacyCodeHelper;
 				`article_id`, `article_pubdate`, `type_id`, `article_tva`
 		FROM `stock`
 		JOIN `articles` USING(`article_id`)
-		WHERE `site_id` = '. LegacyCodeHelper::getGlobalSite()['site_id']);
+		');
 	$stock = $stock->fetchAll(PDO::FETCH_ASSOC);
 
 	$table = NULL;

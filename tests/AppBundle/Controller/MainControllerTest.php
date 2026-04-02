@@ -121,7 +121,6 @@ class MainControllerTest extends TestCase
         ModelFactory::createPage([
             "page_title" => "Home",
             "page_url" => "home",
-            "site_id" => $site->get("id"),
             "content" => "Bienvenue",
         ]);
         $site->setOpt("home", "page:home");

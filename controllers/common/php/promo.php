@@ -28,9 +28,9 @@ if ($active_stock) {
 $articles = $_SQL->prepare("SELECT `article_id`, `article_title`, `article_url`, `article_authors`, `article_collection`, `stock_id`, `stock_selling_price`, `stock_selling_price_saved`
     FROM `articles`
     JOIN `stock` USING(`article_id`)
-    WHERE `stock`.`site_id` = :site_id AND `stock_selling_price` < `stock_selling_price_saved` AND `stock_selling_date` IS NULL AND `stock_return_date` IS NULL AND `stock_lost_date` IS NULL AND `type_id` != 7 ".$active_stock_query."
+    WHERE `stock_selling_price` < `stock_selling_price_saved` AND `stock_selling_date` IS NULL AND `stock_return_date` IS NULL AND `stock_lost_date` IS NULL AND `type_id` != 7 ".$active_stock_query."
     ORDER BY `stock_selling_price`");
-$articles->execute(['site_id' => $globalSite->get('id')]);
+$articles->execute();
 
 $num = 0;
 $table = null;
