@@ -178,7 +178,7 @@ class InventoryController extends Controller
                 `stock_purchase_date`
             FROM stock
             JOIN articles USING(`article_id`)
-            WHERE article_ean IS NOT NULL AND site_id = :site_id AND stock_condition = 'Neuf'
+            WHERE article_ean IS NOT NULL AND stock_condition = 'Neuf'
                 AND stock_purchase_date IS NOT NULL AND stock_purchase_date <= :date
                 AND (stock_selling_date IS NULL OR stock_selling_date > :date)
                 AND (stock_return_date IS NULL OR stock_return_date > :date)
@@ -186,14 +186,14 @@ class InventoryController extends Controller
             GROUP BY `article_ean`, `stock_purchase_date`
             ORDER BY stock_purchase_date DESC
         ");
-        $stocks->execute(['site_id' => LegacyCodeHelper::getGlobalSite()["site_id"], 'date' => $date." ".$time]);
+        $stocks->execute(['date' => $date." ".$time]);
         $total = count($stocks->fetchAll(PDO::FETCH_ASSOC));
 
         // Process 100 more copies
         $stocks = $_SQL->prepare("SELECT COUNT(stock_id) AS stocks, article_ean
             FROM stock
             JOIN articles USING(`article_id`)
-            WHERE article_ean IS NOT NULL AND site_id = :site_id AND stock_condition = 'Neuf'
+            WHERE article_ean IS NOT NULL AND stock_condition = 'Neuf'
                 AND stock_purchase_date IS NOT NULL AND stock_purchase_date <= :date
                 AND (stock_selling_date IS NULL OR stock_selling_date > :date)
                 AND (stock_return_date IS NULL OR stock_return_date > :date)
@@ -201,7 +201,7 @@ class InventoryController extends Controller
             GROUP BY article_ean
             LIMIT $offset, $limit
         ");
-        $stocks->execute(['site_id' => LegacyCodeHelper::getGlobalSite()["site_id"], 'date' => $date." ".$time]);
+        $stocks->execute(['date' => $date." ".$time]);
         $stocks = $stocks->fetchAll(PDO::FETCH_ASSOC);
 
         foreach ($stocks as $stock) {
