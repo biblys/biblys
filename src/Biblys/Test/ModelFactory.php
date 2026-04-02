@@ -506,7 +506,6 @@ class ModelFactory
 
         $session = new Session();
         $session->setUser($user);
-        $session->setSite($user->getSite());
         $session->setToken(Session::generateToken());
         $session->setExpiresAt(new DateTime('tomorrow'));
         $session->save();
@@ -919,7 +918,6 @@ class ModelFactory
 
         $article = $article ?? ModelFactory::createArticle();
 
-        $wish->setSiteId($wishlist->getSiteId());
         $wish->setUser($wishlist->getUser());
         $wish->setWishlistId($wishlist->getId());
         $wish->setArticleId($article->getId());

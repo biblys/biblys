@@ -130,7 +130,6 @@ class ImagesServiceTest extends TestCase
         // then
         $image = ImageQuery::create()->findOneByArticleId($article->getId());
         $this->assertInstanceOf(Image::class, $image);
-        $this->assertEquals($site, $image->getSite());
         $this->assertEquals("cover", $image->getType());
         $this->assertEquals("articles/{$article->getId()}/", $image->getFilepath());
         $this->assertEquals("cover.jpg", $image->getFilename());
@@ -434,7 +433,6 @@ class ImagesServiceTest extends TestCase
         // then
         $image = ImageQuery::create()->filterByStockItem($stockItem)->findOne();
         $this->assertInstanceOf(Image::class, $image);
-        $this->assertEquals($site, $image->getSite());
         $this->assertEquals("photo", $image->getType());
         $this->assertEquals("stockitems/{$stockItem->getId()}/", $image->getFilepath());
         $this->assertEquals("photo.png", $image->getFilename());
@@ -658,7 +656,6 @@ class ImagesServiceTest extends TestCase
         // then
         $image = ImageQuery::create()->filterByPost($post)->findOne();
         $this->assertInstanceOf(Image::class, $image);
-        $this->assertEquals($site, $image->getSite());
         $this->assertEquals("illustration", $image->getType());
         $this->assertEquals("posts/{$post->getId()}/", $image->getFilepath());
         $this->assertEquals("illustration.webp", $image->getFilename());
@@ -882,7 +879,6 @@ class ImagesServiceTest extends TestCase
         // then
         $image = ImageQuery::create()->filterByEvent($event)->findOne();
         $this->assertInstanceOf(Image::class, $image);
-        $this->assertEquals($site, $image->getSite());
         $this->assertEquals("illustration", $image->getType());
         $this->assertEquals("events/{$event->getId()}/", $image->getFilepath());
         $this->assertEquals("illustration.webp", $image->getFilename());
@@ -1107,7 +1103,6 @@ class ImagesServiceTest extends TestCase
         // then
         $image = ImageQuery::create()->findOneByPublisherId($publisher->getId());
         $this->assertInstanceOf(Image::class, $image);
-        $this->assertEquals($site, $image->getSite());
         $this->assertEquals("logo", $image->getType());
         $this->assertEquals("publishers/{$publisher->getId()}/", $image->getFilepath());
         $this->assertEquals("logo.jpg", $image->getFilename());
@@ -1331,7 +1326,6 @@ class ImagesServiceTest extends TestCase
         // then
         $image = ImageQuery::create()->findOneByContributorId($contributor->getId());
         $this->assertInstanceOf(Image::class, $image);
-        $this->assertEquals($site, $image->getSite());
         $this->assertEquals("portrait", $image->getType());
         $this->assertEquals("contributors/{$contributor->getId()}/", $image->getFilepath());
         $this->assertEquals("portrait.jpg", $image->getFilename());

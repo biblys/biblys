@@ -431,7 +431,6 @@ class InvitationController extends Controller
     ): Invitation
     {
         $invitation = new Invitation();
-        $invitation->setSite($currentSite->getSite());
         $invitation->setArticles($articles);
         $invitation->setEmail($recipientEmail);
         $invitation->setCode(Invitation::generateCode());
@@ -504,7 +503,6 @@ class InvitationController extends Controller
         $libraryItem->setArticle($article);
         $libraryItem->setUser($user);
         $libraryItem->setAllowPredownload($allowsPreDownload);
-        $libraryItem->setSite($currentSite->getSite());
         $libraryItem->setSellingPrice(0);
         $libraryItem->setSellingDate(new DateTime());
         $libraryItem->save();

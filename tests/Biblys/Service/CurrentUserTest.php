@@ -1569,7 +1569,6 @@ class CurrentUserTest extends TestCase
 
         // then
         $this->assertInstanceOf(Customer::class, $customer);
-        $this->assertEquals($site, $customer->getSite());
         $this->assertEquals($user, $customer->getUser());
     }
 

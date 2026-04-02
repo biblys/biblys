@@ -183,7 +183,6 @@ class ImportImagesCommand extends Command
 
                 if ($modelType === "stock" || $modelType === "post" || $modelType === "event") {
                     $image = ImageQuery::create()->filterByModel($model)->findOne();
-                    $image->setSiteId($model->getSiteId());
                     $image->save();
                 }
 
