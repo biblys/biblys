@@ -270,7 +270,6 @@ class ShippingControllerTest extends TestCase
         $site = ModelFactory::createSite();
         $zone = ModelFactory::createShippingZone();
         $shippingFee = ModelFactory::createShippingOption(
-            site: $site,
             type: "colissimo",
             mode: "Colissimo",
             info: "Expedition sous 72h",

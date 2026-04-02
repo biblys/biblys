@@ -1325,7 +1325,6 @@ class UserControllerTest extends TestCase
 
         $article = ModelFactory::createArticle(title: "In my library", typeId: ArticleType::EBOOK);
         ModelFactory::createStockItem(
-            site: $currentSite->getSite(),
             article: $article,
             user: $user,
             sellingDate: new DateTime(),
@@ -1382,7 +1381,6 @@ class UserControllerTest extends TestCase
 
         $article = ModelFactory::createArticle(title: "In the user library", typeId: ArticleType::EBOOK);
         ModelFactory::createStockItem(
-            site: $currentSite->getSite(),
             article: $article,
             user: $user,
             sellingDate: new DateTime(),

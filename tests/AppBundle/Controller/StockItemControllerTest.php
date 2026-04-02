@@ -71,9 +71,9 @@ class StockItemControllerTest extends TestCase
         $controller = new StockItemController();
 
         $site = ModelFactory::createSite();
-        $cart = ModelFactory::createCart(site: $site);
+        $cart = ModelFactory::createCart();
         $article = ModelFactory::createArticle(price: 500, isPriceEditable: true);
-        $stock = ModelFactory::createStockItem(site: $site, article: $article, cart: $cart);
+        $stock = ModelFactory::createStockItem( article: $article, cart: $cart);
 
         $request = new Request();
         $request->request->set("new_price", 6);
@@ -121,7 +121,7 @@ class StockItemControllerTest extends TestCase
         $controller = new StockItemController();
         $site = ModelFactory::createSite();
         $article = ModelFactory::createArticle(title: "Exemplaire à supprimer");
-        $stockItem = ModelFactory::createStockItem(site: $site, article: $article);
+        $stockItem = ModelFactory::createStockItem(article: $article);
 
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getSite")->andReturn($site);
@@ -156,7 +156,7 @@ class StockItemControllerTest extends TestCase
         // given
         $controller = new StockItemController();
         $site = ModelFactory::createSite();
-        $stockItem = ModelFactory::createStockItem(site: $site, lostDate: new DateTime());
+        $stockItem = ModelFactory::createStockItem(lostDate: new DateTime());
 
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->expects("authAdmin");

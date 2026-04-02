@@ -69,7 +69,7 @@ class ArticleControllerTest extends TestCase
             publisher: $publisher,
             collection: $collection
         );
-        ModelFactory::createStockItem(site: $site, article: $article);
+        ModelFactory::createStockItem(article: $article);
         ModelFactory::createArticle(
             title: "Au-revoir, Mao",
             authors: [$author],

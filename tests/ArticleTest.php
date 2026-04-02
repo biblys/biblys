@@ -980,12 +980,12 @@ class ArticleTest extends PHPUnit\Framework\TestCase
         $currentSite = ModelFactory::createSite();
         $articleWithStock = ModelFactory::createArticle(keywords: "Article à trouver");
         ModelFactory::createArticle(keywords: "Article à trouver");
-        ModelFactory::createStockItem(site: $currentSite, article: $articleWithStock);
-        ModelFactory::createStockItem(site: $currentSite, article: $articleWithStock);
+        ModelFactory::createStockItem(article: $articleWithStock);
+        ModelFactory::createStockItem(article: $articleWithStock);
         $otherArticleWithStockToFound = ModelFactory::createArticle(keywords: "Article à trouver aussi");
-        ModelFactory::createStockItem(site: $currentSite, article: $otherArticleWithStockToFound);
+        ModelFactory::createStockItem(article: $otherArticleWithStockToFound);
         $otherArticleWithStock = ModelFactory::createArticle(keywords: "Sans rapport");
-        ModelFactory::createStockItem(site: $currentSite, article: $otherArticleWithStock);
+        ModelFactory::createStockItem(article: $otherArticleWithStock);
         $am = new ArticleManager();
 
         // when
@@ -1008,9 +1008,9 @@ class ArticleTest extends PHPUnit\Framework\TestCase
         $currentSite = ModelFactory::createSite();
         $articleWithStock = ModelFactory::createArticle(keywords: "Article à trouver");
         ModelFactory::createArticle(keywords: "Article à trouver");
-        ModelFactory::createStockItem(site: $currentSite, article: $articleWithStock);
+        ModelFactory::createStockItem(article: $articleWithStock);
         $otherArticleWithStock = ModelFactory::createArticle(keywords: "Sans rapport");
-        ModelFactory::createStockItem(site: $currentSite, article: $otherArticleWithStock);
+        ModelFactory::createStockItem(article: $otherArticleWithStock);
         $am = new ArticleManager();
 
         // when

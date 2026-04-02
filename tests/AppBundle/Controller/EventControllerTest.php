@@ -58,7 +58,7 @@ class EventControllerTest extends TestCase
         // givens
         $controller = new EventController();
         $site = ModelFactory::createSite();
-        $event = ModelFactory::createEvent(site: $site, isPublished: true);
+        $event = ModelFactory::createEvent();
 
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("getUser")->andThrow(new UnauthorizedHttpException(""));
@@ -85,7 +85,7 @@ class EventControllerTest extends TestCase
         // given
         $controller = new EventController();
         $site = ModelFactory::createSite();
-        $event = ModelFactory::createEvent(site: $site, isPublished: false);
+        $event = ModelFactory::createEvent(isPublished: false);
 
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("isAuthenticated")->andReturn(false);
@@ -111,7 +111,7 @@ class EventControllerTest extends TestCase
         // given
         $controller = new EventController();
         $site = ModelFactory::createSite();
-        $event = ModelFactory::createEvent(site: $site, isPublished: false);
+        $event = ModelFactory::createEvent(isPublished: false);
 
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("isAuthenticated")->andReturn(true);
@@ -140,7 +140,7 @@ class EventControllerTest extends TestCase
         $controller = new EventController();
         $publisher = ModelFactory::createPublisher();
         $site = ModelFactory::createSite();
-        $event = ModelFactory::createEvent(site: $site, publisher: $publisher, isPublished: false);
+        $event = ModelFactory::createEvent(publisher: $publisher, isPublished: false);
 
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("isAuthenticated")->andReturn(true);

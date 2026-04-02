@@ -674,7 +674,7 @@ class OrderDeliveryHelpersTest extends TestCase
     {
         // given
         $site = ModelFactory::createSite();
-        $cart = ModelFactory::createCart(site: $site);
+        $cart = ModelFactory::createCart();
         $currentSite = new CurrentSite($site);
 
         // when
@@ -695,11 +695,11 @@ class OrderDeliveryHelpersTest extends TestCase
     {
         // given
         $site = ModelFactory::createSite();
-        $cart = ModelFactory::createCart(site: $site);
+        $cart = ModelFactory::createCart();
         $article = ModelFactory::createArticle(
             title: "HorsCo", availabilityDilicom: Article::AVAILABILITY_PRIVATELY_PRINTED
         );
-        ModelFactory::createStockItem(site: $site, article: $article, cart: $cart);
+        ModelFactory::createStockItem(article: $article, cart: $cart);
         $currentSite = new CurrentSite($site);
 
         // when
@@ -724,7 +724,7 @@ class OrderDeliveryHelpersTest extends TestCase
         // given
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
-        $cart = ModelFactory::createCart(site: $site);
+        $cart = ModelFactory::createCart();
 
         $targetCollection = ModelFactory::createCollection(name: "Collection cible");
         $freeArticle = ModelFactory::createArticle(
@@ -732,12 +732,12 @@ class OrderDeliveryHelpersTest extends TestCase
             collection: $targetCollection,
             availabilityDilicom: Article::AVAILABILITY_PRIVATELY_PRINTED,
         );
-        ModelFactory::createStockItem(site: $site, article: $freeArticle, cart: $cart);
+        ModelFactory::createStockItem(article: $freeArticle, cart: $cart);
 
         $article1 = ModelFactory::createArticle(collection: $targetCollection);
-        ModelFactory::createStockItem(site: $site, article: $article1, cart: $cart);
+        ModelFactory::createStockItem(article: $article1, cart: $cart);
         $article2 = ModelFactory::createArticle(collection: $targetCollection);
-        ModelFactory::createStockItem(site: $site, article: $article2, cart: $cart);
+        ModelFactory::createStockItem(article: $article2, cart: $cart);
 
         ModelFactory::createSpecialOffer(
             name: "Cado",
@@ -770,7 +770,7 @@ class OrderDeliveryHelpersTest extends TestCase
         // given
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
-        $cart = ModelFactory::createCart(site: $site);
+        $cart = ModelFactory::createCart();
 
         $targetCollection = ModelFactory::createCollection(name: "Collection cible");
         $freeArticle = ModelFactory::createArticle(
@@ -778,7 +778,7 @@ class OrderDeliveryHelpersTest extends TestCase
             collection: $targetCollection,
             availabilityDilicom: Article::AVAILABILITY_PRIVATELY_PRINTED,
         );
-        ModelFactory::createStockItem(site: $site, article: $freeArticle, cart: $cart);
+        ModelFactory::createStockItem(article: $freeArticle, cart: $cart);
 
         ModelFactory::createSpecialOffer(
             name: "Cado",
@@ -787,7 +787,7 @@ class OrderDeliveryHelpersTest extends TestCase
         );
 
         $article1 = ModelFactory::createArticle(collection: $targetCollection);
-        ModelFactory::createStockItem(site: $site, article: $article1, cart: $cart);
+        ModelFactory::createStockItem(article: $article1, cart: $cart);
 
         // when
         $exception = Helpers::runAndCatchException(function() use($currentSite, $cart) {
@@ -811,7 +811,7 @@ class OrderDeliveryHelpersTest extends TestCase
         // given
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
-        $cart = ModelFactory::createCart(site: $site);
+        $cart = ModelFactory::createCart();
 
         $targetCollection = ModelFactory::createCollection(name: "Collection cible");
         $freeArticle = ModelFactory::createArticle(
@@ -819,8 +819,8 @@ class OrderDeliveryHelpersTest extends TestCase
             collection: $targetCollection,
             availabilityDilicom: Article::AVAILABILITY_PRIVATELY_PRINTED,
         );
-        ModelFactory::createStockItem(site: $site, article: $freeArticle, cart: $cart);
-        ModelFactory::createStockItem(site: $site, article: $freeArticle, cart: $cart);
+        ModelFactory::createStockItem(article: $freeArticle, cart: $cart);
+        ModelFactory::createStockItem(article: $freeArticle, cart: $cart);
 
         ModelFactory::createSpecialOffer(
             name: "Cado",
@@ -829,9 +829,9 @@ class OrderDeliveryHelpersTest extends TestCase
         );
 
         $article1 = ModelFactory::createArticle(collection: $targetCollection);
-        ModelFactory::createStockItem(site: $site, article: $article1, cart: $cart);
+        ModelFactory::createStockItem(article: $article1, cart: $cart);
         $article2 = ModelFactory::createArticle(collection: $targetCollection);
-        ModelFactory::createStockItem(site: $site, article: $article2, cart: $cart);
+        ModelFactory::createStockItem(article: $article2, cart: $cart);
 
         // when
         $exception = Helpers::runAndCatchException(function() use($currentSite, $cart) {
@@ -855,7 +855,7 @@ class OrderDeliveryHelpersTest extends TestCase
         // given
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
-        $cart = ModelFactory::createCart(site: $site);
+        $cart = ModelFactory::createCart();
 
         $targetCollection = ModelFactory::createCollection(name: "Collection cible");
         $freeArticle = ModelFactory::createArticle(
@@ -863,16 +863,16 @@ class OrderDeliveryHelpersTest extends TestCase
             collection: $targetCollection,
             availabilityDilicom: Article::AVAILABILITY_PRIVATELY_PRINTED,
         );
-        ModelFactory::createStockItem(site: $site, article: $freeArticle, cart: $cart);
+        ModelFactory::createStockItem(article: $freeArticle, cart: $cart);
 
         ModelFactory::createSpecialOffer(
             targetCollection: $targetCollection, freeArticle: $freeArticle,
         );
 
         $article1 = ModelFactory::createArticle(collection: $targetCollection);
-        ModelFactory::createStockItem(site: $site, article: $article1, cart: $cart);
+        ModelFactory::createStockItem(article: $article1, cart: $cart);
         $article2 = ModelFactory::createArticle(collection: $targetCollection);
-        ModelFactory::createStockItem(site: $site, article: $article2, cart: $cart);
+        ModelFactory::createStockItem(article: $article2, cart: $cart);
 
         // when
         OrderDeliveryHelpers::validateCartContent($currentSite, $cart);
@@ -889,8 +889,8 @@ class OrderDeliveryHelpersTest extends TestCase
     {
         // given
         $site = ModelFactory::createSite();
-        $cart = ModelFactory::createCart(site: $site);
-        ModelFactory::createStockItem(site: $site, cart: $cart);
+        $cart = ModelFactory::createCart();
+        ModelFactory::createStockItem(cart: $cart);
         $currentSite = new CurrentSite($site);
 
         // when

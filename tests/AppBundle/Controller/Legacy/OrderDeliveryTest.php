@@ -56,9 +56,9 @@ class OrderDeliveryTest extends TestCase
         $site = ModelFactory::createSite();
         $siteManager = new SiteManager();
         $GLOBALS["LEGACY_CURRENT_SITE"] = $siteManager->getById($site->getId());
-        $cart = ModelFactory::createCart(site: $site);
+        $cart = ModelFactory::createCart();
         $article = ModelFactory::createArticle();
-        ModelFactory::createStockItem(site: $site, article: $article, cart: $cart);
+        ModelFactory::createStockItem(article: $article, cart: $cart);
         $shipping = ModelFactory::createShippingOption(type: "colissimo");
         $_POST["order_email"] = "customer@biblys.fr";
         $_POST["order_firstname"] = "Barnabé";
@@ -142,9 +142,9 @@ class OrderDeliveryTest extends TestCase
         $site = ModelFactory::createSite();
         $siteManager = new SiteManager();
         $GLOBALS["LEGACY_CURRENT_SITE"] = $siteManager->getById($site->getId());
-        $cart = ModelFactory::createCart(site: $site);
+        $cart = ModelFactory::createCart();
         $article = ModelFactory::createArticle(typeId: ArticleType::EBOOK);
-        ModelFactory::createStockItem(site: $site, article: $article, cart: $cart);
+        ModelFactory::createStockItem(article: $article, cart: $cart);
         $country = ModelFactory::createCountry();
 
         $_POST["order_email"] = "e-customer@biblys.fr";
@@ -223,9 +223,9 @@ class OrderDeliveryTest extends TestCase
         $site = ModelFactory::createSite();
         $siteManager = new SiteManager();
         $GLOBALS["LEGACY_CURRENT_SITE"] = $siteManager->getById($site->getId());
-        $cart = ModelFactory::createCart(site: $site);
+        $cart = ModelFactory::createCart();
         $article = ModelFactory::createArticle();
-        ModelFactory::createStockItem(site: $site, article: $article, cart: $cart);
+        ModelFactory::createStockItem(article: $article, cart: $cart);
         $country = ModelFactory::createCountry();
 
         $_POST["order_email"] = "e-customer@biblys.fr";
@@ -273,8 +273,6 @@ class OrderDeliveryTest extends TestCase
         $response = $controller($request, $currentSite, $urlGenerator, $currentUser, $mailer, $queryParamsService, $config);
 
         // then
-        $om = new OrderManager();
-        $order = $om->get(["order_email" => "e-customer@biblys.fr"]);
         $this->assertInstanceOf(
             "Symfony\Component\HttpFoundation\RedirectResponse",
             $response,
@@ -334,7 +332,7 @@ class OrderDeliveryTest extends TestCase
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getOption")->andReturn(null);
         $currentSite->shouldReceive("getSite")->andReturn($site);
-        $cart = ModelFactory::createCart(site: $site);
+        $cart = ModelFactory::createCart();
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("getCart")->andReturn($cart);
         $currentUser->shouldReceive("isAuthenticated")->andReturn(false);
@@ -368,9 +366,9 @@ class OrderDeliveryTest extends TestCase
         $site = ModelFactory::createSite();
         $siteManager = new SiteManager();
         $GLOBALS["LEGACY_CURRENT_SITE"] = $siteManager->getById($site->getId());
-        $cart = ModelFactory::createCart(site: $site);
+        $cart = ModelFactory::createCart();
         $article = ModelFactory::createArticle(title: "Livre commandé");
-        ModelFactory::createStockItem(site: $site, article: $article, cart: $cart);
+        ModelFactory::createStockItem(article: $article, cart: $cart);
         $country = ModelFactory::createCountry();
 
         $shipping = ModelFactory::createShippingOption(type: "colissimo");
@@ -453,9 +451,9 @@ class OrderDeliveryTest extends TestCase
         $site = ModelFactory::createSite();
         $siteManager = new SiteManager();
         $GLOBALS["LEGACY_CURRENT_SITE"] = $siteManager->getById($site->getId());
-        $cart = ModelFactory::createCart(site: $site, count: 1);
+        $cart = ModelFactory::createCart(count: 1);
         $article = ModelFactory::createArticle(title: "Livre commandé");
-        ModelFactory::createStockItem(site: $site, article: $article, cart: $cart);
+        ModelFactory::createStockItem(article: $article, cart: $cart);
         $country = ModelFactory::createCountry();
 
         $shipping = ModelFactory::createShippingOption(type: "colissimo");
@@ -520,6 +518,9 @@ class OrderDeliveryTest extends TestCase
         $this->assertTrue($stockItemInCart, "Stock item should still be in cart");
     }
 
+    /**
+     * @throws PropelException
+     */
     public function tearDown(): void
     {
         OrderQuery::create()->deleteAll();

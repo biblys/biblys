@@ -63,7 +63,7 @@ class CartHelpersTest extends TestCase
             $urlGenerator,
             $imageServices,
             $templateService,
-            ModelFactory::createCart(site: $site),
+            ModelFactory::createCart(),
         );
 
         // then
@@ -81,7 +81,7 @@ class CartHelpersTest extends TestCase
 
         ModelFactory::createSpecialOffer(
             targetCollection: $freeArticle->getBookCollection(),
-            freeArticle: $freeArticle, targetQuantity: 2, startDate: new DateTime("+1 day"),
+            freeArticle: $freeArticle, startDate: new DateTime("+1 day"),
         );
 
         $currentSite = Mockery::mock(CurrentSite::class);
@@ -98,7 +98,7 @@ class CartHelpersTest extends TestCase
             $urlGenerator,
             $imageServices,
             $templateService,
-            ModelFactory::createCart(site: $site),
+            ModelFactory::createCart(),
         );
 
         // then
@@ -133,7 +133,7 @@ class CartHelpersTest extends TestCase
             $urlGenerator,
             $imageServices,
             $templateService,
-            ModelFactory::createCart(site: $site),
+            ModelFactory::createCart(),
         );
 
         // then
@@ -154,7 +154,7 @@ class CartHelpersTest extends TestCase
             targetCollection: $targetCollection, freeArticle: $freeArticle,
         );
 
-        $cart = ModelFactory::createCart(site:$site);
+        $cart = ModelFactory::createCart();
 
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getSite")->andReturn($site);
@@ -209,7 +209,7 @@ class CartHelpersTest extends TestCase
             targetCollection: $targetCollection2, freeArticle: $freeArticle2,
         );
 
-        $cart = ModelFactory::createCart(site:$site);
+        $cart = ModelFactory::createCart();
 
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getSite")->andReturn($site);
@@ -249,11 +249,11 @@ class CartHelpersTest extends TestCase
             targetCollection: $targetCollection, freeArticle: $freeArticle,
         );
 
-        $cart = ModelFactory::createCart(site: $site);
+        $cart = ModelFactory::createCart();
         $article1 = ModelFactory::createArticle(collection: $targetCollection);
-        ModelFactory::createStockItem(site: $site, article: $article1, cart: $cart);
+        ModelFactory::createStockItem(article: $article1, cart: $cart);
         $article2 = ModelFactory::createArticle(collection: $targetCollection);
-        ModelFactory::createStockItem(site: $site, article: $article2, cart: $cart);
+        ModelFactory::createStockItem(article: $article2, cart: $cart);
 
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive('getSite')->andReturn($site);
@@ -295,18 +295,18 @@ class CartHelpersTest extends TestCase
     {
         // given
         $site = ModelFactory::createSite();
-        $cart = ModelFactory::createCart(site: $site);
+        $cart = ModelFactory::createCart();
         $targetCollection = ModelFactory::createCollection(name: "Collection cible");
         $freeArticle = ModelFactory::createArticle(title: "Cékado", collection: $targetCollection);
-        ModelFactory::createStockItem(site: $site, article: $freeArticle, cart: $cart);
+        ModelFactory::createStockItem(article: $freeArticle, cart: $cart);
         ModelFactory::createSpecialOffer(
             targetCollection: $targetCollection, freeArticle: $freeArticle,
         );
 
         $article1 = ModelFactory::createArticle(collection: $targetCollection);
-        ModelFactory::createStockItem(site: $site, article: $article1, cart: $cart);
+        ModelFactory::createStockItem(article: $article1, cart: $cart);
         $article2 = ModelFactory::createArticle(collection: $targetCollection);
-        ModelFactory::createStockItem(site: $site, article: $article2, cart: $cart);
+        ModelFactory::createStockItem(article: $article2, cart: $cart);
 
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive('getSite')->andReturn($site);

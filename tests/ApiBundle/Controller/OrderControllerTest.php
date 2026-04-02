@@ -56,9 +56,8 @@ class OrderControllerTest extends TestCase
         $controller = new OrderController();
 
         $site = ModelFactory::createSite();
-        $shippingFee = ModelFactory::createShippingOption(site: $site, type: "mondial-relay");
+        $shippingFee = ModelFactory::createShippingOption(type: "mondial-relay");
         $order = ModelFactory::createOrder(
-            site: $site,
             shippingOption: $shippingFee,
             firstName: "Éléonore",
             lastName: "Champollion",
@@ -133,7 +132,6 @@ class OrderControllerTest extends TestCase
         $site = ModelFactory::createSite();
         $shippingFee = ModelFactory::createShippingOption(type: "colissimo");
         $order = ModelFactory::createOrder(
-            site: $site,
             shippingOption: $shippingFee,
             firstName: "Éléonore",
             lastName: "Champollion",
