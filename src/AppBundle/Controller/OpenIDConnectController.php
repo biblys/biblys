@@ -215,12 +215,10 @@ class OpenIDConnectController extends Controller
             $con->beginTransaction();
 
             $user = new User();
-            $user->setSite($currentSite->getSite());
             $user->setEmail($email);
             $user->save($con);
 
             $authenticationMethod = new AuthenticationMethod();
-            $authenticationMethod->setSite($currentSite->getSite());
             $authenticationMethod->setUser($user);
             $authenticationMethod->setIdentityProvider("axys");
             $authenticationMethod->setExternalId($externalId);
@@ -325,7 +323,6 @@ class OpenIDConnectController extends Controller
                     ->filterByAxysAccountId($externalId)
                     ->find();
                 foreach ($alerts as $alert) {
-                    $alert->setSite($currentSite->getSite());
                     $alert->setUser($user);
                     $alert->setAxysAccountId(null);
                     $alert->save($con);
@@ -338,7 +335,6 @@ class OpenIDConnectController extends Controller
                     ->filterByAxysAccountId($externalId)
                     ->find();
                 foreach ($publisherRights as $adminRight) {
-                    $adminRight->setSite($currentSite->getSite());
                     $adminRight->setUser($user);
                     $adminRight->setAxysAccountId(null);
                     $adminRight->save($con);
@@ -351,7 +347,6 @@ class OpenIDConnectController extends Controller
                     ->find();
                 foreach ($votes as $vote) {
                     $vote->setUser($user);
-                    $vote->setSite($currentSite->getSite());
                     $vote->setAxysAccountId(null);
                     $vote->save($con);
                 }
@@ -363,7 +358,6 @@ class OpenIDConnectController extends Controller
                     ->find();
                 foreach ($wishlists as $wishlist) {
                     $wishlist->setUser($user);
-                    $wishlist->setSite($currentSite->getSite());
                     $wishlist->setAxysAccountId(null);
                     $wishlist->save($con);
 
@@ -372,7 +366,6 @@ class OpenIDConnectController extends Controller
                         ->find();
                     foreach ($wishes as $wish) {
                         $wish->setUser($user);
-                        $wish->setSiteId($currentSite->getSite()->getId());
                         $wish->setAxysAccountId(null);
                         $wish->save($con);
                     }
@@ -380,7 +373,6 @@ class OpenIDConnectController extends Controller
             }
 
             $importDateOption = new Option();
-            $importDateOption->setSite($currentSite->getSite());
             $importDateOption->setUser($user);
             $importDateOption->setKey("imported_from_axys");
             $importDateOption->setValue(date("Y-m-d"));

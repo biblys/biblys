@@ -98,7 +98,6 @@ class ImagesService
             default => throw new BadRequestHttpException("Le format $mediaType n'est pas supporté. Essayez avec JPEG, PNG ou WebP."),
         };
 
-        $imageModel->setSite($this->currentSite->getSite());
         $imageModel->setType($type);
         $imageModel->setArticle($article);
         $imageModel->setStockItem($stockItem);

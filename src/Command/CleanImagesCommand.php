@@ -122,7 +122,6 @@ class  CleanImagesCommand extends Command
 
             $shouldDeleteImage = $isSiteAgnostic ?
                 $image->$getterMethodName() === null :
-                $image->getSiteId() != $this->currentSite->getSite()->getId();
             [$modelType, $modelId] = $this->_getModelTypeAndId($image);
             if ($shouldDeleteImage) {
                 $this->imagesService->deleteImageByModelId($modelType, $modelId);

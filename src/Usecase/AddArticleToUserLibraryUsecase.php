@@ -56,7 +56,6 @@ class AddArticleToUserLibraryUsecase
     {
         if ($article) {
             $newItem = new Stock();
-            $newItem->setSite($currentSite->getSite());
             $newItem->setArticle($article);
             $items[] = $newItem;
         }

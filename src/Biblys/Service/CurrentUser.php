@@ -159,8 +159,6 @@ class CurrentUser
             return false;
         }
 
-        $site = $this->getCurrentSite()->getSite();
-
         return RightQuery::create()->isUserAdmin($this->user);
     }
 
@@ -303,7 +301,6 @@ class CurrentUser
 
         if (!$cart) {
             $cart = new Cart();
-            $cart->setSite($this->getCurrentSite()->getSite());
             $cart->setType("web");
 
             if ($this->isAuthenticated()) {
@@ -523,7 +520,6 @@ class CurrentUser
 
         if ($customer === null) {
             $customer = new Customer();
-            $customer->setSite($this->getCurrentSite()->getSite());
             $customer->setUser($this->getUser());
             $customer->save();
         }
