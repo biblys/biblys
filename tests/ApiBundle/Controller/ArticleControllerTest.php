@@ -59,7 +59,7 @@ class ArticleControllerTest extends TestCase
         $currentUser->shouldReceive("authAdmin")->once()->andReturn(true);
 
         $publisher = ModelFactory::createPublisher(name: "Un éditeur");
-        $collection = ModelFactory::createCollection(publisher: $publisher);
+        $collection = ModelFactory::createCollection(publisher: $publisher, name: "Import/Export");
         $author = ModelFactory::createPeople(["first_name" => "Albert", "last_name" => "Koalanstein"]);
         $article = ModelFactory::createArticle(
             title: "L'Animalie",
@@ -117,9 +117,9 @@ class ArticleControllerTest extends TestCase
         );
 
         $csv  = "EAN,Titre,Auteur·trice·s,Collection,Éditeur,Prix,Stock\n";
-        $csv .= "9781234567897,L'Animalie,\"Albert Koalanstein\",\"La Blanche\",\"Un éditeur\",15,1\n";
-        $csv .= "9781234567844,\"Au-revoir, Mao\",\"Albert Koalanstein\",\"La Blanche\",\"Un éditeur\",9.99,0\n";
-        $csv .= "9781234567833,\"Le \"\"Serpent\"\" sur la butte aux pommes\",\"Albert Koalanstein\",\"La Blanche\",\"Un éditeur\",0,0\n";
+        $csv .= "9781234567897,L'Animalie,\"Albert Koalanstein\",Import/Export,\"Un éditeur\",15,1\n";
+        $csv .= "9781234567844,\"Au-revoir, Mao\",\"Albert Koalanstein\",Import/Export,\"Un éditeur\",9.99,0\n";
+        $csv .= "9781234567833,\"Le \"\"Serpent\"\" sur la butte aux pommes\",\"Albert Koalanstein\",Import/Export,\"Un éditeur\",0,0\n";
         $this->assertEquals(
             $csv,
             $response->getContent(),
