@@ -1196,8 +1196,7 @@ class ArticleControllerTest extends TestCase
         $user = ModelFactory::createUser(email: "i.hate.tatoo@biblys.fr");
         $site = ModelFactory::createSite();
         $stock = ModelFactory::createStockItem(
-            article: $article,
-            user: $user,
+            article: $article, user: $user,
         );
 
         $currentSite = Mockery::mock(CurrentSite::class);

@@ -122,23 +122,21 @@ class CreateSeedsCommand extends Command
 
         // Stock item
         ModelFactory::createStockItem(
-            site: $site,
             article: $article,
-            sellingPrice: 999,
+            user: 999, cart: null, order: null, sellingPrice: 999,
         );
         $output->writeln(["Inserted stock item for L'Ordure du jeu"]);
 
         // Order
         $order = ModelFactory::createOrder(
-            site: $site,
+            
         );
 
         // Stock Item
         ModelFactory::createStockItem(
-            site: $site,
             article: $article,
-            order: $order,
-            sellingPrice: 999,
+            user: $order,
+            cart: 999, order: $order, sellingPrice: 999,
         );
 
         $output->writeln(["Seeds generated!"]);

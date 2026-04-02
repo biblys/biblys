@@ -315,7 +315,7 @@ class CurrentUserTest extends TestCase
     {
         // given
         $site = ModelFactory::createSite();
-        $user = ModelFactory::createAdminUser(site: $site);
+        $user = ModelFactory::createAdminUser();
         $request = RequestFactory::createAuthRequest(user: $user);
         $config = new Config(["site" => $site->getId()]);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
@@ -338,7 +338,7 @@ class CurrentUserTest extends TestCase
     {
         // given
         $site = ModelFactory::createSite();
-        $user = ModelFactory::createPublisherUser(site: $site);
+        $user = ModelFactory::createPublisherUser();
         $request = RequestFactory::createAuthRequest(user: $user);
         $config = new Config(["site" => $site->getId()]);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
@@ -403,13 +403,13 @@ class CurrentUserTest extends TestCase
     {
         // given
         $site = ModelFactory::createSite();
-        $user = ModelFactory::createAdminUser(site: $site);
+        $user = ModelFactory::createAdminUser();
         $request = RequestFactory::createAuthRequest(user: $user);
         $config = new Config(["site" => $site->getId()]);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
 
         // when
-        $isAdminForSite = $currentUser->isAdminForSite($site);
+        $isAdminForSite = $currentUser->isAdminForSite();
 
         // then
         $this->assertTrue(
@@ -432,7 +432,7 @@ class CurrentUserTest extends TestCase
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
 
         // when
-        $isAdminForSite = $currentUser->isAdminForSite($site);
+        $isAdminForSite = $currentUser->isAdminForSite();
 
         // then
         $this->assertFalse(
@@ -675,7 +675,7 @@ class CurrentUserTest extends TestCase
         $config = new Config();
         $config->set("site", $site->getId());
         $request = new Request();
-        ModelFactory::createCart(site: ModelFactory::createSite(), user: ModelFactory::createUser());
+        ModelFactory::createCart(user: ModelFactory::createUser());
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
 
         // when
@@ -697,7 +697,7 @@ class CurrentUserTest extends TestCase
         $config->set("site", $site->getId());
         $request = new Request();
         $request->cookies->set("visitor_uid", "this-visitor-uid");
-        $cart = ModelFactory::createCart(site: $site, uniqueId: "this-visitor-uid");
+        $cart = ModelFactory::createCart( uniqueId: "this-visitor-uid");
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
 
         // when
@@ -718,7 +718,7 @@ class CurrentUserTest extends TestCase
         $config->set("site", $site->getId());
         $request = new Request();
         $request->cookies->set("visitor_uid", "this-visitor-uid");
-        $cart = ModelFactory::createCart(site: $site, uniqueId: "this-visitor-uid");
+        $cart = ModelFactory::createCart( uniqueId: "this-visitor-uid");
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
 
         // when
@@ -763,7 +763,7 @@ class CurrentUserTest extends TestCase
         $user = ModelFactory::createUser();
         $request = RequestFactory::createAuthRequest("", $user);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
-        $cart = ModelFactory::createCart(site: $site, user: $user);
+        $cart = ModelFactory::createCart( user: $user);
 
         // when
         $userCart = $currentUser->getCart();
@@ -784,7 +784,7 @@ class CurrentUserTest extends TestCase
         $user = ModelFactory::createUser();
         $request = RequestFactory::createAuthRequest("", $user);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
-        $cart = ModelFactory::createCart(site: $site, user: $user);
+        $cart = ModelFactory::createCart( user: $user);
 
         // when
         $userCart = $currentUser->getOrCreateCart();
@@ -915,7 +915,7 @@ class CurrentUserTest extends TestCase
     {
         // given
         $site = ModelFactory::createSite();
-        $user = ModelFactory::createAdminUser(site: $site);
+        $user = ModelFactory::createAdminUser();
         $request = RequestFactory::createAuthRequest(user: $user);
         $config = new Config(["site" => $site->getId()]);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
@@ -1000,7 +1000,7 @@ class CurrentUserTest extends TestCase
         // given
         $publisher = ModelFactory::createPublisher();
         $site = ModelFactory::createSite();
-        $user = ModelFactory::createPublisherUser(site: $site, publisher: $publisher);
+        $user = ModelFactory::createPublisherUser( publisher: $publisher);
         $request = RequestFactory::createAuthRequest(user: $user);
         $config = new Config(["site" => $site->getId()]);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
@@ -1021,7 +1021,7 @@ class CurrentUserTest extends TestCase
         // given
         $publisher = ModelFactory::createPublisher();
         $site = ModelFactory::createSite();
-        $user = ModelFactory::createAdminUser(site: $site);
+        $user = ModelFactory::createAdminUser();
         $request = RequestFactory::createAuthRequest(user: $user);
         $config = new Config(["site" => $site->getId()]);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
@@ -1083,7 +1083,7 @@ class CurrentUserTest extends TestCase
         // given
         $publisher = ModelFactory::createPublisher();
         $site = ModelFactory::createSite();
-        $user = ModelFactory::createPublisherUser(site: $site, publisher: $publisher);
+        $user = ModelFactory::createPublisherUser( publisher: $publisher);
         $request = RequestFactory::createAuthRequest(user: $user);
         $config = new Config(["site" => $site->getId()]);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
@@ -1103,7 +1103,7 @@ class CurrentUserTest extends TestCase
     {
         // given
         $site = ModelFactory::createSite();
-        $user = ModelFactory::createAdminUser(site: $site);
+        $user = ModelFactory::createAdminUser();
         $request = RequestFactory::createAuthRequest(user: $user);
         $config = new Config(["site" => $site->getId()]);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
@@ -1149,7 +1149,7 @@ class CurrentUserTest extends TestCase
         $user = ModelFactory::createUser();
         $request = RequestFactory::createAuthRequest(user: $user);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
-        ModelFactory::createCart(site: $site, user: $user);
+        ModelFactory::createCart( user: $user);
 
         // when
         $hasArticleInCart = $currentUser->hasArticleInCart($article);
@@ -1171,8 +1171,8 @@ class CurrentUserTest extends TestCase
         $user = ModelFactory::createUser();
         $request = RequestFactory::createAuthRequest(user: $user);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
-        $cart = ModelFactory::createCart(site: $site, user: $user);
-        ModelFactory::createStockItem(site: $site, article: $article, cart: $cart);
+        $cart = ModelFactory::createCart(user: $user);
+        ModelFactory::createStockItem(article: $article, cart: $cart);
 
         // when
         $hasArticleInCart = $currentUser->hasArticleInCart($article);
@@ -1215,7 +1215,7 @@ class CurrentUserTest extends TestCase
         $user = ModelFactory::createUser();
         $request = RequestFactory::createAuthRequest(user: $user);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
-        ModelFactory::createCart(site: $site, user: $user);
+        ModelFactory::createCart( user: $user);
 
         // when
         $hasStockItemInCart = $currentUser->hasStockItemInCart($stockItem);
@@ -1236,8 +1236,8 @@ class CurrentUserTest extends TestCase
         $user = ModelFactory::createUser();
         $request = RequestFactory::createAuthRequest(user: $user);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
-        $cart = ModelFactory::createCart(site: $site, user: $user);
-        $stockItem = ModelFactory::createStockItem(site: $site, cart: $cart);
+        $cart = ModelFactory::createCart(user: $user);
+        $stockItem = ModelFactory::createStockItem(cart: $cart);
 
         // when
         $hasStockItemInCart = $currentUser->hasStockItemInCart($stockItem);
@@ -1291,11 +1291,11 @@ class CurrentUserTest extends TestCase
     {
         // given
         $site = ModelFactory::createSite();
-        $visitorCart = ModelFactory::createCart(site: $site, uniqueId: "visitor-token");
-        $stockItemInVisitorCart = ModelFactory::createStockItem(site: $site, cart: $visitorCart, sellingPrice: 999);
+        $visitorCart = ModelFactory::createCart(uniqueId: "visitor-token");
+        $stockItemInVisitorCart = ModelFactory::createStockItem(cart: $visitorCart, sellingPrice: 999);
         $user = ModelFactory::createUser();
-        $userCart = ModelFactory::createCart(site: $site, user: $user);
-        $stockItemInUserCart = ModelFactory::createStockItem(site: $site, cart: $userCart, sellingPrice: 2499);
+        $userCart = ModelFactory::createCart(user: $user);
+        $stockItemInUserCart = ModelFactory::createStockItem(cart: $userCart, sellingPrice: 2499);
 
 
         $currentSite = Mockery::mock(CurrentSite::class);
@@ -1380,7 +1380,7 @@ class CurrentUserTest extends TestCase
         $user = ModelFactory::createUser();
         $request = RequestFactory::createAuthRequest(user: $user);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
-        ModelFactory::createWishlist(site: $site, user: $user);
+        ModelFactory::createWishlist( user: $user);
 
         // when
         $hasArticleInWishlist = $currentUser->hasArticleInWishlist($article);
@@ -1402,7 +1402,7 @@ class CurrentUserTest extends TestCase
         $user = ModelFactory::createUser();
         $request = RequestFactory::createAuthRequest(user: $user);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
-        $wishlist = ModelFactory::createWishlist(site: $site, user: $user);
+        $wishlist = ModelFactory::createWishlist(user: $user);
         ModelFactory::createWish($wishlist, $article);
 
         // when
@@ -1469,7 +1469,7 @@ class CurrentUserTest extends TestCase
         $user = ModelFactory::createUser();
         $request = RequestFactory::createAuthRequest(user: $user);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
-        ModelFactory::createAlert(site: $site, user: $user, article: $article);
+        ModelFactory::createAlert(user: $user, article: $article);
 
         // when
         $hasAlertForArticle = $currentUser->hasAlertForArticle($article);
@@ -1516,7 +1516,7 @@ class CurrentUserTest extends TestCase
         $anotherUser = ModelFactory::createUser();
         $request = RequestFactory::createAuthRequest(user: $user);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
-        ModelFactory::createStockItem(site: $site, article: $article, user: $anotherUser);
+        ModelFactory::createStockItem(article: $article, user: $anotherUser);
 
         // when
         $hasPurchasedArticle = $currentUser->hasPurchasedArticle($article);
@@ -1538,7 +1538,7 @@ class CurrentUserTest extends TestCase
         $user = ModelFactory::createUser();
         $request = RequestFactory::createAuthRequest(user: $user);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
-        ModelFactory::createStockItem(site: $site, article: $article, user: $user);
+        ModelFactory::createStockItem(article: $article, user: $user);
 
         // when
         $hasPurchasedArticle = $currentUser->hasPurchasedArticle($article);
@@ -1584,7 +1584,7 @@ class CurrentUserTest extends TestCase
         $user = ModelFactory::createUser();
         $request = RequestFactory::createAuthRequest(user: $user);
         $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
-        $givenCustomer = ModelFactory::createCustomer($site, $user);
+        $givenCustomer = ModelFactory::createCustomer($user);
 
         // when
         $returnedCustomer = $currentUser->getOrCreateCustomer();

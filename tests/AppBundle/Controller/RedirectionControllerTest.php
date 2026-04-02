@@ -22,7 +22,6 @@ use Biblys\Service\BodyParamsService;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\FlashMessagesService;
-use Biblys\Service\QueryParamsService;
 use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
 use Mockery;
@@ -53,7 +52,7 @@ class RedirectionControllerTest extends TestCase
         $controller = new RedirectionController();
 
         $site = ModelFactory::createSite();
-        ModelFactory::createRedirection(site: $site, oldUrl: "/old-url", newUrl: "/new-url");
+        ModelFactory::createRedirection(oldUrl: "/old-url", newUrl: "/new-url");
 
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->method("authAdmin");
@@ -127,7 +126,7 @@ class RedirectionControllerTest extends TestCase
         $controller = new RedirectionController();
 
         $site = ModelFactory::createSite();
-        $redirection = ModelFactory::createRedirection(site: $site, oldUrl: "/old-url", newUrl: "/new-url");
+        $redirection = ModelFactory::createRedirection(oldUrl: "/old-url", newUrl: "/new-url");
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->method("authAdmin");
         $currentSite = $this->createMock(CurrentSite::class);
@@ -168,7 +167,7 @@ class RedirectionControllerTest extends TestCase
         // given
         $controller = new RedirectionController();
         $site = ModelFactory::createSite();
-        $redirection = ModelFactory::createRedirection(site: $site, oldUrl: "/old-url", newUrl: "/new-url");
+        $redirection = ModelFactory::createRedirection(oldUrl: "/old-url", newUrl: "/new-url");
 
         $currentUser = $this->createMock(CurrentUser::class);
         $currentUser->method("authAdmin");

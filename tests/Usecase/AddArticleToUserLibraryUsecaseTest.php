@@ -112,7 +112,7 @@ class AddArticleToUserLibraryUsecaseTest extends TestCase
         $article = ModelFactory::createArticle(
             title: "Already", typeId: ArticleType::EBOOK, publisher: $publisher
         );
-        ModelFactory::createStockItem(site: $site, article: $article, user: $user);
+        ModelFactory::createStockItem(article: $article, user: $user);
         $mailer = Mockery::mock(Mailer::class);
         $usecase = new AddArticleToUserLibraryUsecase($mailer);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
@@ -181,7 +181,7 @@ class AddArticleToUserLibraryUsecaseTest extends TestCase
         $currentSite->setOption("downloadable_publishers", $publisher->getId());
         $article = ModelFactory::createArticle(title: 'Already', typeId: ArticleType::EBOOK, publisher:
             $publisher);
-        $item = ModelFactory::createStockItem(site: $site, article: $article, user: $otherUser);
+        $item = ModelFactory::createStockItem(article: $article, user: $otherUser);
         $mailer = Mockery::mock(Mailer::class);
         $usecase = new AddArticleToUserLibraryUsecase($mailer);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
@@ -210,9 +210,9 @@ class AddArticleToUserLibraryUsecaseTest extends TestCase
         $publisher = ModelFactory::createPublisher(name: "Autorisé");
         $currentSite->setOption("downloadable_publishers", $publisher->getId());
         $article1 = ModelFactory::createArticle(title: 'Ebook 1', typeId: ArticleType::EBOOK, publisher: $publisher);
-        $item1 = ModelFactory::createStockItem(site: $site, article: $article1);
+        $item1 = ModelFactory::createStockItem(article: $article1);
         $article2 = ModelFactory::createArticle(title: 'Ebook 2', typeId: ArticleType::EAUDIOBOOK, publisher: $publisher);
-        $item2 = ModelFactory::createStockItem(site: $site, article: $article2);
+        $item2 = ModelFactory::createStockItem(article: $article2);
         $mailer = Mockery::mock(Mailer::class);
         $mailer->shouldReceive("send");
         $usecase = new AddArticleToUserLibraryUsecase($mailer);

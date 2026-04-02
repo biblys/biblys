@@ -57,7 +57,7 @@ class CartControllerTest extends TestCase
         $site = ModelFactory::createSite();
         ModelFactory::createSiteOption(key: "virtual_stock", value: 1);
         LegacyCodeHelper::setGlobalSite($site);
-        $cart = ModelFactory::createCart(site: $site);
+        $cart = ModelFactory::createCart();
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("getOrCreateCart")->andReturn($cart);
 
@@ -107,7 +107,7 @@ class CartControllerTest extends TestCase
         $site = ModelFactory::createSite();
         ModelFactory::createSiteOption(key: "virtual_stock", value: 1);
         LegacyCodeHelper::setGlobalSite($site);
-        $cart = ModelFactory::createCart(site: $site);
+        $cart = ModelFactory::createCart();
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("getOrCreateCart")->andReturn($cart);
 
@@ -186,9 +186,9 @@ class CartControllerTest extends TestCase
         $controller = new CartController();
 
         $site = ModelFactory::createSite();
-        $stock = ModelFactory::createStockItem(site: $site);
+        $stock = ModelFactory::createStockItem();
         LegacyCodeHelper::setGlobalSite($site);
-        $cart = ModelFactory::createCart(site: $site);
+        $cart = ModelFactory::createCart();
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("getOrCreateCart")->andReturn($cart);
 
@@ -229,7 +229,7 @@ class CartControllerTest extends TestCase
         $site = ModelFactory::createSite();
         LegacyCodeHelper::setGlobalSite($site);
         ModelFactory::createSiteOption(key: "virtual_stock", value: 1);
-        $cart = ModelFactory::createCart(site: $site);
+        $cart = ModelFactory::createCart();
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("getOrCreateCart")->andReturn($cart);
 
@@ -273,11 +273,11 @@ class CartControllerTest extends TestCase
         $site = ModelFactory::createSite();
         LegacyCodeHelper::setGlobalSite($site);
         ModelFactory::createSiteOption(key: "virtual_stock", value: 1);
-        $cart = ModelFactory::createCart(site: $site);
+        $cart = ModelFactory::createCart();
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("getOrCreateCart")->andReturn($cart);
 
-        $stockItem = ModelFactory::createStockItem(site: $site, cart: $cart);
+        $stockItem = ModelFactory::createStockItem(cart: $cart);
 
         $request = new Request();
         $request->headers->set("Accept", "application/json");
@@ -319,11 +319,11 @@ class CartControllerTest extends TestCase
         $site = ModelFactory::createSite();
         LegacyCodeHelper::setGlobalSite($site);
         ModelFactory::createSiteOption(key: "virtual_stock", value: 1);
-        $cart = ModelFactory::createCart(site: $site);
+        $cart = ModelFactory::createCart();
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("getOrCreateCart")->andReturn($cart);
 
-        $stockItem = ModelFactory::createStockItem(site: $site, cart: $cart);
+        $stockItem = ModelFactory::createStockItem(cart: $cart);
 
         $request = new Request();
         $request->headers->set("Accept", "text/html");
@@ -369,7 +369,7 @@ class CartControllerTest extends TestCase
         // given
         $site = ModelFactory::createSite();
         LegacyCodeHelper::setGlobalSite($site);
-        $cart = ModelFactory::createCart(site: $site);
+        $cart = ModelFactory::createCart();
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("getCart")->andReturn($cart);
 
@@ -404,7 +404,7 @@ class CartControllerTest extends TestCase
 
         $site = ModelFactory::createSite();
         LegacyCodeHelper::setGlobalSite($site);
-        $cart = ModelFactory::createCart(site: $site, amount: 500, count: 1);
+        $cart = ModelFactory::createCart(amount: 500, count: 1);
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("getCart")->andReturn($cart);
 

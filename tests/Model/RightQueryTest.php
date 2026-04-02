@@ -54,7 +54,7 @@ class RightQueryTest extends TestCase
     {
         // given
         $site = ModelFactory::createSite();
-        $user = ModelFactory::createPublisherUser(site: $site);
+        $user = ModelFactory::createPublisherUser();
 
         // when
         $isAdmin = RightQuery::create()->isUserAdmin($user);
@@ -70,7 +70,7 @@ class RightQueryTest extends TestCase
     {
         // given
         $site = ModelFactory::createSite();
-        $user = ModelFactory::createAdminUser(site: $site);
+        $user = ModelFactory::createAdminUser();
 
         // when
         $isAdmin = RightQuery::create()->isUserAdmin($user);

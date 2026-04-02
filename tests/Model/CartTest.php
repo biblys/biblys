@@ -35,9 +35,9 @@ class CartTest extends TestCase
         // given
         $cart = ModelFactory::createCart();
         $physicalArticle = ModelFactory::createArticle();
-        ModelFactory::createStockItem(article: $physicalArticle, cart: $cart);
+        ModelFactory::createStockItem(article: $physicalArticle, user: null, cart: $cart);
         $downloadableArticle = ModelFactory::createArticle(typeId: ArticleType::EBOOK);
-        ModelFactory::createStockItem(article: $downloadableArticle, cart: $cart);
+        ModelFactory::createStockItem(article: $downloadableArticle, user: null, cart: $cart);
 
         // when
         $count = $cart->getPhysicalArticleCount();
@@ -54,9 +54,9 @@ class CartTest extends TestCase
         // given
         $cart = ModelFactory::createCart();
         $physicalArticle = ModelFactory::createArticle();
-        ModelFactory::createStockItem(article: $physicalArticle, cart: $cart);
+        ModelFactory::createStockItem(article: $physicalArticle, user: null, cart: $cart);
         $downloadableArticle = ModelFactory::createArticle(typeId: ArticleType::EBOOK);
-        ModelFactory::createStockItem(article: $downloadableArticle, cart: $cart);
+        ModelFactory::createStockItem(article: $downloadableArticle, user: null, cart: $cart);
 
         // when
         $count = $cart->getDownloadableArticleCount();
@@ -73,7 +73,7 @@ class CartTest extends TestCase
         // given
         $cart = ModelFactory::createCart();
         $downloadableArticle = ModelFactory::createArticle(typeId: ArticleType::EBOOK);
-        ModelFactory::createStockItem(article: $downloadableArticle, cart: $cart);
+        ModelFactory::createStockItem(article: $downloadableArticle, user: null, cart: $cart);
 
         // when
         $contains = $cart->containsPhysicalArticles();
@@ -90,9 +90,9 @@ class CartTest extends TestCase
         // given
         $cart = ModelFactory::createCart();
         $physicalArticle = ModelFactory::createArticle();
-        ModelFactory::createStockItem(article: $physicalArticle, cart: $cart);
+        ModelFactory::createStockItem(article: $physicalArticle, user: null, cart: $cart);
         $downloadableArticle = ModelFactory::createArticle(typeId: ArticleType::EBOOK);
-        ModelFactory::createStockItem(article: $downloadableArticle, cart: $cart);
+        ModelFactory::createStockItem(article: $downloadableArticle, user: null, cart: $cart);
 
         // when
         $contains = $cart->containsPhysicalArticles();
@@ -109,7 +109,7 @@ class CartTest extends TestCase
         // given
         $cart = ModelFactory::createCart();
         $physicalArticle = ModelFactory::createArticle();
-        ModelFactory::createStockItem(article: $physicalArticle, cart: $cart);
+        ModelFactory::createStockItem(article: $physicalArticle, user: null, cart: $cart);
 
         // when
         $contains = $cart->containsDownloadableArticles();
@@ -126,9 +126,9 @@ class CartTest extends TestCase
         // given
         $cart = ModelFactory::createCart();
         $physicalArticle = ModelFactory::createArticle();
-        ModelFactory::createStockItem(article: $physicalArticle, cart: $cart);
+        ModelFactory::createStockItem(article: $physicalArticle, user: null, cart: $cart);
         $downloadableArticle = ModelFactory::createArticle(typeId: ArticleType::EBOOK);
-        ModelFactory::createStockItem(article: $downloadableArticle, cart: $cart);
+        ModelFactory::createStockItem(article: $downloadableArticle, user: null, cart: $cart);
 
         // when
         $contains = $cart->containsDownloadableArticles();

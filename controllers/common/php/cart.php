@@ -287,7 +287,6 @@ return function (
         if ($currentUser->isAuthenticated()) {
             $orderInProgress = OrderQuery::create()
                 ->filterByUser($currentUser->getUser())
-                ->filterBySite($currentSite->getSite())
                 ->filterByPaymentDate(null, Criteria::ISNULL)
                 ->filterByShippingDate(null, Criteria::ISNULL)
                 ->filterByCancelDate(null, Criteria::ISNULL)
