@@ -57,11 +57,9 @@ class CreateSeedsCommand extends Command
         // Admin
         $admin = new User();
         $admin->setEmail("admin@paronymie.fr");
-        $admin->setSite($site);
         $admin->save();
 
         $right = new Right();
-        $right->setSite($site);
         $right->setUser($admin);
         $right->setIsAdmin(true);
         $right->save();
@@ -69,7 +67,6 @@ class CreateSeedsCommand extends Command
 
         // Simple user
         $user = new User();
-        $user->setSite($site);
         $user->setEmail("user@paronymie.fr");
         $user->save();
         $output->writeln(["Inserted user: user@paronymie.fr"]);
@@ -82,20 +79,17 @@ class CreateSeedsCommand extends Command
 
         // User with publisher right
         $publisherUser = new User();
-        $publisherUser->setSite($site);
         $publisherUser->setEmail("publisher@paronymie.fr");
         $publisherUser->save();
 
         $right = new Right();
         $right->setUser($publisherUser);
         $right->setPublisher($publisher);
-        $right->setSite($site);
         $right->save();
         $output->writeln(["Inserted user: publisher@paronymie.fr"]);
 
         // Site
         $shippingFee = new ShippingOption();
-        $shippingFee->setSiteId($site->getId());
         $shippingFee->setMode("Expédition France et Monde");
         $shippingFee->setType("normal");
         $shippingFee->setShippingZoneId(1);

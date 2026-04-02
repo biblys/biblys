@@ -288,7 +288,7 @@ class ShippingControllerTest extends TestCase
         $request->query->set("order_amount", "2000");
         $request->query->set("article_count", "2");
         $currentSite = new CurrentSite($site);
-        ModelFactory::createSiteOption($site,"shipping_packaging_weight", "100");
+        ModelFactory::createSiteOption("shipping_packaging_weight", "100");
 
         // when
         $response = $controller->search($request, $currentSite);
