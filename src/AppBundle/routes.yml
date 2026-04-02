@@ -196,10 +196,6 @@ crons_test:
   path: /crons/test
   controller: AppBundle\Controller\CronsController::testAction
 
-crons_export_pdl:
-  path: /crons/export-pdl
-  controller: AppBundle\Controller\CronsController::exportPdlAction
-
 # Crowdfunding
 
 ## Campaigns
