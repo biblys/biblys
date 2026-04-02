@@ -179,9 +179,8 @@ function _displayMediaFile(string $getDir, CurrentSite $currentSite, string $fil
     ';
 
     $mediaFileQuery = EntityManager::prepareAndExecute(
-        'SELECT * FROM `medias` WHERE `site_id` = :site_id AND `media_dir` = :media_dir AND `media_file` = :media_file AND `media_ext` = :media_ext LIMIT 1',
+        'SELECT * FROM `medias` WHERE `media_dir` = :media_dir AND `media_file` = :media_file AND `media_ext` = :media_ext LIMIT 1',
         [
-            "site_id" => $currentSite->getId(),
             "media_dir" => $getDir,
             "media_file" => $fileName,
             "media_ext" => $fileExt,
@@ -195,8 +194,8 @@ function _displayMediaFile(string $getDir, CurrentSite $currentSite, string $fil
 
     $categories_options = null;
     $categories = EntityManager::prepareAndExecute(
-        'SELECT `category_id`, `category_name` FROM `categories` WHERE `site_id` = :site_id',
-        ['site_id' => $currentSite->getId()]
+        'SELECT `category_id`, `category_name` FROM `categories`',
+        []
     );
     while ($c = $categories->fetch(PDO::FETCH_ASSOC)) {
         $categories_options .= '<option value="' . $c['category_id'] . '" ' . ($m['category_id'] == $c['category_id'] ? 'selected' : null) . '>' . $c['category_name'] . '</option>';

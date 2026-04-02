@@ -632,9 +632,7 @@ return function (
     $invoice = '<input type="text" name="stock_invoice" id="stock_invoice" value="' . $stockEntity['stock_invoice'] . '" />';
     if (empty($stockEntity['stock_invoice'])) {
         $invoicesQuery = EntityManager::prepareAndExecute(
-            'SELECT `stock_invoice` FROM `stock` WHERE `site_id` = :site_id
-                    GROUP BY `stock_invoice`',
-            ['site_id' => $currentSite->getId()]
+            'SELECT `stock_invoice` FROM `stock` GROUP BY `stock_invoice`',
         );
         $invoices = $invoicesQuery->fetchAll(PDO::FETCH_ASSOC);
         $invoices_options = null;

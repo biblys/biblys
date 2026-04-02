@@ -82,8 +82,8 @@ $query = EntityManager::prepareAndExecute('SELECT
     JOIN `orders` AS `o` ON `s`.`order_id` = `o`.`order_id`
     JOIN `articles` AS `a` ON `s`.`article_id` = `a`.`article_id`
     LEFT JOIN `customers` AS `c` ON `c`.`customer_id` = `o`.`customer_id`
-    WHERE `s`.`site_id` = :site_id AND `o`.`site_id` = :site_id AND `o`.`order_payment_date` IS NOT NULL AND `stock_selling_date` IS NOT NULL '.$_QUERY.'
-    ', array_merge($params, ["site_id" => $globalSite->get("id")])
+    WHERE  `o`.`order_payment_date` IS NOT NULL AND `stock_selling_date` IS NOT NULL '.$_QUERY.'
+    ', $params
 );
 
 $sales = $query->fetchAll();
@@ -118,8 +118,7 @@ foreach ($types as $t) {
 }
 
 // Rayons
-$rayons = $_SQL->query('SELECT `rayon_id`, `rayon_name` FROM `rayons` WHERE `site_id` = '
-    .$globalSite->get("id").' ORDER BY `rayon_order`');
+$rayons = $_SQL->query('SELECT `rayon_id`, `rayon_name` FROM `rayons` ORDER BY `rayon_order`');
 $rayons = $rayons->fetchAll(PDO::FETCH_ASSOC);
 $ra = array();
 foreach ($rayons as $r) {
@@ -725,13 +724,12 @@ function _getDatesOptions(
     SELECT 
         DATE_FORMAT(`order_payment_date`, :format) AS `date`
     FROM `orders` 
-    WHERE `orders`.`site_id` = :site_id 
-        AND `order_cancel_date` IS null
+    WHERE `order_cancel_date` IS null
         AND `order_payment_date` IS NOT NULL
     GROUP BY `date`
     ORDER BY `date` DESC
     LIMIT 30
-", ["format" => $queryFormat, "site_id" => $siteId]);
+", ["format" => $queryFormat]);
     $datesOptions = array_map(function ($date) use ($displayFormat, $parameter) {
         return '<option value="?'.$parameter.'='.$date["date"].'">'
             ._date($date["date"], $displayFormat).

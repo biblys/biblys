@@ -48,14 +48,13 @@
 			SELECT COUNT(`stock_id`) AS `qty`, `article_ean`, `stock_selling_price`
 			FROM `stock`
 			JOIN `articles` USING(`article_id`)
-			WHERE `site_id` = :site_id
-				AND `article_ean` IS NOT NULL AND `stock_condition` = "Neuf"
+			WHERE `article_ean` IS NOT NULL AND `stock_condition` = "Neuf"
 				AND `stock_selling_date` IS NULL
 				AND `stock_return_date` IS NULL
 				AND `stock_lost_date` IS NULL
 			GROUP BY `article_id`
 		');
-		$sql->execute(['site_id' => $site['id']]);
+		$sql->execute();
 		
 		$stock = $sql->fetchAll(PDO::FETCH_ASSOC);
 		$export = 'EXTRACTION STOCK DU '.date('d/m/Y')."\r\n";

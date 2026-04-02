@@ -37,7 +37,7 @@ return function (Request $request, CurrentSite $currentSite): Response
     $query = "SELECT `article_title`, `article_url`, GROUP_CONCAT(DISTINCT `article_id`) AS `ids`, COUNT(`stock_id`) AS `Ventes`, SUM(`stock_selling_price`) AS `CA`, GROUP_CONCAT(DISTINCT `article_publisher` SEPARATOR ', ') AS `publishers`
     FROM `stock`
     JOIN `articles` USING(`article_id`)
-    WHERE `stock`.`site_id` = " . $currentSite->getId() . " AND `stock_selling_price` != 0 " . $query . "
+    WHERE `stock_selling_price` != 0 " . $query . "
     GROUP BY `article_item`, IF (`article_item` IS null, `article_id`, null), `article_title`, `article_url`
     HAVING COUNT(`stock_id`) >= 3
     ORDER BY `Ventes` DESC, `CA`";

@@ -546,7 +546,7 @@ return function (
 
     $tbody = $list;
 
-    $lists = $lm->getAll(["site_id" => $currentSite->getId()]);
+    $lists = $lm->getAll([]);
     $lists = array_map(function ($list) {
         return '<option value=' . $list->get('id') . '>' . $list->get('title') . '</option>';
     }, $lists);

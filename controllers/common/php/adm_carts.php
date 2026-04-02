@@ -86,7 +86,7 @@ return function (Request $request, Session $session, CurrentSite $currentSite): 
     $emptied = 0;
     $carts = EntityManager::prepareAndExecute("
         SELECT
-            `cart_id`, `carts`.`site_id`, `carts`.`user_id`, `cart_uid`, `cart_date`, `cart_count`, 
+            `cart_id`, `carts`.`user_id`, `cart_uid`, `cart_date`, `cart_count`, 
             `cart_amount`, `users`.`email`, COUNT(`stock_id`) AS `num`, SUM(`stock_selling_price`) AS `total`,
             MAX(`stock_cart_date`) AS `stock_cart_date`,
             `carts`.`user_id`,
@@ -94,10 +94,10 @@ return function (Request $request, Session $session, CurrentSite $currentSite): 
         FROM `carts`
         LEFT JOIN `users` ON `carts`.`user_id` = `users`.`id`
         LEFT JOIN `stock` USING(`cart_id`)
-        WHERE `carts`.`site_id` = :site_id AND `cart_type` = 'web'
+        WHERE `cart_type` = 'web'
         GROUP BY `cart_id`
         ORDER BY `stock_cart_date` DESC",
-        ['site_id' => $currentSite->getId()]
+        []
     );
     while ($c = $carts->fetch(PDO::FETCH_ASSOC)) {
         $userIdentity = "Anonyme (".substr($c["cart_uid"], 0, 7)."…)";;
@@ -107,7 +107,7 @@ return function (Request $request, Session $session, CurrentSite $currentSite): 
         }
 
         if ($refresh) {
-            $cart = $cm->get(array('cart_id' => $c['cart_id'], 'site_id' => $c['site_id']));
+            $cart = $cm->get(array('cart_id' => $c['cart_id']));
             $cm->updateFromStock($cart);
         }
 
@@ -119,7 +119,7 @@ return function (Request $request, Session $session, CurrentSite $currentSite): 
             $c["style"] = ' style="text-decoration:line-through;"';
 
             if (isset($_GET["go"])) {
-                if ($cart = $cm->get(array('cart_id' => $c['cart_id'], 'site_id' => $c['site_id']))) {
+                if ($cart = $cm->get(array('cart_id' => $c['cart_id']))) {
                     $cm->vacuum($cart);
                     $cm->delete($cart);
                     $emptied++;

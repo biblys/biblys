@@ -35,13 +35,12 @@ return function (Request $request): Response
         "SELECT DATE_FORMAT(`order_payment_date`, '%Y-%m-%d') as `date`, MAX(`order_payment_date`)
     FROM `orders`
     WHERE
-        `orders`.`site_id` = :site_id AND
         `order_payment_date` > SUBDATE(NOW(), INTERVAL 1 MONTH) AND
         `order_payment_date` IS NOT NULL AND
         `order_cancel_date` IS null
     GROUP BY `date`
     ORDER BY `date` DESC",
-        ['site_id' => $GLOBALS["LEGACY_CURRENT_SITE"]->get('id')]
+        []
     );
     while ($o = $orders->fetch(PDO::FETCH_ASSOC)) {
         $dates .= '<option value="?d=' . $o["date"] . '">' . _date($o["date"], "l j F") . '</option>';
@@ -51,12 +50,11 @@ return function (Request $request): Response
     $mois = EntityManager::prepareAndExecute(
         "SELECT DATE_FORMAT(`order_payment_date`, '%Y-%m') as `date`, MAX(`order_payment_date`)
     FROM `orders`
-    WHERE `orders`.`site_id` = :site_id 
-      AND `order_cancel_date` IS NULL
+    WHERE `order_cancel_date` IS NULL
       AND `order_payment_date` IS NOT NULL
     GROUP BY `date`
     ORDER BY `date` DESC",
-        ["site_id" => $GLOBALS["LEGACY_CURRENT_SITE"]->get("id")]
+        []
     );
     while ($m = $mois->fetch(PDO::FETCH_ASSOC)) {
         $months .= '<option value="?m=' . $m["date"] . '">' . _date($m["date"], "F Y") . '</option>';
@@ -96,7 +94,7 @@ return function (Request $request): Response
     if (empty($_GET["time2"])) $_GET["time2"] = "23:59";
 
     $req = null;
-    $sqlParams = ['site_id' => $GLOBALS["LEGACY_CURRENT_SITE"]->get('id')];
+    $sqlParams = [];
 
     if (!empty($_GET["date1"])) {
         $req .= "AND `order_payment_date` >= '" . $_GET["date1"] . " " . $_GET["time1"] . ":00' AND `order_payment_date` <= '" . $_GET["date2"] . " " . $_GET["time2"] . ":59'";
@@ -132,7 +130,7 @@ return function (Request $request): Response
     JOIN `orders` USING(`order_id`)
     JOIN `collections` USING(`collection_id`)
     LEFT JOIN `customers` ON `orders`.`customer_id` = `customers`.`customer_id`
-    WHERE `orders`.`site_id` = :site_id $req
+    WHERE 1=1 AND $req
     GROUP BY `stock_id` ORDER BY `order_payment_date` ASC"
     );
     $sql->execute($sqlParams);
