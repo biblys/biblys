@@ -109,7 +109,8 @@
     "laminas/laminas-feed": "^2.23",
     "paypal/paypal-server-sdk": "^2.0.0",
     "league/flysystem": "^3.0",
-    "league/flysystem-local": "^3.0"
+    "league/flysystem-local": "^3.0",
+    "fakerphp/faker": "^1.24"
   },
   "require-dev": {
     "phpunit/phpunit": "~10",
