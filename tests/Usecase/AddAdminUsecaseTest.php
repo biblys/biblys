@@ -60,7 +60,7 @@ class AddAdminUsecaseTest extends TestCase
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("authAdmin")->once();
         $currentSite = Mockery::mock(CurrentSite::class);
-        $currentSite->shouldReceive("getSite")->andReturn($site);
+        
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $urlGenerator->shouldReceive("generate");
         $flashMessages = Mockery::mock(FlashMessagesService::class);
@@ -95,7 +95,7 @@ class AddAdminUsecaseTest extends TestCase
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("authAdmin")->once();
         $currentSite = Mockery::mock(CurrentSite::class);
-        $currentSite->shouldReceive("getSite")->andReturn($site);
+        
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $urlGenerator->shouldReceive("generate");
         $flashMessages = Mockery::mock(FlashMessagesService::class);
@@ -129,7 +129,7 @@ class AddAdminUsecaseTest extends TestCase
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("authAdmin")->once();
         $currentSite = Mockery::mock(CurrentSite::class);
-        $currentSite->shouldReceive("getSite")->andReturn($site);
+        
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $urlGenerator->shouldReceive("generate")->andReturn("https://example.org");
         $flashMessages = Mockery::mock(FlashMessagesService::class);

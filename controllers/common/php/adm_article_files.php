@@ -109,7 +109,6 @@ return function (Request $request, CurrentSite $currentSite, CurrentUser $curren
             throw new BadRequestHttpException("Le titre du fichier ne doit pas dépasser 32 caractères.");
         }
 
-        $file->setSite($currentSite->getSite());
         $file->setArticleId($articleId);
         $file->setAxysAccountId($currentUser->getUser()->getId());
         $file->setTitle($title);

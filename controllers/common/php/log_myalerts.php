@@ -38,7 +38,6 @@ return function (
     if (!$currentSiteService->hasOptionEnabled("alerts")) {
         throw new ResourceNotFoundException("Alerts are not enabled for this site");
     }
-    $currentSite = $currentSiteService->getSite();
     $currentUser = $currentUserService->getUser();
 
     $am = new AlertManager();
@@ -50,7 +49,6 @@ return function (
         $params = json_decode($body, true);
 
         $alert = AlertQuery::create()
-            ->filterBySite($currentSite)
             ->filterByUser($currentUser)
             ->filterByArticleId($params['article_id'])
             ->findOne();
@@ -60,7 +58,6 @@ return function (
             $result['deleted'] = 1;
         } else {
             $alert = new \Model\Alert();
-            $alert->setSite($currentSite);
             $alert->setUser($currentUser);
             $alert->setArticleId($params['article_id']);
             $alert->save();
@@ -103,7 +100,7 @@ return function (
     GROUP BY `alert_id`
     ORDER BY `alert_id`, `stock_purchase_date`
 ");
-    $sql->execute(['user_id' => $currentUser->getId(), 'site_id' => $currentSite->getId()]);
+    $sql->execute(['user_id' => $currentUser->getId());
 
     while ($a = $sql->fetch(PDO::FETCH_ASSOC)) {
         if ($a["alert_max_price"]) {

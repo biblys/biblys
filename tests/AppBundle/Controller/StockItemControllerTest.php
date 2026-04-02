@@ -84,7 +84,7 @@ class StockItemControllerTest extends TestCase
         $currentUser->shouldReceive("hasStockItemInCart")->andReturn(true);
 
         $currentSite = Mockery::mock(CurrentSite::class);
-        $currentSite->shouldReceive("getSite")->andReturn($site);
+        
         $currentSite->shouldReceive("getOption")->andReturn(null);
 
         // when
@@ -124,7 +124,7 @@ class StockItemControllerTest extends TestCase
         $stockItem = ModelFactory::createStockItem(article: $article);
 
         $currentSite = Mockery::mock(CurrentSite::class);
-        $currentSite->shouldReceive("getSite")->andReturn($site);
+        
         $imagesService = Mockery::spy(ImagesService::class);
         $imagesService->expects("imageExistsFor")->andReturn(true);
         $flashMessages = Mockery::spy(FlashMessagesService::class);
@@ -162,7 +162,6 @@ class StockItemControllerTest extends TestCase
         $currentUser->expects("authAdmin");
 
         $currentSite = Mockery::mock(CurrentSite::class);
-        $currentSite->expects("getSite")->andReturn($site);
 
         $flashMessages = Mockery::mock(FlashMessagesService::class);
         $flashMessages->expects("add")->with(

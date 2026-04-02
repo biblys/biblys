@@ -57,7 +57,7 @@ class SpecialOfferControllerTest extends TestCase
         $site = ModelFactory::createSite();
         $offer = ModelFactory::createSpecialOffer();
         $currentSite = Mockery::mock(CurrentSite::class);
-        $currentSite->shouldReceive("getSite")->andReturn($site);
+        
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("authAdmin")->andReturn();
         $templateService = Mockery::mock(TemplateService::class);
@@ -93,7 +93,7 @@ class SpecialOfferControllerTest extends TestCase
         $specialOfferController = new SpecialOfferController();
         $site = ModelFactory::createSite();
         $currentSite = Mockery::mock(CurrentSite::class);
-        $currentSite->shouldReceive("getSite")->andReturn($site);
+        
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("authAdmin")->andReturn();
         $templateService = Mockery::mock(TemplateService::class);
@@ -134,7 +134,7 @@ class SpecialOfferControllerTest extends TestCase
         $offer = ModelFactory::createSpecialOffer(name: "Super offre spéciale", targetCollection: $collection, freeArticle: $article);
 
         $currentSite = Mockery::mock(CurrentSite::class);
-        $currentSite->shouldReceive("getSite")->andReturn($site);
+        
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("authAdmin")->andReturn();
         $templateService = Helpers::getTemplateService();
@@ -164,7 +164,7 @@ class SpecialOfferControllerTest extends TestCase
         $request = new Request();
         $site = ModelFactory::createSite();
         $currentSite = Mockery::mock(CurrentSite::class);
-        $currentSite->shouldReceive("getSite")->andReturn($site);
+        
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("authAdmin")->andReturn();
         $session = Mockery::mock(Session::class);
@@ -198,7 +198,7 @@ class SpecialOfferControllerTest extends TestCase
 
         $request = new Request();
         $currentSite = Mockery::mock(CurrentSite::class);
-        $currentSite->shouldReceive("getSite")->andReturn($site);
+        
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("authAdmin")->andReturn();
         $flashBag = Mockery::mock(FlashBag::class);

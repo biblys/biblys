@@ -127,7 +127,6 @@ function _uploadMediaFiles(array $uploadedFiles, float|InputBag|bool|int|string|
         chmod($targetFilePath, 0604);
 
         $mediaFile = new \Model\MediaFile();
-        $mediaFile->setSiteId($currentSite->getId());
         $mediaFile->setDir($getDir);
         $mediaFile->setFile($fileName);
         $mediaFile->setExt($fileExtension);
@@ -353,7 +352,6 @@ function _displayMediaDirectory(CurrentSite $currentSite, string $currentDirecto
 
     /** @var \Model\MediaFile[] $mediaFiles */
     $mediaFiles = MediaFileQuery::create()
-        ->filterBySiteId($currentSite->getId())
         ->filterByDir($currentDirectory)
         ->orderByFile()
         ->find();
@@ -411,7 +409,6 @@ function _displayMediaDirectories(CurrentSite $currentSite, Request $request): R
     $CKEditorFuncNum = $request->query->getAlnum("CKEditorFuncNum");
 
     $mediaDirectories = MediaFileQuery::create()
-        ->filterBySiteId($currentSite->getId())
         ->withColumn('media_dir', 'name')
         ->withColumn('SUM(`media_file_size`)', 'size')
         ->select(['name', 'size'])

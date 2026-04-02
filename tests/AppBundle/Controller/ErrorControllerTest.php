@@ -70,7 +70,6 @@ class ErrorControllerTest extends TestCase
         $exception = new ResourceNotFoundException("Page not found");
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getOption")->with("publisher_filter")->andReturn(null);
-        $currentSite->shouldReceive("getSite")->andReturn(ModelFactory::createSite());
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $templateService = Mockery::mock(TemplateService::class);
         $templateService
@@ -225,7 +224,6 @@ class ErrorControllerTest extends TestCase
         $request->headers->set("Accept", "application/json");
         $exception = new ResourceNotFoundException("Page not found");
         $currentSite = Mockery::mock(CurrentSite::class);
-        $currentSite->shouldReceive("getSite")->andReturn(ModelFactory::createSite());
         $currentSite->shouldReceive("getOption")->with("publisher_filter")->andReturn(null);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $templateService = Mockery::mock(TemplateService::class);
@@ -276,7 +274,6 @@ class ErrorControllerTest extends TestCase
         $request = new Request();
         $exception = new ResourceNotFoundException("Page not found");
         $currentSite = Mockery::mock(CurrentSite::class);
-        $currentSite->expects("getSite")->andReturn($site);
         $currentSite->shouldReceive("getOption")->with("publisher_filter")->andReturn(null);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $templateService = Mockery::mock(TemplateService::class);

@@ -260,7 +260,7 @@ class OrderDeliveryTest extends TestCase
 
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getOption")->andReturn(null);
-        $currentSite->shouldReceive("getSite")->andReturn($site);
+        
         $currentSite->shouldReceive("hasOptionEnabled")->andReturn(false);
 
         $currentUser = Mockery::mock(CurrentUser::class);
@@ -331,7 +331,7 @@ class OrderDeliveryTest extends TestCase
         $site = ModelFactory::createSite();
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getOption")->andReturn(null);
-        $currentSite->shouldReceive("getSite")->andReturn($site);
+        
         $cart = ModelFactory::createCart();
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("getCart")->andReturn($cart);

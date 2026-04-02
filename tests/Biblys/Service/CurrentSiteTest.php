@@ -66,7 +66,6 @@ class CurrentSiteTest extends TestCase
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
         $option = new Option();
-        $option->setSite($site);
         $option->setKey("home_page_mode");
         $option->setValue("template");
         $option->save();
