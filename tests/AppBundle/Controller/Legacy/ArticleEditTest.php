@@ -58,7 +58,7 @@ class ArticleEditTest extends TestCase
 
         $site = ModelFactory::createSite();
         $currentSite = Mockery::mock(CurrentSite::class);
-        $currentSite->shouldReceive("getSite")->andReturn($site);
+        
         $currentSite->shouldReceive("getOption")->andReturn("null");
         $currentUser->shouldReceive("authPublisher")->andReturn(true);
         $currentUser->shouldReceive("hasPublisherRight")->andReturn(false);

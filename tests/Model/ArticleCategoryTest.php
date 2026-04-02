@@ -32,7 +32,6 @@ class ArticleCategoryTest extends TestCase
     {
         // given
         $articleCategory = new ArticleCategory();
-        $articleCategory->setSiteId(1);
         $articleCategory->setName("Fruits & légumes");
 
         // when

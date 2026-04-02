@@ -301,7 +301,6 @@ class ArticleControllerTest extends TestCase
         $currentSite = ModelFactory::createSite();
         $category = ModelFactory::createArticleCategory($currentSite);
         $currentSiteService = $this->createMock(CurrentSite::class);
-        $currentSiteService->method("getSite")->willReturn($currentSite);
         $request->request->set("rayon_id", $category->getId());
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("authPublisher");
@@ -1140,7 +1139,6 @@ class ArticleControllerTest extends TestCase
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getOption")
             ->with("publisher_filter")->andReturn($article->getPublisherId());
-        $currentSite->shouldReceive("getSite")->andReturn($site);
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("authUser");
         $currentUser->shouldReceive("getUser")->andReturn($user);
@@ -1202,7 +1200,6 @@ class ArticleControllerTest extends TestCase
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getOption")
             ->with("publisher_filter")->andReturn($article->getPublisherId());
-        $currentSite->shouldReceive("getSite")->andReturn($site);
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("authUser");
         $currentUser->shouldReceive("getUser")->andReturn($user);
@@ -1372,8 +1369,6 @@ class ArticleControllerTest extends TestCase
         $currentSite->shouldReceive("getOption")
             ->with("publisher_filter")
             ->andReturn($article->getPublisherId());
-        $currentSite->shouldReceive("getSite")
-            ->andReturn(ModelFactory::createSite());
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("getUser")
             ->andReturn(ModelFactory::createUser());
@@ -1426,8 +1421,6 @@ class ArticleControllerTest extends TestCase
         $currentSite->shouldReceive("getOption")
             ->with("publisher_filter")
             ->andReturn($article->getPublisherId());
-        $currentSite->shouldReceive("getSite")
-            ->andReturn($site);
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("authUser");
         $currentUser->shouldReceive("getUser")
@@ -1476,8 +1469,6 @@ class ArticleControllerTest extends TestCase
         $currentSite->shouldReceive("getOption")
             ->with("publisher_filter")
             ->andReturn($article->getPublisherId());
-        $currentSite->shouldReceive("getSite")
-            ->andReturn($site);
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("authUser");
         $currentUser->shouldReceive("getUser")
@@ -1528,8 +1519,6 @@ class ArticleControllerTest extends TestCase
         $currentSite->shouldReceive("getOption")
             ->with("publisher_filter")
             ->andReturn($article->getPublisherId());
-        $currentSite->shouldReceive("getSite")
-            ->andReturn($site);
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("authUser");
         $currentUser->shouldReceive("getUser")

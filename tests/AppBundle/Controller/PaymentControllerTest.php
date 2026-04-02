@@ -68,7 +68,6 @@ class PaymentControllerTest extends TestCase
         $site = ModelFactory::createSite();
         $order = ModelFactory::createOrder();
         $currentSite = $this->createMock(CurrentSite::class);
-        $currentSite->method("getSite")->willReturn($site);
         $today = new DateTime();
         ModelFactory::createPayment(order: $order, executedAt: $today);
         ModelFactory::createPayment(amount: 300);
@@ -106,7 +105,6 @@ class PaymentControllerTest extends TestCase
         // given
         $site = ModelFactory::createSite();
         $currentSite = $this->createMock(CurrentSite::class);
-        $currentSite->method("getSite")->willReturn($site);
 
         $orderPayedUsingStripe = ModelFactory::createOrder();
         ModelFactory::createPayment(
@@ -150,7 +148,6 @@ class PaymentControllerTest extends TestCase
         // given
         $site = ModelFactory::createSite();
         $currentSite = $this->createMock(CurrentSite::class);
-        $currentSite->method("getSite")->willReturn($site);
 
         ModelFactory::createPayment(executedAt: new DateTime("2019-04-26"));
         ModelFactory::createPayment(executedAt: new DateTime("2019-04-28"));

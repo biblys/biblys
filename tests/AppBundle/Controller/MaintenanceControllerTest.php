@@ -81,7 +81,6 @@ class MaintenanceControllerTest extends TestCase
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->expects("authAdmin")->andReturns();
         $currentSite = Mockery::mock(CurrentSite::class);
-        $currentSite->expects("getSite")->andReturns($site);
         $currentSite->expects("getOption")->andReturns(null);
         $templateService = Helpers::getTemplateService();
 

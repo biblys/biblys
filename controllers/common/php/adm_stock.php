@@ -509,8 +509,6 @@ return function (
     // alertes
     if ($mode == 'insert') {
         $alerts = AlertQuery::create()
-            ->filterBySite($currentSite->getSite())
-            ->_or()
             ->filterByUserId(null, Criteria::ISNULL)
             ->findByArticleId($articleModel->get("id"))
             ->getArrayCopy();
@@ -920,7 +918,6 @@ return function (
     // Add to cart
     if ($mode == 'update' && $stockEntity->isAvailable()) {
         $carts = CartQuery::create()
-            ->filterBySite($currentSite->getSite())
             ->filterByType("web")
             ->orderByUpdatedAt()
             ->limit(100)
@@ -997,8 +994,6 @@ function _sendAlertsForArticle(
 ): array
 {
     $alerts = AlertQuery::create()
-        ->filterBySite($currentSite->getSite())
-        ->_or()
         ->filterByUserId(null, Criteria::ISNULL)
         ->findByArticleId($article->get("id"))
         ->getArrayCopy();
