@@ -264,7 +264,7 @@ class TokenServiceTest extends TestCase
         // given
         $secretKey = "222fabebd31bdc2ec7f382404cff0417";
         $site = ModelFactory::createSite();
-        $user = ModelFactory::createUser(site: $site);
+        $user = ModelFactory::createUser();
 
         $config = new Config(["authentication" => ["secret" => $secretKey]]);
         $currentSite = Mockery::mock(CurrentSite::class);
@@ -288,7 +288,7 @@ class TokenServiceTest extends TestCase
     {
         // given
         $site = ModelFactory::createSite();
-        $user = ModelFactory::createUser(site: $site);
+        $user = ModelFactory::createUser();
 
         $config = Mockery::mock(Config::class);
         $config->expects("getAuthenticationSecret")->andReturn($this->testSecretKey);

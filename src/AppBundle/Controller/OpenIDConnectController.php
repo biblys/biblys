@@ -292,6 +292,7 @@ class OpenIDConnectController extends Controller
             }
 
             $adminRights = RightQuery::create()
+                ->filterByisAdmin(true)
                 ->filterByAxysAccountId($externalId)
                 ->find();
             foreach ($adminRights as $adminRight) {

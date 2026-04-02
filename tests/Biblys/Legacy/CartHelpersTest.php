@@ -37,7 +37,7 @@ class CartHelpersTest extends TestCase
     /**
      * @throws PropelException
      */
-    protected function tearDown(): void
+    protected function setUp(): void
     {
         SpecialOfferQuery::create()->deleteAll();
     }
@@ -80,10 +80,8 @@ class CartHelpersTest extends TestCase
         $freeArticle = ModelFactory::createArticle();
 
         ModelFactory::createSpecialOffer(
-            site: $site,
             targetCollection: $freeArticle->getBookCollection(),
-            freeArticle: $freeArticle,
-            startDate: new DateTime("+1 day"),
+            freeArticle: $freeArticle, targetQuantity: 2, startDate: new DateTime("+1 day"),
         );
 
         $currentSite = Mockery::mock(CurrentSite::class);
@@ -117,10 +115,8 @@ class CartHelpersTest extends TestCase
         $freeArticle = ModelFactory::createArticle();
 
         ModelFactory::createSpecialOffer(
-            site: $site,
             targetCollection: $freeArticle->getBookCollection(),
-            freeArticle: $freeArticle,
-            endDate: new DateTime("-1 day"),
+            freeArticle: $freeArticle, startDate: new DateTime("- 1 day"), endDate: new DateTime("-1 day"),
         );
 
         $currentSite = Mockery::mock(CurrentSite::class);
@@ -155,9 +151,7 @@ class CartHelpersTest extends TestCase
         $freeArticle = ModelFactory::createArticle(title: "Cékado", collection: $targetCollection);
 
         ModelFactory::createSpecialOffer(
-            site: $site,
-            targetCollection: $targetCollection,
-            freeArticle: $freeArticle,
+            targetCollection: $targetCollection, freeArticle: $freeArticle,
         );
 
         $cart = ModelFactory::createCart(site:$site);
@@ -209,14 +203,10 @@ class CartHelpersTest extends TestCase
         );
 
         ModelFactory::createSpecialOffer(
-            site: $site,
-            targetCollection: $targetCollection1,
-            freeArticle: $freeArticle1,
+            targetCollection: $targetCollection1, freeArticle: $freeArticle1,
         );
         ModelFactory::createSpecialOffer(
-            site: $site,
-            targetCollection: $targetCollection2,
-            freeArticle: $freeArticle2,
+            targetCollection: $targetCollection2, freeArticle: $freeArticle2,
         );
 
         $cart = ModelFactory::createCart(site:$site);
@@ -256,9 +246,7 @@ class CartHelpersTest extends TestCase
         $targetCollection = ModelFactory::createCollection(name: "Collection cible");
         $freeArticle = ModelFactory::createArticle(title: "Cékado", collection: $targetCollection);
         ModelFactory::createSpecialOffer(
-            site: $site,
-            targetCollection: $targetCollection,
-            freeArticle: $freeArticle,
+            targetCollection: $targetCollection, freeArticle: $freeArticle,
         );
 
         $cart = ModelFactory::createCart(site: $site);
@@ -312,9 +300,7 @@ class CartHelpersTest extends TestCase
         $freeArticle = ModelFactory::createArticle(title: "Cékado", collection: $targetCollection);
         ModelFactory::createStockItem(site: $site, article: $freeArticle, cart: $cart);
         ModelFactory::createSpecialOffer(
-            site: $site,
-            targetCollection: $targetCollection,
-            freeArticle: $freeArticle,
+            targetCollection: $targetCollection, freeArticle: $freeArticle,
         );
 
         $article1 = ModelFactory::createArticle(collection: $targetCollection);

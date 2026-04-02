@@ -208,6 +208,7 @@ class ModelFactory
             $collection->save();
         } catch (EntityAlreadyExistsException) {
             $collection = BookCollectionQuery::create()->findOneByUrl($slug);
+            $collection->setPublisherId($publisher->getId());
         }
 
         $collection->setNoosfereId($noosfereId);
@@ -249,9 +250,7 @@ class ModelFactory
         $reward->setLimited($attributes["limited"] ?? 1);
 
         if (!isset($attributes["campaign_id"])) {
-            $campaign = ModelFactory::createCrowdfundingCampaign(
-                ["site_id" => $attributes["site_id"] ?? 1]
-            );
+            $campaign = ModelFactory::createCrowdfundingCampaign();
             $attributes["campaign_id"] = $campaign->getId();
         }
         $reward->setCampaignId($attributes["campaign_id"]);
@@ -653,12 +652,10 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createUser(
-        ?Site   $site = null,
         ?string $email = "user@biblys.fr",
     ): User
     {
         $user = new User();
-        $user->setSite($site ?? self::createSite());
         $user->setEmail($email);
         $user->save();
 
@@ -695,7 +692,7 @@ class ModelFactory
     {
         $site = $site ?? self::createSite();
 
-        $user = self::createUser(site: $site, email: $email);
+        $user = self::createUser(email: $email);
         self::createRight(user: $user, isAdmin: true);
 
         return $user;
@@ -712,7 +709,7 @@ class ModelFactory
         $site = $site ?? self::createSite();
         $publisher = $publisher ?? self::createPublisher();
 
-        $user = self::createUser($site);
+        $user = self::createUser();
         self::createRight(user: $user, site: $site, publisher: $publisher);
 
         return $user;
@@ -769,13 +766,11 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createStockItemList(
-        Site    $site,
         ?string $axysAccountId = null,
     ): StockItemList
     {
         $stockItemList = new StockItemList();
 
-        $stockItemList->setSite($site);
         $stockItemList->setAxysAccountId($axysAccountId);
         $stockItemList->save();
 
@@ -837,13 +832,11 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createSubscription(
-        Site    $site,
         ?string $axysAccountId = null
     ): Subscription
     {
         $subscription = new Subscription();
 
-        $subscription->setSite($site);
         $subscription->setAxysAccountId($axysAccountId);
         $subscription->save();
 
@@ -933,7 +926,6 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createSpecialOffer(
-        Site            $site,
         string          $name = "Offre spéciale",
         ?BookCollection $targetCollection = null,
         ?Article        $freeArticle = null,
@@ -943,7 +935,6 @@ class ModelFactory
     ): SpecialOffer
     {
         $specialOffer = new SpecialOffer();
-        $specialOffer->setSite($site);
         $specialOffer->setName($name);
         $specialOffer->setFreeArticle($freeArticle ?? ModelFactory::createArticle());
         $specialOffer->setTargetCollection($targetCollection ?? self::createCollection());
