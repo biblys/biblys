@@ -24,8 +24,7 @@ $_FEED["channel"]["description"] = 'Les derniers billets du blog';
 
 $posts = $_SQL->query(
     "SELECT * FROM `posts` 
-	WHERE `site_id` = '". LegacyCodeHelper::getGlobalSite()["site_id"]."' AND `post_status` = 1 
-		AND `post_date` <= NOW() 
+	WHERE `post_status` = 1 AND `post_date` <= NOW() 
 	ORDER BY `post_date` DESC LIMIT 15"
 );
 while ($p = $posts->fetch()) {

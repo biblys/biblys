@@ -454,14 +454,12 @@ return function (
         if ($addSupplier) {
             $lm->create([
                 'publisher_id' => $publisherEntity->get('id'),
-                'site_id' => $currentSite->getId(),
                 'supplier_id' => $addSupplier
             ]);
             return new RedirectResponse("/pages/publisher_edit?id=" . $publisherEntity->get('id') . "#suppliers");
         } elseif (isset($_GET["del_supplier"])) {
             $link = $lm->get([
                 'publisher_id' => $publisherEntity->get('id'),
-                'site_id' => $currentSite->getId(),
                 'supplier_id' => $delSupplier
             ]);
             $lm->delete($link);

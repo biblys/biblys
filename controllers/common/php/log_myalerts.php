@@ -92,7 +92,6 @@ return function (
     JOIN `articles` USING(`article_id`)
     LEFT JOIN `stock` 
         ON `stock`.`article_id` = `articles`.`article_id` 
-            AND `stock`.`site_id` = :site_id 
             AND `stock_selling_date` IS NULL 
             AND `stock_return_date` IS NULL 
             AND `stock_lost_date` IS NULL

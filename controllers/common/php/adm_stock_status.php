@@ -46,7 +46,7 @@ if (empty($_GET["date"])) $_GET["date"] = date("Y-m-d");
 			`a`.`article_id`, `article_tva`, `type_id`, `article_pubdate`, `article_links`
 		FROM `stock` AS `s`
 		JOIN `articles` AS `a` ON `s`.`article_id` = `a`.`article_id`
-		WHERE `s`.`site_id` = '. LegacyCodeHelper::getGlobalSite()["site_id"].' '.$_QUERY);
+		WHERE '.$_QUERY);
 	$query->execute($params) or error($query->errorInfo());
 
 	$sales = $query->fetchAll();
@@ -83,7 +83,7 @@ if (empty($_GET["date"])) $_GET["date"] = date("Y-m-d");
 	}
 
 	// Rayons
-	$rayons = $_SQL->query('SELECT `rayon_id`, `rayon_name` FROM `rayons` WHERE `site_id` = '. LegacyCodeHelper::getGlobalSite()['site_id'].' ORDER BY `rayon_order`');
+	$rayons = $_SQL->query('SELECT `rayon_id`, `rayon_name` FROM `rayons` ORDER BY `rayon_order`');
 	$rayons = $rayons->fetchAll(PDO::FETCH_ASSOC);
 	$ra = array();
 	foreach ($rayons as $r)

@@ -97,7 +97,7 @@ return function (
 
     // Linked post
     $sql = EntityManager::prepareAndExecute(
-        "SELECT * FROM `posts` JOIN `links` USING(`post_id`) WHERE `posts`.`site_id` = '" . $currentSite->getId() . "' AND `links`.`people_id` = '" . $people->getId() . "'",
+        "SELECT * FROM `posts` JOIN `links` USING(`post_id`) WHERE `links`.`people_id` = '" . $people->getId() . "'",
         []
     );
     $posts = $sql->fetchAll();

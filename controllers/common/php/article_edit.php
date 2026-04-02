@@ -418,7 +418,7 @@ return function (
     $articlePriceReadonly = null;
     if (!empty($a['collection_id'])) {
         $collections = EntityManager::prepareAndExecute(
-            'SELECT `collection_name`, `site_id`, `pricegrid_id`, `publisher_id` FROM `collections` WHERE `collection_id` = :collection_id LIMIT 1',
+            'SELECT `collection_name`, `pricegrid_id`, `publisher_id` FROM `collections` WHERE `collection_id` = :collection_id LIMIT 1',
             ["collection_id" => $articleEntity->get("collection_id")],
         );
         $c = $collections->fetch(PDO::FETCH_ASSOC);
