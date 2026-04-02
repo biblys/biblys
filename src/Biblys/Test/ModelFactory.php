@@ -23,6 +23,9 @@ use Biblys\Exception\EntityAlreadyExistsException;
 use Biblys\Service\Slug\SlugService;
 use Biblys\Service\StringService;
 use DateTime;
+use Faker\Factory;
+use Faker\Provider\fr_FR\Company;
+use Faker\Provider\Text;
 use Model\Alert;
 use Model\Article;
 use Model\ArticleCategory;
@@ -188,11 +191,15 @@ class ModelFactory
      */
     public static function createCollection(
         ?Publisher $publisher = null,
-        string     $name = "La Blanche",
+        string     $name = null,
         ?int       $noosfereId = null,
     ): BookCollection
     {
         $slugService = new SlugService();
+
+        if ($name === null) {
+            $name = Factory::create('fr_FR')->company();
+        }
 
         $collection = new BookCollection();
         $collection->setName($name);
