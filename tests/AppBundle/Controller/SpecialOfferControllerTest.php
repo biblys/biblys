@@ -55,7 +55,7 @@ class SpecialOfferControllerTest extends TestCase
         // given
         $specialOfferController = new SpecialOfferController();
         $site = ModelFactory::createSite();
-        $offer = ModelFactory::createSpecialOffer(site: $site);
+        $offer = ModelFactory::createSpecialOffer();
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getSite")->andReturn($site);
         $currentUser = Mockery::mock(CurrentUser::class);
@@ -131,7 +131,7 @@ class SpecialOfferControllerTest extends TestCase
             collection: $collection,
             availabilityDilicom: Article::AVAILABILITY_PRIVATELY_PRINTED
         );
-        $offer = ModelFactory::createSpecialOffer(site: $site, targetCollection: $collection, freeArticle: $article);
+        $offer = ModelFactory::createSpecialOffer(name: "Super offre spéciale", targetCollection: $collection, freeArticle: $article);
 
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getSite")->andReturn($site);
@@ -194,7 +194,7 @@ class SpecialOfferControllerTest extends TestCase
         $specialOfferController = new SpecialOfferController();
 
         $site = ModelFactory::createSite();
-        $offer = ModelFactory::createSpecialOffer(site: $site, name: "Super offre");
+        $offer = ModelFactory::createSpecialOffer(name: "Super offre");
 
         $request = new Request();
         $currentSite = Mockery::mock(CurrentSite::class);

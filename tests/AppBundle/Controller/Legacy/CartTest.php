@@ -132,7 +132,7 @@ class CartTest extends TestCase
         $cart = ModelFactory::createCart(site: $site);
         $article = ModelFactory::createArticle(title: "Le livre dans mon panier");
         ModelFactory::createStockItem(site: $site, article: $article, cart: $cart);
-        $user = ModelFactory::createUser(site: $site);
+        $user = ModelFactory::createUser();
         $customer = ModelFactory::createCustomer(site: $site);
         $order = ModelFactory::createOrder(site: $site, user: $user);
         $articleInOrder = ModelFactory::createArticle(title: "Le livre dans ma commande");

@@ -70,12 +70,10 @@ class PaymentControllerTest extends TestCase
         $currentSite = $this->createMock(CurrentSite::class);
         $currentSite->method("getSite")->willReturn($site);
         $today = new DateTime();
-        ModelFactory::createPayment(site: $site, order: $order, executedAt: $today);
-        ModelFactory::createPayment(site: $site, amount: 300);
-        ModelFactory::createPayment(site: $site, amount: 900);
-        $otherSite = ModelFactory::createSite();
-        ModelFactory::createPayment(site: $otherSite);
-        ModelFactory::createPayment(site: $site, executedAt: null);
+        ModelFactory::createPayment(order: $order, executedAt: $today);
+        ModelFactory::createPayment(amount: 300);
+        ModelFactory::createPayment(amount: 900);
+        ModelFactory::createPayment(executedAt: null);
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("authAdmin")->once()->andReturn();
         $templateService = Helpers::getTemplateService();

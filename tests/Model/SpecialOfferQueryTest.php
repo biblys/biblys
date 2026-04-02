@@ -35,14 +35,12 @@ class SpecialOfferQueryTest extends TestCase
     {
         // given
         $site = ModelFactory::createSite();
-        $activeOffer = ModelFactory::createSpecialOffer($site);
+        $activeOffer = ModelFactory::createSpecialOffer();
         $offerStartingTomorrow = ModelFactory::createSpecialOffer(
-            site: $site,
-            startDate: new DateTime("tomorrow"),
+             startDate: new DateTime("tomorrow"),
         );
         $offerEndedYesterday = ModelFactory::createSpecialOffer(
-            site: $site,
-            endDate: new DateTime("yesterday"),
+            startDate: new DateTime("- 1 day"), endDate: new DateTime("yesterday"),
         );
 
         // when

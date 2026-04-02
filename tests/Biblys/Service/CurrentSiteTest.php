@@ -20,6 +20,7 @@ namespace Biblys\Service;
 
 use Biblys\Test\ModelFactory;
 use Model\Option;
+use Model\OptionQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 
@@ -27,6 +28,13 @@ require_once __DIR__ . "/../../setUp.php";
 
 class CurrentSiteTest extends TestCase
 {
+    /**
+     * @throws PropelException
+     */
+    protected function setUp(): void
+    {
+        OptionQuery::create()->deleteAll();
+    }
 
     /**
      * @throws PropelException

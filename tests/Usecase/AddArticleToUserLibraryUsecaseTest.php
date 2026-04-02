@@ -50,7 +50,7 @@ class AddArticleToUserLibraryUsecaseTest extends TestCase
         $currentSite = new CurrentSite($site);
         $publisher = ModelFactory::createPublisher(name: "Interdit");
         $currentSite->setOption("downloadable_publishers", "");
-        $user = ModelFactory::createUser(site: $site);
+        $user = ModelFactory::createUser();
         $article = ModelFactory::createArticle(publisher: $publisher);
         $mailer = Mockery::mock(Mailer::class);
         $usecase = new AddArticleToUserLibraryUsecase($mailer);
@@ -78,7 +78,7 @@ class AddArticleToUserLibraryUsecaseTest extends TestCase
         // given
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
-        $user = ModelFactory::createUser(site: $site);
+        $user = ModelFactory::createUser();
         $publisher = ModelFactory::createPublisher(name: "Autorisé");
         $currentSite->setOption("downloadable_publishers", $publisher->getId());
         $article = ModelFactory::createArticle(title: "Paper book", publisher: $publisher);
@@ -106,7 +106,7 @@ class AddArticleToUserLibraryUsecaseTest extends TestCase
         // given
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
-        $user = ModelFactory::createUser(site: $site);
+        $user = ModelFactory::createUser();
         $publisher = ModelFactory::createPublisher(name: "Autorisé");
         $currentSite->setOption("downloadable_publishers", $publisher->getId());
         $article = ModelFactory::createArticle(
@@ -140,7 +140,7 @@ class AddArticleToUserLibraryUsecaseTest extends TestCase
         // given
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
-        $user = ModelFactory::createUser(site: $site);
+        $user = ModelFactory::createUser();
         $publisher = ModelFactory::createPublisher(name: "Autorisé");
         $currentSite->setOption("downloadable_publishers", $publisher->getId());
         $article = ModelFactory::createArticle(typeId: ArticleType::EBOOK, publisher: $publisher);
@@ -175,8 +175,8 @@ class AddArticleToUserLibraryUsecaseTest extends TestCase
         // given
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
-        $user = ModelFactory::createUser(site: $site);
-        $otherUser = ModelFactory::createUser(site: $site);
+        $user = ModelFactory::createUser();
+        $otherUser = ModelFactory::createUser();
         $publisher = ModelFactory::createPublisher(name: "Autorisé");
         $currentSite->setOption("downloadable_publishers", $publisher->getId());
         $article = ModelFactory::createArticle(title: 'Already', typeId: ArticleType::EBOOK, publisher:
@@ -206,7 +206,7 @@ class AddArticleToUserLibraryUsecaseTest extends TestCase
         // given
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
-        $user = ModelFactory::createUser(site: $site);
+        $user = ModelFactory::createUser();
         $publisher = ModelFactory::createPublisher(name: "Autorisé");
         $currentSite->setOption("downloadable_publishers", $publisher->getId());
         $article1 = ModelFactory::createArticle(title: 'Ebook 1', typeId: ArticleType::EBOOK, publisher: $publisher);
@@ -245,7 +245,7 @@ class AddArticleToUserLibraryUsecaseTest extends TestCase
         // given
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
-        $user = ModelFactory::createUser(site: $site);
+        $user = ModelFactory::createUser();
         $publisher = ModelFactory::createPublisher(name: "Autorisé");
         $currentSite->setOption("downloadable_publishers", $publisher->getId());
         $article = ModelFactory::createArticle(typeId: ArticleType::EBOOK, publisher: $publisher);
@@ -284,7 +284,7 @@ class AddArticleToUserLibraryUsecaseTest extends TestCase
         // given
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
-        $user = ModelFactory::createUser(site: $site);
+        $user = ModelFactory::createUser();
         $publisher = ModelFactory::createPublisher(name: "Autorisé");
         $currentSite->setOption("downloadable_publishers", $publisher->getId());
         $article = ModelFactory::createArticle(typeId: ArticleType::EBOOK, publisher: $publisher);

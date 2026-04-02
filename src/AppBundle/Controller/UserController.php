@@ -237,7 +237,8 @@ class UserController extends Controller
         }
 
         $userAccountExists = UserQuery::create()
-            ->findOneByEmail($recipientEmail);
+            ->filterByEmail($recipientEmail)
+            ->exists();
 
         $tokenAction = "login-by-email";
         $targetPath = "user_login_with_token";

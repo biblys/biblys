@@ -55,8 +55,7 @@ class AddAdminUsecaseTest extends TestCase
         // given
         $site = ModelFactory::createSite();
 
-        ModelFactory::createAdminUser(site: $site, email: "already-admin@example.org");
-        $user = ModelFactory::createUser(site: $site, email: "new-admin@example.org");
+        $user = ModelFactory::createUser(email: "existing-user@example.org");
 
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("authAdmin")->once();
@@ -67,19 +66,21 @@ class AddAdminUsecaseTest extends TestCase
         $flashMessages = Mockery::mock(FlashMessagesService::class);
         $flashMessages->shouldReceive("add")->with(
             "success",
-            "Un accès administrateur a été ajouté pour le compte new-admin@example.org."
+            "Un accès administrateur a été ajouté pour le compte existing-user@example.org."
         );
         $mailer = Mockery::mock(Mailer::class);
         $mailer->shouldReceive("send")->twice();
-        $templateService = Helpers::getTemplateService();
 
-        $usecase = new AddAdminUsecase($currentSite, $flashMessages, $urlGenerator, $templateService, $mailer);
+        $usecase = new AddAdminUsecase($currentSite);
 
         // when
-        $usecase->execute("new-admin@example.org");
+        $usecase->execute("existing-user@example.org");
 
         // then
-        $this->assertTrue(RightQuery::create()->isUserAdmin($user));
+        $this->assertTrue(
+            RightQuery::create()->isUserAdmin($user),
+            "user was given admin rights",
+        );
     }
 
     /**
