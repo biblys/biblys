@@ -104,7 +104,7 @@ class OrderControllerTest extends TestCase
     {
         // given
         $site = ModelFactory::createSite();
-        $order = ModelFactory::createOrder(site: $site);
+        $order = ModelFactory::createOrder();
         $controller = new OrderController();
         $currentSite = new CurrentSite($site);
         $currentUser = Mockery::mock(CurrentUser::class);

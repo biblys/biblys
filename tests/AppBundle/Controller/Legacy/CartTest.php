@@ -59,9 +59,9 @@ class CartTest extends TestCase
         $request = new Request();
 
         $site = ModelFactory::createSite();
-        $cart = ModelFactory::createCart(site: $site);
+        $cart = ModelFactory::createCart();
         $article = ModelFactory::createArticle(title: "Le livre dans mon panier");
-        ModelFactory::createStockItem(site: $site, article: $article, cart: $cart);
+        ModelFactory::createStockItem(article: $article, cart: $cart);
         $config = new Config();
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getSite")->andReturn($site);
@@ -129,14 +129,14 @@ class CartTest extends TestCase
         $request = new Request();
 
         $site = ModelFactory::createSite();
-        $cart = ModelFactory::createCart(site: $site);
+        $cart = ModelFactory::createCart();
         $article = ModelFactory::createArticle(title: "Le livre dans mon panier");
-        ModelFactory::createStockItem(site: $site, article: $article, cart: $cart);
+        ModelFactory::createStockItem(article: $article, cart: $cart);
         $user = ModelFactory::createUser();
-        $customer = ModelFactory::createCustomer(site: $site);
-        $order = ModelFactory::createOrder(site: $site, user: $user);
+        $customer = ModelFactory::createCustomer();
+        $order = ModelFactory::createOrder(user: $user);
         $articleInOrder = ModelFactory::createArticle(title: "Le livre dans ma commande");
-        ModelFactory::createStockItem(site: $site, article: $articleInOrder, order: $order);
+        ModelFactory::createStockItem(article: $articleInOrder, order: $order);
 
         $config = new Config();
         $currentSite = Mockery::mock(CurrentSite::class);
@@ -234,9 +234,9 @@ class CartTest extends TestCase
         $currentSite->shouldReceive("getOption")->with("cart_suggestions_rayon_id")->andReturn(null);
 
         ModelFactory::createCountry();
-        $cart = ModelFactory::createCart(site: $site);
+        $cart = ModelFactory::createCart();
         $article = ModelFactory::createArticle(title: "Le livre dans mon panier");
-        ModelFactory::createStockItem(site: $site, article: $article, cart: $cart, sellingPrice: 500);
+        ModelFactory::createStockItem(article: $article, cart: $cart, sellingPrice: 500);
 
         $request = new Request();
         $currentUser = Mockery::mock(CurrentUser::class);
@@ -314,9 +314,9 @@ class CartTest extends TestCase
         $currentSite->shouldReceive("getOption")->with("cart_suggestions_rayon_id")->andReturn(null);
 
         ModelFactory::createCountry();
-        $cart = ModelFactory::createCart(site: $site);
+        $cart = ModelFactory::createCart();
         $article = ModelFactory::createArticle(title: "Le livre dans mon panier");
-        ModelFactory::createStockItem(site: $site, article: $article, cart: $cart, sellingPrice: 1500);
+        ModelFactory::createStockItem(article: $article, cart: $cart, sellingPrice: 1500);
 
         $request = new Request();
         $currentUser = Mockery::mock(CurrentUser::class);
@@ -363,11 +363,10 @@ class CartTest extends TestCase
 
         ModelFactory::createCountry();
         $site = ModelFactory::createSite();
-        $cart = ModelFactory::createCart(site: $site);
+        $cart = ModelFactory::createCart();
         $article = ModelFactory::createArticle();
-        ModelFactory::createStockItem(site: $site, article: $article, cart: $cart, sellingPrice: 500);
+        ModelFactory::createStockItem(article: $article, cart: $cart, sellingPrice: 500);
         $articleCategory = ModelFactory::createArticleCategory(
-            site: $site,
             name: "Suggestions du panier",
         );
         $suggestedArticle = ModelFactory::createArticle(title: "Article suggéré");

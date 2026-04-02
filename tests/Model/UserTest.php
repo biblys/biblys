@@ -59,7 +59,7 @@ class UserTest extends TestCase
     {
         // given
         $user = ModelFactory::createUser(email: "user-with-library@example.org");
-        ModelFactory::createStockItem(user: $user);
+        ModelFactory::createStockItem(null, user: $user);
 
         // when
         $exception = Helpers::runAndCatchException(fn() => $user->delete());

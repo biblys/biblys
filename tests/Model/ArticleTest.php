@@ -399,10 +399,10 @@ class ArticleTest extends TestCase
         // given
         $site = ModelFactory::createSite();
         $article = ModelFactory::createArticle();
-        ModelFactory::createStockItem(site: $site, article: $article);
-        ModelFactory::createStockItem(site: $site, article: $article, sellingDate: new DateTime());
-        ModelFactory::createStockItem(site: $site, article: $article, returnDate: new DateTime());
-        ModelFactory::createStockItem(site: $site, article: $article, lostDate: new DateTime());
+        ModelFactory::createStockItem(article: $article);
+        ModelFactory::createStockItem(article: $article, sellingDate: new DateTime());
+        ModelFactory::createStockItem(article: $article, returnDate: new DateTime());
+        ModelFactory::createStockItem(article: $article, lostDate: new DateTime());
 
         // when
         $count = $article->countAvailableStockItems();

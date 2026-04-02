@@ -865,7 +865,7 @@ class ImagesServiceTest extends TestCase
     {
         // given
         $site = ModelFactory::createSite();
-        $event = ModelFactory::createEvent(site: $site);
+        $event = ModelFactory::createEvent();
 
         $config = new Config();
         $currentSite = new CurrentSite($site);
@@ -897,7 +897,7 @@ class ImagesServiceTest extends TestCase
     {
         // given
         $site = ModelFactory::createSite();
-        $event = ModelFactory::createEvent(site: $site);
+        $event = ModelFactory::createEvent();
 
         $config = new Config();
         $currentSite = new CurrentSite($site);
@@ -933,7 +933,7 @@ class ImagesServiceTest extends TestCase
     {
         // given
         $site = ModelFactory::createSite();
-        $event = ModelFactory::createEvent(site: $site);
+        $event = ModelFactory::createEvent();
 
         $config = new Config();
         $currentSite = new CurrentSite($site);
@@ -961,7 +961,7 @@ class ImagesServiceTest extends TestCase
     {
         // given
         $site = ModelFactory::createSite();
-        $event = ModelFactory::createEvent(site: $site);
+        $event = ModelFactory::createEvent();
         ModelFactory::createImage(event: $event);
 
         $config = new Config();
@@ -983,7 +983,7 @@ class ImagesServiceTest extends TestCase
     {
         // given
         $site = ModelFactory::createSite();
-        $event = ModelFactory::createEvent(site: $site);
+        $event = ModelFactory::createEvent();
 
         $currentSite = new CurrentSite($site);
         $config = new Config();
@@ -1007,7 +1007,7 @@ class ImagesServiceTest extends TestCase
     {
         // given
         $site = ModelFactory::createSite();
-        $event = ModelFactory::createEvent(site: $site);
+        $event = ModelFactory::createEvent();
 
         $config = new Config(["images" => ["path" => "/images/"]]);
         $currentSite = new CurrentSite($site);
@@ -1036,7 +1036,7 @@ class ImagesServiceTest extends TestCase
         $filesystem = Mockery::mock(Filesystem::class);
         $service = new ImagesService($config, $currentSite, $filesystem);
 
-        $event = ModelFactory::createEvent(site: $site);
+        $event = ModelFactory::createEvent();
         ModelFactory::createImage(
             event: $event,
             filePath: "book/covers/",
@@ -1059,7 +1059,7 @@ class ImagesServiceTest extends TestCase
     {
         // given
         $site = ModelFactory::createSite();
-        $event = ModelFactory::createEvent(site: $site);
+        $event = ModelFactory::createEvent();
         ModelFactory::createImage(event: $event);
         $site = ModelFactory::createSite();
 

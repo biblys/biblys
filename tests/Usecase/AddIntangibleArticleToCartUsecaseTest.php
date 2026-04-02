@@ -141,7 +141,7 @@ class AddIntangibleArticleToCartUsecaseTest extends TestCase
         $usecase = new AddIntangibleArticleToCartUsecase();
 
         $article = ModelFactory::createArticle(typeId: ArticleType::EBOOK);
-        $item = ModelFactory::createStockItem(article: $article, sellingPrice: 1000);
+        $item = ModelFactory::createStockItem(article: $article, user: null, cart: null, order: null, sellingPrice: 1000);
         $cart = ModelFactory::createCart();
 
         // when
@@ -192,7 +192,7 @@ class AddIntangibleArticleToCartUsecaseTest extends TestCase
         $usecase = new AddIntangibleArticleToCartUsecase();
 
         $article = ModelFactory::createArticle(price: 1000, typeId: ArticleType::EBOOK);
-        $soldItem = ModelFactory::createStockItem(article: $article, sellingDate: new DateTime());
+        $soldItem = ModelFactory::createStockItem(article: $article, user: null, cart: null, order: null, sellingPrice: 0, sellingDate: new DateTime());
         $cart = ModelFactory::createCart();
 
         // when

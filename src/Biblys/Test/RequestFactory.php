@@ -19,7 +19,6 @@
 namespace Biblys\Test;
 
 use Model\Publisher;
-use Model\Site;
 use Model\User;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
@@ -58,10 +57,9 @@ class RequestFactory
      */
     public static function createAuthRequestForAdminUser(
         string $content = "",
-        Site   $site = null,
     ): Request
     {
-        $adminUser = ModelFactory::createAdminUser(site: $site);
+        $adminUser = ModelFactory::createAdminUser();
         return RequestFactory::createAuthRequest($content, $adminUser);
     }
 

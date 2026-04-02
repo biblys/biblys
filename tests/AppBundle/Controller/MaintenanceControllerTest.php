@@ -65,17 +65,17 @@ class MaintenanceControllerTest extends TestCase
 
         $site = ModelFactory::createSite();
         ModelFactory::createImage(type: 'cover', fileSize: 99999999);
-        ModelFactory::createImage(site: $site, type: 'photo', fileSize: 99999999);
+        ModelFactory::createImage(type: 'photo', fileSize: 99999999);
         ModelFactory::createImage(type: 'other', fileSize: 99999999);
         ModelFactory::createImage(
-            post: ModelFactory::createPost(site: $site), site: $site, type: 'illustration', fileSize: 99999999
+            post: ModelFactory::createPost(), type: 'illustration', fileSize: 99999999
         );
         ModelFactory::createImage(
-            event: ModelFactory::createEvent(site: $site), site: $site, type: 'illustration', fileSize: 99999999
+            event: ModelFactory::createEvent(), type: 'illustration', fileSize: 99999999
         );
-        ModelFactory::createImage(site: $site, type: 'logo', fileSize: 99999999);
-        ModelFactory::createImage(site: $site, type: 'portrait', fileSize: 99999999);
-        ModelFactory::createMediaFile(site: $site, fileSize: 99999999);
+        ModelFactory::createImage(type: 'logo', fileSize: 99999999);
+        ModelFactory::createImage(type: 'portrait', fileSize: 99999999);
+        ModelFactory::createMediaFile(fileSize: 99999999);
         ModelFactory::createDownloadableFile(fileSize: 99999999);
 
         $currentUser = Mockery::mock(CurrentUser::class);

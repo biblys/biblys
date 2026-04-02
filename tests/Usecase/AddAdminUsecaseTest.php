@@ -124,7 +124,7 @@ class AddAdminUsecaseTest extends TestCase
         // given
         $site = ModelFactory::createSite();
 
-        $user = ModelFactory::createAdminUser(site: $site, email: "already-admin@example.org");
+        $user = ModelFactory::createAdminUser( email: "already-admin@example.org");
 
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("authAdmin")->once();

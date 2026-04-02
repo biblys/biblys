@@ -110,13 +110,11 @@ class PaymentControllerTest extends TestCase
 
         $orderPayedUsingStripe = ModelFactory::createOrder();
         ModelFactory::createPayment(
-            site: $site,
             order: $orderPayedUsingStripe,
             executedAt: new DateTime(),
         );
         $orderPayedUsingPaypal = ModelFactory::createOrder();
         ModelFactory::createPayment(
-            site: $site,
             order: $orderPayedUsingPaypal,
             mode: "paypal",
             executedAt: new DateTime(),
@@ -154,9 +152,9 @@ class PaymentControllerTest extends TestCase
         $currentSite = $this->createMock(CurrentSite::class);
         $currentSite->method("getSite")->willReturn($site);
 
-        ModelFactory::createPayment(site: $site, executedAt: new DateTime("2019-04-26"));
-        ModelFactory::createPayment(site: $site, executedAt: new DateTime("2019-04-28"));
-        ModelFactory::createPayment(site: $site, executedAt: new DateTime("2019-04-30"));
+        ModelFactory::createPayment(executedAt: new DateTime("2019-04-26"));
+        ModelFactory::createPayment(executedAt: new DateTime("2019-04-28"));
+        ModelFactory::createPayment(executedAt: new DateTime("2019-04-30"));
 
         $controller = new PaymentController();
         $request = new Request();

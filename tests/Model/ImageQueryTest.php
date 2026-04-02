@@ -114,8 +114,7 @@ class ImageQueryTest extends TestCase
     public function testFilterByModelWithEvent(): void
     {
         // given
-        $site = ModelFactory::createSite();
-        $event = ModelFactory::createEvent($site);
+        $event = ModelFactory::createEvent();
         ModelFactory::createImage(event: $event);
 
         // when

@@ -270,7 +270,7 @@ class ErrorControllerTest extends TestCase
     {
         // given
         $site = ModelFactory::createSite();
-        $redirection = ModelFactory::createRedirection(site: $site, oldUrl: "/old-url", newUrl: "/new-url");
+        $redirection = ModelFactory::createRedirection(oldUrl: "/old-url", newUrl: "/new-url");
 
         $controller = new ErrorController();
         $request = new Request();
