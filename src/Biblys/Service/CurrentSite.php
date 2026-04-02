@@ -115,7 +115,6 @@ class CurrentSite
 
         if (!$option) {
             $option = new Option();
-            $option->setSite($this->site);
             $option->setKey($key);
         }
 
