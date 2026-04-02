@@ -50,7 +50,7 @@ class CartHelpersTest extends TestCase
         // given
         $site = ModelFactory::createSite();
         $currentSite = Mockery::mock(CurrentSite::class);
-        $currentSite->shouldReceive("getSite")->andReturn($site);
+        
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $imageServices = Mockery::mock(ImagesService::class);
         $imageServices->expects("imageExistsFor")->andReturn(true);
@@ -85,7 +85,7 @@ class CartHelpersTest extends TestCase
         );
 
         $currentSite = Mockery::mock(CurrentSite::class);
-        $currentSite->shouldReceive("getSite")->andReturn($site);
+        
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $imageServices = Mockery::mock(ImagesService::class);
         $imageServices->expects("imageExistsFor")->andReturn(true);
@@ -120,7 +120,7 @@ class CartHelpersTest extends TestCase
         );
 
         $currentSite = Mockery::mock(CurrentSite::class);
-        $currentSite->shouldReceive("getSite")->andReturn($site);
+        
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $imageServices = Mockery::mock(ImagesService::class);
         $imageServices->expects("imageExistsFor")->andReturn(true);
@@ -157,7 +157,7 @@ class CartHelpersTest extends TestCase
         $cart = ModelFactory::createCart();
 
         $currentSite = Mockery::mock(CurrentSite::class);
-        $currentSite->shouldReceive("getSite")->andReturn($site);
+        
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $urlGenerator->shouldReceive("generate");
         $imageServices = Mockery::mock(ImagesService::class);
@@ -212,7 +212,7 @@ class CartHelpersTest extends TestCase
         $cart = ModelFactory::createCart();
 
         $currentSite = Mockery::mock(CurrentSite::class);
-        $currentSite->shouldReceive("getSite")->andReturn($site);
+        
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $urlGenerator->shouldReceive("generate");
         $imageServices = Mockery::mock(ImagesService::class);
@@ -256,7 +256,6 @@ class CartHelpersTest extends TestCase
         ModelFactory::createStockItem(article: $article2, cart: $cart);
 
         $currentSite = Mockery::mock(CurrentSite::class);
-        $currentSite->shouldReceive('getSite')->andReturn($site);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $urlGenerator->shouldReceive("generate")
             ->with("collection_show", ["slug" => $targetCollection->getUrl()]);
@@ -309,7 +308,6 @@ class CartHelpersTest extends TestCase
         ModelFactory::createStockItem(article: $article2, cart: $cart);
 
         $currentSite = Mockery::mock(CurrentSite::class);
-        $currentSite->shouldReceive('getSite')->andReturn($site);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $urlGenerator->shouldReceive("generate")
             ->with("collection_show", ["slug" => $targetCollection->getUrl()]);

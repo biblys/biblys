@@ -195,7 +195,6 @@ return function (
                 } // Else, create a new order
                 else {
                     $order = new \Model\Order();
-                    $order->setSite($currentSite->getSite());
                     $orderSlug = StringService::random();
                     $order->setSlug($orderSlug);
                 }

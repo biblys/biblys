@@ -70,7 +70,6 @@ class OrderControllerTest extends TestCase
         ModelFactory::createStockItem(order: $order, weight: 456);
 
         $currentSite = Mockery::mock(CurrentSite::class);
-        $currentSite->shouldReceive("getSite")->andReturn($site);
         $currentSite->shouldReceive("getOption")->with("shipping_packaging_weight")->andReturn("421");
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("authAdmin");
@@ -148,7 +147,6 @@ class OrderControllerTest extends TestCase
         ModelFactory::createStockItem(article: $downloadableArticle, order: $order);
 
         $currentSite = Mockery::mock(CurrentSite::class);
-        $currentSite->shouldReceive("getSite")->andReturn($site);
         $currentSite->shouldReceive("getOption")->with("shipping_packaging_weight")->andReturn("421");
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("authAdmin");

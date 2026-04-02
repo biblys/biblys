@@ -42,7 +42,6 @@ return function (
 
         $adminRightToDelete = RightQuery::create()
             ->filterByUserId($userToDeleteId)
-            ->filterBySite($currentSite->getSite())
             ->filterByIsAdmin(true)
             ->findOne();
 
@@ -58,7 +57,6 @@ return function (
 
     $adminRights = RightQuery::create()
         ->filterByIsAdmin(true)
-        ->filterBySite($currentSite->getSite())
         ->joinWithUser()
         ->find();
 

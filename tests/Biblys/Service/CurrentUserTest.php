@@ -1299,7 +1299,7 @@ class CurrentUserTest extends TestCase
 
 
         $currentSite = Mockery::mock(CurrentSite::class);
-        $currentSite->shouldReceive("getSite")->andReturn($site);
+        
         $currentUser = new CurrentUser($user, null);
         $currentUser->injectCurrentSite($currentSite);
 

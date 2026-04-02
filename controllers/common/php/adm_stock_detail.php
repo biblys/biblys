@@ -58,8 +58,6 @@ return function (Request $request, CurrentSite $currentSite): Response
         $_GET['stock_depot'] = null;
     }
 
-    $params["site_id"] = $currentSite->getSite()->getId();
-
     $stock = EntityManager::prepareAndExecute(
         'SELECT
         `article_title`, `article_ean`, `article_authors`, `article_url`, `article_tva`,
@@ -67,7 +65,7 @@ return function (Request $request, CurrentSite $currentSite): Response
         `stock_condition`, `stock_purchase_date`
     FROM `stock` AS `s`
     JOIN `articles` AS `a` USING(`article_id`)
-    WHERE `s`.`site_id` = :site_id' . $_QUERY . '
+    WHERE ' . $_QUERY . '
     GROUP BY `s`.`stock_id`
     ORDER BY `stock_purchase_date`', $params
     );

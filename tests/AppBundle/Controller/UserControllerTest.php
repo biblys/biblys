@@ -1312,7 +1312,7 @@ class UserControllerTest extends TestCase
 
         $site = ModelFactory::createSite();
         $currentSite = Mockery::mock(CurrentSite::class);
-        $currentSite->shouldReceive("getSite")->andReturn($site);
+        
 
         $queryParams = Mockery::mock(QueryParamsService::class);
         $queryParams->expects("parse");
@@ -1370,7 +1370,7 @@ class UserControllerTest extends TestCase
 
         $site = ModelFactory::createSite();
         $currentSite = Mockery::mock(CurrentSite::class);
-        $currentSite->shouldReceive("getSite")->andReturn($site);
+        
 
         $queryParams = Mockery::mock(QueryParamsService::class);
         $queryParams->expects("parse");
