@@ -110,7 +110,6 @@ class MigrateFilesCommand extends Command
                 continue;
             }
 
-            $file->setSite($targetSite);
             $file->save();
 
             $targetSiteName = $targetSite->getName();

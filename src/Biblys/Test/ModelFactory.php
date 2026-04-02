@@ -24,8 +24,6 @@ use Biblys\Service\Slug\SlugService;
 use Biblys\Service\StringService;
 use DateTime;
 use Faker\Factory;
-use Faker\Provider\fr_FR\Company;
-use Faker\Provider\Text;
 use Model\Alert;
 use Model\Article;
 use Model\ArticleCategory;
@@ -142,13 +140,11 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createArticleCategory(
-        Site   $site,
         string $name = "Rayon de lune",
     ): ArticleCategory
     {
         $category = new ArticleCategory();
         $category->setName($name);
-        $category->setSite($site);
         $category->save();
 
         return $category;
@@ -158,7 +154,6 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createCart(
-        ?Site   $site = null,
         ?User   $user = null,
         ?int    $axysAccountId = null,
         ?int    $sellerId = null,
@@ -168,7 +163,6 @@ class ModelFactory
     ): Cart
     {
         $cart = new Cart();
-        $cart->setSite($site ?? self::createSite());
 
         if ($user) {
             $cart->setUser($user);
@@ -253,7 +247,6 @@ class ModelFactory
         $reward->setContent("A beautiful reward");
         $reward->setArticles("[{$article->getId()}]");
         $reward->setQuantity($attributes["quantity"] ?? 1);
-        $reward->setSiteId($attributes["site_id"] ?? 1);
         $reward->setLimited($attributes["limited"] ?? 1);
 
         if (!isset($attributes["campaign_id"])) {
@@ -274,7 +267,6 @@ class ModelFactory
     {
         $campaign = new CrowdfundingCampaign();
         $campaign->setTitle("A beautiful campaign");
-        $campaign->setSiteId($attributes["site_id"] ?? 1);
         $campaign->setEnds($attributes["ends"] ?? "2030-01-01");
         $campaign->save();
 
@@ -335,7 +327,6 @@ class ModelFactory
         $country = $country ?? CountryQuery::create()->findOneByCode("FR");
 
         $order = new Order();
-        $order->setSite($site ?? ModelFactory::createSite());
         $order->setUser($user);
         $order->setAmountTobepaid($amountToBePaid);
         $order->setShippingCost($shippingCost);
@@ -371,7 +362,6 @@ class ModelFactory
         $page = new Page();
         $page->setTitle($attributes["page_title"] ?? "Conditions Générales de Vente");
         $page->setUrl($attributes["page_url"] ?? "cgv");
-        $page->setSiteId($attributes["site_id"] ?? 1);
         $page->setStatus($attributes["status"] ?? 1);
         $page->setContent($attributes["content"] ?? "Veuillez lire attentivement le texte suivant.");
         $page->save();
@@ -383,7 +373,6 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createPayment(
-        ?Site     $site = null,
         ?Order    $order = null,
         int       $amount = 10000,
         string    $mode = "stripe",
@@ -393,7 +382,6 @@ class ModelFactory
     ): Payment
     {
         $payment = new Payment();
-        $payment->setSite($site);
         $payment->setOrder($order ?? self::createOrder());
         $payment->setAmount($amount);
         $payment->setMode($mode);
@@ -463,7 +451,6 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createStockItem(
-        ?Site     $site = null,
         ?Article  $article = null,
         ?User     $user = null,
         ?Cart     $cart = null,
@@ -516,10 +503,9 @@ class ModelFactory
     /**
      * @throws PropelException
      */
-    public static function createSiteOption($site, $key, $value): void
+    public static function createSiteOption($key, $value): void
     {
         $option = new Option();
-        $option->setSite($site);
         $option->setKey($key);
         $option->setValue($value);
         $option->save();
@@ -529,7 +515,6 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createShippingOption(
-        ?Site         $site = null,
         string        $type = "normal",
         ?Country      $country = null,
         string        $mode = "Lettre verte",
@@ -545,7 +530,6 @@ class ModelFactory
     ): ShippingOption
     {
         $shippingOption = new ShippingOption();
-        $shippingOption->setSiteId($site?->getId() ?? 1);
         $shippingOption->setType($type);
         $shippingOption->setMode($mode);
         $shippingOption->setFee($fee);
@@ -623,7 +607,6 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createInvitation(
-        ?Site     $site = null,
         array     $articles = [],
         string    $email = "invited-user@biblys.fr",
         string    $code = "ABCD1234",
@@ -635,7 +618,6 @@ class ModelFactory
 
 
         $invitation = new Invitation();
-        $invitation->setSite($site ?? self::createSite());
         $invitation->setEmail($email);
         $invitation->setCode($code);
         $invitation->setAllowsPreDownload($allowsPreDownload);
@@ -672,14 +654,12 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createAuthenticationMethod(
-        ?Site  $site = null,
         ?User  $user = null,
         string $identityProvider = "axys",
         string $externalId = "AXYS1234",
     ): AuthenticationMethod
     {
         $authenticationMethod = new AuthenticationMethod();
-        $authenticationMethod->setSite($site ?? self::createSite());
         $authenticationMethod->setUser($user ?? self::createUser());
         $authenticationMethod->setIdentityProvider($identityProvider);
         $authenticationMethod->setExternalId($externalId);
@@ -692,12 +672,9 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createAdminUser(
-        ?Site   $site = null,
         ?string $email = null,
     ): User
     {
-        $site = $site ?? self::createSite();
-
         $user = self::createUser(email: $email);
         self::createRight(user: $user, isAdmin: true);
 
@@ -708,15 +685,13 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createPublisherUser(
-        ?Site      $site = null,
         ?Publisher $publisher = null,
     ): User
     {
-        $site = $site ?? self::createSite();
         $publisher = $publisher ?? self::createPublisher();
 
         $user = self::createUser();
-        self::createRight(user: $user, site: $site, publisher: $publisher);
+        self::createRight(user: $user, publisher: $publisher);
 
         return $user;
     }
@@ -726,7 +701,6 @@ class ModelFactory
      */
     public static function createRight(
         ?User      $user = null,
-        ?Site      $site = null,
         ?Publisher $publisher = null,
         bool       $isAdmin = false,
         ?string    $axysAccountId = null,
@@ -734,7 +708,6 @@ class ModelFactory
     {
         $right = new Right();
         $right->setUser($user);
-        $right->setSite($site);
         $right->setPublisher($publisher);
         $right->setIsAdmin($isAdmin);
         $right->setAxysAccountId($axysAccountId);
@@ -747,7 +720,6 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createCustomer(
-        ?Site   $site = null,
         ?User   $user = null,
         ?string $axysAccountId = null,
         string  $firstName = "Silas",
@@ -757,7 +729,6 @@ class ModelFactory
     {
         $customer = new Customer();
 
-        $customer->setSite($site);
         $customer->setUser($user);
         $customer->setAxysAccountId($axysAccountId);
         $customer->setFirstname($firstName);
@@ -787,14 +758,12 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createUserOption(
-        ?Site   $site = null,
         ?User   $user = null,
         ?string $axysAccountId = null
     ): Option
     {
         $option = new Option();
 
-        $option->setSite($site);
         $option->setAxysAccountId($axysAccountId);
         $option->setUser($user);
         $option->save();
@@ -806,7 +775,6 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createPost(
-        ?Site    $site = null,
         string   $title = "Une actualité",
         bool     $status = Post::STATUS_ONLINE,
         DateTime $date = new DateTime(),
@@ -819,7 +787,6 @@ class ModelFactory
 
         $post = new Post();
 
-        $post->setSite($site ?? self::createSite());
         $post->setTitle($title);
         $post->setUrl($slugService->slugify($title));
         $post->setStatus($status);
@@ -853,14 +820,12 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createAlert(
-        ?Site    $site = null,
         ?User    $user = null,
         ?Article $article = null,
         ?string  $axysAccountId = null): Alert
     {
         $alert = new Alert();
 
-        $alert->setSite($site);
         $alert->setUser($user);
         $alert->setArticleId($article?->getId());
         $alert->setAxysAccountId($axysAccountId);
@@ -890,14 +855,12 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createWishlist(
-        ?Site   $site = null,
         ?User   $user = null,
         ?string $axysAccountId = null,
     ): Wishlist
     {
         $wishlist = new Wishlist();
 
-        $wishlist->setSite($site);
         $wishlist->setUser($user);
         $wishlist->setAxysAccountId($axysAccountId);
         $wishlist->save();
@@ -961,7 +924,6 @@ class ModelFactory
         ?Publisher $publisher = null,
         ?People    $contributor = null,
         ?Event     $event = null,
-        ?Site      $site = null,
         ?string    $type = null,
         string     $filePath = "/images/",
         string     $fileName = "image.jpg",
@@ -977,7 +939,6 @@ class ModelFactory
         $image->setPublisher($publisher);
         $image->setContributor($contributor);
         $image->setEvent($event);
-        $image->setSite($site);
         $image->setFilePath($filePath);
         $image->setFileName($fileName);
         $image->setFileSize($fileSize);
@@ -1007,13 +968,11 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createMediaFile(
-        ?Site  $site = null,
         string $directory = "medias",
         int    $fileSize = 100,
     ): MediaFile
     {
         $mediaFile = new MediaFile();
-        $mediaFile->setSiteId($site ? $site->getId() : self::createSite()->getId());
         $mediaFile->setDir($directory);
         $mediaFile->setFileSize($fileSize);
         $mediaFile->save();
@@ -1025,13 +984,11 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createEvent(
-        Site       $site,
         ?Publisher $publisher = null,
         bool       $isPublished = true,
     ): Event
     {
         $event = new Event();
-        $event->setSiteId($site->getId());
         $event->setTitle("Event");
         $event->setUrl("event");
         $event->setStart(new DateTime());
@@ -1068,14 +1025,12 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createRedirection(
-        Site   $site,
         string $oldUrl,
         string $newUrl,
     ): Redirection
     {
         $redirection = new Redirection();
 
-        $redirection->setSiteId($site->getId());
         $redirection->setOldUrl($oldUrl);
         $redirection->setNewUrl($newUrl);
         $redirection->save();
@@ -1102,7 +1057,6 @@ class ModelFactory
     {
         $supplier = new Supplier();
         $supplier->setName($name);
-        $supplier->setSiteId(0);
         $supplier->save();
 
         return $supplier;

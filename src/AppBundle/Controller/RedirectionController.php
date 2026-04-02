@@ -86,7 +86,6 @@ class RedirectionController extends Controller
 
         if (!$existingRedirectionForOldUrl) {
             $redirection = new Redirection();
-            $redirection->setSiteId($currentSite->getId());
             $redirection->setOldUrl($bodyParamsService->get("old_url"));
         } else {
             $redirection = $existingRedirectionForOldUrl;
