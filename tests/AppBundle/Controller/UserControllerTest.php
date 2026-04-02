@@ -56,6 +56,15 @@ require_once __DIR__ . "/../../setUp.php";
 class UserControllerTest extends TestCase
 {
     /**
+     * @throws PropelException
+     */
+    public function setUp(): void
+    {
+        UserQuery::create()->deleteAll();
+    }
+
+
+    /**
      * @throws SyntaxError
      * @throws RuntimeError
      * @throws LoaderError
@@ -130,7 +139,7 @@ class UserControllerTest extends TestCase
         // given
         $controller = new UserController();
         $site = ModelFactory::createSite();
-        $user = ModelFactory::createUser(site: $site);
+        $user = ModelFactory::createUser();
         $currentSite = new CurrentSite($site);
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive('authAdmin')->andReturns();
@@ -531,7 +540,7 @@ class UserControllerTest extends TestCase
             contact: "editions@paronymie.fr",
         );
         $currentSite = new CurrentSite($site);
-        ModelFactory::createUser(site: $site, email: "user@example.net");
+        ModelFactory::createUser(email: "user@example.net");
         $request = new Request();
         $templateService = Mockery::mock(TemplateService::class);
         $templateService->shouldReceive("renderResponse")
@@ -593,7 +602,7 @@ class UserControllerTest extends TestCase
         // given
         $controller = new UserController();
         $site = ModelFactory::createSite();
-        ModelFactory::createUser(site: $site, email: "new-@paronymie.fr");
+        ModelFactory::createUser(email: "new-@paronymie.fr");
         $queryParamsService = Mockery::mock(QueryParamsService::class);
         $queryParamsService->expects("parse")->with(["token" => ["type" => "string"]]);
         $queryParamsService->expects("get")->with("token")->andReturn("signup_token");
@@ -629,7 +638,7 @@ class UserControllerTest extends TestCase
         // given
         $controller = new UserController();
         $site = ModelFactory::createSite();
-        ModelFactory::createUser(site: $site, email: "existing-user@paronymie.fr");
+        ModelFactory::createUser(email: "existing-user@paronymie.fr");
         $queryParamsService = Mockery::mock(QueryParamsService::class);
         $queryParamsService->expects("parse")->with(["token" => ["type" => "string"]]);
         $queryParamsService->expects("get")->with("token")->andReturn("signup_token");
@@ -794,7 +803,7 @@ class UserControllerTest extends TestCase
         ]);
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
-        $user = ModelFactory::createUser(site: $site, email: "user@paronymie.fr");
+        $user = ModelFactory::createUser(email: "user@paronymie.fr");
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->expects("setUser")->with($user);
         $currentUser->expects("transfertVisitorCartToUser")->with("visitor_token");
@@ -852,7 +861,7 @@ class UserControllerTest extends TestCase
         ]);
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
-        $user = ModelFactory::createUser(site: $site, email: "user@paronymie.fr");
+        $user = ModelFactory::createUser(email: "user@paronymie.fr");
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->expects("setUser")->with($user);
         $currentUser->expects("transfertVisitorCartToUser")->with("visitor_token");
@@ -886,7 +895,7 @@ class UserControllerTest extends TestCase
         $userController = new UserController();
 
         $site = ModelFactory::createSite();
-        $user = ModelFactory::createUser(site: $site, email: "logged-user@biblys.fr");
+        $user = ModelFactory::createUser(email: "logged-user@biblys.fr");
 
         $currentSite = new CurrentSite($site);
         $currentUser = Mockery::mock(CurrentUser::class);
@@ -920,10 +929,10 @@ class UserControllerTest extends TestCase
         $userController = new UserController();
 
         $site = ModelFactory::createSite();
-        $user = ModelFactory::createUser(site: $site, email: "logged-user@biblys.fr");
+        $user = ModelFactory::createUser(email: "logged-user@biblys.fr");
 
         $currentSite = new CurrentSite($site);
-        ModelFactory::createAuthenticationMethod(site: $site, user: $user);
+        ModelFactory::createAuthenticationMethod(user: $user);
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->expects("getUser")->andReturn($user);
 

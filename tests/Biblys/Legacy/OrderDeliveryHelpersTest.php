@@ -740,11 +740,12 @@ class OrderDeliveryHelpersTest extends TestCase
         ModelFactory::createStockItem(site: $site, article: $article2, cart: $cart);
 
         ModelFactory::createSpecialOffer(
-            site: $site,
             name: "Cado",
             targetCollection: $targetCollection,
             freeArticle: $freeArticle,
-            endDate: new DateTime("yesterday")
+            targetQuantity: 1,
+            startDate: new DateTime("- 1 day"),
+            endDate: new DateTime("yesterday"),
         );
 
         // when
@@ -780,7 +781,6 @@ class OrderDeliveryHelpersTest extends TestCase
         ModelFactory::createStockItem(site: $site, article: $freeArticle, cart: $cart);
 
         ModelFactory::createSpecialOffer(
-            site: $site,
             name: "Cado",
             targetCollection: $targetCollection,
             freeArticle: $freeArticle,
@@ -823,7 +823,6 @@ class OrderDeliveryHelpersTest extends TestCase
         ModelFactory::createStockItem(site: $site, article: $freeArticle, cart: $cart);
 
         ModelFactory::createSpecialOffer(
-            site: $site,
             name: "Cado",
             targetCollection: $targetCollection,
             freeArticle: $freeArticle,
@@ -867,9 +866,7 @@ class OrderDeliveryHelpersTest extends TestCase
         ModelFactory::createStockItem(site: $site, article: $freeArticle, cart: $cart);
 
         ModelFactory::createSpecialOffer(
-            site: $site,
-            targetCollection: $targetCollection,
-            freeArticle: $freeArticle,
+            targetCollection: $targetCollection, freeArticle: $freeArticle,
         );
 
         $article1 = ModelFactory::createArticle(collection: $targetCollection);

@@ -147,7 +147,7 @@ class LegacyControllerTest extends TestCase
 
         // given
         $site = ModelFactory::createSite();
-        $user = ModelFactory::createUser(site: $site);
+        $user = ModelFactory::createUser();
         $request = RequestFactory::createAuthRequest(user: $user);
         $request->query->set("page", "pub_page");
         $session = new Session();

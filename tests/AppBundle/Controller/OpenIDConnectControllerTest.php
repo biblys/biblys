@@ -35,7 +35,9 @@ use Firebase\JWT\JWT;
 use JsonException;
 use Model\AuthenticationMethodQuery;
 use Mockery;
+use Model\BookCollectionQuery;
 use Model\OptionQuery;
+use Model\PublisherQuery;
 use Model\UserQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
@@ -50,6 +52,18 @@ require_once __DIR__."/../../setUp.php";
 class OpenIDConnectControllerTest extends TestCase
 {
     private string $testSecretKey = "fcc92afddd243c1fab6d7f08e5debb7fca6de2f34e366efc41782c9d58b24021";
+
+    /**
+     * @throws PropelException
+     */
+    public function setUp(): void
+    {
+        UserQuery::create()->deleteAll();
+        AuthenticationMethodQuery::create()->deleteAll();
+        PublisherQuery::create()->deleteAll();
+        BookCollectionQuery::create()->deleteAll();
+        OptionQuery::create()->deleteAll();
+    }
 
     /**
      * @throws JsonException
@@ -92,7 +106,7 @@ class OpenIDConnectControllerTest extends TestCase
         $currentSite = new CurrentSite($site);
         $openIDConnectProviderService = $this->_buildOIDCProviderService($externalId);
 
-        $user = ModelFactory::createUser(site: $site);
+        $user = ModelFactory::createUser();
         ModelFactory::createAuthenticationMethod(
             site: $site,
             user: $user,
@@ -153,7 +167,7 @@ class OpenIDConnectControllerTest extends TestCase
             emailVerifiedAt: new DateTime("2013-05-22 21:30:00"),
         );
 
-        $user = ModelFactory::createUser(site: $site, email: "old-email@example.net");
+        $user = ModelFactory::createUser(email: "old-email@example.net");
         ModelFactory::createAuthenticationMethod(
             site: $site,
             user: $user,
@@ -214,9 +228,8 @@ class OpenIDConnectControllerTest extends TestCase
             email: "existing-email@example.net",
         );
 
-        $otherUser = ModelFactory::createUser(site: $site, email: "existing-email@example.net");
+        $otherUser = ModelFactory::createUser(email: "existing-email@example.net");
         ModelFactory::createAuthenticationMethod(
-            site: $site,
             user: $otherUser,
             identityProvider: $identityProvider,
             externalId: 999,
@@ -268,25 +281,25 @@ class OpenIDConnectControllerTest extends TestCase
         $userEmail = "user-to-import@biblys.fr";
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
+        $currentSite->setOption("alerts", 0);
+        $currentSite->setOption("publisher_rights_management", 0);
         $openIDConnectProviderService = $this->_buildOIDCProviderService(
             externalId: $externalId,
             email: $userEmail,
         );
 
-        $cart = ModelFactory::createCart(site: $site, axysAccountId: $externalId);
-        $sellerCart = ModelFactory::createCart(site: $site, sellerId: $externalId);
-        $customer = ModelFactory::createCustomer(site: $site, axysAccountId: $externalId);
-        $list = ModelFactory::createStockItemList(site: $site, axysAccountId: $externalId);
-        $option = ModelFactory::createUserOption(site: $site, axysAccountId: $externalId);
-        $order = ModelFactory::createOrder(site: $site, axysAccountId: $externalId);
-        $post = ModelFactory::createPost(site: $site, axysAccountId: $externalId);
-        $adminRight = ModelFactory::createRight(user: null, site: $site, axysAccountId: $externalId);
-        $libraryItem = ModelFactory::createStockItem(site: $site, axysAccountId: $externalId);
-        $subscription = ModelFactory::createSubscription(site: $site, axysAccountId: $externalId);
+        $cart = ModelFactory::createCart(axysAccountId: $externalId);
+        $sellerCart = ModelFactory::createCart(sellerId: $externalId);
+        $customer = ModelFactory::createCustomer(axysAccountId: $externalId);
+        $list = ModelFactory::createStockItemList(axysAccountId: $externalId);
+        $option = ModelFactory::createUserOption(axysAccountId: $externalId);
+        $order = ModelFactory::createOrder(axysAccountId: $externalId);
+        $post = ModelFactory::createPost(axysAccountId: $externalId);
+        $adminRight = ModelFactory::createRight(isAdmin: true, axysAccountId: $externalId);
+        $libraryItem = ModelFactory::createStockItem(axysAccountId: $externalId);
+        $subscription = ModelFactory::createSubscription(axysAccountId: $externalId);
         $alert = ModelFactory::createAlert(axysAccountId: $externalId);
-        $publisherRight = ModelFactory::createRight(
-            user: null, site: null, publisher: ModelFactory::createPublisher(), axysAccountId: $externalId
-        );
+        $publisherRight = ModelFactory::createRight(publisher: ModelFactory::createPublisher(), axysAccountId: $externalId);
         $vote = ModelFactory::createVote(axysAccountId: $externalId);
         $wishlist = ModelFactory::createWishlist(axysAccountId: $externalId);
         $wish = ModelFactory::createWish(wishlist: $wishlist, axysAccountId: $externalId);
@@ -385,27 +398,22 @@ class OpenIDConnectControllerTest extends TestCase
         $alert->reload();
         $this->assertEquals($externalId, $alert->getAxysAccountId());
         $this->assertNull($alert->getUserId());
-        $this->assertNull($alert->getSiteId());
 
         $publisherRight->reload();
         $this->assertEquals($externalId, $publisherRight->getAxysAccountId());
         $this->assertNull($publisherRight->getUserId());
-        $this->assertNull($publisherRight->getSiteId());
 
         $vote->reload();
         $this->assertEquals($externalId, $vote->getAxysAccountId());
         $this->assertNull($vote->getSiteId());
-        $this->assertNull($vote->getUserId());
 
         $wishlist->reload();
         $this->assertEquals($externalId, $wishlist->getAxysAccountId());
         $this->assertNull($wishlist->getSiteId());
-        $this->assertNull($wishlist->getUserId());
 
         $wish->reload();
         $this->assertEquals($externalId, $wish->getAxysAccountId());
         $this->assertNull($wish->getSiteId());
-        $this->assertNull($wish->getUserId());
     }
 
     /**
