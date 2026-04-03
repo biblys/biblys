@@ -633,7 +633,6 @@ return function (
     if (empty($stockEntity['stock_invoice'])) {
         $invoicesQuery = EntityManager::prepareAndExecute(
             'SELECT `stock_invoice` FROM `stock` GROUP BY `stock_invoice`',
-            [],
         );
         $invoices = $invoicesQuery->fetchAll(PDO::FETCH_ASSOC);
         $invoices_options = null;
