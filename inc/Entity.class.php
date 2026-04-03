@@ -355,7 +355,7 @@ class EntityManager
         return $entities;
     }
 
-    public static function prepareAndExecute($query, array $params)
+    public static function prepareAndExecute($query, array $params = []): false|PDOStatement
     {
         global $_SQL;
         $config = Config::load();

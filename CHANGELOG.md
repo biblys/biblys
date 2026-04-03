@@ -1,5 +1,12 @@
 # Historique des modifications
 
+## 3.12.1 (DEV)
+
+### Corrections
+
+- Une erreur pouvait survenir lors de l'affichage de la page des ventes. C'est corrigé.
+- Une erreur pouvait survenir lors de l'ajout d'un exemplaire au stock. C'est corrige.
+
 ## 3.12.0 (3 avril 2026)
 
 ### Améliorations
