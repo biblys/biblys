@@ -33,23 +33,9 @@ $_SERVER["REMOTE_ADDR"] = "127.0.0.1";
 
 $config = Config::load();
 Connection::initPropel($config);
-createFixtures();
 
 require_once __DIR__."/../inc/functions.php";
 $config->set("environment", "test");
 
 $session = new \Symfony\Component\HttpFoundation\Session\Session();
 $session->start();
-
-/**
- * @throws PropelException
- */
-function createFixtures(): void
-{
-    $site = new \Model\Site();
-    $site->setTva("FR");
-    $site->setTitle("Éditions Paronymie");
-    $site->setContact("contact@biblys.fr");
-    $site->setTag("YS");
-    $site->save();
-}
