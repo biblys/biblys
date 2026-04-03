@@ -16,12 +16,14 @@
  */
 
 
+use Biblys\Service\InvalidSiteIdException;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @throws InvalidDateFormatException
+ * @throws InvalidSiteIdException
  * @throws PropelException
  */
 return function (Request $request): Response
@@ -72,16 +74,16 @@ return function (Request $request): Response
     }
 
     $neuf_sel = null;
-    $occaz_sel = null;
+    $usedArticlesSelected = null;
     if (isset($_GET['e'])) {
         if ($_GET["e"] == "neuf") $neuf_sel = 'selected="selected"';
-        elseif ($_GET["e"] == "occaz") $occaz_sel = 'selected="selected"';
+        elseif ($_GET["e"] == "used") $usedArticlesSelected = 'selected="selected"';
     }
 
-// Affichage par défaut : ventes du jour
+    // Affichage par défaut : ventes du jour
     if (empty($_GET["date1"]) && empty($_GET["d"]) && empty($_GET["m"])) $_GET["d"] = date("Y-m-d");
 
-// Raccourcis mois ou jour
+    // Raccourcis mois ou jour
     if (!empty($_GET["d"])) {
         $_GET["date1"] = $_GET["d"];
         $_GET["date2"] = $_GET["d"];
@@ -93,25 +95,24 @@ return function (Request $request): Response
     if (empty($_GET["time1"])) $_GET["time1"] = "00:00";
     if (empty($_GET["time2"])) $_GET["time2"] = "23:59";
 
-    $req = null;
+    $queriesStatements = [];
     $sqlParams = [];
 
     if (!empty($_GET["date1"])) {
-        $req .= "AND `order_payment_date` >= '" . $_GET["date1"] . " " . $_GET["time1"] . ":00' AND `order_payment_date` <= '" . $_GET["date2"] . " " . $_GET["time2"] . ":59'";
+        $queriesStatements[] = "`order_payment_date` >= '" . $_GET["date1"] . " " . $_GET["time1"] . ":00' AND `order_payment_date` <= '" . $_GET["date2"] . " " . $_GET["time2"] . ":59'";
     }
     if (!empty($_GET["p"])) {
-        $req .= " AND `" . $_GET["p"] . "` != '0' ";
+        $queriesStatements[] = " `" . $_GET["p"] . "` != '0' ";
     }
     if (!empty($_GET["e"])) {
-        if ($_GET["e"] == "neuf") $req .= " AND `stock_condition` = 'Neuf' ";
-        else $req .= " AND `stock_condition` != 'Neuf' ";
+        if ($_GET["e"] == "neuf") $queriesStatements[] = "`stock_condition` = 'Neuf' ";
+        else $queriesStatements[] = "`stock_condition` != 'Neuf' ";
     }
 
     $request = Request::createFromGlobals();
     $customerId = intval($request->query->get("customer_id"));
     if ($customerId) {
-        dump($customerId);
-        $req .= " AND `orders`.`customer_id` = :customer_id ";
+        $queriesStatements[] = "`orders`.`customer_id` = :customer_id ";
         $sqlParams["customer_id"] = $customerId;
     }
 
@@ -130,8 +131,8 @@ return function (Request $request): Response
     JOIN `orders` USING(`order_id`)
     JOIN `collections` USING(`collection_id`)
     LEFT JOIN `customers` ON `orders`.`customer_id` = `customers`.`customer_id`
-    WHERE 1=1 AND $req
-    GROUP BY `stock_id` ORDER BY `order_payment_date` ASC"
+    WHERE ".join(" AND ", $queriesStatements)."
+    GROUP BY `stock_id`, `order_payment_date` ORDER BY `order_payment_date`"
     );
     $sql->execute($sqlParams);
 
@@ -173,7 +174,7 @@ return function (Request $request): Response
                 <option value="order_payment_cash" ' . $cash_sel . '>Espèces</option>
                 <option value="order_payment_cheque" ' . $cheque_sel . '>Chèque</option>
                 <option value="order_payment_card" ' . $card_sel . '>Carte bancaire</option>
-                <option value="order_payment_paypal" ' . $paypal_sel . '>Paypal</option>
+                <option value="order_payment_paypal" ' . $paypal_sel . '>PayPal</option>
             </select>
         </p>
         <p>
@@ -181,7 +182,7 @@ return function (Request $request): Response
             <select name="e">
                 <option value="0">Tous</option>
                 <option value="neuf" ' . $neuf_sel . '>Neuf</option>
-                <option value="occaz" ' . $occaz_sel . '>Occasion</option>
+                <option value="used" ' . $usedArticlesSelected . '>Occasion</option>
             </select>
         </p>
         <p>
@@ -310,7 +311,7 @@ return function (Request $request): Response
             if ($l["order_payment_paypal"]) {
                 $content .= '
                     <td class="center">
-                        Paypal<br />' . price($l["order_payment_paypal"], 'EUR') . '
+                        PayPal<br />' . price($l["order_payment_paypal"], 'EUR') . '
                     </td>
                 ';
             }
@@ -464,7 +465,7 @@ return function (Request $request): Response
         <td>' . price($TotalTransfer, 'EUR') . '</td>
     </tr>
     <tr>
-        <td class="right">Paypal :</td>
+        <td class="right">PayPal :</td>
         <td>' . price($TotalPaypal, 'EUR') . '</td>
     </tr>
     <tr>
