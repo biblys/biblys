@@ -19,11 +19,16 @@
 namespace Biblys\Service;
 
 use Biblys\Exception\InvalidEmailAddressException;
+use Biblys\Exception\UnreachableExternalServiceException;
 use Biblys\Legacy\LegacyCodeHelper;
+use Biblys\Test\Helpers;
+use Mockery;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Mailer\Exception\TransportException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Mailer\MailerInterface;
 
-require_once __DIR__."/../../setUp.php";
+require_once __DIR__ . "/../../setUp.php";
 
 class MailerTest extends TestCase
 {
@@ -86,5 +91,23 @@ class MailerTest extends TestCase
             ["vendor@biblys.fr" => "vendor"],
             ["reply-to" => "yes-reply.4.@biblys.fr"]
         );
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testTransportException(): void
+    {
+        // given
+        $symfonyMailer = Mockery::mock(MailerInterface::class);
+        $symfonyMailer->shouldReceive("send")->andThrow(new TransportException());
+        $mailer = new Mailer(LegacyCodeHelper::getGlobalConfig(), $symfonyMailer);
+
+        // when
+        $exception = Helpers::runAndCatchException(fn() => $mailer->send("customer@biblys.fr", "Hello!", "How are you?"));
+
+        // when
+        $this->assertInstanceOf(UnreachableExternalServiceException::class, $exception);
+        $this->assertEquals("Le service d'envoi d'emails est injoignable. Merci de réessayer plus tard.", $exception->getMessage());
     }
 }
