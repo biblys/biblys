@@ -25,6 +25,7 @@ use Egulias\EmailValidator\Validation\MultipleValidationWithAnd;
 use Egulias\EmailValidator\Validation\RFCValidation;
 use Exception;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mailer\Transport;
 use Symfony\Component\Mailer\Transport\SendmailTransport;
 use Symfony\Component\Mailer\Transport\TransportInterface;
@@ -37,14 +38,15 @@ use Symfony\Component\Mime\Email;
 class Mailer
 {
     private TransportInterface $transport;
-    private \Symfony\Component\Mailer\Mailer $mailer;
+    private MailerInterface $symfonyMailer;
+    private bool $skipSendInTestEnv = true;
     private Address $defaultSender;
     private string $method = "sendmail";
 
     /**
      * @throws Exception
      */
-    public function __construct(Config $config)
+    public function __construct(Config $config, ?MailerInterface $symfonyMailer = null)
     {
         $currentSite = CurrentSite::buildFromConfig($config);
 
@@ -59,8 +61,13 @@ class Mailer
             $this->transport = Transport::fromDsn($smtpDsn);
         }
 
-        // Create mailer with defined transport
-        $this->mailer = new \Symfony\Component\Mailer\Mailer($this->transport);
+        // Create mailer with defined transport (or use injected mailer)
+        if ($symfonyMailer !== null) {
+            $this->symfonyMailer = $symfonyMailer;
+            $this->skipSendInTestEnv = false;
+        } else {
+            $this->symfonyMailer = new \Symfony\Component\Mailer\Mailer($this->transport);
+        }
     }
 
     /**
@@ -118,7 +125,7 @@ class Mailer
             $mailHeaders->addTextHeader($key, $val);
         }
 
-        if (getenv("PHP_ENV") === "test") {
+        if ($this->skipSendInTestEnv && getenv("PHP_ENV") === "test") {
             return true;
         }
 
