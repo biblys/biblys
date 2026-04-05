@@ -19,6 +19,7 @@
 namespace Biblys\Service;
 
 use Biblys\Exception\InvalidEmailAddressException;
+use Biblys\Exception\UnreachableExternalServiceException;
 use Egulias\EmailValidator\EmailValidator;
 use Egulias\EmailValidator\Validation\DNSCheckValidation;
 use Egulias\EmailValidator\Validation\MultipleValidationWithAnd;
@@ -76,6 +77,7 @@ class Mailer
      * @param array $from ["email" => "name"]
      * @throws TransportExceptionInterface
      * @throws InvalidEmailAddressException
+     * @throws UnreachableExternalServiceException
      */
     public function send(
         string $to,
@@ -130,7 +132,16 @@ class Mailer
         }
 
         // Send mail
-        $this->mailer->send($message);
+        try {
+            $this->symfonyMailer->send($message);
+
+        } catch (TransportExceptionInterface $exception) {
+            throw new UnreachableExternalServiceException(
+                "Le service d'envoi d'emails est injoignable. Merci de réessayer plus tard.",
+                code: $exception->getCode(),
+                previous: $exception
+            );
+        }
 
         // Log
         $loggerService = new LoggerService();
