@@ -19,6 +19,7 @@
 namespace Usecase;
 
 use Biblys\Exception\InvalidEmailAddressException;
+use Biblys\Service\CurrentSite;
 use Biblys\Service\InvalidSiteIdException;
 use Biblys\Service\Mailer;
 use Biblys\Service\TemplateService;
@@ -38,21 +39,23 @@ readonly class MarkOrderAsPaidUsecase
 {
 
     public function __construct(
-        private UrlGeneratorInterface $urlGenerator,
-        private TemplateService $templateService,
-        private Mailer $mailer
+        private UrlGeneratorInterface          $urlGenerator,
+        private TemplateService                $templateService,
+        private Mailer                         $mailer,
+        private CurrentSite                    $currentSite,
+        private AddArticleToUserLibraryUsecase $addArticleToUserLibraryUsecase,
     )
     {
     }
 
     /**
+     * @throws BusinessRuleException
      * @throws InvalidEmailAddressException
-     * @throws PropelException
-     * @throws TransportExceptionInterface
-     * @throws InvalidSiteIdException
      * @throws LoaderError
+     * @throws PropelException
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws TransportExceptionInterface
      */
     public function execute(Order $order, int $payedAmountInCents, string $paymentMode): void
     {
@@ -68,6 +71,11 @@ readonly class MarkOrderAsPaidUsecase
             $formatter = new \NumberFormatter('fr_FR', \NumberFormatter::CURRENCY);
             $formattedPayedAmount = $formatter->formatCurrency($payedAmountInCents / 100, 'EUR');
 
+            $libraryUrl = "";
+            if ($order->containsDownloadableArticles()) {
+                $libraryUrl = $this->urlGenerator->generate("user_library");
+            }
+
             $mailSubject = "Paiement pour votre commande bien reçu";
             $mailBody = $this->templateService->render(
                 "AppBundle:Order:order-payed-email.html.twig",
@@ -76,8 +84,8 @@ readonly class MarkOrderAsPaidUsecase
                     "order_id" => $order->getId(),
                     "payed_amount" => $formattedPayedAmount, true,
                     "payment_mode" => $paymentMode,
-                    "has_downloadable" => false, // $order->containsDownloadableArticles(),
-                    "library_url" => "",
+                    "has_downloadable" => $order->containsDownloadableArticles(),
+                    "library_url" => $libraryUrl,
                     "order_url" => $orderUrl,
                 ]
             );
@@ -88,10 +96,26 @@ readonly class MarkOrderAsPaidUsecase
                 $mailBody,
             );
 
+            if ($order->containsDownloadableArticles()) {
+
+                $downloadableItems = array_values(array_filter(
+                    $order->getStockItems()->getArrayCopy(),
+                    fn($stockItem) => $stockItem->getArticle()->getType()->isDownloadable()
+                ));
+
+                $this->addArticleToUserLibraryUsecase->execute(
+                    currentSite: $this->currentSite,
+                    urlGenerator: $this->urlGenerator,
+                    user: $order->getUser(),
+                    items: $downloadableItems,
+                    sendEmail: true,
+                );
+            }
+
             $con->commit();
         } catch (Exception $exception) {
             $con->rollBack();
             throw $exception;
         }
-     }
+    }
 }
