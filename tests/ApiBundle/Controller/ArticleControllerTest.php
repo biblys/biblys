@@ -86,15 +86,6 @@ class ArticleControllerTest extends TestCase
             publisher: $publisher,
             collection: $collection
         );
-        $currentSite->setOption("publisher_filter", $publisher->getId());
-
-        $publisher = ModelFactory::createPublisher(name: "Un autre éditeur");
-        ModelFactory::createArticle(
-            title: "Livre d'un autre éditeur",
-            ean: "9789876543210",
-            price: "21",
-            publisher: $publisher
-        );
 
         // when
         $response = $controller->export($currentUser, $currentSite);

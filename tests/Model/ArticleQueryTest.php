@@ -38,6 +38,14 @@ class ArticleQueryTest extends TestCase
     /**
      * @throws PropelException
      */
+    protected function tearDown(): void
+    {
+        OptionQuery::create()->deleteAll();
+    }
+
+    /**
+     * @throws PropelException
+     */
     public function testFilterForSiteReturnsEverythingWithoutFilter()
     {
         // given

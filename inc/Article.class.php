@@ -475,8 +475,6 @@ class Article extends Entity
      */
     public function getStock($mode = 'all'): array
     {
-        
-
         $sm = new StockManager();
         $stock = $sm->getAll([
             'article_id' => $this->get('id')
@@ -881,7 +879,7 @@ class Article extends Entity
      */
     public function getCartButton($text = false): string
     {
-        
+
         trigger_deprecation(
             "biblys/biblys",
             "2.67.0",
@@ -983,7 +981,6 @@ class Article extends Entity
      */
     public function getShareButtons(array $options = []): string
     {
-        
         $request = LegacyCodeHelper::getGlobalRequest();
 
         $host = $request->getScheme() . '://' . $request->getHost();
@@ -1167,6 +1164,32 @@ class ArticleManager extends EntityManager
     }
 
     /**
+     * Add site filters if any defined
+     * @param $where
+     * @return mixed
+     * @throws Exception
+     */
+    public function addSiteFilters($where): mixed
+    {
+        if ($this->ignoreSiteFilters) {
+            return $where;
+        }
+
+        $currentSite = LegacyCodeHelper::getGlobalSite(ignoreDeprecation: true);
+
+        $publisherFilter = $currentSite->getOpt('publisher_filter');
+        if ($publisherFilter && !array_key_exists('publisher_id', $where)) {
+            $where['publisher_id'] = explode(',', $publisherFilter);
+        }
+
+        $collectionFilterHide = $currentSite->getOpt('collection_filter_hide');
+        if ($collectionFilterHide && !array_key_exists('collection_id', $where)) {
+            $where['collection_id NOT IN'] = explode(',', $collectionFilterHide);
+        }
+        return $where;
+    }
+
+    /**
      * @throws Exception
      */
     public function getAll(array $where = array(), array $options = array(), $withJoins = true): array
@@ -1183,6 +1206,8 @@ class ArticleManager extends EntityManager
             $i++;
         }
 
+        $where = $this->addSiteFilters($where);
+
         if (!empty($query)) {
             $query = implode(' AND ', $query);
             return $this->getQuery($query, $params, $options, $withJoins);
@@ -1196,7 +1221,8 @@ class ArticleManager extends EntityManager
      */
     public function countAll()
     {
-        $q = EntityManager::buildSqlQuery();
+        $where = $this->addSiteFilters([]);
+        $q = EntityManager::buildSqlQuery($where);
         $query = 'SELECT COUNT(*) FROM `' . $this->table . '` WHERE ' . $q['where'];
         $res = $this->db->prepare($query);
         $res->execute($q['params']);
@@ -1208,7 +1234,8 @@ class ArticleManager extends EntityManager
      */
     public function countAllWithoutSearchTerms()
     {
-        $q = EntityManager::buildSqlQuery();
+        $where = $this->addSiteFilters([]);
+        $q = EntityManager::buildSqlQuery($where);
         $query = 'SELECT COUNT(*) FROM `' . $this->table . '` WHERE `article_keywords_generated` IS NULL AND `article_url` IS NOT NULL';
         if (!empty($q['where'])) {
             $query .= ' AND ' . $q['where'];
@@ -1297,6 +1324,13 @@ class ArticleManager extends EntityManager
     {
         $query = array();
         $params = array();
+
+        $filters = $this->addSiteFilters([]);
+        if (count($filters)) {
+            $filters = EntityManager::buildSqlQuery($filters);
+            $query[] = $filters['where'];
+            $params = array_merge($params, $filters['params']);
+        }
 
         $i = 0;
         $keywords = explode(' ', $keywords);
@@ -1704,6 +1738,8 @@ class ArticleManager extends EntityManager
      */
     private function _countAllForWhere(array $where): mixed
     {
+        $where = $this->addSiteFilters($where);
+
         $q = EntityManager::buildSqlQuery($where);
         $query = 'SELECT COUNT(*) FROM `' . $this->table . '` WHERE ' . $q['where'];
         $res = $this->db->prepare($query);
