@@ -45,13 +45,13 @@ class AddArticleToUserLibraryUsecase
      * @throws TransportExceptionInterface
      */
     public function execute(
-        CurrentSite  $currentSite,
-        UrlGenerator $urlGenerator,
-        User         $user,
-        ?Article     $article = null,
-        array        $items = [],
-        bool         $allowsPreDownload = false,
-        bool         $sendEmail = false,
+        CurrentSite           $currentSite,
+        UrlGeneratorInterface $urlGenerator,
+        User                  $user,
+        ?Article              $article = null,
+        array                 $items = [],
+        bool                  $allowsPreDownload = false,
+        bool                  $sendEmail = false,
     ): void
     {
         if ($article) {
