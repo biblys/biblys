@@ -20,6 +20,7 @@ use Biblys\Data\ArticleType;
 use Biblys\Service\CurrentSite;
 use Biblys\Test\EntityFactory;
 use Biblys\Test\ModelFactory;
+use Model\OptionQuery;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Generator\UrlGenerator;

@@ -763,14 +763,6 @@ class ArticleTest extends PHPUnit\Framework\TestCase
         $this->expectNotToPerformAssertions();
 
         // given
-        $pm = new PublisherManager();
-        $publisherAllowed = $pm->create(["publisher_name" => "Éditeur inexistant"]);
-        $sm = new SiteManager();
-
-        /** @var Site $site */
-        $site = $sm->create();
-        $GLOBALS["LEGACY_CURRENT_SITE"] = $site;
-        $GLOBALS["LEGACY_CURRENT_SITE"]->setOpt("publisher_filter", $publisherAllowed->get("id"));
         $am = new ArticleManager();
 
         $am->setIgnoreSiteFilters(true);

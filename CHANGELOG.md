@@ -4,8 +4,12 @@
 
 ### Corrections
 
-- Une erreur pouvait survenir lors de l'affichage de la page des ventes. C'est corrigé.
-- Une erreur pouvait survenir lors de l'ajout d'un exemplaire au stock. C'est corrige.
+- Une erreur pouvait survenir lors de l'affichage de la page des ventes. C'est
+  corrigé.
+- Une erreur pouvait survenir lors de l'ajout d'un exemplaire au stock. C'est
+  corrige.
+- Dans certains cas, le filtre éditeur pouvait ne pas être appliqué aux
+  résultats de recherche. C'est corrigé.
 
 ## 3.12.0 (3 avril 2026)
 
