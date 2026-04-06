@@ -230,9 +230,51 @@ class OrderTest extends TestCase
         $this->assertEquals(579, $result);
     }
 
-    /** containsDownloadableArticle /*
+    /** containsPhysicalArticles */
 
-    /*
+    /**
+     * @return void
+     * @throws PropelException
+     */
+    public function testContainsPhysicalArticlesWhenFalse(): void
+    {
+        // given
+        $order = new Order();
+        $downloadableArticle = ModelFactory::createArticle(typeId: ArticleType::EBOOK);
+        $stockItem = ModelFactory::createStockItem($downloadableArticle);
+        $order->addStockItem($stockItem);
+
+        // when
+        $result = $order->containsPhysicalArticles();
+
+        // then
+        $this->assertFalse($result);
+    }
+
+    /**
+     * @return void
+     * @throws PropelException
+     */
+    public function testContainsPhysicalArticlesWhenTrue(): void
+    {
+        // given
+        $order = new Order();
+        $physicalArticle = ModelFactory::createArticle();
+        $stockItem = ModelFactory::createStockItem($physicalArticle);
+        $order->addStockItem($stockItem);
+
+        // when
+        $result = $order->containsPhysicalArticles();
+
+        // then
+        $this->assertTrue($result);
+    }
+
+    /**
+     * containsDownloadableArticles
+     */
+
+    /**
      * @throws PropelException
      */
     public function testContainsDownloadableArticlesWhenFalse(): void
