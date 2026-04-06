@@ -105,6 +105,22 @@ class Order extends BaseOrder
     /**
      * @throws PropelException
      */
+    public function containsPhysicalArticles(): bool
+    {
+        $stockItems = $this->getStockItems()->getArrayCopy();
+
+        foreach ($stockItems as $stockItem) {
+            if ($stockItem->getArticle()->getType()->isPhysical()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @throws PropelException
+     */
     public function containsDownloadableArticles(): bool
     {
         $stockItems = $this->getStockItems()->getArrayCopy();
