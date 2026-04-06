@@ -18,7 +18,9 @@
 
 namespace Usecase;
 
+use Biblys\Data\ArticleType;
 use Biblys\Exception\InvalidEmailAddressException;
+use Biblys\Service\CurrentSite;
 use Biblys\Service\Mailer;
 use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
@@ -68,6 +70,74 @@ class MarkOrderAsPaidUsecaseTest extends TestCase
             urlGenerator: $urlGenerator,
             templateService: $templateService,
             mailer: $mailer,
+            currentSite: $this->createMock(CurrentSite::class),
+            addArticleToUserLibraryUsecase: $this->createMock(AddArticleToUserLibraryUsecase::class),
+        );
+
+        // when
+        $usecase->execute($order, payedAmountInCents: 999, paymentMode: "Carte bancaire");
+
+        // then
+        $this->assertTrue($order->isPaid(), "order is marked as paid");
+    }
+
+    /**
+     * @throws PropelException
+     * @throws InvalidEmailAddressException
+     * @throws Exception
+     * @throws TransportExceptionInterface
+     * @throws \Exception
+     */
+    public function testMarkingAsPaidOrderWithDownloadableArticles(): void
+    {
+        // given
+        $downloadableArticle = ModelFactory::createArticle(typeId: ArticleType::EBOOK);
+        $stockItem = ModelFactory::createStockItem(article: $downloadableArticle);
+        $user = ModelFactory::createUser();
+        $order = ModelFactory::createOrder(
+            slug: "order-123",
+            email: "payer@paronymie.fr",
+        );
+        $order->addStockItem($stockItem);
+        $order->setUser($user);
+
+        $urlGenerator = $this->createMock(UrlGeneratorInterface::class);
+        $urlGenerator->method("generate")->willReturnMap([
+            ["legacy_order", ["url" => "order-123"], 1, "https://paronymie.fr/order/order-123"],
+            ["user_library", [], 1, "https://paronymie.fr/user/library"],
+        ]);
+        $templateService = Helpers::getTemplateService();
+        $mailer = $this->createMock(Mailer::class);
+        $mailer->expects($this->once())->method("send")->with(
+            $this->anything(),
+            $this->anything(),
+            Helpers::stringContainsString([
+                "Vous pouvez télécharger les articles numériques de votre commande depuis",
+                "https://paronymie.fr/user/library",
+            ], $this),
+        );
+        $currentSite = $this->createMock(CurrentSite::class);
+
+        $addArticleToUserLibraryUsecase = $this->getMockBuilder(AddArticleToUserLibraryUsecase::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(["execute"])
+            ->getMock();
+        $addArticleToUserLibraryUsecase->expects($this->once())->method("execute")->with(
+            $currentSite,
+            $urlGenerator,
+            $user,
+            null,          // article
+            [$stockItem],  // items
+            false,         // allowsPreDownload
+            true,          // sendEmail
+        );
+
+        $usecase = new MarkOrderAsPaidUsecase(
+            urlGenerator: $urlGenerator,
+            templateService: $templateService,
+            mailer: $mailer,
+            currentSite: $currentSite,
+            addArticleToUserLibraryUsecase: $addArticleToUserLibraryUsecase,
         );
 
         // when
