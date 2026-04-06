@@ -25,6 +25,8 @@ use Biblys\Service\MetaTagsService;
 use Biblys\Service\TemplateService;
 use Exception;
 use Mockery;
+use PHPUnit\Framework\Constraint\Callback;
+use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ReflectionException;
 use Symfony\Component\HttpFoundation\Request;
@@ -86,5 +88,18 @@ class Helpers
             metaTagsService: $metaTags,
             request: $request
         );
+    }
+
+    public static function stringContainsString(array $needles, TestCase $instance): Callback
+    {
+        return $instance->callback(function ($arg) use ($needles) {
+            foreach ($needles as $needle) {
+                if (!str_contains($arg, $needle)) {
+                    throw new \Exception("String not found: $needle in \n\n $arg");
+                }
+            }
+
+            return true;
+        });
     }
 }
