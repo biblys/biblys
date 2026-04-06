@@ -18,6 +18,7 @@
 
 namespace Model;
 
+use Biblys\Data\ArticleType;
 use Biblys\Test\ModelFactory;
 use DateTime;
 use PHPUnit\Framework\TestCase;
@@ -93,7 +94,6 @@ class OrderTest extends TestCase
         // then
         $this->assertTrue($result);
     }
-
 
     /** getTrackingLink */
 
@@ -228,5 +228,43 @@ class OrderTest extends TestCase
 
         // then
         $this->assertEquals(579, $result);
+    }
+
+    /** containsDownloadableArticle /*
+
+    /*
+     * @throws PropelException
+     */
+    public function testContainsDownloadableArticlesWhenFalse(): void
+    {
+        // given
+        $order = new Order();
+        $physicalArticle = ModelFactory::createArticle();
+        $stockItem = ModelFactory::createStockItem($physicalArticle);
+        $order->addStockItem($stockItem);
+
+        // when
+        $result = $order->containsDownloadableArticles();
+
+        // then
+        $this->assertFalse($result);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testContainsDownloadableArticlesWhenTrue(): void
+    {
+        // given
+        $order = new Order();
+        $downloadableArticle = ModelFactory::createArticle(typeId: ArticleType::EBOOK);
+        $stockItem = ModelFactory::createStockItem($downloadableArticle);
+        $order->addStockItem($stockItem);
+
+        // when
+        $result = $order->containsDownloadableArticles();
+
+        // then
+        $this->assertTrue($result);
     }
 }
