@@ -62,7 +62,6 @@ class CollectionControllerTest extends TestCase
         $currentUser->expects("authPublisher");
         $currentUser->expects("hasPublisherRight")->andReturn(false);
         $currentSite = Mockery::mock(CurrentSite::class);
-        $currentSite->shouldReceive("allowsPublisher")->andReturn(true);
         $queryParams = Mockery::mock(QueryParamsService::class);
         $queryParams->expects("parse")->with(["term" => ["type" => "string"]]);
         $queryParams->expects("get")->with("term")->andReturn("Searchable");
@@ -96,7 +95,6 @@ class CollectionControllerTest extends TestCase
         $currentUser->expects("hasPublisherRight")->andReturn(true);
         $currentUser->expects("getCurrentRight")->andReturn($publisherRight);
         $currentSite = Mockery::mock(CurrentSite::class);
-        $currentSite->shouldReceive("allowsPublisher")->andReturn(true);
         $queryParams = Mockery::mock(QueryParamsService::class);
         $queryParams->expects("parse")->with(["term" => ["type" => "string"]]);
         $queryParams->expects("get")->with("term")->andReturn("User");

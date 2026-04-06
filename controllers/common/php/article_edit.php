@@ -59,13 +59,6 @@ return function (
 
     $imagesService = new ImagesService($config, $currentSite, new Symfony\Component\Filesystem\Filesystem());
 
-    $publisherId = $currentUser->getCurrentRight()?->getPublisherId();
-    $publisher = PublisherQuery::create()->findPk($publisherId);
-    if ($publisherId && !$currentSite->allowsPublisher($publisher)) {
-        $publisherName = $publisher->getName();
-        throw new AccessDeniedHttpException("Votre maison d'édition $publisherName n'est pas autorisée sur ce site.");
-    }
-
     $am->setIgnoreSiteFilters(true);
 
     $content = "";
