@@ -118,7 +118,42 @@ class OrderControllerTest extends TestCase
         $this->assertEquals("/order/order-slug", $response->getTargetUrl());
     }
 
-    /** updateAction */
+    /** updateAction
+     * @throws InvalidEmailAddressException
+     * @throws PropelException
+     * @throws TransportExceptionInterface
+     */
+
+    public function testUpdateActionToMarkOrderAsPaid(): void
+    {
+        // given
+        $controller = new OrderController();
+        $order = ModelFactory::createOrder();
+
+        $payload = json_encode(["payment_mode" => null, "tracking_number" => null]);
+        $request = new Request(content: $payload);
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->once()->andReturn();
+        $templateService = Mockery::mock(TemplateService::class);
+        $mailer = Mockery::mock(Mailer::class);
+
+        // when
+        $response = $controller->updateAction(
+            $request,
+            $currentSite,
+            $currentUser,
+            $templateService,
+            $mailer,
+            $order->getId(),
+            "payed",
+        );
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $order->reload();
+        $this->assertTrue($order->isPaid());
+    }
 
     /**
      * @throws InvalidEmailAddressException
