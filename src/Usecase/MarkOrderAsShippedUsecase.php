@@ -30,12 +30,12 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
-class MarkOrderAsShippedUsecase
+readonly class MarkOrderAsShippedUsecase
 {
     public function __construct(
-        private readonly CurrentSite $currentSite,
-        private readonly TemplateService $templateService,
-        private readonly Mailer $mailer,
+        private CurrentSite     $currentSite,
+        private TemplateService $templateService,
+        private Mailer          $mailer,
     )
     {
 
