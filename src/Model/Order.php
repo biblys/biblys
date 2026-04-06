@@ -101,4 +101,20 @@ class Order extends BaseOrder
             return $totalWeight + $stockItem->getWeight();
         }, 0);
     }
+
+    /**
+     * @throws PropelException
+     */
+    public function containsDownloadableArticles(): bool
+    {
+        $stockItems = $this->getStockItems()->getArrayCopy();
+
+        foreach ($stockItems as $stockItem) {
+            if ($stockItem->getArticle()->getType()->isDownloadable()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
