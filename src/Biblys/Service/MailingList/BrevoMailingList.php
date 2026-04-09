@@ -19,35 +19,34 @@
 namespace Biblys\Service\MailingList;
 
 use Biblys\Service\Config;
-use Brevo\Client\Api\ContactsApi;
-use Brevo\Client\ApiException;
-use Brevo\Client\Configuration;
-use Brevo\Client\Model\AddContactToList;
-use Brevo\Client\Model\CreateContact;
-use Brevo\Client\Model\GetExtendedContactDetails;
-use Brevo\Client\Model\RemoveContactFromList;
-use GuzzleHttp\Client;
+use Brevo\Brevo;
+use Brevo\Contacts\ContactsClientInterface;
+use Brevo\Contacts\Requests\AddContactToListRequest;
+use Brevo\Contacts\Requests\CreateContactRequest;
+use Brevo\Contacts\Requests\GetContactsFromListRequest;
+use Brevo\Contacts\Requests\RemoveContactFromListRequest;
+use Brevo\Contacts\Types\AddContactToListRequestBodyEmails;
+use Brevo\Contacts\Types\GetContactInfoResponse;
+use Brevo\Contacts\Types\RemoveContactFromListRequestBodyEmails;
+use Brevo\Exceptions\BrevoApiException;
 
 class BrevoMailingList implements MailingListInterface
 {
-
     private Config $config;
-    private ContactsApi $client;
+    private ContactsClientInterface $client;
     private string $source = "Brevo";
 
     public function __construct(Config $config)
     {
         $this->config = $config;
 
-        $config = Configuration::getDefaultConfiguration()->setApiKey(
-            'api-key',
-            $config->get("mailing.api_key"),
-        );
+        $brevo = new Brevo($config->get("mailing.api_key"));
+        $this->client = $brevo->contacts;
+    }
 
-        $this->client = new ContactsApi(
-            new Client(),
-            $config
-        );
+    public function setClient(ContactsClientInterface $client): void
+    {
+        $this->client = $client;
     }
 
     public function getSource(): string
@@ -62,18 +61,18 @@ class BrevoMailingList implements MailingListInterface
     }
 
     /**
-     * @throws ApiException
+     * @throws BrevoApiException
      */
     public function getContactCount(): int
     {
-        $listId = $this->config->get("mailing.list_id");
+        $listId = (int) $this->config->get("mailing.list_id");
         $result = $this->client->getList($listId);
 
-        return $result["uniqueSubscribers"];
+        return $result->uniqueSubscribers;
     }
 
     /**
-     * @throws ApiException
+     * @throws BrevoApiException
      */
     public function getContacts(int $offset = 0, int $limit = 500): array
     {
@@ -81,21 +80,23 @@ class BrevoMailingList implements MailingListInterface
             $limit = 500;
         }
 
-        $listId = $this->config->get("mailing.list_id");
+        $listId = (int) $this->config->get("mailing.list_id");
         $result = $this->client->getContactsFromList(
-            listId: $listId,
-            limit: $limit,
-            offset: $offset,
-            sort: "asc",
+            $listId,
+            new GetContactsFromListRequest([
+                "limit" => $limit,
+                "offset" => $offset,
+                "sort" => "asc",
+            ]),
         );
 
         return array_map(function ($dto) {
-            return new Contact($dto["email"], $dto["createdAt"]);
-        }, $result["contacts"]);
+            return new Contact($dto->email, $dto->createdAt);
+        }, $result->contacts);
     }
 
     /**
-     * @throws ApiException
+     * @throws BrevoApiException
      */
     public function hasContact(string $emailAddress): bool
     {
@@ -104,20 +105,17 @@ class BrevoMailingList implements MailingListInterface
             return false;
         }
 
-        $listId = $this->config->get("mailing.list_id");
-        $listIds = $contact["listIds"] ?? [];
-        return in_array($listId, $listIds);
+        $listId = (int) $this->config->get("mailing.list_id");
+        return in_array($listId, $contact->listIds);
     }
 
     /**
-     * @throws ApiException
+     * @throws BrevoApiException
      */
     public function addContact(string $emailAddress, bool $force = false): void
     {
-        $contact = $this->_getContactForEmail($emailAddress);
-        if (!$contact) {
-            $createContact = new CreateContact(["email" => $emailAddress]);
-            $this->client->createContact($createContact);
+        if (!$this->_getContactForEmail($emailAddress)) {
+            $this->client->createContact(new CreateContactRequest(["email" => $emailAddress]));
         }
 
         if ($this->hasContact($emailAddress)) {
@@ -125,18 +123,20 @@ class BrevoMailingList implements MailingListInterface
         }
 
         $listId = (int) $this->config->get("mailing.list_id");
-        $contactEmails = new AddContactToList(["emails" => [$emailAddress]]);
-        $this->client->addContactToList($contactEmails, $listId);
+        $this->client->addContactToList(
+            $listId,
+            new AddContactToListRequest([
+                "body" => new AddContactToListRequestBodyEmails(["emails" => [$emailAddress]]),
+            ]),
+        );
     }
 
     /**
-     * @throws ApiException
+     * @throws BrevoApiException
      */
     public function removeContact(string $emailAddress): void
     {
-
-        $contact = $this->_getContactForEmail($emailAddress);
-        if (!$contact) {
+        if (!$this->_getContactForEmail($emailAddress)) {
             return;
         }
 
@@ -145,23 +145,26 @@ class BrevoMailingList implements MailingListInterface
         }
 
         $listId = (int) $this->config->get("mailing.list_id");
-        $contactEmails = new RemoveContactFromList(["emails" => [$emailAddress]]);
-        $this->client->removeContactFromList($contactEmails, $listId);
+        $this->client->removeContactFromList(
+            $listId,
+            new RemoveContactFromListRequest([
+                "body" => new RemoveContactFromListRequestBodyEmails(["emails" => [$emailAddress]]),
+            ]),
+        );
     }
 
     /**
-     * @throws ApiException
+     * @throws BrevoApiException
      */
-    private function _getContactForEmail(string $emailAddress): ?GetExtendedContactDetails
+    private function _getContactForEmail(string $emailAddress): ?GetContactInfoResponse
     {
         try {
             return $this->client->getContactInfo($emailAddress);
-        } catch (ApiException $exception) {
+        } catch (BrevoApiException $exception) {
             if ($exception->getCode() === 404) {
                 return null;
-            } else {
-                throw $exception;
             }
+            throw $exception;
         }
     }
 }
