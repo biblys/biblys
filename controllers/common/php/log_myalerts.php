@@ -99,7 +99,7 @@ return function (
     GROUP BY `alert_id`
     ORDER BY `alert_id`, `stock_purchase_date`
 ");
-    $sql->execute(['user_id' => $currentUser->getId());
+    $sql->execute(['user_id' => $currentUser->getId()]);
 
     while ($a = $sql->fetch(PDO::FETCH_ASSOC)) {
         if ($a["alert_max_price"]) {
