@@ -137,7 +137,7 @@ return function (
     </h2>
 
     <p><strong>Ci-dessous, la liste des alertes que vous avez créées.</strong></p>
-    <p>Vous recevrez un courriel dès qu\'ils seront disponibles aux conditions que vous avez indiquées dans une des librairies Biblys.</p>
+    <p>Vous recevrez un courriel dès qu\'ils seront en stock.</p>
 ';
 
     if (isset($_GET["deleted"])) {
