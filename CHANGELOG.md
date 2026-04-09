@@ -1,5 +1,12 @@
 # Historique des modifications
 
+## 3.12.2 (DEV)
+
+### Corrections
+
+- Une erreur pouvait survenir sur la page de validation de commandes si une
+  mailing list Brevo était configurée. C'est corrigé.
+
 ## 3.12.1 (9 avril 2026)
 
 ### Corrections
