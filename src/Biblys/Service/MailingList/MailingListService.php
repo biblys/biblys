@@ -25,21 +25,13 @@ class MailingListService
 {
     private ?MailingListInterface $list = null;
     private bool $isConfigured = false;
+    private Config $config;
 
     public function __construct(Config $config)
     {
-        if ($config->get("mailing.service") === "mailjet") {
-            $this->list = new MailjetMailingList($config);
-            $this->isConfigured = true;
-        }
+        $this->config = $config;
 
-        if ($config->get("mailing.service") === "brevo") {
-            $this->list = new BrevoMailingList($config);
-            $this->isConfigured = true;
-        }
-
-        if ($config->get("mailing.service") === "listmonk") {
-            $this->list = new ListmonkMailingList($config);
+        if (in_array($config->get("mailing.service"), ["mailjet", "brevo", "listmonk"])) {
             $this->isConfigured = true;
         }
     }
@@ -52,12 +44,23 @@ class MailingListService
     /**
      * @throws InvalidConfigurationException
      */
-    public function getMailingList(): ?MailingListInterface
+    public function getMailingList(): MailingListInterface
     {
         if (!$this->isConfigured()) {
             throw new InvalidConfigurationException(
                 "Aucun service de gestion de liste de contacts n'est configuré."
             );
+        }
+
+        if ($this->list === null) {
+            $service = $this->config->get("mailing.service");
+            if ($service === "mailjet") {
+                $this->list = new MailjetMailingList($this->config);
+            } elseif ($service === "brevo") {
+                $this->list = new BrevoMailingList($this->config);
+            } elseif ($service === "listmonk") {
+                $this->list = new ListmonkMailingList($this->config);
+            }
         }
 
         return $this->list;

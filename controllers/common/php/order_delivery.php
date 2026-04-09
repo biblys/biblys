@@ -158,11 +158,7 @@ return function (
     }
 
     $config = Config::load();
-    $mailingList = null;
     $mailingListService = new MailingListService($config);
-    if ($mailingListService->isConfigured()) {
-        $mailingList = $mailingListService->getMailingList();
-    }
 
     if ($request->getMethod() === "POST") {
 
@@ -182,7 +178,7 @@ return function (
             $newsletter_checked = $request->request->get('newsletter', false);
             $orderEmail = $request->request->get('order_email');
             if ($newsletter_checked && $mailingListService->isConfigured()) {
-                $mailingList->addContact($orderEmail, true);
+                $mailingListService->getMailingList()->addContact($orderEmail, true);
             }
 
             try {
@@ -483,7 +479,7 @@ return function (
 
         if ($currentUser->isAuthenticated()
             && $mailingListService->isConfigured()
-            && $mailingList->hasContact($currentUser->getUser()->getEmail())) {
+            && $mailingListService->getMailingList()->hasContact($currentUser->getUser()->getEmail())) {
             $showCheckbox = false;
         }
 
