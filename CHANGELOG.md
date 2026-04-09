@@ -10,6 +10,8 @@
   corrige.
 - Dans certains cas, le filtre éditeur pouvait ne pas être appliqué aux
   résultats de recherche. C'est corrigé.
+- Une erreur pouvait survenir lors de l'affichage de la page des alertes d'un
+  utilisateur. C'est corrigé.
 
 ## 3.12.0 (3 avril 2026)
 
