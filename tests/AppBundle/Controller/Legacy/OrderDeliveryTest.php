@@ -518,6 +518,56 @@ class OrderDeliveryTest extends TestCase
         $this->assertTrue($stockItemInCart, "Stock item should still be in cart");
     }
 
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testValidatingAnOrderUsingBrevoMailingList()
+    {
+        // given
+        $controller = require __DIR__ . "/../../../../controllers/common/php/order_delivery.php";
+
+        $site = ModelFactory::createSite();
+        $cart = ModelFactory::createCart();
+        $article = ModelFactory::createArticle();
+        ModelFactory::createStockItem(article: $article, cart: $cart);
+        $shipping = ModelFactory::createShippingOption(type: "colissimo");
+        $country = ModelFactory::createCountry();
+
+        $queryParamsService = Mockery::mock(QueryParamsService::class);
+        $queryParamsService->shouldReceive("parse");
+        $queryParamsService->shouldReceive("getInteger")->with("country_id")
+            ->andReturn($country->getId());
+        $queryParamsService->shouldReceive("getInteger")->with("shipping_id")
+            ->andReturn($shipping->getId());
+
+        $request = new Request();
+
+        $mailer = Mockery::mock(Mailer::class);
+        $mailer->shouldReceive("send")->andReturn(true);
+
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getOption")->andReturn(null);
+        $currentSite->shouldReceive("getSite")->andReturn($site);
+        $currentSite->shouldReceive("hasOptionEnabled")->andReturn(false);
+        $urlGenerator = $this->createMock(UrlGenerator::class);
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("getCart")->andReturn($cart);
+        $currentUser->shouldReceive("isAuthenticated")->andReturn(false);
+        $currentUser->shouldReceive("getUser")->andReturn(null);
+
+        $config = new Config();
+        $config->set("mailing", ["service" => "brevo", "api_key" => "api_key"]);
+
+        // when
+        $response = $controller($request, $currentSite, $urlGenerator, $currentUser, $mailer, $queryParamsService, $config);
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode(), "it should answer with http status 200");
+    }
+
     /**
      * @throws PropelException
      */

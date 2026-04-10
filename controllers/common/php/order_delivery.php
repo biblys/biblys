@@ -157,7 +157,6 @@ return function (
         $total += $shipping->get('fee');
     }
 
-    $config = Config::load();
     $mailingList = null;
     $mailingListService = new MailingListService($config);
     if ($mailingListService->isConfigured()) {
