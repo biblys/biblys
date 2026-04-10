@@ -992,16 +992,16 @@
         },
         {
             "name": "getbrevo/brevo-php",
-            "version": "4.0.12",
+            "version": "4.0.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/getbrevo/brevo-php.git",
-                "reference": "ca18c07011c7e6838863778ed43bc7f89392279c"
+                "reference": "bc58ca6f6d3ddf8e8610ab2f9d7c38ba024e1223"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/getbrevo/brevo-php/zipball/ca18c07011c7e6838863778ed43bc7f89392279c",
-                "reference": "ca18c07011c7e6838863778ed43bc7f89392279c",
+                "url": "https://api.github.com/repos/getbrevo/brevo-php/zipball/bc58ca6f6d3ddf8e8610ab2f9d7c38ba024e1223",
+                "reference": "bc58ca6f6d3ddf8e8610ab2f9d7c38ba024e1223",
                 "shasum": ""
             },
             "require": {
@@ -1039,9 +1039,9 @@
             ],
             "support": {
                 "issues": "https://github.com/getbrevo/brevo-php/issues",
-                "source": "https://github.com/getbrevo/brevo-php/tree/v4.0.12"
+                "source": "https://github.com/getbrevo/brevo-php/tree/v4.0.13"
             },
-            "time": "2026-03-27T12:53:09+00:00"
+            "time": "2026-04-10T13:39:08+00:00"
         },
         {
             "name": "gitonomy/gitlib",
