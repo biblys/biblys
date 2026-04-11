@@ -39,6 +39,15 @@ class Order extends BaseOrder
     {
         return $this->getPaymentDate() !== null;
     }
+
+    /**
+     * @throws PropelException
+     */
+    public function isShipped(): bool
+    {
+        return $this->getShippingDate() !== null;
+    }
+
     /**
      * @throws PropelException
      */
