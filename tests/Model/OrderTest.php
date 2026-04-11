@@ -62,6 +62,34 @@ class OrderTest extends TestCase
         $this->assertTrue($result);
     }
 
+    /** isShipped */
+
+    public function testIsShippedReturnsFalseForUnshippedOrder(): void
+    {
+        // given
+        $order = new Order();
+        $order->setShippingDate(null);
+
+        // when
+        $result = $order->isShipped();
+
+        // then
+        $this->assertFalse($result);
+    }
+
+    public function testIsShippedReturnsTrueForShippedOrder(): void
+    {
+        // given
+        $order = new Order();
+        $order->setShippingDate(new DateTime());
+
+        // when
+        $result = $order->isShipped();
+
+        // then
+        $this->assertTrue($result);
+    }
+
     /** isCancelled */
 
     /**
