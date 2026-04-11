@@ -42,10 +42,13 @@ class MarkOrderAsPaidUsecaseTest extends TestCase
     public function testMarkingAsPaidOrderWithPhysicalArticles(): void
     {
         // given
+        $physicalArticle = ModelFactory::createArticle();
+        $stockItem = ModelFactory::createStockItem(article: $physicalArticle);
         $order = ModelFactory::createOrder(
             slug: "order-123",
             email: "payer@paronymie.fr",
         );
+        $order->addStockItem($stockItem);
 
         $urlGenerator = $this->createMock(UrlGeneratorInterface::class);
         $urlGenerator->expects($this->once())->method("generate")->with(
@@ -79,6 +82,7 @@ class MarkOrderAsPaidUsecaseTest extends TestCase
 
         // then
         $this->assertTrue($order->isPaid(), "order is marked as paid");
+        $this->assertFalse($order->isShipped(), "order is not marked as shipped");
     }
 
     /**
@@ -146,5 +150,76 @@ class MarkOrderAsPaidUsecaseTest extends TestCase
         // then
         $order->reload();
         $this->assertTrue($order->isPaid(), "order is marked as paid");
+        $this->assertTrue($order->isShipped(), "order marked as shipped");
+    }
+
+    /**
+     * @throws PropelException
+     * @throws InvalidEmailAddressException
+     * @throws Exception
+     * @throws TransportExceptionInterface
+     * @throws \Exception
+     */
+    public function testMarkingAsPaidOrderWithBothArticleTypes(): void
+    {
+        // given
+        $user = ModelFactory::createUser();
+        $order = ModelFactory::createOrder(
+            slug: "order-123",
+            email: "payer@paronymie.fr",
+        );
+        $physicalArticle = ModelFactory::createArticle();
+        $physicalStockItem = ModelFactory::createStockItem(article: $physicalArticle);
+        $downloadableArticle = ModelFactory::createArticle(typeId: ArticleType::EBOOK);
+        $downloadableStockItem = ModelFactory::createStockItem(article: $downloadableArticle);
+        $order->addStockItem($physicalStockItem);
+        $order->addStockItem($downloadableStockItem);
+        $order->setUser($user);
+
+        $urlGenerator = $this->createMock(UrlGeneratorInterface::class);
+        $urlGenerator->method("generate")->willReturnMap([
+            ["legacy_order", ["url" => "order-123"], 1, "https://paronymie.fr/order/order-123"],
+            ["user_library", [], 1, "https://paronymie.fr/user/library"],
+        ]);
+        $templateService = Helpers::getTemplateService();
+        $mailer = $this->createMock(Mailer::class);
+        $mailer->expects($this->once())->method("send")->with(
+            $this->anything(),
+            $this->anything(),
+            Helpers::stringContainsString([
+                "Vous pouvez télécharger les articles numériques de votre commande depuis",
+                "https://paronymie.fr/user/library",
+            ], $this),
+        );
+        $currentSite = $this->createMock(CurrentSite::class);
+
+        $addArticleToUserLibraryUsecase = $this->getMockBuilder(AddArticleToUserLibraryUsecase::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(["execute"])
+            ->getMock();
+        $addArticleToUserLibraryUsecase->expects($this->once())->method("execute")->with(
+            $currentSite,
+            $urlGenerator,
+            $user,
+            null,          // article
+            [$downloadableStockItem],  // items
+            false,         // allowsPreDownload
+            true,          // sendEmail
+        );
+
+        $usecase = new MarkOrderAsPaidUsecase(
+            urlGenerator: $urlGenerator,
+            templateService: $templateService,
+            mailer: $mailer,
+            currentSite: $currentSite,
+            addArticleToUserLibraryUsecase: $addArticleToUserLibraryUsecase,
+        );
+
+        // when
+        $usecase->execute($order, payedAmountInCents: 999, paymentMode: "Carte bancaire");
+
+        // then
+        $this->assertTrue($order->isPaid(), "order is marked as paid");
+        $this->assertFalse($order->isShipped(), "order marked as shipped");
     }
 }

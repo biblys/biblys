@@ -110,6 +110,11 @@ readonly class MarkOrderAsPaidUsecase
                     items: $downloadableItems,
                     sendEmail: true,
                 );
+
+                if (!$order->containsPhysicalArticles()) {
+                    $order->setShippingDate(new DateTime());
+                    $order->save();
+                }
             }
 
             $con->commit();
