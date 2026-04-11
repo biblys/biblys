@@ -130,6 +130,7 @@ class EntityFactory
         int       $shippingId = 0,
         ?string   $mondialRelayPickupPointCode = null,
         ?DateTime $paymentDate = null,
+        string    $paymentMethod = null,
     ): Order
     {
         $om = new OrderManager();
@@ -146,6 +147,7 @@ class EntityFactory
         $order->set("shipping_id", $shippingId);
         $order->set("mondial_relay_pickup_point_code", $mondialRelayPickupPointCode);
         $order->set("order_payment_date", $paymentDate?->format("Y-m-d H:i:s"));
+        $order->set("order_payment_mode", $paymentMethod);
 
         $order->set("user_id", $user?->getId() ?? null);
         $om->update($order);

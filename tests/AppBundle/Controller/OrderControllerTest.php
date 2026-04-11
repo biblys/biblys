@@ -130,7 +130,7 @@ class OrderControllerTest extends TestCase
         $controller = new OrderController();
         $order = ModelFactory::createOrder();
 
-        $payload = json_encode(["payment_mode" => null, "tracking_number" => null]);
+        $payload = json_encode(["payment_mode" => "card", "tracking_number" => null]);
         $request = new Request(content: $payload);
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentUser = Mockery::mock(CurrentUser::class);

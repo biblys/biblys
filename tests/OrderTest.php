@@ -223,8 +223,8 @@ class OrderTest extends PHPUnit\Framework\TestCase
 
         // Adding payement
         $om->addPayment($order, "cash", $amount);
-        $om->update($order);
 
+        $order = $om->getById($order->get('id'));
         $this->assertEquals(0, $order->get('amount_tobepaid'));
         $this->assertEquals($order->get('payment_cash'), $amount);
         $this->assertNotNull($order->get('payment_date'));
@@ -256,6 +256,7 @@ class OrderTest extends PHPUnit\Framework\TestCase
         // Adding payement
         $om->addPayment($order, $payment);
 
+        $order = $om->getById($order->get('id'));
         $this->assertEquals(0, $order->get('amount_tobepaid'));
         $this->assertEquals(1234, $order->get('payment_cash'));
         $this->assertNotNull($order->get('payment_date'));
@@ -273,8 +274,8 @@ class OrderTest extends PHPUnit\Framework\TestCase
         $om = new OrderManager();
         $order = EntityFactory::createOrder();
         $om->addPayment($order, "cash", "1000");
-        $om->update($order);
 
+        $order = $om->getById($order->get('id'));
         $this->assertEquals(0, $order->get('amount_tobepaid'));
         $this->assertEquals("1000", $order->get('payment_cash'));
         $this->assertNotNull($order->get('payment_date'));
