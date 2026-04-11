@@ -24,6 +24,8 @@ use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Log;
 use Biblys\Service\Mailer;
+use Biblys\Test\Helpers;
+use Model\OrderQuery;
 use Model\StockQuery;
 use Model\UserQuery;
 use PayPal\Api\Amount;
@@ -47,6 +49,7 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Usecase\AddArticleToUserLibraryUsecase;
+use Usecase\MarkOrderAsPaidUsecase;
 
 class Order extends Entity
 {
@@ -565,107 +568,25 @@ class OrderManager extends EntityManager
     {
         $mailer = $this->getMailer();
 
-        // Save payment date
-        $order->set('order_payment_date', date('Y-m-d H:i:s'));
+        $templateService = Helpers::getTemplateService();
 
-        $order_downloadable = null;
-        if ($order->containsDownloadable()) {
-            $order_downloadable = '
-                <p>
-                    Vous pouvez télécharger les articles numériques de votre commande depuis
-                    <a href="http://'.$this->site->get('domain').'/pages/log_myebooks">
-                        votre bibliothèque numérique
-                    </a>.
-                </p>
-            ';
-        }
+        $addArticleToUserLibraryUsecase = new AddArticleToUserLibraryUsecase($mailer);
 
-        // Physical types
-        $types = ArticleType::getAllPhysicalTypes();
-        $physical_types = array_map(function ($type) {
-            return $type->getId();
-        }, $types);
+        $usecase = new MarkOrderAsPaidUsecase(
+            urlGenerator: $urlGenerator,
+            templateService: $templateService,
+            mailer: $mailer,
+            currentSite: $currentSite,
+            addArticleToUserLibraryUsecase: $addArticleToUserLibraryUsecase,
+        );
 
-        // Loop through each copy
-        $sm = new StockManager();
-        $stocks = $sm->getAll(array('order_id' => $order->get('id')));
-        $books = [];
-        $ebooks = [];
-        $physical = [];
+        $orderModel = OrderQuery::create()->findPk($order->get('id'));
 
-        foreach ($stocks as $stock) {
-            $type_id = $stock->get('article')->get('type_id');
-
-            if ($type_id == 2) {
-                $ebooks[] = $stock;
-            } else {
-                $books[] = $stock;
-                $stock->set('user_id', $order->get('user_id'));
-                $sm->update($stock);
-            }
-
-            // If article is physical
-            if (in_array($type_id, $physical_types)) {
-                $physical[] = $stock;
-            }
-        }
-
-        // Books & e-books
-        if ($order->has('user_id') && !empty($ebooks)) {
-            $items = array_map(function (Stock $ebook) {
-                return StockQuery::create()->findPk($ebook->get('id'));
-            }, $ebooks);
-
-            $user = UserQuery::create()->findPk($order->get('user_id'));
-            $usecase = new AddArticleToUserLibraryUsecase($mailer);
-            $usecase->execute(
-                currentSite: $currentSite,
-                urlGenerator: $urlGenerator,
-                user: $user,
-                items: $items,
-                sendEmail: true,
-            );
-        }
-
-        // If no physical products, mark order as shipped without warning the user
-        if (!count($physical)) {
-            $order->set('order_shipping_date', date('Y-m-d H:i:s'));
-        }
-
-        // Persist
-        $this->update($order);
-
-        // Send mail
-        $subject = 'Commande n° '.$order->get('id').' payée';
-        $message = '
-            <p>Bonjour '.$order->get('firstname').' !</p>
-
-            <p>Votre paiement pour la commande n° '.$order->get('id').' a bien été reçu.</p>
-
-            <p>
-                Commande n° '.$order->get('id').'<br>
-                Montant : '.currency($order->getTotal() / 100).'<br>
-                Mode de règlement : '.$order->get('payment_mode'). '<br>
-            </p>
-
-            <p>
-                <a href="https://' .$this->site->get('domain').'/order/'.$order->get('url').'">Suivi de la commande</a></a>
-            </p>
-
-            '.$order_downloadable.'
-
-            <p>
-                Merci pour votre confiance.
-            </p>
-
-            <p><a href="http://'.$this->site->get('domain').'/">http://'.$this->site["site_domain"].'/</a></p>
-        ';
-
-        try {
-            $mailer->send($order->get('email'), $subject, $message);
-        } catch (Exception $e) {
-            // Do nothing
-        }
+        $usecase->execute(
+            order: $orderModel,
+            payedAmountInCents: $order->get('order_amount'),
+            paymentMode: $order->get('payment_mode'),
+        );
     }
 
     public function followUp(Order $order)

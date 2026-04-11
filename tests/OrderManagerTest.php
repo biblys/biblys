@@ -20,7 +20,7 @@ use Biblys\Data\ArticleType;
 use Biblys\Service\CurrentSite;
 use Biblys\Test\EntityFactory;
 use Biblys\Test\ModelFactory;
-use Model\OptionQuery;
+use Model\OrderQuery;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Generator\UrlGenerator;
@@ -37,15 +37,19 @@ class OrderManagerTest extends TestCase
     {
         // given
         $orderManager = new OrderManager();
-        $order = EntityFactory::createOrder(orderEmail: "customer@paronymie.fr");
+        $order = EntityFactory::createOrder(orderEmail: "customer@paronymie.fr", paymentMethod: "stripe");
         $currentSite = Mockery::mock(CurrentSite::class);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->shouldReceive("generate")->with("legacy_order", [
+            "url" => $order->get("url"),
+        ]);
 
         // when
         $orderManager->markAsPayed($currentSite, $urlGenerator, $order);
 
         // then
-        $this->assertTrue($order->isPayed());
+        $updatedOrder = OrderQuery::create()->findPk($order->get("id"));
+        $this->assertTrue($updatedOrder->isPaid());
     }
 
     /**
@@ -58,7 +62,7 @@ class OrderManagerTest extends TestCase
         $site = ModelFactory::createSite();
         $user = ModelFactory::createUser();
         $orderManager = new OrderManager();
-        $orderEntity = EntityFactory::createOrder(user: $user, orderEmail: "customer@paronymie.fr");
+        $orderEntity = EntityFactory::createOrder(user: $user, orderEmail: "customer@paronymie.fr", paymentMethod: "card");
         $ebook = ModelFactory::createArticle(typeId: ArticleType::EBOOK);
         $item = EntityFactory::createStock(["article_id" => $ebook->getId()]);
         $orderManager->addStock($orderEntity, $item);
@@ -73,6 +77,7 @@ class OrderManagerTest extends TestCase
         $orderManager->markAsPayed($currentSite, $urlGenerator, $orderEntity);
 
         // then
-        $this->assertTrue($orderEntity->isPayed());
+        $updatedOrder = OrderQuery::create()->findPk($orderEntity->get("id"));
+        $this->assertTrue($updatedOrder->isPaid());
     }
 }
