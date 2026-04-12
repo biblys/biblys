@@ -305,6 +305,7 @@ class ModelFactory
         ?User           $user = null,
         ?Customer       $customer = null,
         ?ShippingOption $shippingOption = null,
+        int             $amount = 0,
         int             $amountToBePaid = 0,
         int             $shippingCost = 0,
         ?string         $axysAccountId = null,
@@ -328,6 +329,7 @@ class ModelFactory
 
         $order = new Order();
         $order->setUser($user);
+        $order->setAmount($amount);
         $order->setAmountTobepaid($amountToBePaid);
         $order->setShippingCost($shippingCost);
         $order->setShippingId($shippingOption?->getId());
@@ -382,7 +384,7 @@ class ModelFactory
     ): Payment
     {
         $payment = new Payment();
-        $payment->setOrder($order ?? self::createOrder());
+        $payment->setOrder($order);
         $payment->setAmount($amount);
         $payment->setMode($mode);
         $payment->setProviderId($providerId);

@@ -33,14 +33,14 @@ use Propel\Runtime\Exception\PropelException;
 class Payment extends BasePayment
 {
 
-    private const MODE_CASH = 'cash';
-    private const MODE_CHECK = 'cheque';
-    private const MODE_CARD = 'card';
-    private const MODE_TRANSFER = 'transfer';
-    private const MODE_PAYPAL = 'paypal';
-    private const MODE_PAYPLUG = 'payplug';
-    private const MODE_STRIPE = 'stripe';
-    private const MODE_EXCHANGE = 'exchange';
+    public const MODE_CASH = 'cash';
+    public const MODE_CHECK = 'cheque';
+    public const MODE_CARD = 'card';
+    public const MODE_TRANSFER = 'transfer';
+    public const MODE_PAYPAL = 'paypal';
+    public const MODE_PAYPLUG = 'payplug';
+    public const MODE_STRIPE = 'stripe';
+    public const MODE_EXCHANGE = 'exchange';
 
     public static function getModes(): array
     {
