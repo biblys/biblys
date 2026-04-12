@@ -42,7 +42,6 @@ use Biblys\Service\Watermarking\WatermarkingService;
 use Exception;
 use Framework\Controller;
 use InvalidArgumentException;
-use LinkManager;
 use Model\ArticleCategoryQuery;
 use Model\ArticleQuery;
 use Model\Link;
@@ -65,7 +64,6 @@ use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
-use TagManager;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -375,10 +373,12 @@ class ArticleController extends Controller
 
             $article = ArticleQuery::create()->findPk($articleEntity->get("id"));
             try {
-                $usecase = new AddArticleToUserLibraryUsecase($mailer);
-                $usecase->execute(
+                $usecase = new AddArticleToUserLibraryUsecase(
+                    mailer: $mailer,
                     currentSite: $currentSiteService,
-                    urlGenerator: $urlGenerator,
+                    urlGenerator: $urlGenerator
+                );
+                $usecase->execute(
                     user: $currentUser,
                     article: $article,
                 );

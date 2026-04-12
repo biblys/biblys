@@ -29,12 +29,15 @@ use Model\StockQuery;
 use Model\User;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
-use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class AddArticleToUserLibraryUsecase
 {
-    public function __construct(private readonly Mailer $mailer)
+    public function __construct(
+        private Mailer                $mailer,
+        private CurrentSite           $currentSite,
+        private UrlGeneratorInterface $urlGenerator
+    )
     {
     }
 
@@ -45,13 +48,11 @@ class AddArticleToUserLibraryUsecase
      * @throws TransportExceptionInterface
      */
     public function execute(
-        CurrentSite           $currentSite,
-        UrlGeneratorInterface $urlGenerator,
-        User                  $user,
-        ?Article              $article = null,
-        array                 $items = [],
-        bool                  $allowsPreDownload = false,
-        bool                  $sendEmail = false,
+        User     $user,
+        ?Article $article = null,
+        array    $items = [],
+        bool     $allowsPreDownload = false,
+        bool     $sendEmail = false,
     ): void
     {
         if ($article) {
@@ -64,7 +65,7 @@ class AddArticleToUserLibraryUsecase
         foreach ($items as $item) {
             $article = $item->getArticle();
             $publisher = $article->getPublisher();
-            $allowedPublishers = $currentSite->getOption("downloadable_publishers");
+            $allowedPublishers = $this->currentSite->getOption("downloadable_publishers");
             $allowedPublisherIds = explode(",", $allowedPublishers);
             if (!in_array($publisher->getId(), $allowedPublisherIds)) {
                 throw new BusinessRuleException(
@@ -97,7 +98,7 @@ class AddArticleToUserLibraryUsecase
         }
 
         if ($sendEmail) {
-            $eLibraryUrl = $urlGenerator->generate("user_library", referenceType: UrlGeneratorInterface::ABSOLUTE_URL);
+            $eLibraryUrl = $this->urlGenerator->generate("user_library", referenceType: UrlGeneratorInterface::ABSOLUTE_URL);
             $subject = 'De nouveaux livres numériques disponibles dans votre bibliothèque.';
             $message = '
                     <p>Bonjour,</p>
@@ -110,7 +111,7 @@ class AddArticleToUserLibraryUsecase
                 ';
             try {
                 $this->mailer->send($user->getEmail(), $subject, $message);
-            } catch (Exception $e) {
+            } catch (Exception) {
                 // Do nothing
             }
         }
