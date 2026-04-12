@@ -35,7 +35,7 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
-readonly class MarkOrderAsPaidUsecase
+class MarkOrderAsPaidUsecase
 {
 
     public function __construct(
