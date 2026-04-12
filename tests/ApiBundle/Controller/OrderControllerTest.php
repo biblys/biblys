@@ -101,7 +101,7 @@ class OrderControllerTest extends TestCase
             "FR",                      # I - Pays du destinataire (O)
             "+33601020304",            # J - Téléphone fixe du destinataire (F)
             "",                        # K - Téléphone cellulaire (F)
-            "SILAS.COADE@EXAMPLE.NET", # L - Adresse e-mail du destinataire (F)
+            "SILAS.COADE@PARONYMIE.FR", # L - Adresse e-mail du destinataire (F)
             "R",                       # M - Type Collect (R = Relais)
             "654321",                  # N - Id Relais Collecte
             "FR",                      # O - Code Pays Collecte
