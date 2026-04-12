@@ -73,7 +73,6 @@ class MarkOrderAsPaidUsecaseTest extends TestCase
             urlGenerator: $urlGenerator,
             templateService: $templateService,
             mailer: $mailer,
-            currentSite: $this->createMock(CurrentSite::class),
             addArticleToUserLibraryUsecase: $this->createMock(AddArticleToUserLibraryUsecase::class),
         );
 
@@ -127,8 +126,6 @@ class MarkOrderAsPaidUsecaseTest extends TestCase
             ->onlyMethods(["execute"])
             ->getMock();
         $addArticleToUserLibraryUsecase->expects($this->once())->method("execute")->with(
-            $currentSite,
-            $urlGenerator,
             $user,
             null,          // article
             [$stockItem],  // items
@@ -140,7 +137,6 @@ class MarkOrderAsPaidUsecaseTest extends TestCase
             urlGenerator: $urlGenerator,
             templateService: $templateService,
             mailer: $mailer,
-            currentSite: $currentSite,
             addArticleToUserLibraryUsecase: $addArticleToUserLibraryUsecase,
         );
 
@@ -198,8 +194,6 @@ class MarkOrderAsPaidUsecaseTest extends TestCase
             ->onlyMethods(["execute"])
             ->getMock();
         $addArticleToUserLibraryUsecase->expects($this->once())->method("execute")->with(
-            $currentSite,
-            $urlGenerator,
             $user,
             null,          // article
             [$downloadableStockItem],  // items
@@ -211,7 +205,6 @@ class MarkOrderAsPaidUsecaseTest extends TestCase
             urlGenerator: $urlGenerator,
             templateService: $templateService,
             mailer: $mailer,
-            currentSite: $currentSite,
             addArticleToUserLibraryUsecase: $addArticleToUserLibraryUsecase,
         );
 

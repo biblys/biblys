@@ -570,13 +570,16 @@ class OrderManager extends EntityManager
 
         $templateService = Helpers::getTemplateService();
 
-        $addArticleToUserLibraryUsecase = new AddArticleToUserLibraryUsecase($mailer);
+        $addArticleToUserLibraryUsecase = new AddArticleToUserLibraryUsecase(
+            mailer: $mailer,
+            currentSite: $currentSite,
+            urlGenerator: $urlGenerator,
+        );
 
         $usecase = new MarkOrderAsPaidUsecase(
             urlGenerator: $urlGenerator,
             templateService: $templateService,
             mailer: $mailer,
-            currentSite: $currentSite,
             addArticleToUserLibraryUsecase: $addArticleToUserLibraryUsecase,
         );
 

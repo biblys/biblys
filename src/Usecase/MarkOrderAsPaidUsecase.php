@@ -19,14 +19,14 @@
 namespace Usecase;
 
 use Biblys\Exception\InvalidEmailAddressException;
-use Biblys\Service\CurrentSite;
-use Biblys\Service\InvalidSiteIdException;
+use Biblys\Exception\UnreachableExternalServiceException;
 use Biblys\Service\Mailer;
 use Biblys\Service\TemplateService;
 use DateTime;
 use Exception;
 use Model\Map\UserTableMap;
 use Model\Order;
+use NumberFormatter;
 use Propel\Runtime\Exception\PropelException;
 use Propel\Runtime\Propel;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
@@ -42,13 +42,15 @@ readonly class MarkOrderAsPaidUsecase
         private UrlGeneratorInterface          $urlGenerator,
         private TemplateService                $templateService,
         private Mailer                         $mailer,
-        private CurrentSite                    $currentSite,
         private AddArticleToUserLibraryUsecase $addArticleToUserLibraryUsecase,
     )
     {
     }
 
     /**
+     * @param Order $order
+     * @param int $payedAmountInCents
+     * @param string $paymentMode
      * @throws BusinessRuleException
      * @throws InvalidEmailAddressException
      * @throws LoaderError
@@ -56,6 +58,7 @@ readonly class MarkOrderAsPaidUsecase
      * @throws RuntimeError
      * @throws SyntaxError
      * @throws TransportExceptionInterface
+     * @throws UnreachableExternalServiceException
      */
     public function execute(Order $order, int $payedAmountInCents, string $paymentMode): void
     {
@@ -68,7 +71,7 @@ readonly class MarkOrderAsPaidUsecase
 
             $orderUrl = $this->urlGenerator->generate("legacy_order", ["url" => $order->getSlug()]);
 
-            $formatter = new \NumberFormatter('fr_FR', \NumberFormatter::CURRENCY);
+            $formatter = new NumberFormatter('fr_FR', NumberFormatter::CURRENCY);
             $formattedPayedAmount = $formatter->formatCurrency($payedAmountInCents / 100, 'EUR');
 
             $libraryUrl = "";
@@ -104,8 +107,6 @@ readonly class MarkOrderAsPaidUsecase
                 ));
 
                 $this->addArticleToUserLibraryUsecase->execute(
-                    currentSite: $this->currentSite,
-                    urlGenerator: $this->urlGenerator,
                     user: $order->getUser(),
                     items: $downloadableItems,
                     sendEmail: true,
