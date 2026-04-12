@@ -19,6 +19,7 @@
 namespace Model;
 
 use Model\Base\Payment as BasePayment;
+use Propel\Runtime\Exception\PropelException;
 
 /**
  * Skeleton subclass for representing a row from the 'payments' table.
@@ -53,5 +54,13 @@ class Payment extends BasePayment
             self::MODE_STRIPE,
             self::MODE_EXCHANGE,
         ];
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function isExecuted(): bool
+    {
+        return $this->getExecuted() !== null;
     }
 }
