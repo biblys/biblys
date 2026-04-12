@@ -325,7 +325,7 @@ class OrderDeliveryHelpersTest extends TestCase
         $mailer = Mockery::mock(Mailer::class);
         $mailer->shouldReceive("send")
             ->with(
-                "customer@example.net",
+                "customer@paronymie.fr",
                 "Commande n° {$order->get("id")}",
                 $mailBody
             )
@@ -336,7 +336,7 @@ class OrderDeliveryHelpersTest extends TestCase
                 "Commande n° {$order->get("id")}",
                 $mailBody,
                 ['contact@paronymie.fr' => 'Marie Golade'],
-                ['reply-to' => 'customer@example.net'],
+                ['reply-to' => 'customer@paronymie.fr'],
             )
             ->andReturn(true);
 
@@ -451,7 +451,7 @@ class OrderDeliveryHelpersTest extends TestCase
         $mailer = Mockery::mock(Mailer::class);
         $mailer->shouldReceive("send")
             ->with(
-                "customer@example.net",
+                "customer@paronymie.fr",
                 "Commande n° {$order->get("id")}",
                 $mailBody
             )
@@ -462,7 +462,7 @@ class OrderDeliveryHelpersTest extends TestCase
                 "Commande n° {$order->get("id")}",
                 $mailBody,
                 ['contact@paronymie.fr' => 'Rondial Melay'],
-                ['reply-to' => 'customer@example.net'],
+                ['reply-to' => 'customer@paronymie.fr'],
             )
             ->andReturn(true);
 
@@ -509,7 +509,7 @@ class OrderDeliveryHelpersTest extends TestCase
         $mailer = Mockery::mock(Mailer::class);
         $mailer->shouldReceive("send")
             ->with(
-                "customer@example.net",
+                "customer@paronymie.fr",
                 "Commande n° {$order->get("id")}",
                 Mockery::any()
             )
@@ -520,7 +520,7 @@ class OrderDeliveryHelpersTest extends TestCase
                 "PARONYMIE · Commande n° {$order->get("id")}",
                 Mockery::any(),
                 ['contact@paronymie.fr' => 'Marie Golade'],
-                ['reply-to' => 'customer@example.net'],
+                ['reply-to' => 'customer@paronymie.fr'],
             )
             ->andReturn(true);
 
@@ -636,7 +636,7 @@ class OrderDeliveryHelpersTest extends TestCase
         $mailer = Mockery::mock(Mailer::class);
         $mailer->shouldReceive("send")
             ->with(
-                "customer@example.net",
+                "customer@paronymie.fr",
                 "Commande n° {$order->get("id")} (mise à jour)",
                 $mailBody,
             )
@@ -647,7 +647,7 @@ class OrderDeliveryHelpersTest extends TestCase
                 "Commande n° {$order->get("id")} (mise à jour)",
                 $mailBody,
                 ['contact@paronymie.fr' => 'Marie Golade'],
-                ['reply-to' => 'customer@example.net'],
+                ['reply-to' => 'customer@paronymie.fr'],
             )
             ->andReturn(true);
 

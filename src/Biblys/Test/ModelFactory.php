@@ -317,7 +317,7 @@ class ModelFactory
         string          $city = "Bordeaux",
         ?Country        $country = null,
         string          $phone = "0601020304",
-        string          $email = "silas.coade@example.net",
+        string          $email = "silas.coade@paronymie.fr",
         ?string         $mondialRelayPickupPointCode = null,
         DateTime        $paymentDate = null,
         DateTime        $cancelDate = null,
@@ -726,7 +726,7 @@ class ModelFactory
         ?string $axysAccountId = null,
         string  $firstName = "Silas",
         string  $lastName = "Coade",
-        string  $email = "silas.coade@example.net",
+        string  $email = "silas.coade@paronymie.fr",
     ): Customer
     {
         $customer = new Customer();
