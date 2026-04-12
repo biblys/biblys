@@ -126,7 +126,7 @@ class EntityFactory
         ?User     $user = null,
         string    $firstName = "Marie",
         string    $lastName = "Golade",
-        string    $orderEmail = "customer@example.net",
+        string    $orderEmail = "customer@paronymie.fr",
         int       $shippingId = 0,
         ?string   $mondialRelayPickupPointCode = null,
         ?DateTime $paymentDate = null,
@@ -148,6 +148,7 @@ class EntityFactory
         $order->set("mondial_relay_pickup_point_code", $mondialRelayPickupPointCode);
         $order->set("order_payment_date", $paymentDate?->format("Y-m-d H:i:s"));
         $order->set("order_payment_mode", $paymentMethod);
+        $order->set("order_email", $orderEmail);
 
         $order->set("user_id", $user?->getId() ?? null);
         $om->update($order);

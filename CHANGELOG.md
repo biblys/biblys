@@ -1,5 +1,11 @@
 # Historique des modifications
 
+## 3.13.0 (DEV)
+
+### Améliorations
+
+- Le courriel de confirmation de paiement a été modernisé.
+
 ## 3.12.1 (9 avril 2026)
 
 ### Corrections
