@@ -23,13 +23,18 @@
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Test\EntityFactory;
 use Biblys\Test\ModelFactory;
-use Symfony\Component\HttpFoundation\Request;
+use Propel\Runtime\Exception\PropelException;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
 require_once "setUp.php";
 
 class OrderTest extends PHPUnit\Framework\TestCase
 {
     // Set site TVA before tests
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
     public static function setUpBeforeClass(): void
     {
         $site = ModelFactory::createSite();
@@ -42,6 +47,7 @@ class OrderTest extends PHPUnit\Framework\TestCase
 
     /**
      * Test creating an order
+     * @throws Exception
      */
     public function testCreate()
     {
@@ -49,22 +55,23 @@ class OrderTest extends PHPUnit\Framework\TestCase
 
         $order = $om->create(["order_email" => "customer@biblys.fr"]);
 
-        $this->assertInstanceOf('Order', $order);
+        $this->assertNotNull($order);
 
         return $order;
     }
 
     /**
      * Test getting an order
-     * @depends testCreate
+     * @throws Exception
      */
-    public function testGet(Order $order)
+    public function testGet()
     {
         $om = new OrderManager();
+        $order = $om->create();
 
         $gotOrder = $om->getById($order->get('id'));
 
-        $this->assertInstanceOf('Order', $order);
+        $this->assertNotNull($order);
         $this->assertEquals($order->get('id'), $gotOrder->get('id'));
 
         return $order;
@@ -72,25 +79,27 @@ class OrderTest extends PHPUnit\Framework\TestCase
 
     /**
      * Test updating an order
-     * @depends testGet
+     * @throws Exception
      */
-    public function testUpdate(Order $order)
+    public function testUpdate()
     {
         $om = new OrderManager();
+        $order = $om->create();
 
-        $order->set('order_lastname', 'COMMANDETOU');
+        $order->set('order_lastname', 'COMMANDER');
         $om->update($order);
 
         $updatedOrder = $om->getById($order->get('id'));
 
         $this->assertTrue($updatedOrder->has('updated'));
-        $this->assertEquals($updatedOrder->get('lastname'), 'COMMANDETOU');
+        $this->assertEquals('COMMANDER', $updatedOrder->get('lastname'));
 
         return $updatedOrder;
     }
 
     /**
-     * Test if order is payed
+     * Test if the order is paid
+     * @throws Exception
      */
     public function testGetTotal()
     {
@@ -100,17 +109,17 @@ class OrderTest extends PHPUnit\Framework\TestCase
             "order_shipping" => 247
         ]);
 
-        $this->assertEquals($order->getTotal(), 1247);
+        $this->assertEquals(1247, $order->getTotal());
     }
 
     /**
-     * Test if order is payed
-     * @depends testGet
+     * Test if the order is paid
+     * @throws Exception
      */
-    public function testIsPayed(Order $order)
+    public function testIsPayed()
     {
         $om = new OrderManager();
-
+        $order = $om->create();
         $order->set('order_amount_tobepaid', 1100);
 
         $this->assertFalse($order->isPayed());
@@ -122,12 +131,13 @@ class OrderTest extends PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test if order has been shipped
-     * @depends testGet
+     * Test if the order has been shipped
+     * @throws Exception
      */
-    public function testIsShipped(Order $order)
+    public function testIsShipped()
     {
         $om = new OrderManager();
+        $order = $om->create();
 
         $order->set('order_shipping_date', null);
 
@@ -140,25 +150,36 @@ class OrderTest extends PHPUnit\Framework\TestCase
 
     /**
      * Test adding stock
-     * @depends testUpdate
+     * @throws Exception
+     * @throws Exception
+     * @throws Exception
+     * @throws Exception
+     * @throws PropelException
+     * @throws Exception
+     * @throws Exception
+     * @throws Exception
+     * @throws Exception
+     * @throws PropelException
+     * @throws Exception
      */
-    public function testAddStock(Order $order)
+    public function testAddStock()
     {
         // given
-        $cm = new CountryManager();
         $om = new OrderManager();
-        $am = new ArticleManager();
         $sm = new StockManager();
+        $order = $om->create();
         $order->set('country_id', 65);
         $om->update($order);
         $book = EntityFactory::createArticle(["type_id" => 1, "article_price" => 1000]);
         $book = $sm->create(array('article_id' => $book->get('id'), 'stock_selling_price' => $book->get('price')));
+        /** @var Stock $book */
         $om->addStock($order, $book);
         $book = $sm->reload($book);
         $ebook = EntityFactory::createArticle(["type_id" => 2, "article_price" => 500]);
         $ebook = $sm->create(array('article_id' => $ebook->get('id'), 'stock_selling_price' => $ebook->get('price')));
 
         // when
+        /** @var Stock $ebook */
         $om->addStock($order, $ebook);
         $ebook = $sm->reload($ebook);
 
@@ -178,9 +199,9 @@ class OrderTest extends PHPUnit\Framework\TestCase
 
     /**
      * Test setting the customer
-     * @depends testAddStock
+     * @throws Exception
      */
-    public function testSetCustomer(Order $order)
+    public function testSetCustomer()
     {
         $om = new OrderManager();
         $cm = new CustomerManager();
@@ -189,6 +210,8 @@ class OrderTest extends PHPUnit\Framework\TestCase
         $customer = $cm->create();
 
         // Set order customer
+        $order = $om->create();
+        /** @var Customer $customer */
         $om->setCustomer($order, $customer);
 
         $this->assertEquals($order->get('customer_id'), $customer->get('id'));
@@ -198,19 +221,20 @@ class OrderTest extends PHPUnit\Framework\TestCase
 
     /**
      * Test adding payment (as a string)
-     * @depends testSetCustomer
+     * @throws Exception
+     * @throws TransportExceptionInterface
      */
-    public function testAddPayment(Order $order)
+    public function testAddPayment()
     {
         $om = new OrderManager();
-
+        $order = EntityFactory::createOrder();
         $amount = $order->get('amount_tobepaid');
 
         // Adding payement
         $om->addPayment($order, "cash", $amount);
         $om->update($order);
 
-        $this->assertEquals($order->get('amount_tobepaid'), 0);
+        $this->assertEquals(0, $order->get('amount_tobepaid'));
         $this->assertEquals($order->get('payment_cash'), $amount);
         $this->assertNotNull($order->get('payment_date'));
 
@@ -219,9 +243,10 @@ class OrderTest extends PHPUnit\Framework\TestCase
 
     /**
      * Test adding payment (as an object)
-     * @depends testSetCustomer
+     * @throws TransportExceptionInterface
+     * @throws Exception
      */
-    public function testAddPaymentObject(Order $order)
+    public function testAddPaymentObject()
     {
         $om = new OrderManager();
         $pm = new PaymentManager();
@@ -240,36 +265,37 @@ class OrderTest extends PHPUnit\Framework\TestCase
         // Adding payement
         $om->addPayment($order, $payment);
 
-        $this->assertEquals($order->get('amount_tobepaid'), 0);
-        $this->assertEquals($order->get('payment_cash'), 1234);
+        $this->assertEquals(0, $order->get('amount_tobepaid'));
+        $this->assertEquals(1234, $order->get('payment_cash'));
         $this->assertNotNull($order->get('payment_date'));
 
         return $order;
     }
 
     /**
-     * Test adding payment when order is already payed
-     * @depends testAddPayment
+     * Test adding payment when the order is already paid
+     * @throws Exception
+     * @throws TransportExceptionInterface
      */
-    public function testAddPaymentWhenPayed(Order $order)
+    public function testAddPaymentWhenPayed()
     {
         $om = new OrderManager();
-
+        $order = EntityFactory::createOrder();
         $om->addPayment($order, "cash", "1000");
         $om->update($order);
 
-        $this->assertEquals($order->get('amount_tobepaid'), 0);
-        $this->assertEquals($order->get('payment_cash'), "1000");
+        $this->assertEquals(0, $order->get('amount_tobepaid'));
+        $this->assertEquals("1000", $order->get('payment_cash'));
         $this->assertNotNull($order->get('payment_date'));
 
         return $order;
     }
 
     /**
-     * Test setting the customer to a payed order
-     * @depends testAddStock
+     * Test setting the customer to a paid order
+     * @throws Exception
      */
-    public function testSetCustomerPayed(Order $order)
+    public function testSetCustomerPayed()
     {
         $om = new OrderManager();
         $cm = new CustomerManager();
@@ -279,6 +305,8 @@ class OrderTest extends PHPUnit\Framework\TestCase
         $customer = $cm->create();
 
         // Set order customer
+        $order = $om->create();
+        /** @var Customer $customer */
         $om->setCustomer($order, $customer);
 
         // Check that order has correct customer
@@ -292,17 +320,17 @@ class OrderTest extends PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test unsetting customer on a payed order
-     * @depends testAddStock
+     * Test unsetting customer on a paid order
+     * @throws Exception
      */
-    public function testUnsetCustomer(Order $order)
+    public function testUnsetCustomer()
     {
         $om = new OrderManager();
-        $cm = new CustomerManager();
         $sm = new StockManager();
+        $order = $om->create();
 
         // Set order customer
-        $om->setCustomer($order, null);
+        $om->setCustomer($order);
 
         // Check that order has correct customer
         $this->assertNull($order->get('customer_id'));
@@ -316,6 +344,7 @@ class OrderTest extends PHPUnit\Framework\TestCase
 
     /**
      * Test getting stock from orders
+     * @throws Exception
      */
     public function testGetStock()
     {
@@ -323,6 +352,7 @@ class OrderTest extends PHPUnit\Framework\TestCase
         $sm = new StockManager();
         $order = $om->create();
         $copy = $sm->create(["stock_weight" => 1000]);
+        /** @var Stock $copy */
         $om->addStock($order, $copy);
 
         $orderCopies = $order->getCopies();
@@ -334,11 +364,15 @@ class OrderTest extends PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test if article contains downloadable articles
+     * Test if an article contains downloadable articles
+     * @throws Exception
+     * @throws Exception
+     * @throws Exception
+     * @throws PropelException
+     * @throws Exception
      */
     public function testContainsDownloadable()
     {
-        $am = new ArticleManager();
         $om = new OrderManager();
         $sm = new StockManager();
 
@@ -348,6 +382,7 @@ class OrderTest extends PHPUnit\Framework\TestCase
             'article_id' => $article->get('id'),
             'stock_weight' => 1000
         ]);
+        /** @var Stock $copy */
         $om->addStock($order, $copy);
 
         $this->assertTrue($order->containsDownloadable());
@@ -355,6 +390,7 @@ class OrderTest extends PHPUnit\Framework\TestCase
 
     /**
      * Set order's shipping fee
+     * @throws Exception
      */
     public function testSetShippingFee()
     {
@@ -368,14 +404,14 @@ class OrderTest extends PHPUnit\Framework\TestCase
 
         $order->setShippingFee($fee);
 
-        $this->assertEquals($order->get('shipping_id'), 45);
-        $this->assertEquals($order->get('order_shipping'), 485);
-        $this->assertEquals($order->get('order_shipping_mode'), 'colissimo');
+        $this->assertEquals(45, $order->get('shipping_id'));
+        $this->assertEquals(485, $order->get('order_shipping'));
+        $this->assertEquals('colissimo', $order->get('order_shipping_mode'));
         $this->assertEquals($order->get('order_amount_tobepaid'), 5500 + 485);
     }
 
     /**
-     * Set a payed order's shipping fee
+     * Set a paid order's shipping fee
      */
     public function testSetShippingFeeForPayedOrder()
     {
@@ -402,26 +438,39 @@ class OrderTest extends PHPUnit\Framework\TestCase
 
     /**
      * Test getting order's total weight
+     * @throws Exception
+     * @throws Exception
+     * @throws Exception
+     * @throws Exception
+     * @throws Exception
+     * @throws Exception
+     * @throws Exception
+     * @throws Exception
      */
     public function testGetTotalWeight()
     {
         $om = new OrderManager();
         $sm = new StockManager();
 
-        $order = $om->create([]);
+        $order = $om->create();
 
         $item1 = $sm->create(['stock_weight' => 100]);
+        /** @var Stock $item1 */
         $om->addStock($order, $item1);
         $item2 = $sm->create(['stock_weight' => 200]);
+        /** @var Stock $item2 */
         $om->addStock($order, $item2);
 
-        $this->assertEquals($order->getTotalWeight(), 300);
+        $this->assertEquals(300, $order->getTotalWeight());
 
         $sm->delete($item1);
         $sm->delete($item2);
         $om->delete($order);
     }
 
+    /**
+     * @throws Exception
+     */
     public function testCancel()
     {
         // given
@@ -440,6 +489,9 @@ class OrderTest extends PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @throws Exception
+     */
     public function testCancelShopOrder()
     {
         // given
@@ -474,6 +526,9 @@ class OrderTest extends PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * @throws Exception
+     */
     public function testGetCountryWithCountryId()
     {
         // given
@@ -534,17 +589,17 @@ class OrderTest extends PHPUnit\Framework\TestCase
 
     /**
      * Test deleting an order
-     * @depends testGet
+     * @throws Exception
      */
-    public function testDelete(Order $order)
+    public function testDelete()
     {
         $om = new OrderManager();
-
+        $order = EntityFactory::createOrder();
         $om->delete($order, 'Test entity');
 
-        $Orderxists = $om->getById($order->get('id'));
+        $orderExists = $om->getById($order->get('id'));
 
-        $this->assertFalse($Orderxists);
+        $this->assertFalse($orderExists);
     }
 
     /**
