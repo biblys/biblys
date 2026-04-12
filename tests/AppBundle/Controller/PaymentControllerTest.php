@@ -65,13 +65,12 @@ class PaymentControllerTest extends TestCase
         // given
         $controller = new PaymentController();
         $request = new Request();
-        $site = ModelFactory::createSite();
         $order = ModelFactory::createOrder();
         $currentSite = $this->createMock(CurrentSite::class);
         $today = new DateTime();
         ModelFactory::createPayment(order: $order, executedAt: $today);
-        ModelFactory::createPayment(amount: 300);
-        ModelFactory::createPayment(amount: 900);
+        ModelFactory::createPayment(order: $order, amount: 300);
+        ModelFactory::createPayment(order: $order, amount: 900);
         ModelFactory::createPayment(executedAt: null);
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("authAdmin")->once()->andReturn();
@@ -103,9 +102,6 @@ class PaymentControllerTest extends TestCase
     public function testIndexWithModeFilter()
     {
         // given
-        $site = ModelFactory::createSite();
-        $currentSite = $this->createMock(CurrentSite::class);
-
         $orderPayedUsingStripe = ModelFactory::createOrder();
         ModelFactory::createPayment(
             order: $orderPayedUsingStripe,
@@ -146,12 +142,10 @@ class PaymentControllerTest extends TestCase
     public function testIndexWithDatesFilter()
     {
         // given
-        $site = ModelFactory::createSite();
-        $currentSite = $this->createMock(CurrentSite::class);
-
-        ModelFactory::createPayment(executedAt: new DateTime("2019-04-26"));
-        ModelFactory::createPayment(executedAt: new DateTime("2019-04-28"));
-        ModelFactory::createPayment(executedAt: new DateTime("2019-04-30"));
+        $order = ModelFactory::createOrder();
+        ModelFactory::createPayment(order: $order, executedAt: new DateTime("2019-04-26"));
+        ModelFactory::createPayment(order: $order, executedAt: new DateTime("2019-04-28"));
+        ModelFactory::createPayment(order: $order, executedAt: new DateTime("2019-04-30"));
 
         $controller = new PaymentController();
         $request = new Request();
