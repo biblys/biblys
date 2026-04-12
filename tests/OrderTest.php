@@ -150,16 +150,7 @@ class OrderTest extends PHPUnit\Framework\TestCase
 
     /**
      * Test adding stock
-     * @throws Exception
-     * @throws Exception
-     * @throws Exception
-     * @throws Exception
-     * @throws PropelException
-     * @throws Exception
-     * @throws Exception
-     * @throws Exception
-     * @throws Exception
-     * @throws PropelException
+     * @depends testUpdate
      * @throws Exception
      */
     public function testAddStock()
@@ -305,6 +296,7 @@ class OrderTest extends PHPUnit\Framework\TestCase
         $customer = $cm->create();
 
         // Set order customer
+        /** @var Customer $customer */
         $order = $om->create();
         /** @var Customer $customer */
         $om->setCustomer($order, $customer);
@@ -589,6 +581,7 @@ class OrderTest extends PHPUnit\Framework\TestCase
 
     /**
      * Test deleting an order
+     * @depends testGet
      * @throws Exception
      */
     public function testDelete()
