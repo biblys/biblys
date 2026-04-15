@@ -290,9 +290,9 @@ class PaymentController extends Controller
             } catch (BadRequestException $exception) {
                 $order = $paymentService->getPayableOrderBySlug($slug);
                 $error = $exception->getErrorObject();
-                $loggerService->log("payplug", $error["message"], $error["details"]);
+                $loggerService->log("payplug", "CRITICAL", $error["message"], $error["details"]);
                 $flashMessagesService->add("error", "Une erreur est survenue lors de la création du paiement via PayPlug : " . $error["message"]);
-                $paymentPageUrl = $urlGenerator->generate("payment", ["slug" => $order->getSlug()]);
+                $paymentPageUrl = $urlGenerator->generate("payment_pay", ["slug" => $order->getSlug()]);
                 return new RedirectResponse($paymentPageUrl);
             }
 

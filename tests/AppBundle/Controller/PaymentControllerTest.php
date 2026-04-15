@@ -584,7 +584,7 @@ class PaymentControllerTest extends TestCase
         $controller = new PaymentController();
         $order = ModelFactory::createOrder();
         $badRequestException = new BadRequestException(
-            "error", '{"message":"message","details":"details"}'
+            "error", '{"message":"message","details":{"details": "details"}}'
         );
 
         $paymentService = Mockery::mock(PaymentService::class);
@@ -592,12 +592,12 @@ class PaymentControllerTest extends TestCase
         $paymentService->expects("createPayplugPaymentForOrder")->with($order)
             ->andThrows($badRequestException);
         $loggerService = Mockery::mock(LoggerService::class);
-        $loggerService->expects("log")->with("payplug", "message", "details");
+        $loggerService->expects("log")->with("payplug", "CRITICAL", "message", ["details" => "details"]);
         $flashMessagesService = Mockery::mock(FlashMessagesService::class);
         $flashMessagesService->expects("add")
             ->with("error", "Une erreur est survenue lors de la création du paiement via PayPlug : message");
         $urlGenerator = Mockery::mock(UrlGenerator::class);
-        $urlGenerator->expects("generate")->with("payment", ["slug" => $order->getSlug()])
+        $urlGenerator->expects("generate")->with("payment_pay", ["slug" => $order->getSlug()])
             ->andReturn("/order_url");
 
         // when
