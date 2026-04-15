@@ -19,13 +19,17 @@
 namespace ApiBundle\Controller;
 
 use Biblys\Exception\CannotFindPayableOrderException;
+use Biblys\Exception\InvalidEmailAddressException;
+use Biblys\Exception\UnreachableExternalServiceException;
 use Biblys\Service\Config;
+use Biblys\Service\CurrentSite;
 use Biblys\Service\LoggerService;
+use Biblys\Service\Mailer;
 use Biblys\Service\PaymentService;
+use Biblys\Service\TemplateService;
 use Exception;
 use Framework\Controller;
-use Order;
-use OrderManager;
+use Model\Payment;
 use PaypalServerSdkLib\Authentication\ClientCredentialsAuthCredentialsBuilder;
 use PaypalServerSdkLib\Environment;
 use PaypalServerSdkLib\Models\Builders\AmountBreakdownBuilder;
@@ -41,6 +45,14 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Routing\Generator\UrlGenerator;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
+use Usecase\AddArticleToUserLibraryUsecase;
+use Usecase\AddPaymentToOrderAndExecuteUsecase;
+use Usecase\BusinessRuleException;
+use Usecase\MarkOrderAsPaidUsecase;
 
 class PaymentController extends Controller
 {
@@ -112,14 +124,24 @@ class PaymentController extends Controller
     }
 
     /**
-     * @throws TransportExceptionInterface
      * @throws PropelException
+     * @throws TransportExceptionInterface
+     * @throws InvalidEmailAddressException
+     * @throws UnreachableExternalServiceException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws BusinessRuleException
      */
     public function paypalCaptureAction(
         Config         $config,
         PaymentService $paymentService,
         Request        $request,
         LoggerService  $logger,
+        Mailer         $mailer,
+        CurrentSite    $currentSite,
+        UrlGenerator    $urlGenerator,
+        TemplateService $templateService,
         string         $slug
     ): JsonResponse
     {
@@ -145,10 +167,27 @@ class PaymentController extends Controller
 
             if ($jsonResponse["status"] === "COMPLETED") {
                 $paidAmount = $jsonResponse["purchase_units"][0]["payments"]["captures"][0]["amount"]["value"];
-                $orderManager = new OrderManager();
-                /** @var Order $orderEntity */
-                $orderEntity = $orderManager->getById($order->getId());
-                $orderManager->addPayment($orderEntity, "paypal", $paidAmount * 100);
+
+                $payment = new Payment();
+                $payment->setOrder($order);
+                $payment->setMode(Payment::MODE_PAYPAL);
+                $payment->setAmount($paidAmount * 100);
+
+                $addArticleToLibraryUsecase = new AddArticleToUserLibraryUsecase(
+                    mailer: $mailer,
+                    currentSite: $currentSite,
+                    urlGenerator: $urlGenerator,
+                );
+                $markOrderAsPaidUsecase = new MarkOrderAsPaidUsecase(
+                    urlGenerator: $urlGenerator,
+                    templateService: $templateService,
+                    mailer: $mailer,
+                    addArticleToUserLibraryUsecase: $addArticleToLibraryUsecase,
+                );
+                $usecase = new AddPaymentToOrderAndExecuteUsecase(
+                    markOrderAsPaidUsecase: $markOrderAsPaidUsecase,
+                );
+                $usecase->execute($order, $payment);
             }
 
             return new JsonResponse($jsonResponse, $apiResponse->getStatusCode());
