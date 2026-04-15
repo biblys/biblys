@@ -19,9 +19,13 @@
 namespace ApiBundle\Controller;
 
 use Biblys\Service\Config;
+use Biblys\Service\CurrentSite;
 use Biblys\Service\LoggerService;
+use Biblys\Service\Mailer;
 use Biblys\Service\PaymentService;
+use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
+use Exception;
 use Mockery;
 use Model\Payment;
 use Model\PaymentQuery;
@@ -32,6 +36,7 @@ use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 
 class PaymentControllerTest extends TestCase
 {
@@ -71,6 +76,7 @@ class PaymentControllerTest extends TestCase
     /**
      * @throws PropelException
      * @throws TransportExceptionInterface
+     * @throws Exception
      */
     public function testPaypalCaptureAction(): void
     {
@@ -117,8 +123,27 @@ class PaymentControllerTest extends TestCase
         $controller->shouldAllowMockingProtectedMethods();
         $controller->expects("_createPayPalClient")->andReturn($mockPaypalClient);
 
+        $mailer = Mockery::mock(Mailer::class);
+        $mailer->expects("send")->once();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate");
+        $templateService = Helpers::getTemplateService();
+        $loggerService = Mockery::mock(LoggerService::class);
+        $loggerService->shouldReceive("log");
+
         // when
-        $response = $controller->paypalCaptureAction($config, $paymentService, $request, $logger, $order->getSlug());
+        $response = $controller->paypalCaptureAction(
+            config: $config,
+            paymentService: $paymentService,
+            request: $request,
+            logger: $loggerService,
+            mailer: $mailer,
+            currentSite: $currentSite,
+            urlGenerator: $urlGenerator,
+            templateService: $templateService,
+            slug: $order->getSlug(),
+        );
 
         // then
         $this->assertEquals(201, $response->getStatusCode());
