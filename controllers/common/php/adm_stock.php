@@ -949,7 +949,7 @@ return function (
         ';
     }
 
-    if ($stock) {
+    if (isset($stock) && $stock) {
         $deleteUrl = LegacyCodeHelper::getGlobalUrlGenerator()->generate("stock_item_delete", ["stockId" => $stock->getId()]);
         $content .= '
             <form action="'. $deleteUrl .'" method="post" class="text-center">
