@@ -34,6 +34,8 @@ use Payplug\Exception\BadRequestException;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -163,6 +165,107 @@ class PaymentControllerTest extends TestCase
         $this->assertStringContainsString("28/04/2019", $response->getContent());
         $this->assertStringNotContainsString("26/04/2019", $response->getContent());
         $this->assertStringNotContainsString("30/04/2019", $response->getContent());
+    }
+
+    /** stripeWebhookAction */
+
+    /**
+     * @throws Exception
+     * @throws TransportExceptionInterface
+     */
+    public function testStripeWebhookActionWithoutStripeConfig(): void
+    {
+        // given
+        $controller = new PaymentController();
+        $config = new Config([]);
+        $request = new Request();
+
+        // then
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage("Stripe is not configured.");
+
+        // when
+        $controller->stripeWebhookAction($request, $config);
+    }
+
+    /**
+     * @throws Exception
+     * @throws TransportExceptionInterface
+     */
+    public function testStripeWebhookActionWithMissingPublicKey(): void
+    {
+        // given
+        $controller = new PaymentController();
+        $config = new Config(["stripe" => ["secret_key" => "sk_test_123", "endpoint_secret" => "whsec_123"]]);
+        $request = new Request();
+
+        // then
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage("Missing Stripe public key.");
+
+        // when
+        $controller->stripeWebhookAction($request, $config);
+    }
+
+    /**
+     * @throws Exception
+     * @throws TransportExceptionInterface
+     */
+    public function testStripeWebhookActionWithMissingSecretKey(): void
+    {
+        // given
+        $controller = new PaymentController();
+        $config = new Config(["stripe" => ["public_key" => "pk_test_123", "endpoint_secret" => "whsec_123"]]);
+        $request = new Request();
+
+        // then
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage("Missing Stripe secret key.");
+
+        // when
+        $controller->stripeWebhookAction($request, $config);
+    }
+
+    /**
+     * @throws Exception
+     * @throws TransportExceptionInterface
+     */
+    public function testStripeWebhookActionWithMissingEndpointSecret(): void
+    {
+        // given
+        $controller = new PaymentController();
+        $config = new Config(["stripe" => ["public_key" => "pk_test_123", "secret_key" => "sk_test_123"]]);
+        $request = new Request();
+
+        // then
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage("Missing Stripe endpoint secret.");
+
+        // when
+        $controller->stripeWebhookAction($request, $config);
+    }
+
+    /**
+     * @throws Exception
+     * @throws TransportExceptionInterface
+     */
+    public function testStripeWebhookActionWithMissingSignatureHeader(): void
+    {
+        // given
+        $controller = new PaymentController();
+        $config = new Config(["stripe" => [
+            "public_key" => "pk_test_123",
+            "secret_key" => "sk_test_123",
+            "endpoint_secret" => "whsec_123",
+        ]]);
+        $request = new Request();
+
+        // then
+        $this->expectException(BadRequestHttpException::class);
+        $this->expectExceptionMessage("stripe-signature header is missing");
+
+        // when
+        $controller->stripeWebhookAction($request, $config);
     }
 
     /** selectMethodAction */
