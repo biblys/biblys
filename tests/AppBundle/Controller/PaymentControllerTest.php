@@ -22,7 +22,9 @@ use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\FlashMessagesService;
 use Biblys\Service\LoggerService;
+use Biblys\Service\Mailer;
 use Biblys\Service\PaymentService;
+use Biblys\Service\TemplateService;
 use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
 use DateTime;
@@ -179,13 +181,17 @@ class PaymentControllerTest extends TestCase
         $controller = new PaymentController();
         $config = new Config([]);
         $request = new Request();
+        $mailer = Mockery::mock(Mailer::class);
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $templateService = Mockery::mock(TemplateService::class);
 
         // then
         $this->expectException(Exception::class);
         $this->expectExceptionMessage("Stripe is not configured.");
 
         // when
-        $controller->stripeWebhookAction($request, $config);
+        $controller->stripeWebhookAction($request, $config, $mailer, $currentSite, $urlGenerator, $templateService);
     }
 
     /**
@@ -198,13 +204,17 @@ class PaymentControllerTest extends TestCase
         $controller = new PaymentController();
         $config = new Config(["stripe" => ["secret_key" => "sk_test_123", "endpoint_secret" => "whsec_123"]]);
         $request = new Request();
+        $mailer = Mockery::mock(Mailer::class);
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $templateService = Mockery::mock(TemplateService::class);
 
         // then
         $this->expectException(Exception::class);
         $this->expectExceptionMessage("Missing Stripe public key.");
 
         // when
-        $controller->stripeWebhookAction($request, $config);
+        $controller->stripeWebhookAction($request, $config, $mailer, $currentSite, $urlGenerator, $templateService);
     }
 
     /**
@@ -217,13 +227,17 @@ class PaymentControllerTest extends TestCase
         $controller = new PaymentController();
         $config = new Config(["stripe" => ["public_key" => "pk_test_123", "endpoint_secret" => "whsec_123"]]);
         $request = new Request();
+        $mailer = Mockery::mock(Mailer::class);
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $templateService = Mockery::mock(TemplateService::class);
 
         // then
         $this->expectException(Exception::class);
         $this->expectExceptionMessage("Missing Stripe secret key.");
 
         // when
-        $controller->stripeWebhookAction($request, $config);
+        $controller->stripeWebhookAction($request, $config, $mailer, $currentSite, $urlGenerator, $templateService);
     }
 
     /**
@@ -236,13 +250,17 @@ class PaymentControllerTest extends TestCase
         $controller = new PaymentController();
         $config = new Config(["stripe" => ["public_key" => "pk_test_123", "secret_key" => "sk_test_123"]]);
         $request = new Request();
+        $mailer = Mockery::mock(Mailer::class);
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $templateService = Mockery::mock(TemplateService::class);
 
         // then
         $this->expectException(Exception::class);
         $this->expectExceptionMessage("Missing Stripe endpoint secret.");
 
         // when
-        $controller->stripeWebhookAction($request, $config);
+        $controller->stripeWebhookAction($request, $config, $mailer, $currentSite, $urlGenerator, $templateService);
     }
 
     /**
@@ -259,13 +277,17 @@ class PaymentControllerTest extends TestCase
             "endpoint_secret" => "whsec_123",
         ]]);
         $request = new Request();
+        $mailer = Mockery::mock(Mailer::class);
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $templateService = Mockery::mock(TemplateService::class);
 
         // then
         $this->expectException(BadRequestHttpException::class);
         $this->expectExceptionMessage("stripe-signature header is missing");
 
         // when
-        $controller->stripeWebhookAction($request, $config);
+        $controller->stripeWebhookAction($request, $config, $mailer, $currentSite, $urlGenerator, $templateService);
     }
 
     /**
@@ -294,9 +316,13 @@ class PaymentControllerTest extends TestCase
         $signature = hash_hmac("sha256", "$timestamp.$payload", $endpointSecret);
         $request = Request::create("/", "POST", [], [], [], [], $payload);
         $request->headers->set("stripe-signature", "t=$timestamp,v1=$signature");
+        $mailer = Mockery::mock(Mailer::class);
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $templateService = Mockery::mock(TemplateService::class);
 
         // when
-        $response = $controller->stripeWebhookAction($request, $config);
+        $response = $controller->stripeWebhookAction($request, $config, $mailer, $currentSite, $urlGenerator, $templateService);
 
         // then
         $this->assertEquals(200, $response->getStatusCode());
@@ -320,7 +346,7 @@ class PaymentControllerTest extends TestCase
             "secret_key" => "sk_test_123",
             "endpoint_secret" => $endpointSecret,
         ]]);
-        $order = ModelFactory::createOrder(amountToBePaid: 1000);
+        $order = ModelFactory::createOrder(amountToBePaid: 1000, email: "customer@example.com");
         $payment = ModelFactory::createPayment(order: $order, providerId: "pi_test_456", executedAt: null);
         $payload = json_encode([
             "id" => "evt_test_456",
@@ -332,9 +358,15 @@ class PaymentControllerTest extends TestCase
         $signature = hash_hmac("sha256", "$timestamp.$payload", $endpointSecret);
         $request = Request::create("/", "POST", [], [], [], [], $payload);
         $request->headers->set("stripe-signature", "t=$timestamp,v1=$signature");
+        $mailer = Mockery::mock(Mailer::class);
+        $mailer->expects("send")->once()->with("customer@example.com", Mockery::any(), Mockery::any());
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate")->with("legacy_order", ["url" => $order->getSlug()])->andReturn("/order/order-slug");
+        $templateService = Helpers::getTemplateService();
 
         // when
-        $response = $controller->stripeWebhookAction($request, $config);
+        $response = $controller->stripeWebhookAction($request, $config, $mailer, $currentSite, $urlGenerator, $templateService);
 
         // then
         $this->assertEquals(200, $response->getStatusCode());
