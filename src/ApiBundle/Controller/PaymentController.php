@@ -161,7 +161,7 @@ class PaymentController extends Controller
      * @param Config $config
      * @return PaypalServerSdkClient
      */
-    private function _createPayPalClient(Config $config): PaypalServerSdkClient
+    protected function _createPayPalClient(Config $config): PaypalServerSdkClient
     {
         $environment = $config->get("paypal.environment") === "sandbox" ? Environment::SANDBOX : Environment::PRODUCTION;
         return PaypalServerSdkClientBuilder::init()
