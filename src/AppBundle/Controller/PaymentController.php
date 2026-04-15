@@ -158,7 +158,7 @@ class PaymentController extends Controller
 
             Stripe::setApiKey($stripe['secret_key']);
 
-            $payload = @file_get_contents('php://input');
+            $payload = $request->getContent();
 
             $sigHeader = $request->headers->get('stripe-signature');
             if (!$sigHeader) {
