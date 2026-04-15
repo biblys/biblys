@@ -258,11 +258,10 @@ class OrderController extends Controller
     public function payplugNotificationAction(
         Request $request,
         LoggerService $loggerService,
+        Config $config,
         $url
     ): Response
     {
-        $config = LegacyCodeHelper::getGlobalConfig();
-
         $payplug_config = $config->get('payplug');
         if (!$payplug_config) {
             $loggerService->log("payplug", "ERROR", 'Payplug configuration not found.');

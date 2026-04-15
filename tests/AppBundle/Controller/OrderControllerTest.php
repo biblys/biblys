@@ -226,9 +226,9 @@ class OrderControllerTest extends TestCase
     public function testPayplugNotificationActionWithoutPayplugConfig(): void
     {
         // given
-        $GLOBALS["LEGACY_CONFIG"] = new Config([]);
         $controller = new OrderController();
         $request = new Request();
+        $config = new Config([]);
         $loggerService = Mockery::mock(LoggerService::class);
         $loggerService->expects("log")->with("payplug", "ERROR", "Payplug configuration not found.");
 
@@ -237,7 +237,7 @@ class OrderControllerTest extends TestCase
         $this->expectExceptionMessage("Payplug configuration not found.");
 
         // when
-        $controller->payplugNotificationAction($request, $loggerService, "order-url");
+        $controller->payplugNotificationAction($request, $loggerService, $config, "order-url");
     }
 
     /**
@@ -247,9 +247,9 @@ class OrderControllerTest extends TestCase
     public function testPayplugNotificationActionWithMissingSecret(): void
     {
         // given
-        $GLOBALS["LEGACY_CONFIG"] = new Config(["payplug" => ["public_key" => "pk_test"]]);
         $controller = new OrderController();
         $request = new Request();
+        $config = new Config(["payplug" => ["public_key" => "pk_test"]]);
         $loggerService = Mockery::mock(LoggerService::class);
         $loggerService->expects("log")->with("payplug", "ERROR", "Missing payplug private key.");
 
@@ -258,7 +258,7 @@ class OrderControllerTest extends TestCase
         $this->expectExceptionMessage("Missing payplug private key.");
 
         // when
-        $controller->payplugNotificationAction($request, $loggerService, "order-url");
+        $controller->payplugNotificationAction($request, $loggerService, $config, "order-url");
     }
 
     /**
@@ -268,9 +268,9 @@ class OrderControllerTest extends TestCase
     public function testPayplugNotificationActionWithUnknownOrder(): void
     {
         // given
-        $GLOBALS["LEGACY_CONFIG"] = new Config(["payplug" => ["secret" => "sk_test_123"]]);
         $controller = new OrderController();
         $request = new Request();
+        $config = new Config(["payplug" => ["secret" => "sk_test_123"]]);
         $loggerService = Mockery::mock(LoggerService::class);
         $loggerService->expects("log")->with("payplug", "ERROR", "Order unknown-url not found.");
 
@@ -279,7 +279,7 @@ class OrderControllerTest extends TestCase
         $this->expectExceptionMessage("Order unknown-url not found.");
 
         // when
-        $controller->payplugNotificationAction($request, $loggerService, "unknown-url");
+        $controller->payplugNotificationAction($request, $loggerService, $config, "unknown-url");
     }
 
     /**
@@ -289,9 +289,9 @@ class OrderControllerTest extends TestCase
     public function testPayplugNotificationActionIgnoresRefund(): void
     {
         // given
-        $GLOBALS["LEGACY_CONFIG"] = new Config(["payplug" => ["secret" => "sk_test_123"]]);
         $order = ModelFactory::createOrder(slug: "pp-refund");
         $controller = new OrderController();
+        $config = new Config(["payplug" => ["secret" => "sk_test_123"]]);
         $body = json_encode(["object" => "refund", "id" => "re_test_123", "payment_id" => "pay_test_123"]);
         $request = new Request(content: $body);
         $loggerService = Mockery::mock(LoggerService::class);
@@ -310,7 +310,7 @@ class OrderControllerTest extends TestCase
         HttpClient::$REQUEST_HANDLER = $httpMock;
 
         // when
-        $response = $controller->payplugNotificationAction($request, $loggerService, $order->getSlug());
+        $response = $controller->payplugNotificationAction($request, $loggerService, $config, $order->getSlug());
 
         // then
         HttpClient::$REQUEST_HANDLER = null;
@@ -325,9 +325,9 @@ class OrderControllerTest extends TestCase
     public function testPayplugNotificationActionWithInvalidJson(): void
     {
         // given
-        $GLOBALS["LEGACY_CONFIG"] = new Config(["payplug" => ["secret" => "sk_test_123"]]);
         $order = ModelFactory::createOrder(slug: "pp-invalid-json");
         $controller = new OrderController();
+        $config = new Config(["payplug" => ["secret" => "sk_test_123"]]);
         $request = new Request(content: "not valid json");
         $loggerService = Mockery::mock(LoggerService::class);
         $loggerService->shouldReceive("log");
@@ -336,7 +336,7 @@ class OrderControllerTest extends TestCase
         $this->expectException(BadRequestHttpException::class);
 
         // when
-        $controller->payplugNotificationAction($request, $loggerService, $order->getSlug());
+        $controller->payplugNotificationAction($request, $loggerService, $config, $order->getSlug());
     }
 
     /**
@@ -346,9 +346,9 @@ class OrderControllerTest extends TestCase
     public function testPayplugNotificationActionWithUnpaidPayment(): void
     {
         // given
-        $GLOBALS["LEGACY_CONFIG"] = new Config(["payplug" => ["secret" => "sk_test_123"]]);
         $order = ModelFactory::createOrder(slug: "pp-unpaid");
         $controller = new OrderController();
+        $config = new Config(["payplug" => ["secret" => "sk_test_123"]]);
         $body = json_encode(["object" => "payment", "id" => "pay_test_unpaid"]);
         $request = new Request(content: $body);
         $loggerService = Mockery::mock(LoggerService::class);
@@ -367,7 +367,7 @@ class OrderControllerTest extends TestCase
         HttpClient::$REQUEST_HANDLER = $httpMock;
 
         // when
-        $response = $controller->payplugNotificationAction($request, $loggerService, $order->getSlug());
+        $response = $controller->payplugNotificationAction($request, $loggerService, $config, $order->getSlug());
 
         // then
         HttpClient::$REQUEST_HANDLER = null;
@@ -382,9 +382,9 @@ class OrderControllerTest extends TestCase
     public function testPayplugNotificationActionWithPaymentNotFoundInDatabase(): void
     {
         // given
-        $GLOBALS["LEGACY_CONFIG"] = new Config(["payplug" => ["secret" => "sk_test_123"]]);
         $order = ModelFactory::createOrder(slug: "pp-not-found");
         $controller = new OrderController();
+        $config = new Config(["payplug" => ["secret" => "sk_test_123"]]);
         $body = json_encode(["object" => "payment", "id" => "pay_test_unknown"]);
         $request = new Request(content: $body);
         $loggerService = Mockery::mock(LoggerService::class);
@@ -408,7 +408,7 @@ class OrderControllerTest extends TestCase
 
         // when
         try {
-            $controller->payplugNotificationAction($request, $loggerService, $order->getSlug());
+            $controller->payplugNotificationAction($request, $loggerService, $config, $order->getSlug());
         } finally {
             HttpClient::$REQUEST_HANDLER = null;
         }
@@ -421,10 +421,10 @@ class OrderControllerTest extends TestCase
     public function testPayplugNotificationActionWithOrderIdMismatch(): void
     {
         // given
-        $GLOBALS["LEGACY_CONFIG"] = new Config(["payplug" => ["secret" => "sk_test_123"]]);
         $order = ModelFactory::createOrder(slug: "pp-mismatch");
         ModelFactory::createPayment(order: $order, providerId: "pay_test_mismatch", executedAt: null);
         $controller = new OrderController();
+        $config = new Config(["payplug" => ["secret" => "sk_test_123"]]);
         $body = json_encode(["object" => "payment", "id" => "pay_test_mismatch"]);
         $request = new Request(content: $body);
         $loggerService = Mockery::mock(LoggerService::class);
@@ -449,7 +449,7 @@ class OrderControllerTest extends TestCase
 
         // when
         try {
-            $controller->payplugNotificationAction($request, $loggerService, $order->getSlug());
+            $controller->payplugNotificationAction($request, $loggerService, $config, $order->getSlug());
         } finally {
             HttpClient::$REQUEST_HANDLER = null;
         }
@@ -462,10 +462,10 @@ class OrderControllerTest extends TestCase
     public function testPayplugNotificationActionAddsPaymentToOrder(): void
     {
         // given
-        $GLOBALS["LEGACY_CONFIG"] = new Config(["payplug" => ["secret" => "sk_test_123"]]);
         $order = ModelFactory::createOrder(amountToBePaid: 1000, slug: "pp-success");
         $payment = ModelFactory::createPayment(order: $order, mode: Payment::MODE_PAYPLUG, providerId: "pay_test_success", executedAt: null);
         $controller = new OrderController();
+        $config = new Config(["payplug" => ["secret" => "sk_test_123"]]);
         $body = json_encode(["object" => "payment", "id" => "pay_test_success"]);
         $request = new Request(content: $body);
         $loggerService = Mockery::mock(LoggerService::class);
@@ -485,7 +485,7 @@ class OrderControllerTest extends TestCase
         HttpClient::$REQUEST_HANDLER = $httpMock;
 
         // when
-        $response = $controller->payplugNotificationAction($request, $loggerService, $order->getSlug());
+        $response = $controller->payplugNotificationAction($request, $loggerService, $config, $order->getSlug());
 
         // then
         HttpClient::$REQUEST_HANDLER = null;
