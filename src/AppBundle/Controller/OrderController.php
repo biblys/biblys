@@ -19,7 +19,6 @@
 namespace AppBundle\Controller;
 
 use Biblys\Exception\InvalidEmailAddressException;
-use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
@@ -30,9 +29,9 @@ use Biblys\Service\TemplateService;
 use Exception;
 use Framework\Controller;
 use Model\OrderQuery;
+use Model\PaymentQuery;
 use Order;
 use OrderManager;
-use PaymentManager;
 use Payplug\Exception\ConfigurationException;
 use Payplug\Exception\PayplugException;
 use Payplug\Exception\UnknownAPIResourceException;
@@ -259,6 +258,10 @@ class OrderController extends Controller
         Request $request,
         LoggerService $loggerService,
         Config $config,
+        Mailer $mailer,
+        CurrentSite $currentSite,
+        UrlGenerator $urlGenerator,
+        TemplateService $templateService,
         $url
     ): Response
     {
@@ -275,16 +278,13 @@ class OrderController extends Controller
 
         Payplug::init(["secretKey" => $payplug_config['secret']]);
 
-        $om = new OrderManager();
-        $pm = new PaymentManager();
-
         // Check if order exists
-        $order = $om->get(['order_url' => $url]);
+        $order = OrderQuery::create()->findOneBySlug($url);
         if (!$order) {
             $loggerService->log("payplug", "ERROR", "Order $url not found.");
             throw new Exception("Order $url not found.");
         }
-        $loggerService->log("payplug", "INFO", 'Receiving Payplug notification for order ' . $order->get('id') . ' from ' . $request->headers->get('referer'));
+        $loggerService->log("payplug", "INFO", 'Receiving Payplug notification for order ' . $order->getId() . ' from ' . $request->headers->get('referer'));
 
         // Process notification
         $input = $request->getContent();
@@ -308,31 +308,43 @@ class OrderController extends Controller
             }
 
             // Check if payment exists
-            $payment = $pm->get(['payment_provider_id' => $resource->id]);
+            $payment = PaymentQuery::create()->findOneByProviderId($resource->id);
             if (!$payment) {
                 $loggerService->log("payplug", "ERROR", 'Payment ' . $resource->id . ' not found.');
                 throw new Exception('Payment '.$resource->id.' not found.');
             }
-            $loggerService->log("payplug", "INFO", 'Found payment ' . $payment->get('id') . ' in database.');
+            $loggerService->log("payplug", "INFO", 'Found payment ' . $payment->getId() . ' in database.');
 
             // Get order id from metadata and compare to database order id
-            if ($resource->metadata['order_id'] != $order->get('id')) {
-                $loggerService->log("payplug", "ERROR", 'Order id from Payplug (' . $resource->metadata['order_id'] . ') does not match order ID (' . $order->get('id') . ').');
+            if ($resource->metadata['order_id'] != $order->getId()) {
+                $loggerService->log("payplug", "ERROR", 'Order id from Payplug (' . $resource->metadata['order_id'] . ') does not match order ID (' . $order->getId() . ').');
                 throw new Exception('Invoice number does not match order ID.');
             }
             $loggerService->log("payplug", "INFO", 'Received order id (' . $resource->metadata['order_id'] . ' matches order id in database.');
 
+            $addArticleToLibraryUsecase = new AddArticleToUserLibraryUsecase(
+                mailer: $mailer,
+                currentSite: $currentSite,
+                urlGenerator: $urlGenerator,
+            );
+            $markOrderAsPaidUsecase = new MarkOrderAsPaidUsecase(
+                urlGenerator: $urlGenerator,
+                templateService: $templateService,
+                mailer: $mailer,
+                addArticleToUserLibraryUsecase: $addArticleToLibraryUsecase,
+            );
+            $usecase = new AddPaymentToOrderAndExecuteUsecase(
+                markOrderAsPaidUsecase: $markOrderAsPaidUsecase,
+            );
+            $usecase->execute($order, $payment);
+
             // Add payment to the order
-            $om->addPayment($order, $payment);
-            $loggerService->log("payplug", "INFO", 'Payment amount (' . $payment->get('amount') . ') was added to order ' . $order->get('id'));
+            $loggerService->log("payplug", "INFO", 'Payment amount (' . $payment->getAmount() . ') was added to order ' . $order->getId());
 
             return new Response('');
         } catch (UnknownAPIResourceException $exception) {
             $loggerService->log("payplug", "ERROR", 'UnknownAPIResourceException: ' . $exception->getMessage());
             throw new BadRequestHttpException($exception->getMessage(), $exception);
-        } catch (PayplugException $exception) {
-            $loggerService->log("payplug", "ERROR", 'PayplugException: ' . $exception->getMessage());
-            throw $exception;
         }
     }
 
