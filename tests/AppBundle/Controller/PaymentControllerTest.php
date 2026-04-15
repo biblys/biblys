@@ -268,6 +268,82 @@ class PaymentControllerTest extends TestCase
         $controller->stripeWebhookAction($request, $config);
     }
 
+    /**
+     * @throws Exception
+     * @throws TransportExceptionInterface
+     */
+    public function testStripeWebhookActionIgnoresNonPaymentIntentSucceededEvent(): void
+    {
+        // given
+        $controller = new PaymentController();
+        $endpointSecret = "whsec_test_secret";
+        $config = new Config(["stripe" => [
+            "public_key" => "pk_test_123",
+            "secret_key" => "sk_test_123",
+            "endpoint_secret" => $endpointSecret,
+        ]]);
+        $order = ModelFactory::createOrder(amountToBePaid: 1000);
+        $payment = ModelFactory::createPayment(order: $order, providerId: "pi_test_123", executedAt: null);
+        $payload = json_encode([
+            "id" => "evt_test_123",
+            "object" => "event",
+            "type" => "payment_intent.created",
+            "data" => ["object" => ["id" => "pi_test_123"]],
+        ]);
+        $timestamp = time();
+        $signature = hash_hmac("sha256", "$timestamp.$payload", $endpointSecret);
+        $request = Request::create("/", "POST", [], [], [], [], $payload);
+        $request->headers->set("stripe-signature", "t=$timestamp,v1=$signature");
+
+        // when
+        $response = $controller->stripeWebhookAction($request, $config);
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $payment->reload();
+        $this->assertFalse($payment->isExecuted());
+        $order->reload();
+        $this->assertFalse($order->isPaid());
+    }
+
+    /**
+     * @throws Exception
+     * @throws TransportExceptionInterface
+     */
+    public function testStripeWebhookActionHandlesPaymentIntentSucceededEvent(): void
+    {
+        // given
+        $controller = new PaymentController();
+        $endpointSecret = "whsec_test_secret";
+        $config = new Config(["stripe" => [
+            "public_key" => "pk_test_123",
+            "secret_key" => "sk_test_123",
+            "endpoint_secret" => $endpointSecret,
+        ]]);
+        $order = ModelFactory::createOrder(amountToBePaid: 1000);
+        $payment = ModelFactory::createPayment(order: $order, providerId: "pi_test_456", executedAt: null);
+        $payload = json_encode([
+            "id" => "evt_test_456",
+            "object" => "event",
+            "type" => "payment_intent.succeeded",
+            "data" => ["object" => ["id" => "pi_test_456"]],
+        ]);
+        $timestamp = time();
+        $signature = hash_hmac("sha256", "$timestamp.$payload", $endpointSecret);
+        $request = Request::create("/", "POST", [], [], [], [], $payload);
+        $request->headers->set("stripe-signature", "t=$timestamp,v1=$signature");
+
+        // when
+        $response = $controller->stripeWebhookAction($request, $config);
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $payment->reload();
+        $this->assertTrue($payment->isExecuted());
+        $order->reload();
+        $this->assertTrue($order->isPaid());
+    }
+
     /** selectMethodAction */
 
     /**
