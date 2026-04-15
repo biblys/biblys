@@ -19,6 +19,7 @@
 namespace AppBundle\Controller;
 
 use Biblys\Exception\InvalidEmailAddressException;
+use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
@@ -144,7 +145,6 @@ class OrderController extends Controller
      * @throws PropelException
      */
     public function show(
-        CurrentSite $currentSite,
         CurrentUser $currentUser,
         int         $id,
     ): RedirectResponse
@@ -249,8 +249,9 @@ class OrderController extends Controller
 
     /**
      * @throws ConfigurationException
-     * @throws UnknownAPIResourceException
      * @throws PayplugException
+     * @throws TransportExceptionInterface
+     * @throws UnknownAPIResourceException
      * @throws Exception
      * @noinspection PhpUndefinedFieldInspection
      */
@@ -260,7 +261,7 @@ class OrderController extends Controller
         $url
     ): Response
     {
-        $config = \Biblys\Legacy\LegacyCodeHelper::getGlobalConfig();;
+        $config = LegacyCodeHelper::getGlobalConfig();
 
         $payplug_config = $config->get('payplug');
         if (!$payplug_config) {
@@ -336,6 +337,10 @@ class OrderController extends Controller
         }
     }
 
+    /**
+     * @throws InvalidSiteIdException
+     * @throws PropelException
+     */
     private function _jsonOrderFromEntity(Order $order): array
     {
         return [
