@@ -29,10 +29,13 @@ use Biblys\Test\ModelFactory;
 use Exception;
 use Mockery;
 use Model\OrderQuery;
+use Model\Payment;
+use Model\PaymentQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -128,15 +131,19 @@ class OrderControllerTest extends TestCase
     {
         // given
         $controller = new OrderController();
-        $order = ModelFactory::createOrder();
+        $order = ModelFactory::createOrder(amountToBePaid: 999);
 
-        $payload = json_encode(["payment_mode" => "card", "tracking_number" => null]);
+        $payload = json_encode(["payment_mode" => Payment::MODE_CARD, "tracking_number" => null]);
         $request = new Request(content: $payload);
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("authAdmin")->once()->andReturn();
         $templateService = Mockery::mock(TemplateService::class);
+        $templateService->expects("render");
         $mailer = Mockery::mock(Mailer::class);
+        $mailer->expects("send");
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate");
 
         // when
         $response = $controller->updateAction(
@@ -145,14 +152,20 @@ class OrderControllerTest extends TestCase
             $currentUser,
             $templateService,
             $mailer,
-            $order->getId(),
-            "payed",
+            urlGenerator: $urlGenerator,
+            id: $order->getId(),
+            action: "payed",
         );
 
         // then
         $this->assertEquals(200, $response->getStatusCode());
         $order->reload();
         $this->assertTrue($order->isPaid());
+        $payment = PaymentQuery::create()->findOneByOrderId($order->getId());
+        $this->assertNotNull($payment);
+        $this->assertEquals(Payment::MODE_CARD, $payment->getMode());
+        $this->assertEquals(999, $payment->getAmount());
+        $this->assertTrue($payment->isExecuted());
     }
 
     /**
@@ -182,8 +195,9 @@ class OrderControllerTest extends TestCase
             $currentUser,
             $templateService,
             $mailer,
-            $order->getId(),
-            "shipped"
+            urlGenerator: Mockery::mock(UrlGenerator::class),
+            id: $order->getId(),
+            action: "shipped",
         );
 
         // then
@@ -219,8 +233,9 @@ class OrderControllerTest extends TestCase
             $currentUser,
             $templateService,
             $mailer,
-            $order->getId(),
-            "shipped"
+            urlGenerator: Mockery::mock(UrlGenerator::class),
+            id: $order->getId(),
+            action: "shipped",
         );
 
         // then
