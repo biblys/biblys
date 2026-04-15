@@ -19,11 +19,14 @@ namespace AppBundle\Controller;
 
 use Biblys\Exception\CannotFindPayableOrderException;
 use Biblys\Exception\InvalidConfigurationException;
+use Biblys\Exception\InvalidEmailAddressException;
+use Biblys\Exception\UnreachableExternalServiceException;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\FlashMessagesService;
 use Biblys\Service\LoggerService;
+use Biblys\Service\Mailer;
 use Biblys\Service\Pagination;
 use Biblys\Service\PaymentService;
 use Biblys\Service\TemplateService;
@@ -33,9 +36,6 @@ use Framework\Controller;
 use InvalidArgumentException;
 use Model\Payment;
 use Model\PaymentQuery;
-use Order;
-use OrderManager;
-use PaymentManager;
 use Payplug\Exception\BadRequestException;
 use Payplug\Exception\ConfigurationException;
 use Payplug\Exception\ConfigurationNotSetException;
@@ -56,6 +56,10 @@ use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
+use Usecase\AddArticleToUserLibraryUsecase;
+use Usecase\AddPaymentToOrderAndExecuteUsecase;
+use Usecase\BusinessRuleException;
+use Usecase\MarkOrderAsPaidUsecase;
 
 class PaymentController extends Controller
 {
@@ -128,10 +132,24 @@ class PaymentController extends Controller
      *
      * Confirm that a payment has succeeded using order url
      * and redirect
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
      * @throws SignatureVerificationException
+     * @throws SyntaxError
      * @throws TransportExceptionInterface
+     * @throws InvalidEmailAddressException
+     * @throws UnreachableExternalServiceException
+     * @throws BusinessRuleException
      */
-    public function stripeWebhookAction(Request $request, Config $config): JsonResponse
+    public function stripeWebhookAction(
+        Request $request,
+        Config $config,
+        Mailer $mailer,
+        CurrentSite $currentSite,
+        UrlGenerator $urlGenerator,
+        TemplateService $templateService,
+    ): JsonResponse
     {
         $loggerService = new LoggerService();
 
@@ -176,25 +194,36 @@ class PaymentController extends Controller
             $loggerService->log("stripe", "INFO", 'Handling payment intent…', ["id" => $session->id]);
 
             // Retrieve payment associated with session id
-            $pm = new PaymentManager();
-            $payment = $pm->get(["payment_provider_id" => $session->id]);
+            $payment = PaymentQuery::create()->findOneByProviderId($session->id);
             if (!$payment) {
                 throw new Exception("Could not find a payment associated with this session id");
             }
-            $loggerService->log("stripe", "INFO", 'Associated Payment with session id', ["id" => $payment->get('id')]);
+            $loggerService->log("stripe", "INFO", 'Associated Payment with session id', ["id" => $payment->getId()]);
 
             // Retrieve order associated with payment
-            $om = new OrderManager();
-            /** @var Order $order */
-            $order = $om->getById($payment->get('order_id'));
+            $order = $payment->getOrder();
             if (!$order) {
                 throw new Exception("Could not find an order associated with this id");
             }
-            $loggerService->log("stripe", "INFO", 'Associated Order with Payment', ["id" => $order->get('id')]);
+            $loggerService->log("stripe", "INFO", 'Associated Order with Payment', ["id" => $order->getId()]);
 
-            // Add payment to the order
-            $om->addPayment($order, $payment);
-            $loggerService->log("stripe", "INFO", 'Payment amount (' . $payment->get('amount') . ') was added to order ' . $order->get('id'));
+            $addArticleToLibraryUsecase = new AddArticleToUserLibraryUsecase(
+                mailer: $mailer,
+                currentSite: $currentSite,
+                urlGenerator: $urlGenerator,
+            );
+            $markOrderAsPaidUsecase = new MarkOrderAsPaidUsecase(
+                urlGenerator: $urlGenerator,
+                templateService: $templateService,
+                mailer: $mailer,
+                addArticleToUserLibraryUsecase: $addArticleToLibraryUsecase,
+            );
+            $usecase = new AddPaymentToOrderAndExecuteUsecase(
+                markOrderAsPaidUsecase: $markOrderAsPaidUsecase,
+            );
+            $usecase->execute($order, $payment);
+
+            $loggerService->log("stripe", "INFO", 'Payment amount (' . $payment->getAmount() . ') was added to order ' . $order->getId());
 
         } catch (Exception $e) {
             $loggerService->log("stripe", "ERROR", $e->getMessage());
