@@ -23,22 +23,14 @@ use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\InvalidSiteIdException;
-use Biblys\Service\LoggerService;
 use Biblys\Service\Mailer;
 use Biblys\Service\TemplateService;
 use Exception;
 use Framework\Controller;
 use Model\OrderQuery;
-use Model\PaymentQuery;
+use Model\Payment;
 use Order;
 use OrderManager;
-use Payplug\Exception\ConfigurationException;
-use Payplug\Exception\PayplugException;
-use Payplug\Exception\UnknownAPIResourceException;
-use Payplug\Notification;
-use Payplug\Payplug;
-use Payplug\Resource\Payment;
-use Payplug\Resource\Refund;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -193,7 +185,7 @@ class OrderController extends Controller
         if ($action == "payed") {
             $amount = $orderEntity->get('amount_tobepaid');
 
-            $payment = new \Model\Payment();
+            $payment = new Payment();
             $payment->setOrder($order);
             $payment->setMode($requestBody->payment_mode);
             $payment->setAmount($amount);
@@ -244,108 +236,6 @@ class OrderController extends Controller
             "notice" => $notice,
             "order" => $this->_jsonOrder($updatedOrder),
         ]);
-    }
-
-    /**
-     * @throws ConfigurationException
-     * @throws PayplugException
-     * @throws TransportExceptionInterface
-     * @throws UnknownAPIResourceException
-     * @throws Exception
-     * @noinspection PhpUndefinedFieldInspection
-     */
-    public function payplugNotificationAction(
-        Request $request,
-        LoggerService $loggerService,
-        Config $config,
-        Mailer $mailer,
-        CurrentSite $currentSite,
-        UrlGenerator $urlGenerator,
-        TemplateService $templateService,
-        $url
-    ): Response
-    {
-        $payplug_config = $config->get('payplug');
-        if (!$payplug_config) {
-            $loggerService->log("payplug", "ERROR", 'Payplug configuration not found.');
-            throw new Exception('Payplug configuration not found.');
-        }
-
-        if (!isset($payplug_config['secret'])) {
-            $loggerService->log("payplug", "ERROR", 'Missing payplug private key.');
-            throw new Exception('Missing payplug private key.');
-        }
-
-        Payplug::init(["secretKey" => $payplug_config['secret']]);
-
-        // Check if order exists
-        $order = OrderQuery::create()->findOneBySlug($url);
-        if (!$order) {
-            $loggerService->log("payplug", "ERROR", "Order $url not found.");
-            throw new Exception("Order $url not found.");
-        }
-        $loggerService->log("payplug", "INFO", 'Receiving Payplug notification for order ' . $order->getId() . ' from ' . $request->headers->get('referer'));
-
-        // Process notification
-        $input = $request->getContent();
-        try {
-            $resource = Notification::treat($input);
-
-            if ($resource instanceof Refund) {
-                $loggerService->log("payplug", "INFO", 'Ignoring resource ' . $resource->id . ' (refund)');
-                return new Response();
-            }
-
-            if (!$resource instanceof Payment) {
-                $loggerService->log("payplug", "ERROR", 'Resource ' . $resource->id . '  is not a Payment.');
-                throw new Exception('Resource '.$resource->id.'  is not a Payment.');
-            }
-
-            // Payment failed, log error and ignore process
-            if (!$resource->is_paid) {
-                $loggerService->log("payplug", "ERROR", 'Payment ' . $resource->id . '  is not paid.');
-                return new Response('');
-            }
-
-            // Check if payment exists
-            $payment = PaymentQuery::create()->findOneByProviderId($resource->id);
-            if (!$payment) {
-                $loggerService->log("payplug", "ERROR", 'Payment ' . $resource->id . ' not found.');
-                throw new Exception('Payment '.$resource->id.' not found.');
-            }
-            $loggerService->log("payplug", "INFO", 'Found payment ' . $payment->getId() . ' in database.');
-
-            // Get order id from metadata and compare to database order id
-            if ($resource->metadata['order_id'] != $order->getId()) {
-                $loggerService->log("payplug", "ERROR", 'Order id from Payplug (' . $resource->metadata['order_id'] . ') does not match order ID (' . $order->getId() . ').');
-                throw new Exception('Invoice number does not match order ID.');
-            }
-            $loggerService->log("payplug", "INFO", 'Received order id (' . $resource->metadata['order_id'] . ' matches order id in database.');
-
-            $addArticleToLibraryUsecase = new AddArticleToUserLibraryUsecase(
-                mailer: $mailer,
-                currentSite: $currentSite,
-                urlGenerator: $urlGenerator,
-            );
-            $markOrderAsPaidUsecase = new MarkOrderAsPaidUsecase(
-                urlGenerator: $urlGenerator,
-                templateService: $templateService,
-                mailer: $mailer,
-                addArticleToUserLibraryUsecase: $addArticleToLibraryUsecase,
-            );
-            $usecase = new AddPaymentToOrderAndExecuteUsecase(
-                markOrderAsPaidUsecase: $markOrderAsPaidUsecase,
-            );
-            $usecase->execute($order, $payment);
-
-            // Add payment to the order
-            $loggerService->log("payplug", "INFO", 'Payment amount (' . $payment->getAmount() . ') was added to order ' . $order->getId());
-
-            return new Response('');
-        } catch (UnknownAPIResourceException $exception) {
-            $loggerService->log("payplug", "ERROR", 'UnknownAPIResourceException: ' . $exception->getMessage());
-            throw new BadRequestHttpException($exception->getMessage(), $exception);
-        }
     }
 
     /**

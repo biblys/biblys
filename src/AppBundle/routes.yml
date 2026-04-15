@@ -415,10 +415,6 @@ order_index:
   path: /admin/orders/
   controller: AppBundle\Controller\OrderController::indexAction
 
-order_payplug_notification:
-  path: /orders/{url}/payplug-notification
-  controller: AppBundle\Controller\OrderController::payplugNotificationAction
-
 order_update:
   path: /admin/orders/{id}/{action}
   controller: AppBundle\Controller\OrderController::updateAction
@@ -479,6 +475,10 @@ payment_paypal_capture:
   methods: POST
   path: /api/order/{slug}/paypal/capture
   controller: ApiBundle\Controller\PaymentController::paypalCaptureAction
+    
+payment_payplug_notification:
+  path: /payment/{url}/payplug-notification
+  controller: AppBundle\Controller\PaymentController::payplugNotificationAction
 
 # Post
 
