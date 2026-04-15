@@ -231,13 +231,28 @@ class OrderControllerTest extends TestCase
         $config = new Config([]);
         $loggerService = Mockery::mock(LoggerService::class);
         $loggerService->expects("log")->with("payplug", "ERROR", "Payplug configuration not found.");
+        $mailer = Mockery::mock(Mailer::class);
+        $mailer->expects("send")->once();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate");
+        $templateService = Helpers::getTemplateService();
 
         // then
         $this->expectException(Exception::class);
         $this->expectExceptionMessage("Payplug configuration not found.");
 
         // when
-        $controller->payplugNotificationAction($request, $loggerService, $config, "order-url");
+        $controller->payplugNotificationAction(
+            request: $request,
+            loggerService: $loggerService,
+            config: $config,
+            mailer: $mailer,
+            currentSite: $currentSite,
+            urlGenerator: $urlGenerator,
+            templateService: $templateService,
+            url: "slug"
+        );
     }
 
     /**
@@ -252,13 +267,28 @@ class OrderControllerTest extends TestCase
         $config = new Config(["payplug" => ["public_key" => "pk_test"]]);
         $loggerService = Mockery::mock(LoggerService::class);
         $loggerService->expects("log")->with("payplug", "ERROR", "Missing payplug private key.");
+        $mailer = Mockery::mock(Mailer::class);
+        $mailer->expects("send")->once();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate");
+        $templateService = Helpers::getTemplateService();
 
         // then
         $this->expectException(Exception::class);
         $this->expectExceptionMessage("Missing payplug private key.");
 
         // when
-        $controller->payplugNotificationAction($request, $loggerService, $config, "order-url");
+        $controller->payplugNotificationAction(
+            request: $request,
+            loggerService: $loggerService,
+            config: $config,
+            mailer: $mailer,
+            currentSite: $currentSite,
+            urlGenerator: $urlGenerator,
+            templateService: $templateService,
+            url: "slug"
+        );
     }
 
     /**
@@ -273,13 +303,28 @@ class OrderControllerTest extends TestCase
         $config = new Config(["payplug" => ["secret" => "sk_test_123"]]);
         $loggerService = Mockery::mock(LoggerService::class);
         $loggerService->expects("log")->with("payplug", "ERROR", "Order unknown-url not found.");
+        $mailer = Mockery::mock(Mailer::class);
+        $mailer->expects("send")->once();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate");
+        $templateService = Helpers::getTemplateService();
 
         // then
         $this->expectException(Exception::class);
         $this->expectExceptionMessage("Order unknown-url not found.");
 
         // when
-        $controller->payplugNotificationAction($request, $loggerService, $config, "unknown-url");
+        $controller->payplugNotificationAction(
+            request: $request,
+            loggerService: $loggerService,
+            config: $config,
+            mailer: $mailer,
+            currentSite: $currentSite,
+            urlGenerator: $urlGenerator,
+            templateService: $templateService,
+            url: "unknown-url",
+        );
     }
 
     /**
@@ -308,9 +353,24 @@ class OrderControllerTest extends TestCase
         $httpMock->shouldReceive("error")->andReturn("");
         $httpMock->shouldReceive("close");
         HttpClient::$REQUEST_HANDLER = $httpMock;
+        $mailer = Mockery::mock(Mailer::class);
+        $mailer->expects("send")->once();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate");
+        $templateService = Helpers::getTemplateService();
 
         // when
-        $response = $controller->payplugNotificationAction($request, $loggerService, $config, $order->getSlug());
+        $response = $controller->payplugNotificationAction(
+            request: $request,
+            loggerService: $loggerService,
+            config: $config,
+            mailer: $mailer,
+            currentSite: $currentSite,
+            urlGenerator: $urlGenerator,
+            templateService: $templateService,
+            url: $order->getSlug()
+        );
 
         // then
         HttpClient::$REQUEST_HANDLER = null;
@@ -331,12 +391,27 @@ class OrderControllerTest extends TestCase
         $request = new Request(content: "not valid json");
         $loggerService = Mockery::mock(LoggerService::class);
         $loggerService->shouldReceive("log");
+        $mailer = Mockery::mock(Mailer::class);
+        $mailer->expects("send")->once();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate");
+        $templateService = Helpers::getTemplateService();
 
         // then
         $this->expectException(BadRequestHttpException::class);
 
         // when
-        $controller->payplugNotificationAction($request, $loggerService, $config, $order->getSlug());
+        $controller->payplugNotificationAction(
+            request: $request,
+            loggerService: $loggerService,
+            config: $config,
+            mailer: $mailer,
+            currentSite: $currentSite,
+            urlGenerator: $urlGenerator,
+            templateService: $templateService,
+            url: $order->getSlug()
+        );
     }
 
     /**
@@ -365,9 +440,24 @@ class OrderControllerTest extends TestCase
         $httpMock->shouldReceive("error")->andReturn("");
         $httpMock->shouldReceive("close");
         HttpClient::$REQUEST_HANDLER = $httpMock;
+        $mailer = Mockery::mock(Mailer::class);
+        $mailer->expects("send")->once();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate");
+        $templateService = Helpers::getTemplateService();
 
         // when
-        $response = $controller->payplugNotificationAction($request, $loggerService, $config, $order->getSlug());
+        $response = $controller->payplugNotificationAction(
+            request: $request,
+            loggerService: $loggerService,
+            config: $config,
+            mailer: $mailer,
+            currentSite: $currentSite,
+            urlGenerator: $urlGenerator,
+            templateService: $templateService,
+            url: $order->getSlug()
+        );
 
         // then
         HttpClient::$REQUEST_HANDLER = null;
@@ -401,6 +491,12 @@ class OrderControllerTest extends TestCase
         $httpMock->shouldReceive("error")->andReturn("");
         $httpMock->shouldReceive("close");
         HttpClient::$REQUEST_HANDLER = $httpMock;
+        $mailer = Mockery::mock(Mailer::class);
+        $mailer->expects("send")->once();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate");
+        $templateService = Helpers::getTemplateService();
 
         // then
         $this->expectException(Exception::class);
@@ -408,7 +504,16 @@ class OrderControllerTest extends TestCase
 
         // when
         try {
-            $controller->payplugNotificationAction($request, $loggerService, $config, $order->getSlug());
+            $controller->payplugNotificationAction(
+                request: $request,
+                loggerService: $loggerService,
+                config: $config,
+                mailer: $mailer,
+                currentSite: $currentSite,
+                urlGenerator: $urlGenerator,
+                templateService: $templateService,
+                url: $order->getSlug()
+            );
         } finally {
             HttpClient::$REQUEST_HANDLER = null;
         }
@@ -442,6 +547,12 @@ class OrderControllerTest extends TestCase
         $httpMock->shouldReceive("error")->andReturn("");
         $httpMock->shouldReceive("close");
         HttpClient::$REQUEST_HANDLER = $httpMock;
+        $mailer = Mockery::mock(Mailer::class);
+        $mailer->expects("send")->once();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate");
+        $templateService = Helpers::getTemplateService();
 
         // then
         $this->expectException(Exception::class);
@@ -449,7 +560,16 @@ class OrderControllerTest extends TestCase
 
         // when
         try {
-            $controller->payplugNotificationAction($request, $loggerService, $config, $order->getSlug());
+            $controller->payplugNotificationAction(
+                request: $request,
+                loggerService: $loggerService,
+                config: $config,
+                mailer: $mailer,
+                currentSite: $currentSite,
+                urlGenerator: $urlGenerator,
+                templateService: $templateService,
+                url: $order->getSlug()
+            );
         } finally {
             HttpClient::$REQUEST_HANDLER = null;
         }
@@ -483,9 +603,25 @@ class OrderControllerTest extends TestCase
         $httpMock->shouldReceive("error")->andReturn("");
         $httpMock->shouldReceive("close");
         HttpClient::$REQUEST_HANDLER = $httpMock;
+        $mailer = Mockery::mock(Mailer::class);
+        $mailer->expects("send")->once();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate");
+        $templateService = Helpers::getTemplateService();
 
         // when
-        $response = $controller->payplugNotificationAction($request, $loggerService, $config, $order->getSlug());
+        $response =
+            $controller->payplugNotificationAction(
+                request: $request,
+                loggerService: $loggerService,
+                config: $config,
+                mailer: $mailer,
+                currentSite: $currentSite,
+                urlGenerator: $urlGenerator,
+                templateService: $templateService,
+                url: $order->getSlug()
+            );
 
         // then
         HttpClient::$REQUEST_HANDLER = null;
