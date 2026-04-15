@@ -47,9 +47,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
+use Usecase\AddArticleToUserLibraryUsecase;
+use Usecase\AddPaymentToOrderAndExecuteUsecase;
+use Usecase\MarkOrderAsPaidUsecase;
 use Usecase\MarkOrderAsShippedUsecase;
 
 class OrderController extends Controller
@@ -169,6 +173,7 @@ class OrderController extends Controller
         CurrentUser     $currentUser,
         TemplateService $templateService,
         Mailer          $mailer,
+        UrlGenerator    $urlGenerator,
                         $id,
                         $action
     ): JsonResponse
@@ -186,9 +191,30 @@ class OrderController extends Controller
 
         $requestBody = json_decode($request->getContent());
 
-        if ($action == 'payed') {
+        if ($action == "payed") {
             $amount = $orderEntity->get('amount_tobepaid');
-            $om->addPayment($orderEntity, $requestBody->payment_mode, $amount);
+
+            $payment = new \Model\Payment();
+            $payment->setOrder($order);
+            $payment->setMode($requestBody->payment_mode);
+            $payment->setAmount($amount);
+            $payment->save();
+
+            $addArticleToLibraryUsecase = new AddArticleToUserLibraryUsecase(
+                mailer: $mailer,
+                currentSite: $currentSite,
+                urlGenerator: $urlGenerator,
+            );
+            $markOrderAsPaidUsecase = new MarkOrderAsPaidUsecase(
+                urlGenerator: $urlGenerator,
+                templateService: $templateService,
+                mailer: $mailer,
+                addArticleToUserLibraryUsecase: $addArticleToLibraryUsecase,
+            );
+            $usecase = new AddPaymentToOrderAndExecuteUsecase(
+                markOrderAsPaidUsecase: $markOrderAsPaidUsecase,
+            );
+            $usecase->execute($order, $payment);
             $notice = 'La commande n°&nbsp;'.$orderEntity->get('id').' de '.$orderEntity->get('firstname').' '.$orderEntity->get('lastname').' a été marquée comme payée.';
         }
 
@@ -198,8 +224,8 @@ class OrderController extends Controller
                 throw new BadRequestHttpException("Le numéro de suivi ne peut pas dépasser 16 caractères.");
             }
 
-            $usecase = new MarkOrderAsShippedUsecase($currentSite, $templateService, $mailer);
-            $usecase->execute($order, $trackingNumber);
+            $markOrderAsPaidUsecase = new MarkOrderAsShippedUsecase($currentSite, $templateService, $mailer);
+            $markOrderAsPaidUsecase->execute($order, $trackingNumber);
 
             $notice = "La commande n°&nbsp;{$order->getId()} de {$order->getFirstname()} {$order->getLastname()} a été marquée comme expédiée.";
         }
