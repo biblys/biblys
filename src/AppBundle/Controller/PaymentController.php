@@ -69,7 +69,6 @@ class PaymentController extends Controller
      */
     public function index(
         Request         $request,
-        CurrentSite     $currentSite,
         CurrentUser     $currentUser,
         TemplateService $templateService,
     ): Response
@@ -173,7 +172,6 @@ class PaymentController extends Controller
             }
 
             // Handle the payment_intent.succeeded event
-            /** @noinspection PhpPossiblePolymorphicInvocationInspection */
             $session = $event->data->object;
             $loggerService->log("stripe", "INFO", 'Handling payment intent…', ["id" => $session->id]);
 
