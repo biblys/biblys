@@ -119,15 +119,13 @@ class OrderControllerTest extends TestCase
     public function testShowForAdmin()
     {
         // given
-        $site = ModelFactory::createSite();
         $order = ModelFactory::createOrder();
         $controller = new OrderController();
-        $currentSite = new CurrentSite($site);
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("authAdmin")->once()->andReturn();
 
         // when
-        $response = $controller->show($currentSite, $currentUser, $order->getId());
+        $response = $controller->show($currentUser, $order->getId());
 
         // then
         $this->assertEquals(302, $response->getStatusCode());
@@ -223,6 +221,7 @@ class OrderControllerTest extends TestCase
 
     /**
      * @throws Exception
+     * @throws TransportExceptionInterface
      */
     public function testPayplugNotificationActionWithoutPayplugConfig(): void
     {
@@ -243,6 +242,7 @@ class OrderControllerTest extends TestCase
 
     /**
      * @throws Exception
+     * @throws TransportExceptionInterface
      */
     public function testPayplugNotificationActionWithMissingSecret(): void
     {
@@ -263,6 +263,7 @@ class OrderControllerTest extends TestCase
 
     /**
      * @throws Exception
+     * @throws TransportExceptionInterface
      */
     public function testPayplugNotificationActionWithUnknownOrder(): void
     {
@@ -283,6 +284,7 @@ class OrderControllerTest extends TestCase
 
     /**
      * @throws Exception
+     * @throws TransportExceptionInterface
      */
     public function testPayplugNotificationActionIgnoresRefund(): void
     {
@@ -318,6 +320,7 @@ class OrderControllerTest extends TestCase
 
     /**
      * @throws Exception
+     * @throws TransportExceptionInterface
      */
     public function testPayplugNotificationActionWithInvalidJson(): void
     {
@@ -338,6 +341,7 @@ class OrderControllerTest extends TestCase
 
     /**
      * @throws Exception
+     * @throws TransportExceptionInterface
      */
     public function testPayplugNotificationActionWithUnpaidPayment(): void
     {
@@ -373,6 +377,7 @@ class OrderControllerTest extends TestCase
 
     /**
      * @throws Exception
+     * @throws TransportExceptionInterface
      */
     public function testPayplugNotificationActionWithPaymentNotFoundInDatabase(): void
     {
@@ -411,13 +416,14 @@ class OrderControllerTest extends TestCase
 
     /**
      * @throws Exception
+     * @throws TransportExceptionInterface
      */
     public function testPayplugNotificationActionWithOrderIdMismatch(): void
     {
         // given
         $GLOBALS["LEGACY_CONFIG"] = new Config(["payplug" => ["secret" => "sk_test_123"]]);
         $order = ModelFactory::createOrder(slug: "pp-mismatch");
-        $payment = ModelFactory::createPayment(order: $order, providerId: "pay_test_mismatch", executedAt: null);
+        ModelFactory::createPayment(order: $order, providerId: "pay_test_mismatch", executedAt: null);
         $controller = new OrderController();
         $body = json_encode(["object" => "payment", "id" => "pay_test_mismatch"]);
         $request = new Request(content: $body);
@@ -451,12 +457,13 @@ class OrderControllerTest extends TestCase
 
     /**
      * @throws Exception
+     * @throws TransportExceptionInterface
      */
     public function testPayplugNotificationActionAddsPaymentToOrder(): void
     {
         // given
         $GLOBALS["LEGACY_CONFIG"] = new Config(["payplug" => ["secret" => "sk_test_123"]]);
-        $order = ModelFactory::createOrder(slug: "pp-success", amountToBePaid: 1000);
+        $order = ModelFactory::createOrder(amountToBePaid: 1000, slug: "pp-success");
         $payment = ModelFactory::createPayment(order: $order, mode: Payment::MODE_PAYPLUG, providerId: "pay_test_success", executedAt: null);
         $controller = new OrderController();
         $body = json_encode(["object" => "payment", "id" => "pay_test_success"]);
