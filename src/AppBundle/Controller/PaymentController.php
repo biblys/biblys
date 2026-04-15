@@ -213,20 +213,7 @@ class PaymentController extends Controller
             }
             $loggerService->log("stripe", "INFO", 'Associated Order with Payment', ["id" => $order->getId()]);
 
-            $addArticleToLibraryUsecase = new AddArticleToUserLibraryUsecase(
-                mailer: $mailer,
-                currentSite: $currentSite,
-                urlGenerator: $urlGenerator,
-            );
-            $markOrderAsPaidUsecase = new MarkOrderAsPaidUsecase(
-                urlGenerator: $urlGenerator,
-                templateService: $templateService,
-                mailer: $mailer,
-                addArticleToUserLibraryUsecase: $addArticleToLibraryUsecase,
-            );
-            $usecase = new AddPaymentToOrderAndExecuteUsecase(
-                markOrderAsPaidUsecase: $markOrderAsPaidUsecase,
-            );
+            $usecase = $this->getPaymentUsecase($mailer, $currentSite, $urlGenerator, $templateService);
             $usecase->execute($order, $payment);
 
             $loggerService->log("stripe", "INFO", 'Payment amount (' . $payment->getAmount() . ') was added to order ' . $order->getId());
@@ -390,20 +377,7 @@ class PaymentController extends Controller
             }
             $loggerService->log("payplug", "INFO", 'Received order id (' . $resource->metadata['order_id'] . ' matches order id in database.');
 
-            $addArticleToLibraryUsecase = new AddArticleToUserLibraryUsecase(
-                mailer: $mailer,
-                currentSite: $currentSite,
-                urlGenerator: $urlGenerator,
-            );
-            $markOrderAsPaidUsecase = new MarkOrderAsPaidUsecase(
-                urlGenerator: $urlGenerator,
-                templateService: $templateService,
-                mailer: $mailer,
-                addArticleToUserLibraryUsecase: $addArticleToLibraryUsecase,
-            );
-            $usecase = new AddPaymentToOrderAndExecuteUsecase(
-                markOrderAsPaidUsecase: $markOrderAsPaidUsecase,
-            );
+            $usecase = $this->getPaymentUsecase($mailer, $currentSite, $urlGenerator, $templateService);
             $usecase->execute($order, $payment);
 
             // Add payment to the order
@@ -414,5 +388,30 @@ class PaymentController extends Controller
             $loggerService->log("payplug", "ERROR", 'UnknownAPIResourceException: ' . $exception->getMessage());
             throw new BadRequestHttpException($exception->getMessage(), $exception);
         }
+    }
+
+    /**
+     * @param Mailer $mailer
+     * @param CurrentSite $currentSite
+     * @param UrlGenerator $urlGenerator
+     * @param TemplateService $templateService
+     * @return AddPaymentToOrderAndExecuteUsecase
+     */
+    private function getPaymentUsecase(Mailer $mailer, CurrentSite $currentSite, UrlGenerator $urlGenerator, TemplateService $templateService): AddPaymentToOrderAndExecuteUsecase
+    {
+        $addArticleToLibraryUsecase = new AddArticleToUserLibraryUsecase(
+            mailer: $mailer,
+            currentSite: $currentSite,
+            urlGenerator: $urlGenerator,
+        );
+        $markOrderAsPaidUsecase = new MarkOrderAsPaidUsecase(
+            urlGenerator: $urlGenerator,
+            templateService: $templateService,
+            mailer: $mailer,
+            addArticleToUserLibraryUsecase: $addArticleToLibraryUsecase,
+        );
+        return new AddPaymentToOrderAndExecuteUsecase(
+            markOrderAsPaidUsecase: $markOrderAsPaidUsecase,
+        );
     }
 }
