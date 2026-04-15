@@ -33,6 +33,8 @@ use Mockery;
 use Model\OrderQuery;
 use Model\Payment;
 use Model\PaymentQuery;
+use Payplug\Core\HttpClient;
+use Payplug\Core\IHttpRequest;
 use Payplug\Exception\BadRequestException;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
@@ -573,7 +575,6 @@ class PaymentControllerTest extends TestCase
         $this->assertEquals("/payment_url", $response->getTargetUrl());
     }
 
-
     /**
      * @throws Exception
      */
@@ -611,5 +612,421 @@ class PaymentControllerTest extends TestCase
         // then
         $this->assertEquals(302, $response->getStatusCode());
         $this->assertEquals("/order_url", $response->getTargetUrl());
+    }
+
+
+    /** payplugNotificationAction */
+
+    /**
+     * @throws Exception
+     * @throws TransportExceptionInterface
+     */
+    public function testPayplugNotificationActionWithoutPayplugConfig(): void
+    {
+        // given
+        $controller = new PaymentController();
+        $request = new Request();
+        $config = new Config([]);
+        $loggerService = Mockery::mock(LoggerService::class);
+        $loggerService->expects("log")->with("payplug", "ERROR", "Payplug configuration not found.");
+        $mailer = Mockery::mock(Mailer::class);
+        $mailer->expects("send")->once();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate");
+        $templateService = Helpers::getTemplateService();
+
+        // then
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage("Payplug configuration not found.");
+
+        // when
+        $controller->payplugNotificationAction(
+            request: $request,
+            loggerService: $loggerService,
+            config: $config,
+            mailer: $mailer,
+            currentSite: $currentSite,
+            urlGenerator: $urlGenerator,
+            templateService: $templateService,
+            url: "slug"
+        );
+    }
+
+    /**
+     * @throws Exception
+     * @throws TransportExceptionInterface
+     */
+    public function testPayplugNotificationActionWithMissingSecret(): void
+    {
+        // given
+        $controller = new PaymentController();
+        $request = new Request();
+        $config = new Config(["payplug" => ["public_key" => "pk_test"]]);
+        $loggerService = Mockery::mock(LoggerService::class);
+        $loggerService->expects("log")->with("payplug", "ERROR", "Missing payplug private key.");
+        $mailer = Mockery::mock(Mailer::class);
+        $mailer->expects("send")->once();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate");
+        $templateService = Helpers::getTemplateService();
+
+        // then
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage("Missing payplug private key.");
+
+        // when
+        $controller->payplugNotificationAction(
+            request: $request,
+            loggerService: $loggerService,
+            config: $config,
+            mailer: $mailer,
+            currentSite: $currentSite,
+            urlGenerator: $urlGenerator,
+            templateService: $templateService,
+            url: "slug"
+        );
+    }
+
+    /**
+     * @throws Exception
+     * @throws TransportExceptionInterface
+     */
+    public function testPayplugNotificationActionWithUnknownOrder(): void
+    {
+        // given
+        $controller = new PaymentController();
+        $request = new Request();
+        $config = new Config(["payplug" => ["secret" => "sk_test_123"]]);
+        $loggerService = Mockery::mock(LoggerService::class);
+        $loggerService->expects("log")->with("payplug", "ERROR", "Order unknown-url not found.");
+        $mailer = Mockery::mock(Mailer::class);
+        $mailer->expects("send")->once();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate");
+        $templateService = Helpers::getTemplateService();
+
+        // then
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage("Order unknown-url not found.");
+
+        // when
+        $controller->payplugNotificationAction(
+            request: $request,
+            loggerService: $loggerService,
+            config: $config,
+            mailer: $mailer,
+            currentSite: $currentSite,
+            urlGenerator: $urlGenerator,
+            templateService: $templateService,
+            url: "unknown-url",
+        );
+    }
+
+    /**
+     * @throws Exception
+     * @throws TransportExceptionInterface
+     */
+    public function testPayplugNotificationActionIgnoresRefund(): void
+    {
+        // given
+        $order = ModelFactory::createOrder(slug: "pp-refund");
+        $controller = new PaymentController();
+        $config = new Config(["payplug" => ["secret" => "sk_test_123"]]);
+        $body = json_encode(["object" => "refund", "id" => "re_test_123", "payment_id" => "pay_test_123"]);
+        $request = new Request(content: $body);
+        $loggerService = Mockery::mock(LoggerService::class);
+        $loggerService->shouldReceive("log");
+        $httpMock = Mockery::mock(IHttpRequest::class);
+        $httpMock->shouldReceive("setopt");
+        $httpMock->shouldReceive("exec")->andReturn(json_encode([
+            "object" => "refund",
+            "id" => "re_test_123",
+            "payment_id" => "pay_test_123",
+        ]));
+        $httpMock->shouldReceive("getinfo")->andReturn(200);
+        $httpMock->shouldReceive("errno")->andReturn(0);
+        $httpMock->shouldReceive("error")->andReturn("");
+        $httpMock->shouldReceive("close");
+        HttpClient::$REQUEST_HANDLER = $httpMock;
+        $mailer = Mockery::mock(Mailer::class);
+        $mailer->expects("send")->once();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate");
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $controller->payplugNotificationAction(
+            request: $request,
+            loggerService: $loggerService,
+            config: $config,
+            mailer: $mailer,
+            currentSite: $currentSite,
+            urlGenerator: $urlGenerator,
+            templateService: $templateService,
+            url: $order->getSlug()
+        );
+
+        // then
+        HttpClient::$REQUEST_HANDLER = null;
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals("", $response->getContent());
+    }
+
+    /**
+     * @throws Exception
+     * @throws TransportExceptionInterface
+     */
+    public function testPayplugNotificationActionWithInvalidJson(): void
+    {
+        // given
+        $order = ModelFactory::createOrder(slug: "pp-invalid-json");
+        $controller = new PaymentController();
+        $config = new Config(["payplug" => ["secret" => "sk_test_123"]]);
+        $request = new Request(content: "not valid json");
+        $loggerService = Mockery::mock(LoggerService::class);
+        $loggerService->shouldReceive("log");
+        $mailer = Mockery::mock(Mailer::class);
+        $mailer->expects("send")->once();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate");
+        $templateService = Helpers::getTemplateService();
+
+        // then
+        $this->expectException(BadRequestHttpException::class);
+
+        // when
+        $controller->payplugNotificationAction(
+            request: $request,
+            loggerService: $loggerService,
+            config: $config,
+            mailer: $mailer,
+            currentSite: $currentSite,
+            urlGenerator: $urlGenerator,
+            templateService: $templateService,
+            url: $order->getSlug()
+        );
+    }
+
+    /**
+     * @throws Exception
+     * @throws TransportExceptionInterface
+     */
+    public function testPayplugNotificationActionWithUnpaidPayment(): void
+    {
+        // given
+        $order = ModelFactory::createOrder(slug: "pp-unpaid");
+        $controller = new PaymentController();
+        $config = new Config(["payplug" => ["secret" => "sk_test_123"]]);
+        $body = json_encode(["object" => "payment", "id" => "pay_test_unpaid"]);
+        $request = new Request(content: $body);
+        $loggerService = Mockery::mock(LoggerService::class);
+        $loggerService->shouldReceive("log");
+        $httpMock = Mockery::mock(IHttpRequest::class);
+        $httpMock->shouldReceive("setopt");
+        $httpMock->shouldReceive("exec")->andReturn(json_encode([
+            "object" => "payment",
+            "id" => "pay_test_unpaid",
+            "is_paid" => false,
+        ]));
+        $httpMock->shouldReceive("getinfo")->andReturn(200);
+        $httpMock->shouldReceive("errno")->andReturn(0);
+        $httpMock->shouldReceive("error")->andReturn("");
+        $httpMock->shouldReceive("close");
+        HttpClient::$REQUEST_HANDLER = $httpMock;
+        $mailer = Mockery::mock(Mailer::class);
+        $mailer->expects("send")->once();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate");
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $controller->payplugNotificationAction(
+            request: $request,
+            loggerService: $loggerService,
+            config: $config,
+            mailer: $mailer,
+            currentSite: $currentSite,
+            urlGenerator: $urlGenerator,
+            templateService: $templateService,
+            url: $order->getSlug()
+        );
+
+        // then
+        HttpClient::$REQUEST_HANDLER = null;
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertEquals("", $response->getContent());
+    }
+
+    /**
+     * @throws Exception
+     * @throws TransportExceptionInterface
+     */
+    public function testPayplugNotificationActionWithPaymentNotFoundInDatabase(): void
+    {
+        // given
+        $order = ModelFactory::createOrder(slug: "pp-not-found");
+        $controller = new PaymentController();
+        $config = new Config(["payplug" => ["secret" => "sk_test_123"]]);
+        $body = json_encode(["object" => "payment", "id" => "pay_test_unknown"]);
+        $request = new Request(content: $body);
+        $loggerService = Mockery::mock(LoggerService::class);
+        $loggerService->shouldReceive("log");
+        $httpMock = Mockery::mock(IHttpRequest::class);
+        $httpMock->shouldReceive("setopt");
+        $httpMock->shouldReceive("exec")->andReturn(json_encode([
+            "object" => "payment",
+            "id" => "pay_test_unknown",
+            "is_paid" => true,
+        ]));
+        $httpMock->shouldReceive("getinfo")->andReturn(200);
+        $httpMock->shouldReceive("errno")->andReturn(0);
+        $httpMock->shouldReceive("error")->andReturn("");
+        $httpMock->shouldReceive("close");
+        HttpClient::$REQUEST_HANDLER = $httpMock;
+        $mailer = Mockery::mock(Mailer::class);
+        $mailer->expects("send")->once();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate");
+        $templateService = Helpers::getTemplateService();
+
+        // then
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage("Payment pay_test_unknown not found.");
+
+        // when
+        try {
+            $controller->payplugNotificationAction(
+                request: $request,
+                loggerService: $loggerService,
+                config: $config,
+                mailer: $mailer,
+                currentSite: $currentSite,
+                urlGenerator: $urlGenerator,
+                templateService: $templateService,
+                url: $order->getSlug()
+            );
+        } finally {
+            HttpClient::$REQUEST_HANDLER = null;
+        }
+    }
+
+    /**
+     * @throws Exception
+     * @throws TransportExceptionInterface
+     */
+    public function testPayplugNotificationActionWithOrderIdMismatch(): void
+    {
+        // given
+        $order = ModelFactory::createOrder(slug: "pp-mismatch");
+        ModelFactory::createPayment(order: $order, providerId: "pay_test_mismatch", executedAt: null);
+        $controller = new PaymentController();
+        $config = new Config(["payplug" => ["secret" => "sk_test_123"]]);
+        $body = json_encode(["object" => "payment", "id" => "pay_test_mismatch"]);
+        $request = new Request(content: $body);
+        $loggerService = Mockery::mock(LoggerService::class);
+        $loggerService->shouldReceive("log");
+        $httpMock = Mockery::mock(IHttpRequest::class);
+        $httpMock->shouldReceive("setopt");
+        $httpMock->shouldReceive("exec")->andReturn(json_encode([
+            "object" => "payment",
+            "id" => "pay_test_mismatch",
+            "is_paid" => true,
+            "metadata" => ["order_id" => 99999],
+        ]));
+        $httpMock->shouldReceive("getinfo")->andReturn(200);
+        $httpMock->shouldReceive("errno")->andReturn(0);
+        $httpMock->shouldReceive("error")->andReturn("");
+        $httpMock->shouldReceive("close");
+        HttpClient::$REQUEST_HANDLER = $httpMock;
+        $mailer = Mockery::mock(Mailer::class);
+        $mailer->expects("send")->once();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate");
+        $templateService = Helpers::getTemplateService();
+
+        // then
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage("Invoice number does not match order ID.");
+
+        // when
+        try {
+            $controller->payplugNotificationAction(
+                request: $request,
+                loggerService: $loggerService,
+                config: $config,
+                mailer: $mailer,
+                currentSite: $currentSite,
+                urlGenerator: $urlGenerator,
+                templateService: $templateService,
+                url: $order->getSlug()
+            );
+        } finally {
+            HttpClient::$REQUEST_HANDLER = null;
+        }
+    }
+
+    /**
+     * @throws Exception
+     * @throws TransportExceptionInterface
+     */
+    public function testPayplugNotificationActionAddsPaymentToOrder(): void
+    {
+        // given
+        $order = ModelFactory::createOrder(amountToBePaid: 1000, slug: "pp-success");
+        $payment = ModelFactory::createPayment(order: $order, mode: Payment::MODE_PAYPLUG, providerId: "pay_test_success", executedAt: null);
+        $controller = new PaymentController();
+        $config = new Config(["payplug" => ["secret" => "sk_test_123"]]);
+        $body = json_encode(["object" => "payment", "id" => "pay_test_success"]);
+        $request = new Request(content: $body);
+        $loggerService = Mockery::mock(LoggerService::class);
+        $loggerService->shouldReceive("log");
+        $httpMock = Mockery::mock(IHttpRequest::class);
+        $httpMock->shouldReceive("setopt");
+        $httpMock->shouldReceive("exec")->andReturn(json_encode([
+            "object" => "payment",
+            "id" => "pay_test_success",
+            "is_paid" => true,
+            "metadata" => ["order_id" => $order->getId()],
+        ]));
+        $httpMock->shouldReceive("getinfo")->andReturn(200);
+        $httpMock->shouldReceive("errno")->andReturn(0);
+        $httpMock->shouldReceive("error")->andReturn("");
+        $httpMock->shouldReceive("close");
+        HttpClient::$REQUEST_HANDLER = $httpMock;
+        $mailer = Mockery::mock(Mailer::class);
+        $mailer->expects("send")->once();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate");
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response =
+            $controller->payplugNotificationAction(
+                request: $request,
+                loggerService: $loggerService,
+                config: $config,
+                mailer: $mailer,
+                currentSite: $currentSite,
+                urlGenerator: $urlGenerator,
+                templateService: $templateService,
+                url: $order->getSlug()
+            );
+
+        // then
+        HttpClient::$REQUEST_HANDLER = null;
+        $this->assertEquals(200, $response->getStatusCode());
+        $payment->reload();
+        $this->assertTrue($payment->isExecuted());
+        $order->reload();
+        $this->assertTrue($order->isPaid());
     }
 }

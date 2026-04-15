@@ -202,7 +202,7 @@ class PaymentService
         }
 
         $notification_url = $ipn_protocol . '://' . $ipn_host .
-            $this->urlGenerator->generate("order_payplug_notification", ["url" => $order->getSlug()]);
+            $this->urlGenerator->generate("payment_payplug_notification", ["url" => $order->getSlug()]);
 
         // Gather customer info
         $billing = [
