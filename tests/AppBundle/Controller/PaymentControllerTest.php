@@ -29,6 +29,7 @@ use DateTime;
 use Exception;
 use Mockery;
 use Model\OrderQuery;
+use Model\Payment;
 use Model\PaymentQuery;
 use Payplug\Exception\BadRequestException;
 use PHPUnit\Framework\TestCase;
@@ -68,7 +69,6 @@ class PaymentControllerTest extends TestCase
         $controller = new PaymentController();
         $request = new Request();
         $order = ModelFactory::createOrder();
-        $currentSite = $this->createMock(CurrentSite::class);
         $today = new DateTime();
         ModelFactory::createPayment(order: $order, executedAt: $today);
         ModelFactory::createPayment(order: $order, amount: 300);
@@ -79,7 +79,7 @@ class PaymentControllerTest extends TestCase
         $templateService = Helpers::getTemplateService();
 
         // when
-        $response = $controller->index($request, $currentSite, $currentUser, $templateService);
+        $response = $controller->index($request, $currentUser, $templateService);
 
         // then
         $this->assertEquals(200, $response->getStatusCode());
@@ -112,7 +112,7 @@ class PaymentControllerTest extends TestCase
         $orderPayedUsingPaypal = ModelFactory::createOrder();
         ModelFactory::createPayment(
             order: $orderPayedUsingPaypal,
-            mode: "paypal",
+            mode: Payment::MODE_PAYPAL,
             executedAt: new DateTime(),
         );
 
@@ -124,7 +124,7 @@ class PaymentControllerTest extends TestCase
         $templateService = Helpers::getTemplateService();
 
         // when
-        $response = $controller->index($request, $currentSite, $currentUser, $templateService);
+        $response = $controller->index($request, $currentUser, $templateService);
 
         // then
         $this->assertEquals(200, $response->getStatusCode());
@@ -158,7 +158,7 @@ class PaymentControllerTest extends TestCase
         $templateService = Helpers::getTemplateService();
 
         // when
-        $response = $controller->index($request, $currentSite, $currentUser, $templateService);
+        $response = $controller->index($request, $currentUser, $templateService);
 
         // then
         $this->assertEquals(200, $response->getStatusCode());
