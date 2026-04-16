@@ -16,31 +16,34 @@
  */
 
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-\Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Clients');
+/**
+ * @throws Exception
+ */
+return function(Request $request): Response
+{
+    $request->attributes->set("page_title", "Clients");
+    $searchParam = $request->query->get("q");
 
-if (!isset($_GET['q'])) $_GET['q'] = null;
+    $years = [];
+    for ($y = date('Y'); $y >= 2010; $y--) {
+        $sel = NULL;
+        if (isset($_GET['year']) && $y == $_GET["year"]) {
+            $sel = 'selected';
+        }
+        $years[] = '<option value="?year=' . $y . '" ' . $sel . '>' . $y . '</option>';
+    }
 
-$years = null;
-for ($y = date('Y'); $y >= 2010; $y--) {
-    if (isset($_GET['year']) && $y == $_GET["year"]) $sel = 'selected';
-    else $sel = NULL;
-    $years .= '<option value="?year='.$y.'" '.$sel.'>'.$y.'</option>';
-}
+    $query = NULL;
+    if (!empty($_GET['year'])) {
+        $query = " AND `stock_selling_date` LIKE :year ";
+    } elseif (!empty($searchParam)) {
+        $query .= " AND (`customer_first_name` LIKE :q OR `customer_last_name` LIKE :q OR `customer_email` LIKE :q)";
+    }
 
-$query = NULL;
-if (!empty($_GET['year'])) {
-    $query = " AND `stock_selling_date` LIKE :year ";
-    $params['year'] = (int) $_GET['year'].'%';
-} elseif (!empty($_GET['q'])) {
-    $query .= " AND (`customer_first_name` LIKE :q OR `customer_last_name` LIKE :q OR `customer_email` LIKE :q)";
-    $params['q'] = '%'.$_GET['q'].'%';
-} else {
-    $_GET['q'] = NULL;
-}
-
-$query = '
+    $query = '
     SELECT
            `customers`.`customer_id`,
            `customer_last_name`,
@@ -50,15 +53,18 @@ $query = '
            MAX(`stock_selling_date`) AS `DateVente`
     FROM `customers`
     LEFT JOIN `stock` ON `customers`.`customer_id` = `stock`.`customer_id`
-    WHERE '.$query.'
+    WHERE ' . $query . '
     GROUP BY `customers`.`customer_id`
     ORDER BY `CA` DESC
 ';
-$customers = EntityManager::prepareAndExecute($query, []);
+    $customers = EntityManager::prepareAndExecute($query);
 
 
-$content = '
-    <h1><span class="fa fa-address-card"></span> '.\Biblys\Legacy\LegacyCodeHelper::getGlobalPageTitle().'</h1>
+    $content = '
+    <h1>
+      <span class="fa fa-address-card"></span>
+      Clients 
+    </h1>
 
     <p class="buttonset">
         <a class="btn btn-primary" href="/pages/adm_customer"><i class="fa fa-user"></i> Nouveau client</a>
@@ -71,13 +77,13 @@ $content = '
                 <label for="year">Année :</label>
                 <select id="year" class="goto">
                     <option value="/pages/adm_customers">Cumul</option>
-                    '.$years.'
+                    ' . join($years) . '
                 </select>
                 <br />
             </p>
             <p>
                 <label for"query">Rechercher :</label>
-                <input type="text" name="q" id="query" class="long" value="'.$_GET["q"].'" placeholder="Nom, adresse-email, code postal..." /> <input type="submit" value="Rechercher" />
+                <input type="text" name="q" id="query" class="long" value="' . $searchParam . '" placeholder="Nom, adresse-email, code postal..." /> <input type="submit" value="Rechercher" />
             </p>
         </fieldset>
     </form>
@@ -97,37 +103,33 @@ $content = '
         <tbody>
 ';
 
-$Total = 0; $Ventes = 0; $Clients = 0;
+    $Clients = 0;
 
-while ($s = $customers->fetch(PDO::FETCH_ASSOC))
-{
+    while ($s = $customers->fetch(PDO::FETCH_ASSOC)) {
 
-    $Total += $s["CA"];
-    $Ventes += $s["num"];
-    $Clients++;
+        $Clients++;
 
-    if (!empty($s["customer_last_name"])) {
-        $user = trim($s["customer_first_name"].' '.$s["customer_last_name"]); $key = $s["customer_last_name"].' '.$s["customer_first_name"];
-    }
-    else { $user = 'Anonyme'; $key = ' '; }
+        if (!empty($s["customer_last_name"])) {
+            $user = trim($s["customer_first_name"] . ' ' . $s["customer_last_name"]);
+        } else {
+            $user = 'Anonyme';
+        }
 
-    $content .= '
+        $content .= '
         <tr>
-            <td class="right">'.$Clients.'.</td>
-            <td><a href="/pages/adm_customer?id='.$s['customer_id'].'">'.$user.'</a></td>
-            <td class="right"><a href="/pages/adm_orders_shop?customer_id='.$s["customer_id"].'&date1=2001-01-01&date2='.date('Y-m-d').'">'.$s["num"].'</a></td>
-            <td class="right" style="width: 100px;">'.price($s["CA"],'EUR').'</td>
-            <td class="center"><a href="/pages/adm_customer?id='.$s["customer_id"].'"><i class="fa fa-edit fa-lg black"></i></td>
+            <td class="right">' . $Clients . '.</td>
+            <td><a href="/pages/adm_customer?id=' . $s['customer_id'] . '">' . $user . '</a></td>
+            <td class="right"><a href="/pages/adm_orders_shop?customer_id=' . $s["customer_id"] . '&date1=2001-01-01&date2=' . date('Y-m-d') . '">' . $s["num"] . '</a></td>
+            <td class="right" style="width: 100px;">' . price($s["CA"], 'EUR') . '</td>
+            <td class="center"><a href="/pages/adm_customer?id=' . $s["customer_id"] . '"><i class="fa fa-edit fa-lg black"></i></td>
         </tr>
     ';
-}
+    }
 
-$content .= '
+    $content .= '
         </tbody>
    </table>
 ';
 
-$Total = 0;
-$Ventes = 0;
-
-return new Response($content);
+    return new Response($content);
+};
