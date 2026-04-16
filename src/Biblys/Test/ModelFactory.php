@@ -463,6 +463,7 @@ class ModelFactory
         ?string   $lemoninkTransactionId = null,
         ?string   $lemoninkTransactionToken = null,
         ?string   $axysAccountId = null,
+        ?Customer $customer = null,
     ): Stock
     {
         $stock = new Stock();
@@ -479,6 +480,7 @@ class ModelFactory
         $stock->setLemonInkTransactionId($lemoninkTransactionId);
         $stock->setLemonInkTransactionToken($lemoninkTransactionToken);
         $stock->setAxysAccountId($axysAccountId);
+        $stock->setCustomerId($customer?->getId());
         $stock->save();
 
         return $stock;
