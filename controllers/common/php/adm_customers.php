@@ -32,7 +32,7 @@ return function (Request $request): Response {
         if (isset($_GET['year']) && $y == $_GET["year"]) {
             $sel = 'selected';
         }
-        $years[] = '<option value="?year=' . $y . '" ' . $sel . '>' . $y . '</option>';
+        $years[] = "<option value=\"$y\" $sel>$y</option>";
     }
 
     $where = ["1=1"];
@@ -67,26 +67,43 @@ return function (Request $request): Response {
           Clients 
         </h1>
     
-        <p class="buttonset text-right">
-            <a class="btn btn-primary" href="/pages/adm_customer"><i class="fa fa-user"></i> Nouveau client</a>
-        </p>
+        <div class="buttonset mt-4 mb-3">
+            <a class="btn btn-outline-success" href="/pages/adm_customer">
+              <i class="fa-solide fa-user-plus  "></i> 
+              Nouveau client
+          </a>
+        </div>
     
-        <form class="fieldset">
-            <fieldset>
-                <legend>Filtres</legend>
-                <p>
-                    <label for="year">Année :</label>
-                    <select id="year" class="goto">
+        <form>
+            <div class="row g-2 align-items-center mb-2">
+                <div class="col-2">
+                    <label for="query" class="col-form-label">Filtre par client</label>
+                </div>
+                <div class="col">
+                    <div class="input-group">
+                        <input type="text" name="q" id="query" class="form-control" value="' . $searchParam . '" placeholder="Nom, adresse-email, code postal..." />
+                    </div>
+                </div>
+            </div>
+            <div class="row g-2 align-items-center mb-2">
+                <div class="col-2">
+                    <label for="year" class="col-form-label">Filtrer par année</label>
+                </div>
+                <div class="col-auto">
+                    <select name="year" id="year" class="custom-select">
                         <option value="/pages/adm_customers">Cumul</option>
                         ' . join($years) . '
                     </select>
-                    <br />
-                </p>
-                <p>
-                    <label for"query">Rechercher :</label>
-                    <input type="text" name="q" id="query" class="long" value="' . $searchParam . '" placeholder="Nom, adresse-email, code postal..." /> <input type="submit" value="Rechercher" />
-                </p>
-            </fieldset>
+                </div>
+            </div>
+            <div class="row">
+              <div class="col offset-2">
+                <button type="submit" class="btn btn-primary">
+                  <i class="fa fa-search"></i>
+                  Filtrer
+                </button>
+              </div>
+          </div>
         </form>
     
         <br />
@@ -95,9 +112,9 @@ return function (Request $request): Response {
                 <tr class="cliquable">
                     <th></th>
                     <th>Client</th>
-                    <th>Achats</th>
-                    <th>C.A.</th>
-                    <th>Dernier</th>
+                    <th class="text-center">Achats</th>
+                    <th class="text-center">C.A.</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -121,7 +138,11 @@ return function (Request $request): Response {
                     <td><a href="/pages/adm_customer?id=' . $s['customer_id'] . '">' . $user . '</a></td>
                     <td class="right"><a href="/pages/adm_orders_shop?customer_id=' . $s["customer_id"] . '&date1=2001-01-01&date2=' . date('Y-m-d') . '">' . $s["num"] . '</a></td>
                     <td class="right" style="width: 100px;">' . price($s["CA"], 'EUR') . '</td>
-                    <td class="center"><a href="/pages/adm_customer?id=' . $s["customer_id"] . '"><i class="fa fa-edit fa-lg black"></i></td>
+                    <td class="center">
+                      <a href="/pages/adm_customer?id=' . $s["customer_id"] . '" class="btn btn-secondary btn-sm">
+                        <i class="fa-solid fa-edit"></i> modifier
+                      </a>
+                    </td>
                 </tr>
             ';
     }
