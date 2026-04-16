@@ -22,8 +22,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * @throws Exception
  */
-return function(Request $request): Response
-{
+return function (Request $request): Response {
     $request->attributes->set("page_title", "Clients");
     $searchParam = $request->query->get("q");
 
@@ -36,28 +35,30 @@ return function(Request $request): Response
         $years[] = '<option value="?year=' . $y . '" ' . $sel . '>' . $y . '</option>';
     }
 
-    $query = NULL;
+    $where = ["1=1"];
+    $params = [];
     if (!empty($_GET['year'])) {
-        $query = " AND `stock_selling_date` LIKE :year ";
+        $where[] = "`stock_selling_date` LIKE :year";
+        $params[':year'] = $_GET['year'] . '%';
     } elseif (!empty($searchParam)) {
-        $query .= " AND (`customer_first_name` LIKE :q OR `customer_last_name` LIKE :q OR `customer_email` LIKE :q)";
+        $where[] = "(`customer_first_name` LIKE :q1 OR `customer_last_name` LIKE :q2 OR `customer_email` LIKE :q3)";
+        $params[':q1'] = $params[':q2'] = $params[':q3'] = '%' . $searchParam . '%';
     }
 
-    $query = '
-    SELECT
-           `customers`.`customer_id`,
-           `customer_last_name`,
-           `customer_first_name`,
-           COUNT(`stock_id`) AS `num`,
-           SUM(`stock_selling_price`) AS `CA`,
-           MAX(`stock_selling_date`) AS `DateVente`
-    FROM `customers`
-    LEFT JOIN `stock` ON `customers`.`customer_id` = `stock`.`customer_id`
-    WHERE ' . $query . '
-    GROUP BY `customers`.`customer_id`
-    ORDER BY `CA` DESC
-';
-    $customers = EntityManager::prepareAndExecute($query);
+    $customers = EntityManager::prepareAndExecute('
+        SELECT
+               `customers`.`customer_id`,
+               `customer_last_name`,
+               `customer_first_name`,
+               COUNT(`stock_id`) AS `num`,
+               SUM(`stock_selling_price`) AS `CA`,
+               MAX(`stock_selling_date`) AS `DateVente`
+        FROM `customers`
+        LEFT JOIN `stock` ON `customers`.`customer_id` = `stock`.`customer_id`
+        WHERE ' . join(" AND ", $where) . '
+        GROUP BY `customers`.`customer_id`
+        ORDER BY `CA` DESC
+    ', $params);
 
 
     $content = '
