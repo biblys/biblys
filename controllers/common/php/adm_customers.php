@@ -62,47 +62,46 @@ return function (Request $request): Response {
 
 
     $content = '
-    <h1>
-      <span class="fa fa-address-card"></span>
-      Clients 
-    </h1>
-
-    <p class="buttonset">
-        <a class="btn btn-primary" href="/pages/adm_customer"><i class="fa fa-user"></i> Nouveau client</a>
-    </p>
-
-    <form class="fieldset">
-        <fieldset>
-            <legend>Filtres</legend>
-            <p>
-                <label for="year">Année :</label>
-                <select id="year" class="goto">
-                    <option value="/pages/adm_customers">Cumul</option>
-                    ' . join($years) . '
-                </select>
-                <br />
-            </p>
-            <p>
-                <label for"query">Rechercher :</label>
-                <input type="text" name="q" id="query" class="long" value="' . $searchParam . '" placeholder="Nom, adresse-email, code postal..." /> <input type="submit" value="Rechercher" />
-            </p>
-        </fieldset>
-    </form>
-
-    <br />
-    <table class="sortable admin-table">
-        <thead>
-            <tr class="cliquable">
-                <th></th>
-                <th>Client</th>
-                <th>Achats</th>
-                <th>C.A.</th>
-                <th>Dernier</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-';
+        <h1>
+          <span class="fa fa-address-card"></span>
+          Clients 
+        </h1>
+    
+        <p class="buttonset text-right">
+            <a class="btn btn-primary" href="/pages/adm_customer"><i class="fa fa-user"></i> Nouveau client</a>
+        </p>
+    
+        <form class="fieldset">
+            <fieldset>
+                <legend>Filtres</legend>
+                <p>
+                    <label for="year">Année :</label>
+                    <select id="year" class="goto">
+                        <option value="/pages/adm_customers">Cumul</option>
+                        ' . join($years) . '
+                    </select>
+                    <br />
+                </p>
+                <p>
+                    <label for"query">Rechercher :</label>
+                    <input type="text" name="q" id="query" class="long" value="' . $searchParam . '" placeholder="Nom, adresse-email, code postal..." /> <input type="submit" value="Rechercher" />
+                </p>
+            </fieldset>
+        </form>
+    
+        <br />
+        <table class="table table-striped table-bordered table-hover">
+            <thead>
+                <tr class="cliquable">
+                    <th></th>
+                    <th>Client</th>
+                    <th>Achats</th>
+                    <th>C.A.</th>
+                    <th>Dernier</th>
+                </tr>
+            </thead>
+            <tbody>
+  ';
 
     $Clients = 0;
 
@@ -117,20 +116,20 @@ return function (Request $request): Response {
         }
 
         $content .= '
-        <tr>
-            <td class="right">' . $Clients . '.</td>
-            <td><a href="/pages/adm_customer?id=' . $s['customer_id'] . '">' . $user . '</a></td>
-            <td class="right"><a href="/pages/adm_orders_shop?customer_id=' . $s["customer_id"] . '&date1=2001-01-01&date2=' . date('Y-m-d') . '">' . $s["num"] . '</a></td>
-            <td class="right" style="width: 100px;">' . price($s["CA"], 'EUR') . '</td>
-            <td class="center"><a href="/pages/adm_customer?id=' . $s["customer_id"] . '"><i class="fa fa-edit fa-lg black"></i></td>
-        </tr>
-    ';
+                <tr>
+                    <td class="right">' . $Clients . '.</td>
+                    <td><a href="/pages/adm_customer?id=' . $s['customer_id'] . '">' . $user . '</a></td>
+                    <td class="right"><a href="/pages/adm_orders_shop?customer_id=' . $s["customer_id"] . '&date1=2001-01-01&date2=' . date('Y-m-d') . '">' . $s["num"] . '</a></td>
+                    <td class="right" style="width: 100px;">' . price($s["CA"], 'EUR') . '</td>
+                    <td class="center"><a href="/pages/adm_customer?id=' . $s["customer_id"] . '"><i class="fa fa-edit fa-lg black"></i></td>
+                </tr>
+            ';
     }
 
     $content .= '
-        </tbody>
-   </table>
-';
+            </tbody>
+        </table>
+    ';
 
     return new Response($content);
 };
