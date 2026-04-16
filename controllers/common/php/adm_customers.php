@@ -15,14 +15,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-
+use Biblys\Service\TemplateService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @throws Exception
  */
-return function (Request $request): Response {
+return function (Request $request, TemplateService $templateService): Response {
     $request->attributes->set("page_title", "Clients");
     $searchParam = $request->query->get("q");
 
@@ -60,6 +60,30 @@ return function (Request $request): Response {
         ORDER BY `CA` DESC
     ', $params);
 
+    $customerRank = 0;
+    $customersHtml = [];
+    while ($s = $customers->fetch(PDO::FETCH_ASSOC)) {
+
+        $customerRank++;
+        $user = 'Anonyme';
+        if (!empty($s["customer_last_name"])) {
+            $user = trim($s["customer_first_name"] . ' ' . $s["customer_last_name"]);
+        }
+
+        $customersHtml[] = '
+            <tr>
+                <td class="right">' . $customerRank . '.</td>
+                <td><a href="/pages/adm_customer?id=' . $s['customer_id'] . '">' . $user . '</a></td>
+                <td class="right"><a href="/pages/adm_orders_shop?customer_id=' . $s["customer_id"] . '&date1=2001-01-01&date2=' . date('Y-m-d') . '">' . $s["num"] . '</a></td>
+                <td class="right" style="width: 100px;">' . price($s["CA"], 'EUR') . '</td>
+                <td class="center">
+                  <a href="/pages/adm_customer?id=' . $s["customer_id"] . '" class="btn btn-secondary btn-sm">
+                    <i class="fa-solid fa-edit"></i> modifier
+                  </a>
+                </td>
+            </tr>
+        ';
+    }
 
     $content = '
         <h1>
@@ -116,39 +140,10 @@ return function (Request $request): Response {
                 </tr>
             </thead>
             <tbody>
-    ';
-
-    $Clients = 0;
-
-    while ($s = $customers->fetch(PDO::FETCH_ASSOC)) {
-
-        $Clients++;
-
-        if (!empty($s["customer_last_name"])) {
-            $user = trim($s["customer_first_name"] . ' ' . $s["customer_last_name"]);
-        } else {
-            $user = 'Anonyme';
-        }
-
-        $content .= '
-            <tr>
-                <td class="right">' . $Clients . '.</td>
-                <td><a href="/pages/adm_customer?id=' . $s['customer_id'] . '">' . $user . '</a></td>
-                <td class="right"><a href="/pages/adm_orders_shop?customer_id=' . $s["customer_id"] . '&date1=2001-01-01&date2=' . date('Y-m-d') . '">' . $s["num"] . '</a></td>
-                <td class="right" style="width: 100px;">' . price($s["CA"], 'EUR') . '</td>
-                <td class="center">
-                  <a href="/pages/adm_customer?id=' . $s["customer_id"] . '" class="btn btn-secondary btn-sm">
-                    <i class="fa-solid fa-edit"></i> modifier
-                  </a>
-                </td>
-            </tr>
-        ';
-    }
-
-    $content .= '
+                ' . join($customersHtml) . '
             </tbody>
         </table>
     ';
 
-    return new Response($content);
+    return $templateService->renderResponseFromString($content);
 };
