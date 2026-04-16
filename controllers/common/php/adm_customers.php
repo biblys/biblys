@@ -47,12 +47,12 @@ return function (Request $request): Response {
 
     $customers = EntityManager::prepareAndExecute('
         SELECT
-               `customers`.`customer_id`,
-               `customer_last_name`,
-               `customer_first_name`,
-               COUNT(`stock_id`) AS `num`,
-               SUM(`stock_selling_price`) AS `CA`,
-               MAX(`stock_selling_date`) AS `DateVente`
+           `customers`.`customer_id`,
+           `customer_last_name`,
+           `customer_first_name`,
+           COUNT(`stock_id`) AS `num`,
+           SUM(`stock_selling_price`) AS `CA`,
+           MAX(`stock_selling_date`) AS `DateVente`
         FROM `customers`
         LEFT JOIN `stock` ON `customers`.`customer_id` = `stock`.`customer_id`
         WHERE ' . join(" AND ", $where) . '
@@ -69,20 +69,18 @@ return function (Request $request): Response {
     
         <div class="buttonset mt-4 mb-3">
             <a class="btn btn-outline-success" href="/pages/adm_customer">
-              <i class="fa-solide fa-user-plus  "></i> 
-              Nouveau client
-          </a>
+                <i class="fa-solide fa-user-plus"></i>
+                Nouveau client
+            </a>
         </div>
-    
+
         <form>
             <div class="row g-2 align-items-center mb-2">
                 <div class="col-2">
                     <label for="query" class="col-form-label">Filtre par client</label>
                 </div>
                 <div class="col">
-                    <div class="input-group">
-                        <input type="text" name="q" id="query" class="form-control" value="' . $searchParam . '" placeholder="Nom, adresse-email, code postal..." />
-                    </div>
+                    <input type="text" name="q" id="query" class="form-control" value="' . $searchParam . '" placeholder="Nom, adresse-email, code postal..." />
                 </div>
             </div>
             <div class="row g-2 align-items-center mb-2">
@@ -97,13 +95,13 @@ return function (Request $request): Response {
                 </div>
             </div>
             <div class="row">
-              <div class="col offset-2">
-                <button type="submit" class="btn btn-primary">
-                  <i class="fa fa-search"></i>
-                  Filtrer
-                </button>
-              </div>
-          </div>
+                <div class="col offset-2">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa fa-search"></i>
+                        Filtrer
+                    </button>
+                </div>
+            </div>
         </form>
     
         <br />
@@ -118,7 +116,7 @@ return function (Request $request): Response {
                 </tr>
             </thead>
             <tbody>
-  ';
+    ';
 
     $Clients = 0;
 
@@ -133,18 +131,18 @@ return function (Request $request): Response {
         }
 
         $content .= '
-                <tr>
-                    <td class="right">' . $Clients . '.</td>
-                    <td><a href="/pages/adm_customer?id=' . $s['customer_id'] . '">' . $user . '</a></td>
-                    <td class="right"><a href="/pages/adm_orders_shop?customer_id=' . $s["customer_id"] . '&date1=2001-01-01&date2=' . date('Y-m-d') . '">' . $s["num"] . '</a></td>
-                    <td class="right" style="width: 100px;">' . price($s["CA"], 'EUR') . '</td>
-                    <td class="center">
-                      <a href="/pages/adm_customer?id=' . $s["customer_id"] . '" class="btn btn-secondary btn-sm">
-                        <i class="fa-solid fa-edit"></i> modifier
-                      </a>
-                    </td>
-                </tr>
-            ';
+            <tr>
+                <td class="right">' . $Clients . '.</td>
+                <td><a href="/pages/adm_customer?id=' . $s['customer_id'] . '">' . $user . '</a></td>
+                <td class="right"><a href="/pages/adm_orders_shop?customer_id=' . $s["customer_id"] . '&date1=2001-01-01&date2=' . date('Y-m-d') . '">' . $s["num"] . '</a></td>
+                <td class="right" style="width: 100px;">' . price($s["CA"], 'EUR') . '</td>
+                <td class="center">
+                  <a href="/pages/adm_customer?id=' . $s["customer_id"] . '" class="btn btn-secondary btn-sm">
+                    <i class="fa-solid fa-edit"></i> modifier
+                  </a>
+                </td>
+            </tr>
+        ';
     }
 
     $content .= '
