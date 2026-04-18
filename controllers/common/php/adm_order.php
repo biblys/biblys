@@ -160,20 +160,26 @@ return function (Request $request, CurrentSite $currentSite): Response|RedirectR
     $customer = '
     <fieldset>
         <legend>Client</legend>
-        <p>
-            <label for="customer_id">Client n°</label>
-            <input type="text" id="customer_id" name="customer_id" readonly> (<a href="#customer">Associer un client</a>)
-        <p>
+        <div class="form-group row">
+            <label for="customer_id" class="col-sm-3 col-form-label">Client n°</label>
+            <div class="col-sm-3">
+                <input type="text" id="customer_id" name="customer_id" class="form-control" readonly>
+                <small class="form-text text-muted"><a href="#customer">Associer un client</a></small>
+            </div>
+        </div>
     </fieldset>
 ';
     if ($c = $cm->get(array('customer_id' => $o['customer_id']))) {
         $customer = '
         <fieldset>
             <legend>Client</legend>
-            <p>
-                <label for="customer_id">Client n°</label>
-                <input type="text" id="customer_id" name="customer_id" value="' . $c->get('id') . '"> (<a href="/pages/adm_customer?id=' . $c->get('id') . '">' . trim($c->get('first_name') . ' ' . $c->get('last_name')) . '</a>)
-            <p>
+            <div class="form-group row">
+                <label for="customer_id" class="col-sm-3 col-form-label">Client n°</label>
+                <div class="col-sm-3">
+                    <input type="text" id="customer_id" name="customer_id" class="form-control" value="' . $c->get('id') . '">
+                    <small class="form-text text-muted"><a href="/pages/adm_customer?id=' . $c->get('id') . '">' . trim($c->get('first_name') . ' ' . $c->get('last_name')) . '</a></small>
+                </div>
+            </div>
         </fieldset>
     ';
     }
@@ -223,139 +229,261 @@ return function (Request $request, CurrentSite $currentSite): Response|RedirectR
 
     <form method="post" id="order" class="fieldset">
         <fieldset>
-
             <input type="hidden" name="order_url" value="' . $o["order_url"] . '" />
 
             <legend>Général</legend>
-            <label for="order" class="disabled">' . $order_type . ' n°</label>
-            <input type="number" name="order_id" id="order_id" value= "' . $o["order_id"] . '" class="short" readonly />
-            <br />
-            <label for="order_insert">Date :</label>
-            <input type="text" name="order_insert" id="order_insert" value="' . $o["order_insert"] . '" class="datetime" />
-            <br />
-            <p>
-                <label for="order_type">Type :</label>
-                <select name="order_type" id="order_type">
-                    <option></option>
-                    <option value="web"' . ($o->get('type') == 'web' ? ' selected' : null) . '>Commande VPC</option>
-                    <option value="shop"' . ($o->get('type') == 'shop' ? ' selected' : null) . '>Vente magasin</option>
-                </select>
-            </p>
-            <br />
-            <label for="order_amount">Montant :</label>
-            <input type="number" name="order_amount" id="order_amount" value="' . $o["order_amount"] . '" class="mini" /> centimes
-            <br />
-            <label for="order_amount_tobepaid">Montant à payer :</label>
-            <input type="number" name="order_amount_tobepaid" id="order_amount_tobepaid" value="' . $o["order_amount_tobepaid"] . '" class="mini" /> centimes
-            <br />
-            <label for="order_discount">Remise :</label>
-            <input type="number" name="order_discount" id="order_discount" value="' . $o["order_discount"] . '" class="mini" /> centimes
+            <div class="form-group row">
+                <label for="order_id" class="col-sm-3 col-form-label">' . $order_type . ' n°</label>
+                <div class="col-sm-3">
+                    <input type="number" name="order_id" id="order_id" value="' . $o["order_id"] . '" class="form-control" readonly />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="order_insert" class="col-sm-3 col-form-label">Date</label>
+                <div class="col-sm-4">
+                    <input type="datetime-local" name="order_insert" id="order_insert" value="' . $o["order_insert"] . '" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="order_type" class="col-sm-3 col-form-label">Type</label>
+                <div class="col-sm-3">
+                    <select name="order_type" id="order_type" class="form-control">
+                        <option></option>
+                        <option value="web"' . ($o->get('type') == 'web' ? ' selected' : null) . '>Commande VPC</option>
+                        <option value="shop"' . ($o->get('type') == 'shop' ? ' selected' : null) . '>Vente magasin</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="order_amount" class="col-sm-3 col-form-label">Montant</label>
+                <div class="col-sm-3">
+                    <div class="input-group">
+                        <input type="number" name="order_amount" id="order_amount" value="' . $o["order_amount"] . '" class="form-control" />
+                        <div class="input-group-append"><span class="input-group-text">centimes</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="order_amount_tobepaid" class="col-sm-3 col-form-label">Montant à payer</label>
+                <div class="col-sm-3">
+                    <div class="input-group">
+                        <input type="number" name="order_amount_tobepaid" id="order_amount_tobepaid" value="' . $o["order_amount_tobepaid"] . '" class="form-control" />
+                        <div class="input-group-append"><span class="input-group-text">centimes</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="order_discount" class="col-sm-3 col-form-label">Remise</label>
+                <div class="col-sm-3">
+                    <div class="input-group">
+                        <input type="number" name="order_discount" id="order_discount" value="' . $o["order_discount"] . '" class="form-control" />
+                        <div class="input-group-append"><span class="input-group-text">centimes</span></div>
+                    </div>
+                </div>
+            </div>
         </fieldset>
 
         ' . $customer . '
 
         <fieldset>
             <legend>Coordonnées</legend>
-
-            <label for="order_firstname">Prénom :</label>
-            <input type="text" name="order_firstname" id="order_firstname" value="' . $o["order_firstname"] . '" />
-            <br />
-            <label for="order_lastname">Nom :</label>
-            <input type="text" name="order_lastname" id="order_lastname" value="' . $o["order_lastname"] . '" />
-            <br /><br>
-            <label for="order_address1">Adresse 1 :</label>
-            <input type="text" name="order_address1" id="order_address1" value="' . $o["order_address1"] . '" />
-            <br />
-            <label for="order_address2">Adresse 2 :</label>
-            <input type="text" name="order_address2" id="order_address2" value="' . $o["order_address2"] . '" />
-            <br />
-            <label for="order_postalcode">Code postal :</label>
-            <input type="text" name="order_postalcode" id="order_postalcode" value="' . $o["order_postalcode"] . '" />
-            <br />
-            <label for="order_city">Ville :</label>
-            <input type="text" name="order_city" id="order_city" value="' . $o["order_city"] . '" />
-            <br />
-            <label for="country_id">Pays :</label>
-            <select name="country_id" id="country_id">
-                <option></option>
-                ' . implode($countries) . '
-            </select>
-            <br /><br>
-            <label for="order_phone">Téléphone :</label>
-            <input type="text" name="order_phone" id="order_phone" value="' . $o["order_phone"] . '" />
-            <br />
-            <label for="order_email">E-mail :</label>
-            <input type="text" name="order_email" id="order_email" value="' . $o["order_email"] . '">
-            <br />
-
+            <div class="form-group row">
+                <label for="order_firstname" class="col-sm-3 col-form-label">Prénom</label>
+                <div class="col-sm-4">
+                    <input type="text" name="order_firstname" id="order_firstname" value="' . $o["order_firstname"] . '" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="order_lastname" class="col-sm-3 col-form-label">Nom</label>
+                <div class="col-sm-4">
+                    <input type="text" name="order_lastname" id="order_lastname" value="' . $o["order_lastname"] . '" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="order_address1" class="col-sm-3 col-form-label">Adresse 1</label>
+                <div class="col-sm-5">
+                    <input type="text" name="order_address1" id="order_address1" value="' . $o["order_address1"] . '" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="order_address2" class="col-sm-3 col-form-label">Adresse 2</label>
+                <div class="col-sm-5">
+                    <input type="text" name="order_address2" id="order_address2" value="' . $o["order_address2"] . '" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="order_postalcode" class="col-sm-3 col-form-label">Code postal</label>
+                <div class="col-sm-3">
+                    <input type="text" name="order_postalcode" id="order_postalcode" value="' . $o["order_postalcode"] . '" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="order_city" class="col-sm-3 col-form-label">Ville</label>
+                <div class="col-sm-4">
+                    <input type="text" name="order_city" id="order_city" value="' . $o["order_city"] . '" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="country_id" class="col-sm-3 col-form-label">Pays</label>
+                <div class="col-sm-4">
+                    <select name="country_id" id="country_id" class="form-control">
+                        <option></option>
+                        ' . implode($countries) . '
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="order_phone" class="col-sm-3 col-form-label">Téléphone</label>
+                <div class="col-sm-4">
+                    <input type="text" name="order_phone" id="order_phone" value="' . $o["order_phone"] . '" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="order_email" class="col-sm-3 col-form-label">E-mail</label>
+                <div class="col-sm-5">
+                    <input type="text" name="order_email" id="order_email" value="' . $o["order_email"] . '" class="form-control" />
+                </div>
+            </div>
         </fieldset>
 
         <fieldset>
             <legend>Paiement</legend>
-            <label for="order_payment_mode">Mode :</label>
-            <input type="text" name="order_payment_mode" id="order_payment_cash" value="' . $o["order_payment_mode"] . '" class="mini" />
-            <br />
-            <label for="order_payment_date">Date :</label>
-            <input type="text" name="order_payment_date" id="order_payment_date" value="' . $o["order_payment_date"] . '" class="datetime" />
-            <br />
-            <label for="order_payment_cash">Espèces :</label>
-            <input type="number" name="order_payment_cash" id="order_payment_cash" value="' . $o["order_payment_cash"] . '" class="mini" /> centimes
-            <br />
-            <label for="order_payment_cheque">Chèque :</label>
-            <input type="number" name="order_payment_cheque" id="order_payment_cheque" value="' . $o["order_payment_cheque"] . '" class="mini" /> centimes
-            <br />
-            <label for="order_payment_transfer">Virement :</label>
-            <input type="number" name="order_payment_transfer" id="order_payment_transfer" value="' . $order->get('payment_transfer') . '" class="mini" /> centimes
-            <br />
-            <label for="order_payment_card">Carte bancaire :</label>
-            <input type="number" name="order_payment_card" id="order_payment_card" value="' . $o["order_payment_card"] . '" class="mini" /> centimes
-            <br />
-            <label for="order_payment_paypal">Paypal :</label>
-            <input type="number" name="order_payment_paypal" id="order_payment_paypal" value="' . $o["order_payment_paypal"] . '" class="mini" /> centimes
-            <br />
-            <label for="order_payment_payplug">Payplug :</label>
-            <input type="number" name="order_payment_payplug" id="order_payment_payplug" value="' . $o["order_payment_payplug"] . '" class="mini" /> centimes
-            <br />
-            <label for="order_payment_left">Monnaie rendue :</label>
-            <input type="number" name="order_payment_left" id="order_payment_left" value="' . $o["order_payment_left"] . '" class="mini" /> centimes
-            <br />
+            <div class="form-group row">
+                <label for="order_payment_mode" class="col-sm-3 col-form-label">Mode</label>
+                <div class="col-sm-3">
+                    <input type="text" name="order_payment_mode" id="order_payment_mode" value="' . $o["order_payment_mode"] . '" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="order_payment_date" class="col-sm-3 col-form-label">Date</label>
+                <div class="col-sm-5">
+                    <input type="datetime-local" name="order_payment_date" id="order_payment_date" value="' . $o["order_payment_date"] . '" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="order_payment_cash" class="col-sm-3 col-form-label">Espèces</label>
+                <div class="col-sm-3">
+                    <div class="input-group">
+                        <input type="number" name="order_payment_cash" id="order_payment_cash" value="' . $o["order_payment_cash"] . '" class="form-control" />
+                        <div class="input-group-append"><span class="input-group-text">centimes</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="order_payment_cheque" class="col-sm-3 col-form-label">Chèque</label>
+                <div class="col-sm-3">
+                    <div class="input-group">
+                        <input type="number" name="order_payment_cheque" id="order_payment_cheque" value="' . $o["order_payment_cheque"] . '" class="form-control" />
+                        <div class="input-group-append"><span class="input-group-text">centimes</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="order_payment_transfer" class="col-sm-3 col-form-label">Virement</label>
+                <div class="col-sm-3">
+                    <div class="input-group">
+                        <input type="number" name="order_payment_transfer" id="order_payment_transfer" value="' . $order->get('payment_transfer') . '" class="form-control" />
+                        <div class="input-group-append"><span class="input-group-text">centimes</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="order_payment_card" class="col-sm-3 col-form-label">Carte bancaire</label>
+                <div class="col-sm-3">
+                    <div class="input-group">
+                        <input type="number" name="order_payment_card" id="order_payment_card" value="' . $o["order_payment_card"] . '" class="form-control" />
+                        <div class="input-group-append"><span class="input-group-text">centimes</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="order_payment_paypal" class="col-sm-3 col-form-label">Paypal</label>
+                <div class="col-sm-3">
+                    <div class="input-group">
+                        <input type="number" name="order_payment_paypal" id="order_payment_paypal" value="' . $o["order_payment_paypal"] . '" class="form-control" />
+                        <div class="input-group-append"><span class="input-group-text">centimes</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="order_payment_payplug" class="col-sm-3 col-form-label">Payplug</label>
+                <div class="col-sm-3">
+                    <div class="input-group">
+                        <input type="number" name="order_payment_payplug" id="order_payment_payplug" value="' . $o["order_payment_payplug"] . '" class="form-control" />
+                        <div class="input-group-append"><span class="input-group-text">centimes</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="order_payment_left" class="col-sm-3 col-form-label">Monnaie rendue</label>
+                <div class="col-sm-3">
+                    <div class="input-group">
+                        <input type="number" name="order_payment_left" id="order_payment_left" value="' . $o["order_payment_left"] . '" class="form-control" />
+                        <div class="input-group-append"><span class="input-group-text">centimes</span></div>
+                    </div>
+                </div>
+            </div>
         </fieldset>
 
         <fieldset>
             <legend>Relance</legend>
-            <label for="order_followup_date">Date :</label>
-            <input type="text" name="order_followup_date" id="order_followup_date" value="' . $o["order_followup_date"] . '" class="datetime" />
-            <br />
+            <div class="form-group row">
+                <label for="order_followup_date" class="col-sm-3 col-form-label">Date</label>
+                <div class="col-sm-5">
+                    <input type="datetime-local" name="order_followup_date" id="order_followup_date" value="' . $o["order_followup_date"] . '" class="form-control" />
+                </div>
+            </div>
         </fieldset>
 
         <fieldset>
             <legend>Expédition</legend>
-            <label for="order_shipping_mode">Mode :</label>
-            <input type="text" name="order_shipping_mode" id="order_shipping_mode" value="' . $o["order_shipping_mode"] . '" class="medium" />
-            <br />
-            <label for="order_shipping">Port :</label>
-            <input type="number" name="order_shipping" id="order_shipping" value="' . $o["order_shipping"] . '" class="mini" /> centimes
-            <br />
-            <label for="order_shipping_date">Date :</label>
-            <input type="text" name="order_shipping_date" id="order_shipping_date" value="' . $o["order_shipping_date"] . '" class="datetime" />
-            <br />
-            <label for="order_track_number">N° de suivi :</label>
-            <input type="text" name="order_track_number" id="order_track_number" value="' . $o["order_track_number"] . '" class="datetime" />
-            <br />
+            <div class="form-group row">
+                <label for="order_shipping_mode" class="col-sm-3 col-form-label">Mode</label>
+                <div class="col-sm-3">
+                    <input type="text" name="order_shipping_mode" id="order_shipping_mode" value="' . $o["order_shipping_mode"] . '" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="order_shipping" class="col-sm-3 col-form-label">Port</label>
+                <div class="col-sm-3">
+                    <div class="input-group">
+                        <input type="number" name="order_shipping" id="order_shipping" value="' . $o["order_shipping"] . '" class="form-control" />
+                        <div class="input-group-append"><span class="input-group-text">centimes</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="order_shipping_date" class="col-sm-3 col-form-label">Date</label>
+                <div class="col-sm-5">
+                    <input type="datetime-local" name="order_shipping_date" id="order_shipping_date" value="' . $o["order_shipping_date"] . '" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="order_track_number" class="col-sm-3 col-form-label">N° de suivi</label>
+                <div class="col-sm-5">
+                    <input type="text" name="order_track_number" id="order_track_number" value="' . $o["order_track_number"] . '" class="form-control" />
+                </div>
+            </div>
         </fieldset>
 
         <fieldset>
             <legend>Confirmation</legend>
-            <label for="order_confirmation_date">Date :</label>
-            <input type="text" name="order_confirmation_date" id="order_confirmation_date" value="' . $o["order_confirmation_date"] . '" class="datetime" />
-            <br />
+            <div class="form-group row">
+                <label for="order_confirmation_date" class="col-sm-3 col-form-label">Date</label>
+                <div class="col-sm-4">
+                    <input type="datetime-local" name="order_confirmation_date" id="order_confirmation_date" value="' . $o["order_confirmation_date"] . '" class="form-control" />
+                </div>
+            </div>
         </fieldset>
 
         <fieldset>
             <legend>Annulation</legend>
-            <label for="order_cancel_date">Date :</label>
-            <input type="text" name="order_cancel_date" id="order_cancel_date" value="' . $o["order_cancel_date"] . '" class="datetime" />
-            <br />
+            <div class="form-group row">
+                <label for="order_cancel_date" class="col-sm-3 col-form-label">Date</label>
+                <div class="col-sm-4">
+                    <input type="datetime-local" name="order_cancel_date" id="order_cancel_date" value="' . $o["order_cancel_date"] . '" class="form-control" />
+                </div>
+            </div>
         </fieldset>
 
         <fieldset class="center">
@@ -369,11 +497,17 @@ return function (Request $request, CurrentSite $currentSite): Response|RedirectR
         <fieldset>
             <legend>Associer un client</legend>
             <input type="hidden" name="action" value="customer">
-            <p>
-                <label for="customer_id">Client n°&nbsp;:</label>
-                <input name="customer_id" id="customer_id" value="' . $order->get("customer_id") . '">
-                <button type="submit" class="btn btn-success btn-sm">Associer</button>
-            </p>
+            <div class="form-group row">
+                <label for="customer_id" class="col-sm-3 col-form-label">Client n°</label>
+                <div class="col-sm-3">
+                    <div class="input-group">
+                        <input name="customer_id" id="customer_id" value="' . $order->get("customer_id") . '" class="form-control">
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-success">Associer</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </fieldset>
     </form>
 
@@ -381,14 +515,20 @@ return function (Request $request, CurrentSite $currentSite): Response|RedirectR
         <fieldset>
             <legend>Modifier le mode d\'expédition</legend>
             <input type="hidden" name="order_id" value="' . $o["order_id"] . '">
-            <p>
-                <label for="shipping_fee">Nouveau mode :</label>
-                <select name="shipping_fee" id="shipping_fee">
-                    <option/>
-                    ' . join($feesList) . '
-                </select>
-                <button type="submit" class="btn btn-primary btn-sm">Valider</button>
-            </p>
+            <div class="form-group row">
+                <label for="shipping_fee" class="col-sm-3 col-form-label">Nouveau mode</label>
+                <div class="col-sm-6">
+                    <div class="input-group">
+                        <select name="shipping_fee" id="shipping_fee" class="form-control">
+                            <option/>
+                            ' . join($feesList) . '
+                        </select>
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-primary">Valider</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </fieldset>
     </form>
 
@@ -396,11 +536,17 @@ return function (Request $request, CurrentSite $currentSite): Response|RedirectR
         <fieldset>
             <legend>Retirer un article</legend>
             <input type="hidden" name="order_id" value="' . $o["order_id"] . '">
-            <p>
-                <label for="stock_remove">Articles :</label>
-                <select name="stock_remove" id="stock_remove">' . $article_list . '</select>
-                <button type="submit" class="btn btn-warning btn-sm">Retirer</button>
-            </p>
+            <div class="form-group row">
+                <label for="stock_remove" class="col-sm-3 col-form-label">Articles</label>
+                <div class="col-sm-6">
+                    <div class="input-group">
+                        <select name="stock_remove" id="stock_remove" class="form-control">' . $article_list . '</select>
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-warning">Retirer</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </fieldset>
     </form>
 
@@ -408,11 +554,17 @@ return function (Request $request, CurrentSite $currentSite): Response|RedirectR
         <fieldset>
             <legend>Ajouter un article</legend>
             <input type="hidden" name="order_id" value="' . $o["order_id"] . '">
-            <p>
-                <label for="stock_add">Exemplaire n°&nbsp;:</label>
-                <input name="stock_add" id="stock_add">
-                <button type="submit" class="btn btn-success btn-sm">Ajouter</button>
-            </p>
+            <div class="form-group row">
+                <label for="stock_add" class="col-sm-3 col-form-label">Exemplaire n°</label>
+                <div class="col-sm-3">
+                    <div class="input-group">
+                        <input name="stock_add" id="stock_add" class="form-control">
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-success">Ajouter</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </fieldset>
     </form>
 
