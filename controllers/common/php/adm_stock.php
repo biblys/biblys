@@ -76,53 +76,6 @@ return function (
         return new RedirectResponse('/pages/adm_stock?id=' . $lostCopyId);
     }
 
-    if (isset($_GET['sold'])) {
-        // All copies sold in shop are associated to a fake customer that needs
-        // to be created and specified via the `fake_shop_customer` site option.
-        // This allows to create only one order for shop sales per day.
-        $fakeCustomerId = $currentSite->getOption('fake_shop_customer');
-        if (!$fakeCustomerId) {
-            throw new Exception("L'option de site `fake_shop_customer` doit être définie.");
-        }
-
-        if ($stockEntity = $sm->get(['stock_id' => $_GET['sold']])) {
-            if (!$stockEntity->isAvailable()) {
-                trigger_error('Exemplaire indisponible.');
-            } else {
-                try {
-                    // Get order for current day shop sales if it exists
-                    $orderDate = date('Y-m-d') . ' 00:00:00';
-                    $order = $om->get([
-                        'customer_id' => $fakeCustomerId,
-                        'order_created' => $orderDate,
-                    ]);
-
-                    // Else, create a new one
-                    if (!$order) {
-                        $order = $om->create();
-                        $order->set('order_created', $orderDate)
-                            ->set('customer_id', $fakeCustomerId)
-                            ->set('order_type', 'shop')
-                            ->set('order_payment_date', $orderDate);
-                        $om->update($order);
-                    }
-
-                    // Add the copy to the order
-                    $om->addStock($order, $stockEntity);
-
-                    // Update the order amount from stock
-                    $om->updateFromStock($order);
-                } catch (Exception $e) {
-                    trigger_error($e->getMessage());
-                }
-
-                return new RedirectResponse('/pages/adm_stock?id=' . $stockEntity->get('id') . '&solded=1');
-            }
-        } else {
-            trigger_error('Exemplaire introuvable');
-        }
-    }
-
     $mode = "";
     if ($request->getMethod() === 'POST') {
         // AddSlashes
@@ -319,8 +272,6 @@ return function (
             $content .= '<p class="success">L\'exemplaire a été retourné.</p>';
         } elseif (isset($_GET['losted'])) {
             $content .= '<p class="success">L\'exemplaire a été marqué comme perdu.</p>';
-        } elseif (isset($_GET['solded'])) {
-            $content .= '<p class="success">L\'exemplaire a été marqué comme vendu en magasin.</p>';
         }
 
         if (isset($_GET['alerts'])) {
