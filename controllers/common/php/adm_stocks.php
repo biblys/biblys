@@ -19,14 +19,11 @@
 use Biblys\Data\ArticleType;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\Images\ImagesService;
-use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * @throws InvalidDateFormatException
- * @throws PropelException
  */
 return function (
     Request       $request,
@@ -73,7 +70,7 @@ return function (
         WHERE `stock_created` > SUBDATE(NOW(), INTERVAL 1 MONTH)
         GROUP BY `date`
         ORDER BY `date` DESC
-    ", []);
+    ");
     foreach ($stockDates as $stockDate) {
         if ($_GET['stock_created'] == $stockDate['date']) {
             $stockDate['selected'] = 'selected="selected"';
@@ -294,7 +291,7 @@ return function (
         ' . $limit . '
     ';
 
-    $sql = EntityManager::prepareAndExecute($sql_query, []);
+    $sql = EntityManager::prepareAndExecute($sql_query);
     $num = $sql->rowCount();
 
     if (isset($_GET['article_id'])) {
@@ -360,32 +357,18 @@ return function (
                 </a>
             ';
 
-            if ($currentSite->getOption("fake_shop_customer")) {
-                $soldButton = '
-                    <a href="/pages/adm_stock?sold=' . $x['stock_id'] . '">
-                        <span class="fa fa-shopping-bag fa-lg black" title="Vendu en magasin" />
-                    </a>
-                ';
-            }
-
-
             if ($x['stock_return_date']) { // Retourné
                 $x['led'] = 'square_orange';
                 $x['status'] = 'Retourné&nbsp;le<br />' . _date($x['stock_return_date'], 'd/m/Y');
-                unset($returnButton, $soldButton);
+                unset($returnButton);
                 ++$retours;
             } elseif ($x['stock_selling_date']) { // Vendu
                 $x['led'] = 'square_blue';
                 $x['status'] = 'Vendu le<br />' . _date($x['stock_selling_date'], 'd/m/Y');
 
                 // Sold in shop
-                if ($x['customer_id'] === $currentSite->getOption("fake_shop_customer")) {
-                    $x['status'] .= '<span class="fa fa-shopping-bag fa-lg"  title="Vendu en magasin" />';
-                } else {
-                    $x['status'] .= '<span class="fa fa- fa-lg" aria-label="Vendu en ligne" title="Vendu en ligne" />';
-                }
+                $x['status'] .= '<span class="fa fa- fa-lg" aria-label="Vendu en ligne" title="Vendu en ligne" />';
 
-                $soldButton = null;
                 ++$ventes;
             } elseif ($x['stock_cart_date']) { // En panier
                 $x['led'] = 'square_gray';
@@ -411,7 +394,6 @@ return function (
                     <td>
                         <a href="/pages/adm_stock?id=' . $x['stock_id'] . '">' . $x['stock_id'] . '</a><br />
                         ' . $copyButton . '
-                        ' . ($soldButton ?? null) . '
                         ' . ($returnButton ?? null) . '
                         ' . $lostButton . '
                         <span class="fa fa-trash-can fa-lg deleteStock pointer"
@@ -546,7 +528,7 @@ return function (
 
     $tbody = $list;
 
-    $lists = $lm->getAll([]);
+    $lists = $lm->getAll();
     $lists = array_map(function ($list) {
         return '<option value=' . $list->get('id') . '>' . $list->get('title') . '</option>';
     }, $lists);
