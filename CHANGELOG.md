@@ -2,6 +2,10 @@
 
 ## 3.13.0 (DEV)
 
+### Conformité NF525
+
+- La fonctionnalité "Vendu en magasin" a été supprimée.
+
 ### Améliorations
 
 - Le courriel de confirmation de paiement a été modernisé.
