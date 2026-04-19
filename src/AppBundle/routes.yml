@@ -451,6 +451,11 @@ payments_index:
   methods: GET
   controller: AppBundle\Controller\PaymentController::index
 
+payment_create:
+  path: /admin/payments/
+  methods: POST
+  controller: AppBundle\Controller\PaymentController::createAction
+
 payment_pay:
   path: /order/{slug}/pay
   methods: GET

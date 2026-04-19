@@ -5,6 +5,9 @@
 ### Conformité NF525
 
 - La fonctionnalité "Vendu en magasin" a été supprimée.
+- La possibilité de modifier le paiement d'une commande depuis la page d'édition
+  de commande a été supprimée.
+- Un formulaire "Ajouter un paiement" a été ajouté sur la page d'édition d'une commande.
 
 ### Améliorations
 
