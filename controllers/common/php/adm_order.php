@@ -360,20 +360,20 @@ return function (Request $request, UrlGenerator $urlGenerator): Response|Redirec
             <div class="form-group row">
                 <label for="order_payment_mode" class="col-sm-3 col-form-label">Mode</label>
                 <div class="col-sm-3">
-                    <input type="text" name="order_payment_mode" id="order_payment_mode" value="' . $o["order_payment_mode"] . '" class="form-control" />
+                    <input type="text" name="order_payment_mode" id="order_payment_mode" value="' . $o["order_payment_mode"] . '" class="form-control" disabled />
                 </div>
             </div>
             <div class="form-group row">
                 <label for="order_payment_date" class="col-sm-3 col-form-label">Date</label>
                 <div class="col-sm-5">
-                    <input type="datetime-local" name="order_payment_date" id="order_payment_date" value="' . $o["order_payment_date"] . '" class="form-control" />
+                    <input type="datetime-local" name="order_payment_date" id="order_payment_date" value="' . $o["order_payment_date"] . '" class="form-control" disabled />
                 </div>
             </div>
             <div class="form-group row">
                 <label for="order_payment_cash" class="col-sm-3 col-form-label">Espèces</label>
                 <div class="col-sm-3">
                     <div class="input-group">
-                        <input type="number" name="order_payment_cash" id="order_payment_cash" value="' . $o["order_payment_cash"] . '" class="form-control" />
+                        <input type="number" name="order_payment_cash" id="order_payment_cash" value="' . $o["order_payment_cash"] . '" class="form-control" disabled />
                         <div class="input-group-append"><span class="input-group-text">centimes</span></div>
                     </div>
                 </div>
@@ -382,7 +382,7 @@ return function (Request $request, UrlGenerator $urlGenerator): Response|Redirec
                 <label for="order_payment_cheque" class="col-sm-3 col-form-label">Chèque</label>
                 <div class="col-sm-3">
                     <div class="input-group">
-                        <input type="number" name="order_payment_cheque" id="order_payment_cheque" value="' . $o["order_payment_cheque"] . '" class="form-control" />
+                        <input type="number" name="order_payment_cheque" id="order_payment_cheque" value="' . $o["order_payment_cheque"] . '" class="form-control" disabled />
                         <div class="input-group-append"><span class="input-group-text">centimes</span></div>
                     </div>
                 </div>
@@ -391,7 +391,7 @@ return function (Request $request, UrlGenerator $urlGenerator): Response|Redirec
                 <label for="order_payment_transfer" class="col-sm-3 col-form-label">Virement</label>
                 <div class="col-sm-3">
                     <div class="input-group">
-                        <input type="number" name="order_payment_transfer" id="order_payment_transfer" value="' . $order->get('payment_transfer') . '" class="form-control" />
+                        <input type="number" name="order_payment_transfer" id="order_payment_transfer" value="' . $order->get('payment_transfer') . '" class="form-control" disabled />
                         <div class="input-group-append"><span class="input-group-text">centimes</span></div>
                     </div>
                 </div>
@@ -400,7 +400,7 @@ return function (Request $request, UrlGenerator $urlGenerator): Response|Redirec
                 <label for="order_payment_card" class="col-sm-3 col-form-label">Carte bancaire</label>
                 <div class="col-sm-3">
                     <div class="input-group">
-                        <input type="number" name="order_payment_card" id="order_payment_card" value="' . $o["order_payment_card"] . '" class="form-control" />
+                        <input type="number" name="order_payment_card" id="order_payment_card" value="' . $o["order_payment_card"] . '" class="form-control" disabled />
                         <div class="input-group-append"><span class="input-group-text">centimes</span></div>
                     </div>
                 </div>
@@ -409,7 +409,7 @@ return function (Request $request, UrlGenerator $urlGenerator): Response|Redirec
                 <label for="order_payment_paypal" class="col-sm-3 col-form-label">Paypal</label>
                 <div class="col-sm-3">
                     <div class="input-group">
-                        <input type="number" name="order_payment_paypal" id="order_payment_paypal" value="' . $o["order_payment_paypal"] . '" class="form-control" />
+                        <input type="number" name="order_payment_paypal" id="order_payment_paypal" value="' . $o["order_payment_paypal"] . '" class="form-control" disabled />
                         <div class="input-group-append"><span class="input-group-text">centimes</span></div>
                     </div>
                 </div>
@@ -418,7 +418,7 @@ return function (Request $request, UrlGenerator $urlGenerator): Response|Redirec
                 <label for="order_payment_payplug" class="col-sm-3 col-form-label">Payplug</label>
                 <div class="col-sm-3">
                     <div class="input-group">
-                        <input type="number" name="order_payment_payplug" id="order_payment_payplug" value="' . $o["order_payment_payplug"] . '" class="form-control" />
+                        <input type="number" name="order_payment_payplug" id="order_payment_payplug" value="' . $o["order_payment_payplug"] . '" class="form-control" disabled />
                         <div class="input-group-append"><span class="input-group-text">centimes</span></div>
                     </div>
                 </div>
@@ -427,7 +427,7 @@ return function (Request $request, UrlGenerator $urlGenerator): Response|Redirec
                 <label for="order_payment_left" class="col-sm-3 col-form-label">Monnaie rendue</label>
                 <div class="col-sm-3">
                     <div class="input-group">
-                        <input type="number" name="order_payment_left" id="order_payment_left" value="' . $o["order_payment_left"] . '" class="form-control" />
+                        <input type="number" name="order_payment_left" id="order_payment_left" value="' . $o["order_payment_left"] . '" class="form-control" disabled />
                         <div class="input-group-append"><span class="input-group-text">centimes</span></div>
                     </div>
                 </div>
