@@ -70,15 +70,16 @@ class Helpers
     {
         $config = new Config(["environment" => "test"]);
         $currentSite = Mockery::mock(CurrentSite::class);
-        $currentSite->expects("getTitle")->andReturn("Éditions Paronymie");
-        $currentSite->expects("getOption")->andReturn(null);
-        $currentSite->expects("getSite")->andReturn(ModelFactory::createSite());
+        $currentSite->shouldReceive("getTitle")->andReturn("Éditions Paronymie");
+        $currentSite->shouldReceive("getOption")->andReturn(null);
+        $currentSite->shouldReceive("getSite")->andReturn(ModelFactory::createSite());
         $currentUser = Mockery::mock(CurrentUser::class);
-        $currentUser->expects("isAuthenticated")->andReturn(false);
-        $currentUser->expects("isAdmin")->andReturn(false);
-        $currentUser->expects("hasPublisherRight")->andReturn(false);
+        $currentUser->shouldReceive("isAuthenticated")->andReturn(false);
+        $currentUser->shouldReceive("isAdmin")->andReturn(false);
+        $currentUser->shouldReceive("hasPublisherRight")->andReturn(false);
+        $currentUser->shouldReceive("getCart")->andReturn(null);
         $metaTags = Mockery::mock(MetaTagsService::class);
-        $metaTags->expects("dump")->andReturn("");
+        $metaTags->shouldReceive("dump")->andReturn("");
         $request = new Request();
 
         return new TemplateService(

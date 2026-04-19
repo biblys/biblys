@@ -74,6 +74,11 @@ class ArticleControllerTest extends TestCase
         BookCollectionQuery::create()->deleteAll();
     }
 
+    public function tearDown(): void
+    {
+        Mockery::close();
+    }
+
     /** adminCatalogAction  */
 
     /**
@@ -346,7 +351,6 @@ class ArticleControllerTest extends TestCase
             ->andReturn();
         $templateService = Helpers::getTemplateService();
         $imagesService = Mockery::mock(ImagesService::class);
-        $imagesService->expects("deleteImageFor");
 
         // when
         $response = $controller->deleteAction(
@@ -391,7 +395,6 @@ class ArticleControllerTest extends TestCase
             ->andReturn();
         $templateService = Helpers::getTemplateService();
         $imagesService = Mockery::mock(ImagesService::class);
-        $imagesService->expects("deleteImageFor");
 
         // when
         $response = $controller->deleteAction(
@@ -583,7 +586,6 @@ class ArticleControllerTest extends TestCase
             ->shouldReceive("renderResponse")
             ->andReturn(new Response(""));
         $imagesService = Mockery::mock(ImagesService::class);
-        $imagesService->expects("deleteImageFor");
 
         // when
         $exception = Helpers::runAndCatchException(function () use (

@@ -41,6 +41,11 @@ class RedirectionControllerTest extends TestCase
         RedirectionQuery::create()->deleteAll();
     }
 
+    public function tearDown(): void
+    {
+        Mockery::close();
+    }
+
     /**
      * @throws PropelException
      * @throws Exception
@@ -87,8 +92,8 @@ class RedirectionControllerTest extends TestCase
         $currentSite->method("getId")->willReturn($site->getId());
         $bodyParamsService = Mockery::mock(BodyParamsService::class);
         $bodyParamsService->expects("parse");
-        $bodyParamsService->expects("get")->with("old_url")->andReturn("/old-url");
-        $bodyParamsService->expects("get")->with("new_url")->andReturn("/new-url");
+        $bodyParamsService->shouldReceive("get")->with("old_url")->andReturn("/old-url");
+        $bodyParamsService->shouldReceive("get")->with("new_url")->andReturn("/new-url");
         $flashMessageService = Mockery::mock(FlashMessagesService::class);
         $flashMessageService
             ->expects("add")
@@ -133,8 +138,8 @@ class RedirectionControllerTest extends TestCase
         $currentSite->method("getId")->willReturn($site->getId());
         $bodyParamsService = Mockery::mock(BodyParamsService::class);
         $bodyParamsService->expects("parse");
-        $bodyParamsService->expects("get")->with("old_url")->andReturn("/old-url");
-        $bodyParamsService->expects("get")->with("new_url")->andReturn("/other-new-url");
+        $bodyParamsService->shouldReceive("get")->with("old_url")->andReturn("/old-url");
+        $bodyParamsService->shouldReceive("get")->with("new_url")->andReturn("/other-new-url");
         $flashMessageService = Mockery::mock(FlashMessagesService::class);
         $flashMessageService
             ->expects("add")
