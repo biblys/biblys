@@ -41,6 +41,11 @@ class CollectionControllerTest extends TestCase
         BookCollectionQuery::create()->deleteAll();
     }
 
+    public function tearDown(): void
+    {
+        Mockery::close();
+    }
+
     /**
      * @throws SyntaxError
      * @throws RuntimeError
