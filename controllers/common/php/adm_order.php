@@ -19,16 +19,18 @@
 use Biblys\Service\CurrentSite;
 use Model\CountryQuery;
 use Model\ShippingOptionQuery;
+use Model\StockQuery;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Routing\Generator\UrlGenerator;
 
 /**
  * @throws PropelException
  */
-return function (Request $request, CurrentSite $currentSite): Response|RedirectResponse
+return function (Request $request, UrlGenerator $urlGenerator): Response|RedirectResponse
 {
     $cm = new CustomerManager();
     $om = new OrderManager();
@@ -194,7 +196,7 @@ return function (Request $request, CurrentSite $currentSite): Response|RedirectR
         return '<option value="' . $country->get('id') . '"' . ($country == $order->get('country') ? ' selected' : null) . '>' . $country->get('name') . '</option>';
     }, $countries);
 
-    $stockItemCount = \Model\StockQuery::create()->filterByOrderId($order->get('id'))->count();
+    $stockItemCount = StockQuery::create()->filterByOrderId($order->get('id'))->count();
 
     $feesList = [];
     $country = $order->get("country");
@@ -213,6 +215,13 @@ return function (Request $request, CurrentSite $currentSite): Response|RedirectR
 
     $pageTitle = $order_type . ' n° <a href="/order/' . $o['order_url'] . '">' . $o["order_id"] . '</a>';
     $request->attributes->set("page_title", "$order_type n° {$o["order_id"]}");
+
+    $paymentModes = \Model\Payment::getModes();
+    $paymentModesHtml = array_map(function ($mode) {
+        return '<option value="' . $mode . '">' . $mode . '</option>';
+    }, $paymentModes);
+    $paymentCreateUrl = $urlGenerator->generate("payment_create");
+
     $content .= '
     <h2>' . $pageTitle . '</h2>
 
@@ -507,6 +516,25 @@ return function (Request $request, CurrentSite $currentSite): Response|RedirectR
                         </div>
                     </div>
                 </div>
+            </div>
+        </fieldset>
+    </form>
+    
+    <form id="add_payment" class="fieldset" action="'.$paymentCreateUrl.'" method="post">
+        <fieldset>
+            <legend>Ajouter un paiement</legend>
+            <input type="hidden" name="order_id" value="'.$order->get('id').'">
+            <div class="form-inline">
+                <label for="payment_amount" class="col-sm-3 col-form-label">Nouveau paiement</label>
+                <select name="payment_mode" id="payment_mode" class="form-control mr-2" required>
+                    <option></option>
+                    '.join('', $paymentModesHtml).'
+                </select>
+                <div class="input-group mr-2">
+                    <input type="number" min="0" name="payment_amount" id="payment_amount" class="form-control" placeholder="Montant" required>
+                    <div class="input-group-append"><span class="input-group-text">centimes</span></div>
+                </div>
+                <button type="submit" class="btn btn-primary">Ajouter</button>
             </div>
         </fieldset>
     </form>
