@@ -17,6 +17,7 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Service\BodyParamsService;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
@@ -46,6 +47,7 @@ use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
+use Usecase\AddPaymentToOrderAndExecuteUsecase;
 
 require_once __DIR__ . "/../../setUp.php";
 
@@ -176,6 +178,67 @@ class PaymentControllerTest extends TestCase
         $this->assertStringContainsString("28/04/2019", $response->getContent());
         $this->assertStringNotContainsString("26/04/2019", $response->getContent());
         $this->assertStringNotContainsString("30/04/2019", $response->getContent());
+    }
+
+    /** createAction */
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     * @throws TransportExceptionInterface
+     */
+    public function testCreateAction(): void
+    {
+        // given
+        $order = ModelFactory::createOrder(amountToBePaid: 1500);
+
+        $controller = new PaymentController();
+
+        $bodyParams = Mockery::mock(BodyParamsService::class);
+        $bodyParams->shouldReceive("parse")->with([
+            "order_id" => ["type" => "numeric"],
+            "payment_mode" => ["type" => "string"],
+            "payment_amount" => ["type" => "numeric"],
+        ])->once();
+        $bodyParams->shouldReceive("getInteger")->with("order_id")->andReturn($order->getId());
+        $bodyParams->shouldReceive("get")->with("payment_mode")->andReturn("cash");
+        $bodyParams->shouldReceive("getInteger")->with("payment_amount")->andReturn(1500);
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->once()->andReturn();
+
+        $mailer = Mockery::mock(Mailer::class);
+        $mailer->expects("send")->once();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate");
+        $templateService = Helpers::getTemplateService();
+
+        $flashMessagesService = Mockery::mock(FlashMessagesService::class);
+        $flashMessagesService->expects("add")
+            ->with("success", "Un paiement de 15,00&nbsp;&euro; a été ajouté à la commande {$order->getId()}.")
+            ->once();
+
+        // when
+        $response = $controller->createAction(
+            bodyParams: $bodyParams,
+            currentUser: $currentUser,
+            mailer: $mailer,
+            currentSite: $currentSite,
+            urlGenerator: $urlGenerator,
+            templateService: $templateService,
+            flashMessages: $flashMessagesService
+        );
+
+        // then
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals("/pages/adm_order?order_id={$order->getId()}", $response->getTargetUrl());
+        $order->reload(true);
+        $this->assertTrue($order->isPaid());
+        $payment = PaymentQuery::create()->findOneByOrderId($order->getId());
+        $this->assertNotNull($payment);
+        $this->assertEquals(1500, $payment->getAmount());
+        $this->assertEquals("cash", $payment->getMode());
     }
 
     /** stripeWebhookAction */
