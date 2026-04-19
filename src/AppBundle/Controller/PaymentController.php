@@ -21,10 +21,12 @@ use Biblys\Exception\CannotFindPayableOrderException;
 use Biblys\Exception\InvalidConfigurationException;
 use Biblys\Exception\InvalidEmailAddressException;
 use Biblys\Exception\UnreachableExternalServiceException;
+use Biblys\Service\BodyParamsService;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\FlashMessagesService;
+use Biblys\Service\InvalidSiteIdException;
 use Biblys\Service\LoggerService;
 use Biblys\Service\Mailer;
 use Biblys\Service\Pagination;
@@ -131,6 +133,63 @@ class PaymentController extends Controller
             "pages" => $pagination,
             "total" => $total,
         ], isPrivate: true);
+    }
+
+    /**
+     * POST /admin/payments
+     *
+     * @throws BusinessRuleException
+     * @throws InvalidEmailAddressException
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws TransportExceptionInterface
+     * @throws UnreachableExternalServiceException
+     * @throws InvalidSiteIdException
+     */
+    public function createAction(
+        BodyParamsService    $bodyParams,
+        CurrentUser          $currentUser,
+        Mailer               $mailer,
+        CurrentSite          $currentSite,
+        UrlGenerator         $urlGenerator,
+        TemplateService      $templateService,
+        FlashMessagesService $flashMessages,
+    ): Response
+    {
+        $currentUser->authAdmin();
+
+        $bodyParams->parse([
+            "order_id" => ["type" => "numeric"],
+            "payment_mode" => ["type" => "string"],
+            "payment_amount" => ["type" => "numeric"],
+        ]);
+
+        $orderId = $bodyParams->getInteger("order_id");
+        $order = OrderQuery::create()->findPk($orderId);
+        $paymentAmount = $bodyParams->getInteger("payment_amount");
+
+        $payment = new Payment();
+        $payment->setOrder($order);
+        $payment->setMode($bodyParams->get("payment_mode"));
+        $payment->setAmount($paymentAmount);
+
+        $usecase = $this->getPaymentUsecase(
+            mailer: $mailer,
+            currentSite: $currentSite,
+            urlGenerator: $urlGenerator,
+            templateService: $templateService,
+        );
+        $usecase->execute($order, $payment);
+
+        $formattedAmount = currency($paymentAmount, true);
+        $flashMessages->add(
+            "success",
+            "Un paiement de $formattedAmount a été ajouté à la commande {$order->getId()}."
+        );
+
+        return new RedirectResponse("/pages/adm_order?order_id=$orderId");
     }
 
     /**
