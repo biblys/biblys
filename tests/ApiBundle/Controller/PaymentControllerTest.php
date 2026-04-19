@@ -40,6 +40,10 @@ use Symfony\Component\Routing\Generator\UrlGenerator;
 
 class PaymentControllerTest extends TestCase
 {
+    public function tearDown(): void
+    {
+        Mockery::close();
+    }
 
     /* createStripePaymentAction */
 
@@ -90,9 +94,6 @@ class PaymentControllerTest extends TestCase
         $paymentService->expects("getPayableOrderBySlug")->andReturn($order);
 
         $request = new Request([], [], [], [], [], [], json_encode(["paypalOrderId" => "PAYPAL_ORDER_123"]));
-
-        $logger = Mockery::mock(LoggerService::class);
-        $logger->expects("log")->andReturnNull();
 
         $captureResponseData = [
             "status" => "COMPLETED",

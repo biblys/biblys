@@ -63,6 +63,11 @@ class UserControllerTest extends TestCase
         UserQuery::create()->deleteAll();
     }
 
+    public function tearDown(): void
+    {
+        Mockery::close();
+    }
+
 
     /**
      * @throws SyntaxError
@@ -83,9 +88,9 @@ class UserControllerTest extends TestCase
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive('authAdmin')->andReturns();
         $queryParamsService = Mockery::mock(QueryParamsService::class);
-        $queryParamsService->expects("parse")->andReturns();
-        $queryParamsService->expects("getInteger")->with("p")->andReturn(0);
-        $queryParamsService->expects("get")->with("q")->andReturn("");
+        $queryParamsService->shouldReceive("parse")->andReturns();
+        $queryParamsService->shouldReceive("getInteger")->with("p")->andReturn(0);
+        $queryParamsService->shouldReceive("get")->with("q")->andReturn("");
         $templateService = Helpers::getTemplateService();
 
         // when
@@ -114,9 +119,9 @@ class UserControllerTest extends TestCase
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive('authAdmin')->andReturns();
         $queryParamsService = Mockery::mock(QueryParamsService::class);
-        $queryParamsService->expects("parse")->andReturns();
-        $queryParamsService->expects("getInteger")->with("p")->andReturn(0);
-        $queryParamsService->expects("get")->with("q")->andReturn("looking-for");
+        $queryParamsService->shouldReceive("parse")->andReturns();
+        $queryParamsService->shouldReceive("getInteger")->with("p")->andReturn(0);
+        $queryParamsService->shouldReceive("get")->with("q")->andReturn("looking-for");
         $templateService = Helpers::getTemplateService();
 
         // when
@@ -169,12 +174,12 @@ class UserControllerTest extends TestCase
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("authAdmin")->andReturns();
         $flashMessages = Mockery::mock(FlashMessagesService::class);
-        $flashMessages->expects("add")->with(
+        $flashMessages->shouldReceive("add")->with(
             "success",
             "L'utilisateur user-to-delete@example.org a bien été supprimé."
         );
         $urlGenerator = Mockery::mock(UrlGenerator::class);
-        $urlGenerator->expects("generate")->with("user_index")->andReturn("/admin/users");
+        $urlGenerator->shouldReceive("generate")->with("user_index")->andReturn("/admin/users");
 
         // when
         $response = $controller->deleteAction($currentUser, $urlGenerator, $flashMessages, $userToDelete->getId());
@@ -199,12 +204,12 @@ class UserControllerTest extends TestCase
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("authAdmin")->andReturns();
         $flashMessages = Mockery::mock(FlashMessagesService::class);
-        $flashMessages->expects("add")->with(
+        $flashMessages->shouldReceive("add")->with(
             "error",
             "Impossible de supprimer le compte user-with-orders@example.org car il a des commandes."
         );
         $urlGenerator = Mockery::mock(UrlGenerator::class);
-        $urlGenerator->expects("generate")->with("user_admin_informations", ["id" => $userToDelete->getId()])
+        $urlGenerator->shouldReceive("generate")->with("user_admin_informations", ["id" => $userToDelete->getId()])
             ->andReturn("/users/123");
 
         // when
@@ -239,10 +244,10 @@ class UserControllerTest extends TestCase
             ->with("openid_axys")
             ->willReturn("/openid/axys");
         $queryParams = Mockery::mock(QueryParamsService::class);
-        $queryParams->expects("parse")->andReturn("");
-        $queryParams->expects("get")->with("return_url")->andReturn("");
+        $queryParams->shouldReceive("parse")->andReturn("");
+        $queryParams->shouldReceive("get")->with("return_url")->andReturn("");
         $config = Mockery::mock(Config::class);
-        $config->expects("isAxysEnabled")->andReturns(false);
+        $config->shouldReceive("isAxysEnabled")->andReturns(false);
 
         // when
         $response = $userController->login($queryParams, $currentUser, $urlGenerator, $config);
@@ -272,10 +277,10 @@ class UserControllerTest extends TestCase
             ->with("openid_axys")
             ->willReturn("/openid/axys");
         $queryParams = Mockery::mock(QueryParamsService::class);
-        $queryParams->expects("parse")->andReturn("");
-        $queryParams->expects("get")->with("return_url")->andReturn("");
+        $queryParams->shouldReceive("parse")->andReturn("");
+        $queryParams->shouldReceive("get")->with("return_url")->andReturn("");
         $config = Mockery::mock(Config::class);
-        $config->expects("isAxysEnabled")->andReturns(true);
+        $config->shouldReceive("isAxysEnabled")->andReturns(true);
 
         // when
         $response = $userController->login($queryParams, $currentUser, $urlGenerator, $config);
@@ -305,10 +310,10 @@ class UserControllerTest extends TestCase
             ->with("openid_axys", ["return_url" => "url_to_return_to"])
             ->willReturn("/openid/axys?return_url=url_to_return_to");
         $queryParams = Mockery::mock(QueryParamsService::class);
-        $queryParams->expects("parse")->andReturn("");
-        $queryParams->expects("get")->with("return_url")->andReturn("url_to_return_to");
+        $queryParams->shouldReceive("parse")->andReturn("");
+        $queryParams->shouldReceive("get")->with("return_url")->andReturn("url_to_return_to");
         $config = Mockery::mock(Config::class);
-        $config->expects("isAxysEnabled")->andReturns(false);
+        $config->shouldReceive("isAxysEnabled")->andReturns(false);
 
         // when
         $response = $userController->login($queryParams, $currentUser, $urlGenerator, $config);
@@ -337,10 +342,10 @@ class UserControllerTest extends TestCase
             ->with("main_home")
             ->willReturn("/");
         $queryParams = Mockery::mock(QueryParamsService::class);
-        $queryParams->expects("parse")->andReturn("");
-        $queryParams->expects("get")->with("return_url")->andReturn("");
+        $queryParams->shouldReceive("parse")->andReturn("");
+        $queryParams->shouldReceive("get")->with("return_url")->andReturn("");
         $config = Mockery::mock(Config::class);
-        $config->expects("isAxysEnabled")->andReturns(false);
+        $config->shouldReceive("isAxysEnabled")->andReturns(false);
 
         // when
         $response = $userController->login($queryParams, $currentUser, $urlGenerator, $config);
@@ -377,18 +382,18 @@ class UserControllerTest extends TestCase
             ->andReturn($expectedResponse);
         $templateService->shouldReceive("render")->andReturn("mail body");
         $tokenService = Mockery::mock(TokenService::class);
-        $tokenService->expects("createLoginToken")->andReturn("token");
+        $tokenService->shouldReceive("createLoginToken")->andReturn("token");
         $urlGenerator = Mockery::mock(UrlGenerator::class);
-        $urlGenerator->expects("generate")->andReturn("login_url");
+        $urlGenerator->shouldReceive("generate")->andReturn("login_url");
         $mailer = Mockery::mock(Mailer::class);
-        $mailer->expects("validateEmail")->andThrow(
+        $mailer->shouldReceive("validateEmail")->andThrow(
             new InvalidEmailAddressException("L'adresse invalid-email est invalide.")
         );
         $bodyParamsService = Mockery::mock(BodyParamsService::class);
-        $bodyParamsService->expects("parse")->andReturns();
-        $bodyParamsService->expects("get")->with("email")->andReturn("invalid-email");
-        $bodyParamsService->expects("get")->with("return_url")->andReturn("/continue");
-        $bodyParamsService->expects("get")->with("username")->andReturn("");
+        $bodyParamsService->shouldReceive("parse")->andReturns();
+        $bodyParamsService->shouldReceive("get")->with("email")->andReturn("invalid-email");
+        $bodyParamsService->shouldReceive("get")->with("return_url")->andReturn("/continue");
+        $bodyParamsService->shouldReceive("get")->with("username")->andReturn("");
 
         // then
         $this->expectException(BadRequestHttpException::class);
@@ -428,18 +433,18 @@ class UserControllerTest extends TestCase
             ->andReturn($expectedResponse);
         $templateService->shouldReceive("render")->andReturn("mail body");
         $tokenService = Mockery::mock(TokenService::class);
-        $tokenService->expects("createLoginToken")->andReturn("token");
+        $tokenService->shouldReceive("createLoginToken")->andReturn("token");
         $urlGenerator = Mockery::mock(UrlGenerator::class);
-        $urlGenerator->expects("generate")->andReturn("login_url");
+        $urlGenerator->shouldReceive("generate")->andReturn("login_url");
         $mailer = Mockery::mock(Mailer::class);
-        $mailer->expects("validateEmail");
-        $mailer->expects("send");
+        $mailer->shouldReceive("validateEmail");
+        $mailer->shouldReceive("send");
 
         $bodyParamsService = Mockery::mock(BodyParamsService::class);
-        $bodyParamsService->expects("parse")->andReturns();
-        $bodyParamsService->expects("get")->with("email")->andReturn("user@example.net");
-        $bodyParamsService->expects("get")->with("return_url")->andReturn("/continue");
-        $bodyParamsService->expects("get")->with("username")->andReturn("");
+        $bodyParamsService->shouldReceive("parse")->andReturns();
+        $bodyParamsService->shouldReceive("get")->with("email")->andReturn("user@example.net");
+        $bodyParamsService->shouldReceive("get")->with("return_url")->andReturn("/continue");
+        $bodyParamsService->shouldReceive("get")->with("username")->andReturn("");
 
         // when
         $returnedResponse = $controller->sendLoginEmailAction(
@@ -491,17 +496,17 @@ class UserControllerTest extends TestCase
             ->andReturn($expectedResponse);
         $templateService->shouldReceive("render")->andReturn("mail body");
         $tokenService = Mockery::mock(TokenService::class);
-        $tokenService->expects("createLoginToken")->andReturn("token");
+        $tokenService->shouldReceive("createLoginToken")->andReturn("token");
         $urlGenerator = Mockery::mock(UrlGenerator::class);
-        $urlGenerator->expects("generate")->andReturn("login_url");
+        $urlGenerator->shouldReceive("generate")->andReturn("login_url");
         $mailer = Mockery::mock(Mailer::class);
-        $mailer->expects("validateEmail");
-        $mailer->expects("send");
+        $mailer->shouldReceive("validateEmail");
+        $mailer->shouldReceive("send");
         $bodyParamsService = Mockery::mock(BodyParamsService::class);
-        $bodyParamsService->expects("parse")->andReturns();
-        $bodyParamsService->expects("get")->with("email")->andReturn("user@example.net");
-        $bodyParamsService->expects("get")->with("return_url")->andReturn("/continue");
-        $bodyParamsService->expects("get")->with("username")->andReturn("honeypot");
+        $bodyParamsService->shouldReceive("parse")->andReturns();
+        $bodyParamsService->shouldReceive("get")->with("email")->andReturn("user@example.net");
+        $bodyParamsService->shouldReceive("get")->with("return_url")->andReturn("/continue");
+        $bodyParamsService->shouldReceive("get")->with("username")->andReturn("honeypot");
 
         // when
         $response = $controller->sendLoginEmailAction(
@@ -548,17 +553,17 @@ class UserControllerTest extends TestCase
         $templateService->shouldReceive("render")
             ->andReturn($expectedMailBody);
         $mailer = Mockery::mock(Mailer::class);
-        $mailer->expects("validateEmail");
-        $mailer->expects("send");
+        $mailer->shouldReceive("validateEmail");
+        $mailer->shouldReceive("send");
         $tokenService = Mockery::mock(TokenService::class);
-        $tokenService->expects("createLoginToken")->andReturn("token");
+        $tokenService->shouldReceive("createLoginToken")->andReturn("token");
         $urlGenerator = Mockery::mock(UrlGenerator::class);
-        $urlGenerator->expects("generate")->andReturn("login_url");
+        $urlGenerator->shouldReceive("generate")->andReturn("login_url");
         $bodyParamsService = Mockery::mock(BodyParamsService::class);
-        $bodyParamsService->expects("parse")->andReturns();
-        $bodyParamsService->expects("get")->with("email")->andReturn("user@example.net");
-        $bodyParamsService->expects("get")->with("return_url")->andReturn("/continue");
-        $bodyParamsService->expects("get")->with("username")->andReturn("");
+        $bodyParamsService->shouldReceive("parse")->andReturns();
+        $bodyParamsService->shouldReceive("get")->with("email")->andReturn("user@example.net");
+        $bodyParamsService->shouldReceive("get")->with("return_url")->andReturn("/continue");
+        $bodyParamsService->shouldReceive("get")->with("username")->andReturn("");
 
         // when
         $returnedResponse = $controller->sendLoginEmailAction(
@@ -604,10 +609,10 @@ class UserControllerTest extends TestCase
         $site = ModelFactory::createSite();
         ModelFactory::createUser(email: "new-@paronymie.fr");
         $queryParamsService = Mockery::mock(QueryParamsService::class);
-        $queryParamsService->expects("parse")->with(["token" => ["type" => "string"]]);
-        $queryParamsService->expects("get")->with("token")->andReturn("signup_token");
+        $queryParamsService->shouldReceive("parse")->with(["token" => ["type" => "string"]]);
+        $queryParamsService->shouldReceive("get")->with("token")->andReturn("signup_token");
         $tokenService = Mockery::mock(TokenService::class);
-        $tokenService->expects("decodeLoginToken")->andReturn([
+        $tokenService->shouldReceive("decodeLoginToken")->andReturn([
             "email" => "existing-user@paronymie.fr",
             "action" => "login-by-email",
             "after_login_url" => "/continue",
@@ -640,10 +645,10 @@ class UserControllerTest extends TestCase
         $site = ModelFactory::createSite();
         ModelFactory::createUser(email: "existing-user@paronymie.fr");
         $queryParamsService = Mockery::mock(QueryParamsService::class);
-        $queryParamsService->expects("parse")->with(["token" => ["type" => "string"]]);
-        $queryParamsService->expects("get")->with("token")->andReturn("signup_token");
+        $queryParamsService->shouldReceive("parse")->with(["token" => ["type" => "string"]]);
+        $queryParamsService->shouldReceive("get")->with("token")->andReturn("signup_token");
         $tokenService = Mockery::mock(TokenService::class);
-        $tokenService->expects("decodeLoginToken")->andReturn([
+        $tokenService->shouldReceive("decodeLoginToken")->andReturn([
             "email" => "existing-user@paronymie.fr",
             "action" => "signup-by-email",
             "after_login_url" => "/continue",
@@ -675,23 +680,23 @@ class UserControllerTest extends TestCase
         // given
         $controller = new UserController();
         $queryParamsService = Mockery::mock(QueryParamsService::class);
-        $queryParamsService->expects("parse")->with(["token" => ["type" => "string"]]);
-        $queryParamsService->expects("get")->with("token")->andReturn("signup_token");
+        $queryParamsService->shouldReceive("parse")->with(["token" => ["type" => "string"]]);
+        $queryParamsService->shouldReceive("get")->with("token")->andReturn("signup_token");
         $tokenService = Mockery::mock(TokenService::class);
-        $tokenService->expects("decodeLoginToken")->andReturn([
+        $tokenService->shouldReceive("decodeLoginToken")->andReturn([
             "email" => "new-user@paronymie.fr",
             "action" => "signup-by-email",
             "after_login_url" => "/continue",
         ]);
-        $tokenService->expects("createLoginToken")->andReturn("token");
+        $tokenService->shouldReceive("createLoginToken")->andReturn("token");
         $site = ModelFactory::createSite(title: "Paronymie ltd");
         $currentSite = new CurrentSite($site);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
-        $urlGenerator->expects("generate")->andReturn("/login_url");
+        $urlGenerator->shouldReceive("generate")->andReturn("/login_url");
         $flashBag = Mockery::mock(FlashBag::class);
-        $flashBag->expects("add");
+        $flashBag->shouldReceive("add");
         $session = Mockery::mock(Session::class);
-        $session->expects("getFlashBag")->andReturn($flashBag);
+        $session->shouldReceive("getFlashBag")->andReturn($flashBag);
 
         // when
         $response = $controller->signupWithTokenAction(
@@ -725,10 +730,10 @@ class UserControllerTest extends TestCase
         $controller = new UserController();
         $request = new Request();
         $queryParamsService = Mockery::mock(QueryParamsService::class);
-        $queryParamsService->expects("parse")->with(["token" => ["type" => "string"]]);
-        $queryParamsService->expects("get")->with("token")->andReturn("login_token");
+        $queryParamsService->shouldReceive("parse")->with(["token" => ["type" => "string"]]);
+        $queryParamsService->shouldReceive("get")->with("token")->andReturn("login_token");
         $tokenService = Mockery::mock(TokenService::class);
-        $tokenService->expects("decodeLoginToken")->andThrows(new InvalidTokenException());
+        $tokenService->shouldReceive("decodeLoginToken")->andThrows(new InvalidTokenException());
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentUser = Mockery::mock(CurrentUser::class);
 
@@ -759,10 +764,10 @@ class UserControllerTest extends TestCase
         $controller = new UserController();
         $request = new Request();
         $queryParamsService = Mockery::mock(QueryParamsService::class);
-        $queryParamsService->expects("parse")->with(["token" => ["type" => "string"]]);
-        $queryParamsService->expects("get")->with("token")->andReturn("login_token");
+        $queryParamsService->shouldReceive("parse")->with(["token" => ["type" => "string"]]);
+        $queryParamsService->shouldReceive("get")->with("token")->andReturn("login_token");
         $tokenService = Mockery::mock(TokenService::class);
-        $tokenService->expects("decodeLoginToken")->andReturn(["email" => "unknown@paronymie.fr"]);
+        $tokenService->shouldReceive("decodeLoginToken")->andReturn(["email" => "unknown@paronymie.fr"]);
         $site = ModelFactory::createSite();
         $currentSite = new CurrentSite($site);
         $currentUser = Mockery::mock(CurrentUser::class);
@@ -793,10 +798,10 @@ class UserControllerTest extends TestCase
         $request->query->set("token", "login_token");
         $request->cookies->set("visitor_uid", "visitor_token");
         $queryParamsService = Mockery::mock(QueryParamsService::class);
-        $queryParamsService->expects("parse")->with(["token" => ["type" => "string"]]);
-        $queryParamsService->expects("get")->with("token")->andReturn("login_token");
+        $queryParamsService->shouldReceive("parse")->with(["token" => ["type" => "string"]]);
+        $queryParamsService->shouldReceive("get")->with("token")->andReturn("login_token");
         $tokenService = Mockery::mock(TokenService::class);
-        $tokenService->expects("decodeLoginToken")->andReturn([
+        $tokenService->shouldReceive("decodeLoginToken")->andReturn([
             "email" => "user@paronymie.fr",
             "action" => "login-by-email",
             "after_login_url" => "/after_login_url",
@@ -805,8 +810,8 @@ class UserControllerTest extends TestCase
         $currentSite = new CurrentSite($site);
         $user = ModelFactory::createUser(email: "user@paronymie.fr");
         $currentUser = Mockery::mock(CurrentUser::class);
-        $currentUser->expects("setUser")->with($user);
-        $currentUser->expects("transfertVisitorCartToUser")->with("visitor_token");
+        $currentUser->shouldReceive("setUser")->with($user);
+        $currentUser->shouldReceive("transfertVisitorCartToUser")->with("visitor_token");
 
         // when
         $response = $controller->loginWithTokenAction(
@@ -851,10 +856,10 @@ class UserControllerTest extends TestCase
         $request->query->set("token", "login_token");
         $request->cookies->set("visitor_uid", "visitor_token");
         $queryParamsService = Mockery::mock(QueryParamsService::class);
-        $queryParamsService->expects("parse")->with(["token" => ["type" => "string"]]);
-        $queryParamsService->expects("get")->with("token")->andReturn("login_token");
+        $queryParamsService->shouldReceive("parse")->with(["token" => ["type" => "string"]]);
+        $queryParamsService->shouldReceive("get")->with("token")->andReturn("login_token");
         $tokenService = Mockery::mock(TokenService::class);
-        $tokenService->expects("decodeLoginToken")->andReturn([
+        $tokenService->shouldReceive("decodeLoginToken")->andReturn([
             "email" => "user@paronymie.fr",
             "action" => "login-with-oidc",
             "after_login_url" => "",
@@ -863,8 +868,8 @@ class UserControllerTest extends TestCase
         $currentSite = new CurrentSite($site);
         $user = ModelFactory::createUser(email: "user@paronymie.fr");
         $currentUser = Mockery::mock(CurrentUser::class);
-        $currentUser->expects("setUser")->with($user);
-        $currentUser->expects("transfertVisitorCartToUser")->with("visitor_token");
+        $currentUser->shouldReceive("setUser")->with($user);
+        $currentUser->shouldReceive("transfertVisitorCartToUser")->with("visitor_token");
 
         // when
         $controller->loginWithTokenAction(
@@ -899,9 +904,9 @@ class UserControllerTest extends TestCase
 
         $currentSite = new CurrentSite($site);
         $currentUser = Mockery::mock(CurrentUser::class);
-        $currentUser->expects("getUser")->andReturn($user);
+        $currentUser->shouldReceive("getUser")->andReturn($user);
         $templateService = Mockery::mock(TemplateService::class);
-        $templateService->expects("renderResponse")
+        $templateService->shouldReceive("renderResponse")
             ->andReturn(new Response("Vous êtes connecté·e à l'aide d'un compte Axys."));
 
         // when
@@ -934,10 +939,10 @@ class UserControllerTest extends TestCase
         $currentSite = new CurrentSite($site);
         ModelFactory::createAuthenticationMethod(user: $user);
         $currentUser = Mockery::mock(CurrentUser::class);
-        $currentUser->expects("getUser")->andReturn($user);
+        $currentUser->shouldReceive("getUser")->andReturn($user);
 
         $templateService = Mockery::mock(TemplateService::class);
-        $templateService->expects("renderResponse")->andReturn(new Response("Vous êtes connecté·e à l'aide d'un compte Axys."));
+        $templateService->shouldReceive("renderResponse")->andReturn(new Response("Vous êtes connecté·e à l'aide d'un compte Axys."));
 
         // when
         $response = $userController->account($currentSite, $currentUser, $templateService);
@@ -959,9 +964,9 @@ class UserControllerTest extends TestCase
         // given
         $userController = new UserController();
         $flashBag = Mockery::mock(FlashBag::class);
-        $flashBag->expects("add");
+        $flashBag->shouldReceive("add");
         $session = Mockery::mock(Session::class);
-        $session->expects("getFlashBag")->andReturn($flashBag);
+        $session->shouldReceive("getFlashBag")->andReturn($flashBag);
 
         // when
         $response = $userController->logout($session);
@@ -996,8 +1001,8 @@ class UserControllerTest extends TestCase
         $request = new Request();
         $request->request->set("new_email", "old-email@paronymie.fr");
         $currentUser = Mockery::mock(CurrentUser::class);
-        $currentUser->expects("authUser");
-        $currentUser->expects("getUser")->andReturn($user);
+        $currentUser->shouldReceive("authUser");
+        $currentUser->shouldReceive("getUser")->andReturn($user);
         $tokenService = Mockery::mock(TokenService::class);
         $templateService = Mockery::mock(TemplateService::class);
         $mailer = Mockery::mock(Mailer::class);
@@ -1037,12 +1042,12 @@ class UserControllerTest extends TestCase
         $request = new Request();
         $request->request->set("new_email", "new-email");
         $currentUser = Mockery::mock(CurrentUser::class);
-        $currentUser->expects("authUser");
-        $currentUser->expects("getUser")->andReturn(ModelFactory::createUser());
+        $currentUser->shouldReceive("authUser");
+        $currentUser->shouldReceive("getUser")->andReturn(ModelFactory::createUser());
         $tokenService = Mockery::mock(TokenService::class);
         $templateService = Mockery::mock(TemplateService::class);
         $mailer = Mockery::mock(Mailer::class);
-        $mailer->expects("validateEmail")->andThrow(InvalidEmailAddressException::class);
+        $mailer->shouldReceive("validateEmail")->andThrow(InvalidEmailAddressException::class);
         $flashMessages = Mockery::mock(FlashMessagesService::class);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
 
@@ -1082,16 +1087,16 @@ class UserControllerTest extends TestCase
         $request->request->set("new_email", "new-email@paronymie.fr");
         $currentUser = new CurrentUser($user, "token");
         $tokenService = Mockery::mock(TokenService::class);
-        $tokenService->expects("createEmailUpdateToken");
+        $tokenService->shouldReceive("createEmailUpdateToken");
         $templateService = Mockery::mock(TemplateService::class);
-        $templateService->expects("render")->andReturn("email body");
+        $templateService->shouldReceive("render")->andReturn("email body");
         $mailer = Mockery::mock(Mailer::class);
-        $mailer->expects("validateEmail");
-        $mailer->expects("send");
+        $mailer->shouldReceive("validateEmail");
+        $mailer->shouldReceive("send");
         $flashMessages = Mockery::mock(FlashMessagesService::class);
-        $flashMessages->expects("add");
+        $flashMessages->shouldReceive("add");
         $urlGenerator = Mockery::mock(UrlGenerator::class);
-        $urlGenerator->expects("generate")->andReturn("/user/account");
+        $urlGenerator->shouldReceive("generate")->andReturn("/user/account");
 
         // when
         $response = $userController->requestEmailUpdateAction(
@@ -1138,13 +1143,13 @@ class UserControllerTest extends TestCase
         $loggedInUser = ModelFactory::createUser();
 
         $currentUser = Mockery::mock(CurrentUser::class);
-        $currentUser->expects("authUser");
-        $currentUser->expects("getUser")->andReturn($loggedInUser);
+        $currentUser->shouldReceive("authUser");
+        $currentUser->shouldReceive("getUser")->andReturn($loggedInUser);
         $queryParams = Mockery::mock(QueryParamsService::class);
-        $queryParams->expects("parse");
-        $queryParams->expects("get")->andReturn("token");
+        $queryParams->shouldReceive("parse");
+        $queryParams->shouldReceive("get")->andReturn("token");
         $tokenService = Mockery::mock(TokenService::class);
-        $tokenService->expects("decodeEmailUpdateToken")
+        $tokenService->shouldReceive("decodeEmailUpdateToken")
             ->andThrow(InvalidTokenException::class);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $flashMessages = Mockery::mock(FlashMessagesService::class);
@@ -1176,13 +1181,13 @@ class UserControllerTest extends TestCase
         $tokenUser = ModelFactory::createUser();
 
         $currentUser = Mockery::mock(CurrentUser::class);
-        $currentUser->expects("authUser");
-        $currentUser->expects("getUser")->andReturn($loggedInUser);
+        $currentUser->shouldReceive("authUser");
+        $currentUser->shouldReceive("getUser")->andReturn($loggedInUser);
         $queryParams = Mockery::mock(QueryParamsService::class);
-        $queryParams->expects("parse");
-        $queryParams->expects("get")->andReturn("token");
+        $queryParams->shouldReceive("parse");
+        $queryParams->shouldReceive("get")->andReturn("token");
         $tokenService = Mockery::mock(TokenService::class);
-        $tokenService->expects("decodeEmailUpdateToken")
+        $tokenService->shouldReceive("decodeEmailUpdateToken")
             ->andReturn(["user_id" => $tokenUser->getId(), "new_email" => "new-email@paronymie.fr"]);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $flashMessages = Mockery::mock(FlashMessagesService::class);
@@ -1214,18 +1219,18 @@ class UserControllerTest extends TestCase
         $user = ModelFactory::createUser(email: "old-email@paronymie.fr");
 
         $currentUser = Mockery::mock(CurrentUser::class);
-        $currentUser->expects("authUser");
-        $currentUser->expects("getUser")->andReturn($user);
+        $currentUser->shouldReceive("authUser");
+        $currentUser->shouldReceive("getUser")->andReturn($user);
         $queryParams = Mockery::mock(QueryParamsService::class);
-        $queryParams->expects("parse");
-        $queryParams->expects("get")->andReturn("token");
+        $queryParams->shouldReceive("parse");
+        $queryParams->shouldReceive("get")->andReturn("token");
         $tokenService = Mockery::mock(TokenService::class);
-        $tokenService->expects("decodeEmailUpdateToken")
+        $tokenService->shouldReceive("decodeEmailUpdateToken")
             ->andReturn(["user_id" => $user->getId(), "new_email" => "new-email@paronymie.fr"]);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
-        $urlGenerator->expects("generate")->andReturn("/user/account");
+        $urlGenerator->shouldReceive("generate")->andReturn("/user/account");
         $flashMessages = Mockery::mock(FlashMessagesService::class);
-        $flashMessages->expects("add");
+        $flashMessages->shouldReceive("add");
 
         // when
         $response = $userController->updateEmailAction(
@@ -1270,7 +1275,7 @@ class UserControllerTest extends TestCase
 
         $user = ModelFactory::createUser();
         $currentUser = Mockery::mock(CurrentUser::class);
-        $currentUser->expects("authUser")->andReturns();
+        $currentUser->shouldReceive("authUser")->andReturns();
         $currentUser->shouldReceive("getUser")->andReturn($user);
         $templateService = Helpers::getTemplateService();
 
@@ -1307,7 +1312,7 @@ class UserControllerTest extends TestCase
 
         $user = ModelFactory::createUser();
         $currentUser = Mockery::mock(CurrentUser::class);
-        $currentUser->expects("authUser")->andReturns();
+        $currentUser->shouldReceive("authUser")->andReturns();
         $currentUser->shouldReceive("getUser")->andReturn($user);
 
         $site = ModelFactory::createSite();
@@ -1315,8 +1320,8 @@ class UserControllerTest extends TestCase
         
 
         $queryParams = Mockery::mock(QueryParamsService::class);
-        $queryParams->expects("parse");
-        $queryParams->expects("get")->andReturn("0");
+        $queryParams->shouldReceive("parse");
+        $queryParams->shouldReceive("get")->andReturn("0");
 
         $templateService = Mockery::mock(TemplateService::class);
         $templateService->shouldReceive("renderResponse")->andReturn(
@@ -1366,16 +1371,16 @@ class UserControllerTest extends TestCase
 
         $user = ModelFactory::createUser();
         $currentUser = Mockery::mock(CurrentUser::class);
-        $currentUser->expects("authAdmin")->andReturns();
+        $currentUser->shouldReceive("authAdmin")->andReturns();
 
         $site = ModelFactory::createSite();
         $currentSite = Mockery::mock(CurrentSite::class);
         
 
         $queryParams = Mockery::mock(QueryParamsService::class);
-        $queryParams->expects("parse");
-        $queryParams->expects("get")->with("q")->andReturn("");
-        $queryParams->expects("get")->with("p")->andReturn("0");
+        $queryParams->shouldReceive("parse");
+        $queryParams->shouldReceive("get")->with("q")->andReturn("");
+        $queryParams->shouldReceive("get")->with("p")->andReturn("0");
 
         $templateService = Helpers::getTemplateService();
 
