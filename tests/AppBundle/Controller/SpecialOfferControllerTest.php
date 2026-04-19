@@ -26,6 +26,7 @@ use Biblys\Test\ModelFactory;
 use Exception;
 use Mockery;
 use Model\Article;
+use Model\SpecialOfferQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
@@ -42,6 +43,19 @@ require_once __DIR__ . "/../../setUp.php";
 
 class SpecialOfferControllerTest extends TestCase
 {
+    /**
+     * @throws PropelException
+     */
+    public function setUp(): void
+    {
+        SpecialOfferQuery::create()->deleteAll();
+    }
+
+    public function tearDown(): void
+    {
+        Mockery::close();
+    }
+
     /* INDEX ACTION */
 
     /**
@@ -63,9 +77,11 @@ class SpecialOfferControllerTest extends TestCase
         $templateService = Mockery::mock(TemplateService::class);
         $templateService
             ->shouldReceive("renderResponse")
-            ->with('AppBundle:SpecialOffer:index.html.twig', [
-                'offers' => [$offer],
-            ], true)
+            ->with(
+                'AppBundle:SpecialOffer:index.html.twig',
+                Mockery::on(fn($args) => count($args['offers']) === 1 && $args['offers'][0]->getId() === $offer->getId()),
+                true,
+            )
             ->andReturn(new Response());
 
         // when

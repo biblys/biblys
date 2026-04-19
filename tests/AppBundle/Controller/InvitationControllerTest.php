@@ -56,6 +56,12 @@ class InvitationControllerTest extends TestCase
     protected function setUp(): void
     {
         InvitationQuery::create()->deleteAll();
+        Mockery::resetContainer();
+    }
+
+    public function tearDown(): void
+    {
+        Mockery::close();
     }
 
     /**
@@ -720,7 +726,7 @@ class InvitationControllerTest extends TestCase
             ->once()
             ->with("warning", "Dans ma bibliothèque était déjà dans votre bibliothèque.");
         $session = Mockery::mock(Session::class);
-        $session->shouldReceive("getFlashBag")->once()->andReturn($flashBag);
+        $session->shouldReceive("getFlashBag")->andReturn($flashBag);
 
         $controller = new InvitationController();
         $request = RequestFactory::createAuthRequest(user: $user);

@@ -44,6 +44,11 @@ class CollectionControllerTest extends TestCase
         BookCollectionQuery::create()->deleteAll();
     }
 
+    public function tearDown(): void
+    {
+        Mockery::close();
+    }
+
     /** searchAction */
 
     /**
@@ -130,7 +135,7 @@ class CollectionControllerTest extends TestCase
         ])->andReturn();
         $bodyParams->expects("get")->with("collection_name")
             ->andReturn("Nouvelle collection");
-        $bodyParams->expects("get")->with("collection_publisher")
+        $bodyParams->shouldReceive("get")->with("collection_publisher")
             ->andReturn($publisher->getName());
         $bodyParams->expects("getInteger")->with("collection_publisher_id")
             ->andReturn($publisher->getId());
@@ -165,7 +170,7 @@ class CollectionControllerTest extends TestCase
         ])->andReturn();
         $bodyParams->expects("get")->with("collection_name")
             ->andReturn("Collection existante");
-        $bodyParams->expects("get")->with("collection_publisher")
+        $bodyParams->shouldReceive("get")->with("collection_publisher")
             ->andReturn("");
         $bodyParams->expects("getInteger")->with("collection_publisher_id")
             ->andReturn(0);
@@ -202,7 +207,7 @@ class CollectionControllerTest extends TestCase
         ])->andReturn();
         $bodyParams->expects("get")->with("collection_name")
             ->andReturn("Collection existante");
-        $bodyParams->expects("get")->with("collection_publisher")
+        $bodyParams->shouldReceive("get")->with("collection_publisher")
             ->andReturn($publisher->getName());
         $bodyParams->expects("getInteger")->with("collection_publisher_id")
             ->andReturn($publisher->getId());
@@ -238,7 +243,7 @@ class CollectionControllerTest extends TestCase
         ])->andReturn();
         $bodyParams->expects("get")->with("collection_name")
             ->andReturn("Nouvelle collection");
-        $bodyParams->expects("get")->with("collection_publisher")
+        $bodyParams->shouldReceive("get")->with("collection_publisher")
             ->andReturn($publisher->getName());
         $bodyParams->expects("getInteger")->with("collection_publisher_id")
             ->andReturn($publisher->getId());
@@ -278,9 +283,9 @@ class CollectionControllerTest extends TestCase
             "collection_publisher" => ["type" => "string"],
             "collection_publisher_id" => ["type" => "numeric"],
         ])->andReturn();
-        $bodyParams->expects("get")->with("collection_name")
+        $bodyParams->shouldReceive("get")->with("collection_name")
             ->andReturn("Nouvelle collection");
-        $bodyParams->expects("get")->with("collection_publisher")
+        $bodyParams->shouldReceive("get")->with("collection_publisher")
             ->andReturn($targetPublisher->getName());
         $bodyParams->expects("getInteger")->with("collection_publisher_id")
             ->andReturn($targetPublisher->getId());

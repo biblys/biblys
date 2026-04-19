@@ -55,6 +55,11 @@ class PostControllerTest extends TestCase
         PostQuery::create()->deleteAll();
     }
 
+    public function tearDown(): void
+    {
+        Mockery::close();
+    }
+
     /** showAction */
 
     /**
@@ -189,7 +194,7 @@ class PostControllerTest extends TestCase
 
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->expects("authPublisher");
-        $currentUser->expects("isAdmin")->andReturn(true);
+        $currentUser->shouldReceive("isAdmin")->andReturn(true);
         $queryParamsService = Mockery::mock(QueryParamsService::class);
         $queryParamsService->expects("parse");
         $queryParamsService->expects("getInteger")->with("category_id")->andReturn(0);
@@ -248,7 +253,7 @@ class PostControllerTest extends TestCase
         $bodyParams->expects("getInteger")->with("category_id")->andReturn(3);
         $bodyParams->expects("get")->with("post_link")->andReturn("https://example.net");
         $bodyParams->expects("get")->with("post_illustration_legend")->andReturn("Légende de l'illustration");
-        $bodyParams->expects("getBoolean")->with("post_status")->andReturn(true);
+        $bodyParams->shouldReceive("getBoolean")->with("post_status")->andReturn(true);
         $bodyParams->expects("getBoolean")->with("post_selected")->andReturn(false);
         $bodyParams->expects("get")->with("post_date")->andReturn("2019-04-28 02:42");
         $bodyParams->expects("getBoolean")->with("delete_illustration")->andReturn(false);
@@ -327,7 +332,7 @@ class PostControllerTest extends TestCase
         $bodyParams->expects("getInteger")->with("category_id")->andReturn(3);
         $bodyParams->expects("get")->with("post_link")->andReturn("https://example.net");
         $bodyParams->expects("get")->with("post_illustration_legend")->andReturn("Légende de l'illustration");
-        $bodyParams->expects("getBoolean")->with("post_status")->andReturn(true);
+        $bodyParams->shouldReceive("getBoolean")->with("post_status")->andReturn(true);
         $bodyParams->expects("getBoolean")->with("post_selected")->andReturn(false);
         $bodyParams->expects("get")->with("post_date")->andReturn("2019-04-28 02:42");
         $bodyParams->expects("getBoolean")->with("delete_illustration")->andReturn(false);

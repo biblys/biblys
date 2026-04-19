@@ -30,6 +30,7 @@ use Biblys\Test\ModelFactory;
 use DateTime;
 use Exception;
 use Mockery;
+use Mockery\Mock;
 use Model\OrderQuery;
 use Model\Payment;
 use Model\PaymentQuery;
@@ -57,6 +58,12 @@ class PaymentControllerTest extends TestCase
     {
         OrderQuery::create()->deleteAll();
         PaymentQuery::create()->deleteAll();
+        Mockery::resetContainer();
+    }
+
+    public function tearDown(): void
+    {
+        Mockery::close();
     }
 
     /**
@@ -390,9 +397,9 @@ class PaymentControllerTest extends TestCase
         $order = ModelFactory::createOrder();
         $config = new Config();
         $currentSite = Mockery::mock(CurrentSite::class);
-        $currentSite->expects("getOption")->with("payment_iban")->andReturn(null);
-        $currentSite->expects("getOption")->with("payment_check")->andReturn(null);
-        $currentSite->expects("getOption")->with("name_for_check_payment")->andReturn(null);
+        $currentSite->shouldReceive("getOption")->with("payment_iban")->andReturn(null);
+        $currentSite->shouldReceive("getOption")->with("payment_check")->andReturn(null);
+        $currentSite->shouldReceive("getOption")->with("name_for_check_payment")->andReturn(null);
         $templateService = Helpers::getTemplateService();
         $paymentService = Mockery::mock(PaymentService::class);
         $paymentService->expects("getPayableOrderBySlug")->andReturn($order);
@@ -419,9 +426,9 @@ class PaymentControllerTest extends TestCase
         $order = ModelFactory::createOrder(amountToBePaid: 1000);
         $config = new Config(["stripe" => ["public_key" => "abcd"]]);
         $currentSite = Mockery::mock(CurrentSite::class);
-        $currentSite->expects("getOption")->with("payment_iban")->andReturn(null);
-        $currentSite->expects("getOption")->with("payment_check")->andReturn(null);
-        $currentSite->expects("getOption")->with("name_for_check_payment")->andReturn(null);
+        $currentSite->shouldReceive("getOption")->with("payment_iban")->andReturn(null);
+        $currentSite->shouldReceive("getOption")->with("payment_check")->andReturn(null);
+        $currentSite->shouldReceive("getOption")->with("name_for_check_payment")->andReturn(null);
         $templateService = Helpers::getTemplateService();
         $paymentService = Mockery::mock(PaymentService::class);
         $paymentService->expects("getPayableOrderBySlug")->andReturn($order);
@@ -444,9 +451,9 @@ class PaymentControllerTest extends TestCase
         $order = ModelFactory::createOrder();
         $config = new Config(["payplug" => ["secret" => "abcd"]]);
         $currentSite = Mockery::mock(CurrentSite::class);
-        $currentSite->expects("getOption")->with("payment_iban")->andReturn(null);
-        $currentSite->expects("getOption")->with("payment_check")->andReturn(null);
-        $currentSite->expects("getOption")->with("name_for_check_payment")->andReturn(null);
+        $currentSite->shouldReceive("getOption")->with("payment_iban")->andReturn(null);
+        $currentSite->shouldReceive("getOption")->with("payment_check")->andReturn(null);
+        $currentSite->shouldReceive("getOption")->with("name_for_check_payment")->andReturn(null);
         $templateService = Helpers::getTemplateService();
         $paymentService = Mockery::mock(PaymentService::class);
         $paymentService->expects("getPayableOrderBySlug")->andReturn($order);
@@ -470,9 +477,9 @@ class PaymentControllerTest extends TestCase
         $order = ModelFactory::createOrder();
         $config = new Config(["paypal" => ["client_id" => "PAYPAL_CLIENT_ID", "client_secret" => "1234"]]);
         $currentSite = Mockery::mock(CurrentSite::class);
-        $currentSite->expects("getOption")->with("payment_iban")->andReturn(null);
-        $currentSite->expects("getOption")->with("payment_check")->andReturn(null);
-        $currentSite->expects("getOption")->with("name_for_check_payment")->andReturn(null);
+        $currentSite->shouldReceive("getOption")->with("payment_iban")->andReturn(null);
+        $currentSite->shouldReceive("getOption")->with("payment_check")->andReturn(null);
+        $currentSite->shouldReceive("getOption")->with("name_for_check_payment")->andReturn(null);
         $templateService = Helpers::getTemplateService();
         $paymentService = Mockery::mock(PaymentService::class);
         $paymentService->expects("getPayableOrderBySlug")->andReturn($order);
@@ -497,9 +504,9 @@ class PaymentControllerTest extends TestCase
         $order = ModelFactory::createOrder();
         $config = new Config();
         $currentSite = Mockery::mock(CurrentSite::class);
-        $currentSite->expects("getOption")->with("payment_iban")->andReturn("PAYMENT_IBAN");
-        $currentSite->expects("getOption")->with("payment_check")->andReturn(null);
-        $currentSite->expects("getOption")->with("name_for_check_payment")->andReturn(null);
+        $currentSite->shouldReceive("getOption")->with("payment_iban")->andReturn("PAYMENT_IBAN");
+        $currentSite->shouldReceive("getOption")->with("payment_check")->andReturn(null);
+        $currentSite->shouldReceive("getOption")->with("name_for_check_payment")->andReturn(null);
         $templateService = Helpers::getTemplateService();
         $paymentService = Mockery::mock(PaymentService::class);
         $paymentService->expects("getPayableOrderBySlug")->andReturn($order);
@@ -527,9 +534,9 @@ class PaymentControllerTest extends TestCase
         $order = ModelFactory::createOrder();
         $config = new Config();
         $currentSite = Mockery::mock(CurrentSite::class);
-        $currentSite->expects("getOption")->with("payment_iban")->andReturn(null);
-        $currentSite->expects("getOption")->with("payment_check")->andReturn(1);
-        $currentSite->expects("getOption")->with("name_for_check_payment")->andReturn("L’ordre");
+        $currentSite->shouldReceive("getOption")->with("payment_iban")->andReturn(null);
+        $currentSite->shouldReceive("getOption")->with("payment_check")->andReturn(1);
+        $currentSite->shouldReceive("getOption")->with("name_for_check_payment")->andReturn("L’ordre");
         $templateService = Helpers::getTemplateService();
         $paymentService = Mockery::mock(PaymentService::class);
         $paymentService->expects("getPayableOrderBySlug")->andReturn($order);
@@ -588,7 +595,7 @@ class PaymentControllerTest extends TestCase
         );
 
         $paymentService = Mockery::mock(PaymentService::class);
-        $paymentService->expects("getPayableOrderBySlug")->andReturn($order);
+        $paymentService->shouldReceive("getPayableOrderBySlug")->andReturn($order);
         $paymentService->expects("createPayplugPaymentForOrder")->with($order)
             ->andThrows($badRequestException);
         $loggerService = Mockery::mock(LoggerService::class);
@@ -630,10 +637,8 @@ class PaymentControllerTest extends TestCase
         $loggerService = Mockery::mock(LoggerService::class);
         $loggerService->expects("log")->with("payplug", "ERROR", "Payplug configuration not found.");
         $mailer = Mockery::mock(Mailer::class);
-        $mailer->expects("send")->once();
         $currentSite = Mockery::mock(CurrentSite::class);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
-        $urlGenerator->expects("generate");
         $templateService = Helpers::getTemplateService();
 
         // then
@@ -666,10 +671,8 @@ class PaymentControllerTest extends TestCase
         $loggerService = Mockery::mock(LoggerService::class);
         $loggerService->expects("log")->with("payplug", "ERROR", "Missing payplug private key.");
         $mailer = Mockery::mock(Mailer::class);
-        $mailer->expects("send")->once();
         $currentSite = Mockery::mock(CurrentSite::class);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
-        $urlGenerator->expects("generate");
         $templateService = Helpers::getTemplateService();
 
         // then
@@ -702,10 +705,8 @@ class PaymentControllerTest extends TestCase
         $loggerService = Mockery::mock(LoggerService::class);
         $loggerService->expects("log")->with("payplug", "ERROR", "Order unknown-url not found.");
         $mailer = Mockery::mock(Mailer::class);
-        $mailer->expects("send")->once();
         $currentSite = Mockery::mock(CurrentSite::class);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
-        $urlGenerator->expects("generate");
         $templateService = Helpers::getTemplateService();
 
         // then
@@ -752,10 +753,8 @@ class PaymentControllerTest extends TestCase
         $httpMock->shouldReceive("close");
         HttpClient::$REQUEST_HANDLER = $httpMock;
         $mailer = Mockery::mock(Mailer::class);
-        $mailer->expects("send")->once();
         $currentSite = Mockery::mock(CurrentSite::class);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
-        $urlGenerator->expects("generate");
         $templateService = Helpers::getTemplateService();
 
         // when
@@ -790,10 +789,8 @@ class PaymentControllerTest extends TestCase
         $loggerService = Mockery::mock(LoggerService::class);
         $loggerService->shouldReceive("log");
         $mailer = Mockery::mock(Mailer::class);
-        $mailer->expects("send")->once();
         $currentSite = Mockery::mock(CurrentSite::class);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
-        $urlGenerator->expects("generate");
         $templateService = Helpers::getTemplateService();
 
         // then
@@ -839,10 +836,8 @@ class PaymentControllerTest extends TestCase
         $httpMock->shouldReceive("close");
         HttpClient::$REQUEST_HANDLER = $httpMock;
         $mailer = Mockery::mock(Mailer::class);
-        $mailer->expects("send")->once();
         $currentSite = Mockery::mock(CurrentSite::class);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
-        $urlGenerator->expects("generate");
         $templateService = Helpers::getTemplateService();
 
         // when
@@ -890,10 +885,8 @@ class PaymentControllerTest extends TestCase
         $httpMock->shouldReceive("close");
         HttpClient::$REQUEST_HANDLER = $httpMock;
         $mailer = Mockery::mock(Mailer::class);
-        $mailer->expects("send")->once();
         $currentSite = Mockery::mock(CurrentSite::class);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
-        $urlGenerator->expects("generate");
         $templateService = Helpers::getTemplateService();
 
         // then
@@ -946,10 +939,8 @@ class PaymentControllerTest extends TestCase
         $httpMock->shouldReceive("close");
         HttpClient::$REQUEST_HANDLER = $httpMock;
         $mailer = Mockery::mock(Mailer::class);
-        $mailer->expects("send")->once();
         $currentSite = Mockery::mock(CurrentSite::class);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
-        $urlGenerator->expects("generate");
         $templateService = Helpers::getTemplateService();
 
         // then
