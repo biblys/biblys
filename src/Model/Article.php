@@ -284,10 +284,10 @@ class Article extends BaseArticle
     public function getVersions(): array
     {
         if (!$this->getItem()) {
-            return [$this];
+            return ArticleQuery::create()->findById($this->getId())->getData();
         }
 
-        return ArticleQuery::create()->filterByItem($this->getItem())->find()->getArrayCopy();
+        return ArticleQuery::create()->filterByItem($this->getItem())->find()->getData();
     }
 
     /**

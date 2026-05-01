@@ -7,6 +7,8 @@
 - Une erreur pouvait survenir sur la page de validation de commandes si une
   mailing list Brevo était configurée. C'est corrigé.
 - La page Clients affichait une erreur. C'est corrigé.
+- Les fichiers téléchargeables associés à un article pouvaient ne pas s'afficher.
+  C'est corrigé.
 
 ## 3.12.1 (9 avril 2026)
 
