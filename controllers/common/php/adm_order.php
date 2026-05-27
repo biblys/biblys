@@ -267,7 +267,7 @@ return function (Request $request, UrlGenerator $urlGenerator): Response|Redirec
                 <label for="order_amount" class="col-sm-3 col-form-label">Montant</label>
                 <div class="col-sm-3">
                     <div class="input-group">
-                        <input type="number" name="order_amount" id="order_amount" value="' . $o["order_amount"] . '" class="form-control" />
+                        <input type="number" name="order_amount" id="order_amount" value="' . $o["order_amount"] . '" class="form-control" readonly />
                         <div class="input-group-append"><span class="input-group-text">centimes</span></div>
                     </div>
                 </div>
@@ -276,7 +276,7 @@ return function (Request $request, UrlGenerator $urlGenerator): Response|Redirec
                 <label for="order_amount_tobepaid" class="col-sm-3 col-form-label">Montant à payer</label>
                 <div class="col-sm-3">
                     <div class="input-group">
-                        <input type="number" name="order_amount_tobepaid" id="order_amount_tobepaid" value="' . $o["order_amount_tobepaid"] . '" class="form-control" />
+                        <input type="number" name="order_amount_tobepaid" id="order_amount_tobepaid" value="' . $o["order_amount_tobepaid"] . '" class="form-control" readonly />
                         <div class="input-group-append"><span class="input-group-text">centimes</span></div>
                     </div>
                 </div>
@@ -285,7 +285,7 @@ return function (Request $request, UrlGenerator $urlGenerator): Response|Redirec
                 <label for="order_discount" class="col-sm-3 col-form-label">Remise</label>
                 <div class="col-sm-3">
                     <div class="input-group">
-                        <input type="number" name="order_discount" id="order_discount" value="' . $o["order_discount"] . '" class="form-control" />
+                        <input type="number" name="order_discount" id="order_discount" value="' . $o["order_discount"] . '" class="form-control" readonly />
                         <div class="input-group-append"><span class="input-group-text">centimes</span></div>
                     </div>
                 </div>
