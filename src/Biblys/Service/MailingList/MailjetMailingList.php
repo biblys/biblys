@@ -35,14 +35,10 @@ class MailjetMailingList implements MailingListInterface
     public function __construct(Config $config)
     {
         $this->config = $config;
-        $mailjet = new Mailjet(
+        $this->client = new Mailjet(
             key: $config->get("mailing.client_id"),
             secret: $config->get("mailing.client_secret"),
         );
-        $mailjet->setTimeout(20000);
-        $mailjet->setConnectionTimeout(20000);
-
-        $this->client = $mailjet;
     }
 
     public function getSource(): string
