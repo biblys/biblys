@@ -1,6 +1,6 @@
 # Historique des modifications
 
-## 3.13.0 (DEV)
+## 3.13.0 (3 juin 2026)
 
 ### Conformité NF525
 
