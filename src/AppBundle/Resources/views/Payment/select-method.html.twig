@@ -128,7 +128,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
             <a href="#collapse-paypal" data-toggle="collapse" data-target="#collapse-paypal" aria-expanded="false"
                aria-controls="collapse-paypal">
               <i class="fa-brands fa-paypal"></i>&nbsp;
-              Compte PayPal
+              PayPal
             </a>
           </h5>
         </div>
@@ -136,7 +136,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         <div id="collapse-paypal" class="collapse" aria-labelledby="headingTwo"
              data-parent="#payment-methods-accordion">
           <div class="card-body">
-            <p>Payez avec votre compte PayPal.</p>
+            {% if paypalOnlyIsAvailable %}
+              <p>Payez par carte bancaire ou avec votre compte PayPal.</p>
+            {% else %}
+              <p>Payez avec votre compte PayPal.</p>
+            {% endif %}
 
             {% if order.amountTobepaid < 100 %}
               <p class="alert alert-warning">

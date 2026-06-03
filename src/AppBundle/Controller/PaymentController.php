@@ -306,12 +306,18 @@ class PaymentController extends Controller
             $orderWillBeCollected = $order->getShippingMode() === "magasin";
             $orderWillBeShipped = !$orderWillBeCollected;
 
+            $stripeIsAvailable = !!$config->get("stripe");
+            $payPlugIsAvailable = !!$config->get("payplug");
+            $paypalIsAvailable = $config->isPayPalEnabled();
+            $paypalOnlyIsAvailable = $paypalIsAvailable && !$payPlugIsAvailable && !$stripeIsAvailable;
+
             return $templateService->renderResponse('AppBundle:Payment:select-method.html.twig', [
                 "order" => $order,
-                "stripeIsAvailable" => !!$config->get("stripe"),
+                "stripeIsAvailable" => $stripeIsAvailable,
                 "stripePublicKey" => $config->get("stripe.public_key"),
-                "payplugIsAvailable" => !!$config->get("payplug"),
-                "paypalIsAvailable" => $config->isPayPalEnabled(),
+                "payplugIsAvailable" => $payPlugIsAvailable,
+                "paypalIsAvailable" => $paypalIsAvailable,
+                "paypalOnlyIsAvailable" => $paypalOnlyIsAvailable,
                 "paypalClientId" => $config->get("paypal.client_id"),
                 "transferIsAvailable" => !!$currentSite->getOption("payment_iban"),
                 "paymentIban" => $currentSite->getOption("payment_iban"),
