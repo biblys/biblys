@@ -66,7 +66,7 @@
                 ]);
 
                 $num_stock = 0;
-                $stockUpdate = $_SQL->prepare("UPDATE `stock` SET `stock_selling_price` = :price_amount WHERE `article_id` = :article_id AND `stock_condition` = 'Neuf' AND `stock_selling_date` IS NULL AND `stock_return_date` IS NULL AND `stock_lost_date` IS NULL");
+                $stockUpdate = $_SQL->prepare("UPDATE `stock` SET `stock_selling_price` = :price_amount WHERE `article_id` = :article_id AND (`stock_condition` = 'Neuf' OR `stock_condition` IS NULL) AND `stock_selling_date` IS NULL AND `stock_return_date` IS NULL AND `stock_lost_date` IS NULL");
                 $stockUpdate->execute([
                     'price_amount' => $request->request->get('price_amount'),
                     'article_id' => $l['article_id']
