@@ -20,7 +20,9 @@ use Biblys\Exception\CannotAddStockItemToCartException;
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\FlashMessagesService;
 use Biblys\Service\Images\ImagesService;
+use Model\Payment;
 use Model\UserQuery;
+use Usecase\RecordShopPaymentsUsecase;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Propel\Runtime\Exception\PropelException;
@@ -141,6 +143,13 @@ return function (
 
             // Update order
             $order = $_O->update($order);
+
+            $shopPaymentsUsecase = new RecordShopPaymentsUsecase();
+            $shopPaymentsUsecase->execute((int) $order->get('order_id'), [
+                Payment::MODE_CASH  => (int) round((float) $_POST['cart_cash']  * 100),
+                Payment::MODE_CHECK => (int) round((float) $_POST['cart_cheque'] * 100),
+                Payment::MODE_CARD  => (int) round((float) $_POST['cart_card']  * 100),
+            ]);
 
             // Reset cart
             $cm->vacuum($cart);
