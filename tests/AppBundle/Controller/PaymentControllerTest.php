@@ -538,6 +538,37 @@ class PaymentControllerTest extends TestCase
         // given
         $controller = new PaymentController();
         $order = ModelFactory::createOrder();
+        $config = new Config([
+            "paypal" => ["client_id" => "PAYPAL_CLIENT_ID", "client_secret" => "1234"],
+            "stripe" => ["public_key" => "abcd"]
+        ]);
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getOption")->with("payment_iban")->andReturn(null);
+        $currentSite->shouldReceive("getOption")->with("payment_check")->andReturn(null);
+        $currentSite->shouldReceive("getOption")->with("name_for_check_payment")->andReturn(null);
+        $templateService = Helpers::getTemplateService();
+        $paymentService = Mockery::mock(PaymentService::class);
+        $paymentService->expects("getPayableOrderBySlug")->andReturn($order);
+
+        // when
+        $response = $controller->selectMethodAction($paymentService, $config, $currentSite, $templateService, $order->getSlug());
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertStringContainsString("PayPal", $response->getContent());
+        $this->assertStringContainsString("PAYPAL_CLIENT_ID", $response->getContent());
+        $this->assertStringContainsString("Payez avec votre compte PayPal.", $response->getContent());
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testSelectMethodActionWhenOnlyPaypalIsAvailable()
+    {
+        // given
+        $controller = new PaymentController();
+        $order = ModelFactory::createOrder();
         $config = new Config(["paypal" => ["client_id" => "PAYPAL_CLIENT_ID", "client_secret" => "1234"]]);
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getOption")->with("payment_iban")->andReturn(null);
@@ -554,6 +585,7 @@ class PaymentControllerTest extends TestCase
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertStringContainsString("PayPal", $response->getContent());
         $this->assertStringContainsString("PAYPAL_CLIENT_ID", $response->getContent());
+        $this->assertStringContainsString("Payez par carte bancaire ou avec votre compte PayPal.", $response->getContent());
     }
 
     /**
