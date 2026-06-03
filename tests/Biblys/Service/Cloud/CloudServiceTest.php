@@ -21,10 +21,11 @@ namespace Biblys\Service\Cloud;
 use Biblys\Service\Config;
 use Exception;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
-use GuzzleHttp\Exception\ServerException;
 use Mockery;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
 
@@ -113,7 +114,36 @@ class CloudServiceTest extends TestCase
         // given
         $cloudConfig = ["public_key" => "PUBLIC", "secret_key" => "SECRET"];
         $config = new Config(["cloud" => $cloudConfig]);
-        $exception = Mockery::mock(ServerException::class);
+        $request = Mockery::mock(RequestInterface::class);
+        $response = Mockery::mock(ResponseInterface::class);
+        $response->shouldReceive("getStatusCode")->andReturn(401);
+        $exception = new ClientException("Unauthorized", $request, $response);
+        $httpClient = Mockery::mock(Client::class);
+        $httpClient->shouldReceive("request")
+            ->andThrow($exception);
+
+        $cloud = new CloudService($config, $httpClient);
+
+        // when
+        $subscription = $cloud->getSubscription();
+
+        // then
+        $this->assertNull($subscription);
+    }
+
+    /**
+     * @throws GuzzleException
+     * @throws Exception
+     */
+    public function testGetSubscriptionSilentlyIgnores401Error(): void
+    {
+        // given
+        $cloudConfig = ["public_key" => "PUBLIC", "secret_key" => "SECRET"];
+        $config = new Config(["cloud" => $cloudConfig]);
+        $request = Mockery::mock(RequestInterface::class);
+        $response = Mockery::mock(ResponseInterface::class);
+        $response->shouldReceive("getStatusCode")->andReturn(401);
+        $exception = new ClientException("Unauthorized", $request, $response);
         $httpClient = Mockery::mock(Client::class);
         $httpClient->shouldReceive("request")
             ->andThrow($exception);

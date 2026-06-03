@@ -23,6 +23,7 @@ use Biblys\Service\CacheService;
 use Biblys\Service\Config;
 use Exception;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\ServerException;
 use Psr\SimpleCache\InvalidArgumentException;
@@ -75,6 +76,10 @@ class CloudService
                     $this->subscription = new CloudSubscription(
                         status: $subscriptionResponse["status"],
                     );
+                }
+            } catch(ClientException $exception) {
+                if ($exception->getCode() !== 401) {
+                    throw $exception;
                 }
             } catch (ServerException) {
 
