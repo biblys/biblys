@@ -124,6 +124,7 @@ class OpenIDConnectController extends Controller
                 $authenticationMethod = self::_importUserFromAxys(
                     $currentSite,
                     $email,
+                    $emailVerified,
                     $externalId,
                     $oidcTokens
                 );
@@ -198,6 +199,7 @@ class OpenIDConnectController extends Controller
     private static function _importUserFromAxys(
         CurrentSite       $currentSite,
         string            $email,
+        bool              $emailVerified,
         string            $externalId,
         TokenSetInterface $oidcTokens
     ): AuthenticationMethod
@@ -206,9 +208,21 @@ class OpenIDConnectController extends Controller
 
         $userWithEmail = UserQuery::create()->findOneByEmail($email);
         if ($userWithEmail) {
-            throw new AccessDeniedHttpException(
-                "Il existe déjà un compte {$currentSite->getTitle()} pour l'adresse $email"
-            );
+            if (!$emailVerified) {
+                throw new AccessDeniedHttpException(
+                    "Il existe déjà un compte {$currentSite->getTitle()} pour l'adresse $email"
+                );
+            }
+
+            $authenticationMethod = new AuthenticationMethod();
+            $authenticationMethod->setUser($userWithEmail);
+            $authenticationMethod->setIdentityProvider("axys");
+            $authenticationMethod->setExternalId($externalId);
+            $authenticationMethod->setAccessToken($oidcTokens->getAccessToken());
+            $authenticationMethod->setIdToken($oidcTokens->getIdToken());
+            $authenticationMethod->save();
+
+            return $authenticationMethod;
         }
 
         try {
