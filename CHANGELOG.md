@@ -6,6 +6,12 @@
 
 - Les paiements effectués lors d'une vente en caisse sont désormais enregistrés.
 
+### Amélorations
+
+- Lors de la connexion avec Axys, si le compte utilisateur existe déjà sur le site,
+  le compte Axys sera lié au compte utilisateur existant. Sinon, un nouveau compte
+  sera créé.
+
 ## 3.13.3 (1er juillet 2026)
 
 - Les commandes contenant uniquement un abonnement n'étaient plus marquées 
