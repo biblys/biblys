@@ -1,5 +1,13 @@
 # Historique des modifications
 
+## 3.14.0 (DEV)
+
+### Amélorations
+
+- Lors de la connexion avec Axys, si le compte utilisateur existe déjà sur le site,
+  le compte Axys sera lié au compte utilisateur existant. Sinon, un nouveau compte
+  sera créé.
+
 ## 3.13.0 (3 juin 2026)
 
 ### Conformité NF525
