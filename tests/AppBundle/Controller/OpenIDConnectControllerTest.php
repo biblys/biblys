@@ -271,6 +271,112 @@ class OpenIDConnectControllerTest extends TestCase
      * @throws PropelException
      * @throws Exception
      */
+    public function testCallbackLinksExistingAccountWhenEmailIsVerified(): void
+    {
+        // given
+        $externalId = "AXYS_NEW_ID";
+        $email = "existing-user@example.com";
+        $site = ModelFactory::createSite();
+        $currentSite = new CurrentSite($site);
+        $openIDConnectProviderService = $this->_buildOIDCProviderService(
+            externalId: $externalId,
+            email: $email,
+            emailVerifiedAt: new DateTime("2024-01-01 00:00:00"),
+        );
+
+        $existingUser = ModelFactory::createUser(email: $email);
+
+        $request = self::_buildCallbackRequest();
+        $controller = new OpenIDConnectController();
+        $queryParamsService = Mockery::mock(QueryParamsService::class);
+        $queryParamsService->shouldReceive("parse")->with([
+            "code" => ["type" => "string"],
+            "state" => ["type" => "string"],
+            "error" => ["type" => "string", "default" => null],
+        ]);
+        $queryParamsService->shouldReceive("get")->with("error")->andReturn("");
+        $tokenService = Mockery::mock(TokenService::class);
+        $tokenService->expects("createLoginToken")->andReturn("login_token");
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate")->andReturn("/login-with-token");
+
+        // when
+        $response = $controller->callback(
+            request: $request,
+            currentSite: $currentSite,
+            config: new Config(["axys" => ["client_secret" => $this->testSecretKey]]),
+            openIDConnectProviderService: $openIDConnectProviderService,
+            queryParams: $queryParamsService,
+            templateService: $this->createMock(TemplateService::class),
+            tokenService: $tokenService,
+            urlGenerator: $urlGenerator,
+        );
+
+        // then
+        $this->assertEquals(302, $response->getStatusCode());
+
+        $authenticationMethod = AuthenticationMethodQuery::create()
+            ->filterByUser($existingUser)
+            ->filterByIdentityProvider("axys")
+            ->filterByExternalId($externalId)
+            ->findOne();
+        $this->assertNotNull($authenticationMethod, "Une AuthenticationMethod doit être créée pour l'utilisateur existant");
+
+        $userCount = UserQuery::create()->filterByEmail($email)->count();
+        $this->assertEquals(1, $userCount, "Aucun nouvel utilisateur ne doit être créé");
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testCallbackWithAlreadyExistingEmailNotVerified(): void
+    {
+        // given
+        $externalId = "AXYS_NEW_ID";
+        $email = "existing-user@example.com";
+        $site = ModelFactory::createSite(title: "Ma Librairie");
+        $currentSite = new CurrentSite($site);
+        $openIDConnectProviderService = $this->_buildOIDCProviderService(
+            externalId: $externalId,
+            email: $email,
+        );
+
+        ModelFactory::createUser(email: $email);
+
+        $request = self::_buildCallbackRequest();
+        $controller = new OpenIDConnectController();
+        $queryParamsService = Mockery::mock(QueryParamsService::class);
+        $queryParamsService->shouldReceive("parse")->with([
+            "code" => ["type" => "string"],
+            "state" => ["type" => "string"],
+            "error" => ["type" => "string", "default" => null],
+        ]);
+        $queryParamsService->shouldReceive("get")->with("error")->andReturn("");
+        $tokenService = Mockery::mock(TokenService::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+
+        // then
+        $this->expectException(AccessDeniedHttpException::class);
+        $this->expectExceptionMessage("Il existe déjà un compte Ma Librairie pour l'adresse existing-user@example.com");
+
+        // when
+        $controller->callback(
+            request: $request,
+            currentSite: $currentSite,
+            config: new Config(["axys" => ["client_secret" => $this->testSecretKey]]),
+            openIDConnectProviderService: $openIDConnectProviderService,
+            queryParams: $queryParamsService,
+            templateService: $this->createMock(TemplateService::class),
+            tokenService: $tokenService,
+            urlGenerator: $urlGenerator,
+        );
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
     public function testCallbackWithUserImport()
     {
         // given
