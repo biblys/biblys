@@ -1,5 +1,11 @@
 # Historique des modifications
 
+## 3.14.0 (DEV)
+
+### Confirmité NF525
+
+- Les paiements effectués lors d'une vente en caisse sont désormais enregistrés.
+
 ## 3.13.0 (3 juin 2026)
 
 ### Conformité NF525
