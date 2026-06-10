@@ -38,8 +38,15 @@ error_reporting(E_ALL);
 // to ensure execution is stopped until they are all replaced
 // with proper exceptions
 /** @noinspection PhpUnusedParameterInspection */
-function errorHandler($errno, $errstr, $errfile, $errline): void
+function errorHandler($errno, $errstr, $errfile, $errline): bool
 {
+    // PHPUnit 11 reinstalls this handler with a full E_ALL mask between tests,
+    // so the E_USER_ERROR mask passed to set_error_handler() below is no longer
+    // enough to keep deprecations (e.g. trigger_deprecation()) from reaching here.
+    if ($errno !== E_USER_ERROR) {
+        return false;
+    }
+
     $message = "An error was thrown using trigger_error in $errfile:$errline: $errstr";
     throw new Exception($message);
 }
