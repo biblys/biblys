@@ -33,3 +33,6 @@ content/cache
 # IDE config files
 .idea
 .vscode
+
+# Git worktrees
+.worktrees
