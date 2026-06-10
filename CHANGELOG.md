@@ -1,5 +1,11 @@
 # Historique des modifications
 
+## 3.14.0 (DEV)
+
+### Confirmité NF525
+
+- Les paiements effectués lors d'une vente en caisse sont désormais enregistrés.
+
 ## 3.13.3 (1er juillet 2026)
 
 - Les commandes contenant uniquement un abonnement n'étaient plus marquées 

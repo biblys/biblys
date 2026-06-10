@@ -146,9 +146,9 @@ return function (
 
             $shopPaymentsUsecase = new RecordShopPaymentsUsecase();
             $shopPaymentsUsecase->execute((int) $order->get('order_id'), [
-                Payment::MODE_CASH  => (int) round((float) $_POST['cart_cash']  * 100),
-                Payment::MODE_CHECK => (int) round((float) $_POST['cart_cheque'] * 100),
-                Payment::MODE_CARD  => (int) round((float) $_POST['cart_card']  * 100),
+                Payment::MODE_CASH  => (int) $_POST['cart_cash'],
+                Payment::MODE_CHECK => (int) $_POST['cart_cheque'],
+                Payment::MODE_CARD  => (int) $_POST['cart_card'],
             ]);
 
             // Reset cart
