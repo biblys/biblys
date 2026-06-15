@@ -23,6 +23,7 @@
 
 use Biblys\Exception\CannotAddStockItemToCartException;
 use Biblys\Legacy\LegacyCodeHelper;
+use Biblys\Service\Images\ImagesService;
 use Biblys\Test\EntityFactory;
 use Biblys\Test\ModelFactory;
 use Entity\Exception\CartException;
@@ -235,6 +236,44 @@ class CartTest extends PHPUnit\Framework\TestCase
 
         // when
         $cm->addStock($targetCart, $stockItem);
+    }
+
+    /**
+     * Test that getLine renders a numeric data-price attribute for items
+     * that have no selling price set (e.g. free copies), so that the
+     * front-end JS total (which uses parseInt on data-price) doesn't turn
+     * into NaN.
+     * @throws Exception
+     */
+    public function testGetLineDataPriceIsZeroForFreeStockItem()
+    {
+        // given
+        $cm = new CartManager();
+        $sm = new StockManager();
+        $cart = $cm->create(['cart_type' => 'shop']);
+
+        $article = EntityFactory::createArticle(['article_url' => 'free-item-test']);
+        $stock = EntityFactory::createStock(['article_id' => $article->get('id')]);
+        $stock->set('stock_selling_price', null);
+        $sm->update($stock);
+        $stock = $sm->reload($stock);
+
+        $this->carts = [$cart];
+        $this->stocks = [$stock];
+        $this->article = $article;
+
+        $imagesService = Mockery::mock(ImagesService::class);
+        $imagesService->shouldReceive('getImageUrlFor')->andReturn(null);
+
+        // when
+        $line = $cart->getLine($imagesService, $stock);
+
+        // then
+        $this->assertStringContainsString(
+            'data-price="0"',
+            $line,
+            "Free items should have a data-price of 0, not empty, to avoid NaN in the front-end JS total computation"
+        );
     }
 
     /**

@@ -84,7 +84,7 @@ class Cart extends Entity
                         de ' . authors($articleEntity->get('authors')) . '<br>
                         Ed. ' . $articleEntity->get('publisher')->get('name') . '
                     </td>
-                    <td class="va-middle right stock_selling_price" data-price="' . $stockEntity->get('selling_price') . '">
+                    <td class="va-middle right stock_selling_price" data-price="' . (int) $stockEntity->get('selling_price') . '">
                         ' . $stockEntity->get('condition') . '
                         ' . currency($stockEntity->get('selling_price') / 100) . '
                     </td>
