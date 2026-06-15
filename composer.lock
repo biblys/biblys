@@ -3204,16 +3204,16 @@
         },
         {
             "name": "payplug/payplug-php",
-            "version": "4.0.0",
+            "version": "4.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/payplug/payplug-php.git",
-                "reference": "ad19dee72100668e14c8c4974a6791ca2d1c8482"
+                "reference": "fddb60a9d0afe3b06d7fac7bec2df33cd0164009"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/payplug/payplug-php/zipball/ad19dee72100668e14c8c4974a6791ca2d1c8482",
-                "reference": "ad19dee72100668e14c8c4974a6791ca2d1c8482",
+                "url": "https://api.github.com/repos/payplug/payplug-php/zipball/fddb60a9d0afe3b06d7fac7bec2df33cd0164009",
+                "reference": "fddb60a9d0afe3b06d7fac7bec2df33cd0164009",
                 "shasum": ""
             },
             "require": {
@@ -3243,13 +3243,17 @@
                 {
                     "name": "PayPlug",
                     "email": "support@payplug.com"
+                },
+                {
+                    "name": "Daniel FLOREZ MURILLO",
+                    "email": "dmurillo@payplug.com"
                 }
             ],
             "description": "A simple PHP library for PayPlug public API.",
             "homepage": "https://www.payplug.com",
             "support": {
                 "issues": "https://github.com/payplug/payplug-php/issues",
-                "source": "https://github.com/payplug/payplug-php/tree/4.0.0"
+                "source": "https://github.com/payplug/payplug-php/tree/4.1.0"
             },
             "time": "2015-05-06T00:00:00+00:00"
         },
