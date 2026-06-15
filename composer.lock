@@ -995,16 +995,16 @@
         },
         {
             "name": "getbrevo/brevo-php",
-            "version": "4.0.15",
+            "version": "4.0.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/getbrevo/brevo-php.git",
-                "reference": "e6d2b5c2fc15c2b450672eeab3dfc181666889ff"
+                "reference": "7dd6020089242ad91a3e5520466962fbb3ffc494"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/getbrevo/brevo-php/zipball/e6d2b5c2fc15c2b450672eeab3dfc181666889ff",
-                "reference": "e6d2b5c2fc15c2b450672eeab3dfc181666889ff",
+                "url": "https://api.github.com/repos/getbrevo/brevo-php/zipball/7dd6020089242ad91a3e5520466962fbb3ffc494",
+                "reference": "7dd6020089242ad91a3e5520466962fbb3ffc494",
                 "shasum": ""
             },
             "require": {
@@ -1042,9 +1042,9 @@
             ],
             "support": {
                 "issues": "https://github.com/getbrevo/brevo-php/issues",
-                "source": "https://github.com/getbrevo/brevo-php/tree/v4.0.15"
+                "source": "https://github.com/getbrevo/brevo-php/tree/v4.0.16"
             },
-            "time": "2026-06-13T08:41:12+00:00"
+            "time": "2026-06-15T13:22:33+00:00"
         },
         {
             "name": "gitonomy/gitlib",
@@ -11966,5 +11966,5 @@
     "platform-overrides": {
         "php": "8.2"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }
