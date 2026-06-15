@@ -96,3 +96,7 @@ composer license:add:twig
 ```shell
 composer license:add:css
 ```
+
+## Contributing
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for the git workflow and contribution conventions.

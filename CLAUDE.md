@@ -78,6 +78,10 @@ Copy `config.example.yml` to `app/config.yml`. Configuration includes database, 
 ### Testing
 Tests use PHPUnit 10. Test setup in `tests/setUp.php` initializes Propel and creates fixtures. Tests run with `PHP_ENV=test` which uses a separate test database.
 
+## Git Workflow
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for the git flow branching model, versioning, and commit conventions used in this repository.
+
 ## Docker Development
 
 ```bash
