@@ -1,5 +1,13 @@
 # Historique des modifications
 
+## 3.13.1 (DEV)
+
+### Corrections
+
+- Dans la caisse, l'ajout au panier d'un exemplaire dont le prix de vente
+  n'est pas renseigné (ex. exemplaire gratuit) provoquait l'affichage de
+  "NaN €" pour les montants à régler et à rendre. C'est corrigé.
+
 ## 3.13.0 (3 juin 2026)
 
 ### Conformité NF525
