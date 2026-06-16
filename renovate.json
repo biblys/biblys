@@ -6,11 +6,7 @@
       "matchManagers": ["composer", "docker-compose", "github-actions"],
       "enabled": true
     },
-    {
-      "matchManagers": ["npm", "nvm"],
-      "enabled": false
-    },
-    {
+{
       "matchManagers": ["composer"],
       "matchUpdateTypes": ["minor", "patch"],
       "matchCurrentVersion": "!/^0/",
