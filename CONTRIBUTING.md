@@ -78,5 +78,5 @@ Types courants utilisés dans ce projet : `feat`, `fix`, `chore`, `docs`, `refac
 
 ## Langue
 
-- Les **issues et Pull Requests** sont rédigées en **français**.
+- Les **issues et Pull Requests** sont rédigées en **français**. Les titres de PR sont en français et sans préfixe de type Conventional Commits (ex. : "Ajouter le job build-assets à la CI", pas "ci: add build-assets job").
 - Les **messages de commit et les noms de branches** sont rédigés en **anglais**.
