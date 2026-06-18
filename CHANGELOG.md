@@ -2,6 +2,11 @@
 
 ## 3.14.0 (DEV)
 
+### Maintenance
+
+- L'adapter jQuery de CKEditor a été mis à jour vers la version CKEditor 4 LTS (2025),
+  en préparation de la migration vers jQuery 4.
+
 ### Confirmité NF525
 
 - Les paiements effectués lors d'une vente en caisse sont désormais enregistrés.
