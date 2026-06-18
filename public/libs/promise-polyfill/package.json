@@ -46,7 +46,7 @@
     "lint-staged": "^17.0.0",
     "mocha": "^11.0.0",
     "npm-run-all2": "^9.0.0",
-    "prettier": "^1.8.2",
+    "prettier": "^3.0.0",
     "promises-aplus-tests": "*",
     "rimraf": "^2.6.2",
     "rollup": "^2.80.0",
