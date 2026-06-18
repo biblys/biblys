@@ -48,7 +48,7 @@
     "npm-run-all2": "^9.0.0",
     "prettier": "^3.0.0",
     "promises-aplus-tests": "*",
-    "rimraf": "^2.6.2",
+    "rimraf": "^6.0.0",
     "rollup": "^2.80.0",
     "rollup-plugin-uglify": "^2.0.1",
     "sinon": "^1.17.2"
