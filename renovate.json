@@ -6,8 +6,14 @@
       "matchManagers": ["composer", "docker-compose", "github-actions"],
       "enabled": true
     },
-{
+    {
       "matchManagers": ["composer"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "matchCurrentVersion": "!/^0/",
+      "automerge": true
+    },
+    {
+      "matchManagers": ["npm"],
       "matchUpdateTypes": ["minor", "patch"],
       "matchCurrentVersion": "!/^0/",
       "automerge": true
