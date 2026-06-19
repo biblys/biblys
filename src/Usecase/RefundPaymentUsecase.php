@@ -19,14 +19,16 @@
 namespace Usecase;
 
 use DateTime;
-use Exception;
-use Model\Map\PaymentTableMap;
 use Model\Payment;
 use Propel\Runtime\Exception\PropelException;
-use Propel\Runtime\Propel;
+use Repository\PaymentRepository;
 
 class RefundPaymentUsecase
 {
+    public function __construct(private readonly PaymentRepository $paymentRepository)
+    {
+    }
+
     /**
      * @throws BusinessRuleException
      * @throws PropelException
@@ -42,27 +44,18 @@ class RefundPaymentUsecase
         }
 
         $now = new DateTime();
-        $con = Propel::getWriteConnection(PaymentTableMap::DATABASE_NAME);
-        $con->beginTransaction();
 
-        try {
-            $payment->setRefundedAt($now);
-            $payment->save($con);
+        $payment->setRefundedAt($now);
 
-            $refund = new Payment();
-            $refund->setSiteId($payment->getSiteId());
-            $refund->setOrderId($payment->getOrderId());
-            $refund->setMode($payment->getMode());
-            $refund->setAmount(-$payment->getAmount());
-            $refund->setOriginalId($payment->getId());
-            $refund->setExecuted(clone $now);
-            $refund->save($con);
+        $refund = new Payment();
+        $refund->setSiteId($payment->getSiteId());
+        $refund->setOrderId($payment->getOrderId());
+        $refund->setMode($payment->getMode());
+        $refund->setAmount(-$payment->getAmount());
+        $refund->setOriginalId($payment->getId());
+        $refund->setExecuted(clone $now);
 
-            $con->commit();
-        } catch (Exception $e) {
-            $con->rollBack();
-            throw $e;
-        }
+        $this->paymentRepository->saveRefund($payment, $refund);
 
         return $refund;
     }

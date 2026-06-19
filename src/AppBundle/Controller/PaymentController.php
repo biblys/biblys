@@ -64,6 +64,7 @@ use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
+use Repository\PaymentRepository;
 use Usecase\AddArticleToUserLibraryUsecase;
 use Usecase\AddPaymentToOrderAndExecuteUsecase;
 use Usecase\BusinessRuleException;
@@ -149,13 +150,14 @@ class PaymentController extends Controller
     {
         $currentUser->authAdmin();
 
-        $payment = PaymentQuery::create()->findPk($id);
+        $paymentRepository = new PaymentRepository();
+        $payment = $paymentRepository->findById($id);
         if ($payment === null) {
             throw new NotFoundHttpException("Paiement #$id introuvable.");
         }
 
         try {
-            $usecase = new RefundPaymentUsecase();
+            $usecase = new RefundPaymentUsecase($paymentRepository);
             $usecase->execute($payment);
             $flashMessages->add("success", "Le paiement a été remboursé.");
         } catch (BusinessRuleException $e) {
