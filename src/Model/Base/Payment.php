@@ -7,6 +7,7 @@ use \Exception;
 use \PDO;
 use Model\Order as ChildOrder;
 use Model\OrderQuery as ChildOrderQuery;
+use Model\Payment as ChildPayment;
 use Model\PaymentQuery as ChildPaymentQuery;
 use Model\Site as ChildSite;
 use Model\SiteQuery as ChildSiteQuery;
@@ -16,6 +17,7 @@ use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\ActiveQuery\ModelCriteria;
 use Propel\Runtime\ActiveRecord\ActiveRecordInterface;
 use Propel\Runtime\Collection\Collection;
+use Propel\Runtime\Collection\ObjectCollection;
 use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\BadMethodCallException;
 use Propel\Runtime\Exception\LogicException;
@@ -138,6 +140,20 @@ abstract class Payment implements ActiveRecordInterface
     protected $payment_updated;
 
     /**
+     * The value for the payment_refunded_at field.
+     *
+     * @var        DateTime|null
+     */
+    protected $payment_refunded_at;
+
+    /**
+     * The value for the payment_original_id field.
+     *
+     * @var        int|null
+     */
+    protected $payment_original_id;
+
+    /**
      * @var        ChildSite
      */
     protected $aSite;
@@ -148,12 +164,31 @@ abstract class Payment implements ActiveRecordInterface
     protected $aOrder;
 
     /**
+     * @var        ChildPayment
+     */
+    protected $aPaymentRelatedByOriginalId;
+
+    /**
+     * @var        ObjectCollection|ChildPayment[] Collection to store aggregation of ChildPayment objects.
+     * @phpstan-var ObjectCollection&\Traversable<ChildPayment> Collection to store aggregation of ChildPayment objects.
+     */
+    protected $collPaymentsRelatedById;
+    protected $collPaymentsRelatedByIdPartial;
+
+    /**
      * Flag to prevent endless save loop, if this object is referenced
      * by another object which falls in this transaction.
      *
      * @var bool
      */
     protected $alreadyInSave = false;
+
+    /**
+     * An array of objects scheduled for deletion.
+     * @var ObjectCollection|ChildPayment[]
+     * @phpstan-var ObjectCollection&\Traversable<ChildPayment>
+     */
+    protected $paymentsRelatedByIdScheduledForDeletion = null;
 
     /**
      * Initializes internal state of Model\Base\Payment object.
@@ -518,6 +553,38 @@ abstract class Payment implements ActiveRecordInterface
     }
 
     /**
+     * Get the [optionally formatted] temporal [payment_refunded_at] column value.
+     *
+     *
+     * @param string|null $format The date/time format string (either date()-style or strftime()-style).
+     *   If format is NULL, then the raw DateTime object will be returned.
+     *
+     * @return string|DateTime|null Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00.
+     *
+     * @throws \Propel\Runtime\Exception\PropelException - if unable to parse/validate the date/time value.
+     *
+     * @psalm-return ($format is null ? DateTime|null : string|null)
+     */
+    public function getRefundedAt($format = null)
+    {
+        if ($format === null) {
+            return $this->payment_refunded_at;
+        } else {
+            return $this->payment_refunded_at instanceof \DateTimeInterface ? $this->payment_refunded_at->format($format) : null;
+        }
+    }
+
+    /**
+     * Get the [payment_original_id] column value.
+     *
+     * @return int|null
+     */
+    public function getOriginalId()
+    {
+        return $this->payment_original_id;
+    }
+
+    /**
      * Set the value of [payment_id] column.
      *
      * @param int $v New value
@@ -726,6 +793,50 @@ abstract class Payment implements ActiveRecordInterface
     }
 
     /**
+     * Sets the value of [payment_refunded_at] column to a normalized version of the date/time value specified.
+     *
+     * @param string|integer|\DateTimeInterface|null $v string, integer (timestamp), or \DateTimeInterface value.
+     *               Empty strings are treated as NULL.
+     * @return $this The current object (for fluent API support)
+     */
+    public function setRefundedAt($v)
+    {
+        $dt = PropelDateTime::newInstance($v, null, 'DateTime');
+        if ($this->payment_refunded_at !== null || $dt !== null) {
+            if ($this->payment_refunded_at === null || $dt === null || $dt->format("Y-m-d H:i:s.u") !== $this->payment_refunded_at->format("Y-m-d H:i:s.u")) {
+                $this->payment_refunded_at = $dt === null ? null : clone $dt;
+                $this->modifiedColumns[PaymentTableMap::COL_PAYMENT_REFUNDED_AT] = true;
+            }
+        } // if either are not null
+
+        return $this;
+    }
+
+    /**
+     * Set the value of [payment_original_id] column.
+     *
+     * @param int|null $v New value
+     * @return $this The current object (for fluent API support)
+     */
+    public function setOriginalId($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->payment_original_id !== $v) {
+            $this->payment_original_id = $v;
+            $this->modifiedColumns[PaymentTableMap::COL_PAYMENT_ORIGINAL_ID] = true;
+        }
+
+        if ($this->aPaymentRelatedByOriginalId !== null && $this->aPaymentRelatedByOriginalId->getId() !== $v) {
+            $this->aPaymentRelatedByOriginalId = null;
+        }
+
+        return $this;
+    }
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -800,6 +911,15 @@ abstract class Payment implements ActiveRecordInterface
             }
             $this->payment_updated = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : PaymentTableMap::translateFieldName('RefundedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            if ($col === '0000-00-00 00:00:00') {
+                $col = null;
+            }
+            $this->payment_refunded_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : PaymentTableMap::translateFieldName('OriginalId', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->payment_original_id = (null !== $col) ? (int) $col : null;
+
             $this->resetModified();
             $this->setNew(false);
 
@@ -807,7 +927,7 @@ abstract class Payment implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 10; // 10 = PaymentTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 12; // 12 = PaymentTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\Payment'), 0, $e);
@@ -835,6 +955,9 @@ abstract class Payment implements ActiveRecordInterface
         }
         if ($this->aOrder !== null && $this->order_id !== $this->aOrder->getId()) {
             $this->aOrder = null;
+        }
+        if ($this->aPaymentRelatedByOriginalId !== null && $this->payment_original_id !== $this->aPaymentRelatedByOriginalId->getId()) {
+            $this->aPaymentRelatedByOriginalId = null;
         }
     }
 
@@ -877,6 +1000,9 @@ abstract class Payment implements ActiveRecordInterface
 
             $this->aSite = null;
             $this->aOrder = null;
+            $this->aPaymentRelatedByOriginalId = null;
+            $this->collPaymentsRelatedById = null;
+
         } // if (deep)
     }
 
@@ -1012,6 +1138,13 @@ abstract class Payment implements ActiveRecordInterface
                 $this->setOrder($this->aOrder);
             }
 
+            if ($this->aPaymentRelatedByOriginalId !== null) {
+                if ($this->aPaymentRelatedByOriginalId->isModified() || $this->aPaymentRelatedByOriginalId->isNew()) {
+                    $affectedRows += $this->aPaymentRelatedByOriginalId->save($con);
+                }
+                $this->setPaymentRelatedByOriginalId($this->aPaymentRelatedByOriginalId);
+            }
+
             if ($this->isNew() || $this->isModified()) {
                 // persist changes
                 if ($this->isNew()) {
@@ -1021,6 +1154,24 @@ abstract class Payment implements ActiveRecordInterface
                     $affectedRows += $this->doUpdate($con);
                 }
                 $this->resetModified();
+            }
+
+            if ($this->paymentsRelatedByIdScheduledForDeletion !== null) {
+                if (!$this->paymentsRelatedByIdScheduledForDeletion->isEmpty()) {
+                    foreach ($this->paymentsRelatedByIdScheduledForDeletion as $paymentRelatedById) {
+                        // need to save related object because we set the relation to null
+                        $paymentRelatedById->save($con);
+                    }
+                    $this->paymentsRelatedByIdScheduledForDeletion = null;
+                }
+            }
+
+            if ($this->collPaymentsRelatedById !== null) {
+                foreach ($this->collPaymentsRelatedById as $referrerFK) {
+                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
+                        $affectedRows += $referrerFK->save($con);
+                    }
+                }
             }
 
             $this->alreadyInSave = false;
@@ -1079,6 +1230,12 @@ abstract class Payment implements ActiveRecordInterface
         if ($this->isColumnModified(PaymentTableMap::COL_PAYMENT_UPDATED)) {
             $modifiedColumns[':p' . $index++]  = 'payment_updated';
         }
+        if ($this->isColumnModified(PaymentTableMap::COL_PAYMENT_REFUNDED_AT)) {
+            $modifiedColumns[':p' . $index++]  = 'payment_refunded_at';
+        }
+        if ($this->isColumnModified(PaymentTableMap::COL_PAYMENT_ORIGINAL_ID)) {
+            $modifiedColumns[':p' . $index++]  = 'payment_original_id';
+        }
 
         $sql = sprintf(
             'INSERT INTO payments (%s) VALUES (%s)',
@@ -1128,6 +1285,14 @@ abstract class Payment implements ActiveRecordInterface
                         break;
                     case 'payment_updated':
                         $stmt->bindValue($identifier, $this->payment_updated ? $this->payment_updated->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
+                        break;
+                    case 'payment_refunded_at':
+                        $stmt->bindValue($identifier, $this->payment_refunded_at ? $this->payment_refunded_at->format("Y-m-d H:i:s.u") : null, PDO::PARAM_STR);
+
+                        break;
+                    case 'payment_original_id':
+                        $stmt->bindValue($identifier, $this->payment_original_id, PDO::PARAM_INT);
 
                         break;
                 }
@@ -1222,6 +1387,12 @@ abstract class Payment implements ActiveRecordInterface
             case 9:
                 return $this->getUpdatedAt();
 
+            case 10:
+                return $this->getRefundedAt();
+
+            case 11:
+                return $this->getOriginalId();
+
             default:
                 return null;
         } // switch()
@@ -1260,6 +1431,8 @@ abstract class Payment implements ActiveRecordInterface
             $keys[7] => $this->getCreatedAt(),
             $keys[8] => $this->getExecuted(),
             $keys[9] => $this->getUpdatedAt(),
+            $keys[10] => $this->getRefundedAt(),
+            $keys[11] => $this->getOriginalId(),
         ];
         if ($result[$keys[7]] instanceof \DateTimeInterface) {
             $result[$keys[7]] = $result[$keys[7]]->format('Y-m-d H:i:s.u');
@@ -1271,6 +1444,10 @@ abstract class Payment implements ActiveRecordInterface
 
         if ($result[$keys[9]] instanceof \DateTimeInterface) {
             $result[$keys[9]] = $result[$keys[9]]->format('Y-m-d H:i:s.u');
+        }
+
+        if ($result[$keys[10]] instanceof \DateTimeInterface) {
+            $result[$keys[10]] = $result[$keys[10]]->format('Y-m-d H:i:s.u');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1308,6 +1485,36 @@ abstract class Payment implements ActiveRecordInterface
                 }
 
                 $result[$key] = $this->aOrder->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->aPaymentRelatedByOriginalId) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'payment';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'payments';
+                        break;
+                    default:
+                        $key = 'Payment';
+                }
+
+                $result[$key] = $this->aPaymentRelatedByOriginalId->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+            }
+            if (null !== $this->collPaymentsRelatedById) {
+
+                switch ($keyType) {
+                    case TableMap::TYPE_CAMELNAME:
+                        $key = 'payments';
+                        break;
+                    case TableMap::TYPE_FIELDNAME:
+                        $key = 'paymentss';
+                        break;
+                    default:
+                        $key = 'Payments';
+                }
+
+                $result[$key] = $this->collPaymentsRelatedById->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
         }
 
@@ -1375,6 +1582,12 @@ abstract class Payment implements ActiveRecordInterface
             case 9:
                 $this->setUpdatedAt($value);
                 break;
+            case 10:
+                $this->setRefundedAt($value);
+                break;
+            case 11:
+                $this->setOriginalId($value);
+                break;
         } // switch()
 
         return $this;
@@ -1430,6 +1643,12 @@ abstract class Payment implements ActiveRecordInterface
         }
         if (array_key_exists($keys[9], $arr)) {
             $this->setUpdatedAt($arr[$keys[9]]);
+        }
+        if (array_key_exists($keys[10], $arr)) {
+            $this->setRefundedAt($arr[$keys[10]]);
+        }
+        if (array_key_exists($keys[11], $arr)) {
+            $this->setOriginalId($arr[$keys[11]]);
         }
 
         return $this;
@@ -1503,6 +1722,12 @@ abstract class Payment implements ActiveRecordInterface
         }
         if ($this->isColumnModified(PaymentTableMap::COL_PAYMENT_UPDATED)) {
             $criteria->add(PaymentTableMap::COL_PAYMENT_UPDATED, $this->payment_updated);
+        }
+        if ($this->isColumnModified(PaymentTableMap::COL_PAYMENT_REFUNDED_AT)) {
+            $criteria->add(PaymentTableMap::COL_PAYMENT_REFUNDED_AT, $this->payment_refunded_at);
+        }
+        if ($this->isColumnModified(PaymentTableMap::COL_PAYMENT_ORIGINAL_ID)) {
+            $criteria->add(PaymentTableMap::COL_PAYMENT_ORIGINAL_ID, $this->payment_original_id);
         }
 
         return $criteria;
@@ -1601,6 +1826,22 @@ abstract class Payment implements ActiveRecordInterface
         $copyObj->setCreatedAt($this->getCreatedAt());
         $copyObj->setExecuted($this->getExecuted());
         $copyObj->setUpdatedAt($this->getUpdatedAt());
+        $copyObj->setRefundedAt($this->getRefundedAt());
+        $copyObj->setOriginalId($this->getOriginalId());
+
+        if ($deepCopy) {
+            // important: temporarily setNew(false) because this affects the behavior of
+            // the getter/setter methods for fkey referrer objects.
+            $copyObj->setNew(false);
+
+            foreach ($this->getPaymentsRelatedById() as $relObj) {
+                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+                    $copyObj->addPaymentRelatedById($relObj->copy($deepCopy));
+                }
+            }
+
+        } // if ($deepCopy)
+
         if ($makeNew) {
             $copyObj->setNew(true);
             $copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -1732,6 +1973,365 @@ abstract class Payment implements ActiveRecordInterface
     }
 
     /**
+     * Declares an association between this object and a ChildPayment object.
+     *
+     * @param ChildPayment|null $v
+     * @return $this The current object (for fluent API support)
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function setPaymentRelatedByOriginalId(ChildPayment $v = null)
+    {
+        if ($v === null) {
+            $this->setOriginalId(NULL);
+        } else {
+            $this->setOriginalId($v->getId());
+        }
+
+        $this->aPaymentRelatedByOriginalId = $v;
+
+        // Add binding for other direction of this n:n relationship.
+        // If this object has already been added to the ChildPayment object, it will not be re-added.
+        if ($v !== null) {
+            $v->addPaymentRelatedById($this);
+        }
+
+
+        return $this;
+    }
+
+
+    /**
+     * Get the associated ChildPayment object
+     *
+     * @param ConnectionInterface $con Optional Connection object.
+     * @return ChildPayment|null The associated ChildPayment object.
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function getPaymentRelatedByOriginalId(?ConnectionInterface $con = null)
+    {
+        if ($this->aPaymentRelatedByOriginalId === null && ($this->payment_original_id != 0)) {
+            $this->aPaymentRelatedByOriginalId = ChildPaymentQuery::create()->findPk($this->payment_original_id, $con);
+            /* The following can be used additionally to
+                guarantee the related object contains a reference
+                to this object.  This level of coupling may, however, be
+                undesirable since it could result in an only partially populated collection
+                in the referenced object.
+                $this->aPaymentRelatedByOriginalId->addPaymentsRelatedById($this);
+             */
+        }
+
+        return $this->aPaymentRelatedByOriginalId;
+    }
+
+
+    /**
+     * Initializes a collection based on the name of a relation.
+     * Avoids crafting an 'init[$relationName]s' method name
+     * that wouldn't work when StandardEnglishPluralizer is used.
+     *
+     * @param string $relationName The name of the relation to initialize
+     * @return void
+     */
+    public function initRelation($relationName): void
+    {
+        if ('PaymentRelatedById' === $relationName) {
+            $this->initPaymentsRelatedById();
+            return;
+        }
+    }
+
+    /**
+     * Clears out the collPaymentsRelatedById collection
+     *
+     * This does not modify the database; however, it will remove any associated objects, causing
+     * them to be refetched by subsequent calls to accessor method.
+     *
+     * @return $this
+     * @see addPaymentsRelatedById()
+     */
+    public function clearPaymentsRelatedById()
+    {
+        $this->collPaymentsRelatedById = null; // important to set this to NULL since that means it is uninitialized
+
+        return $this;
+    }
+
+    /**
+     * Reset is the collPaymentsRelatedById collection loaded partially.
+     *
+     * @return void
+     */
+    public function resetPartialPaymentsRelatedById($v = true): void
+    {
+        $this->collPaymentsRelatedByIdPartial = $v;
+    }
+
+    /**
+     * Initializes the collPaymentsRelatedById collection.
+     *
+     * By default this just sets the collPaymentsRelatedById collection to an empty array (like clearcollPaymentsRelatedById());
+     * however, you may wish to override this method in your stub class to provide setting appropriate
+     * to your application -- for example, setting the initial array to the values stored in database.
+     *
+     * @param bool $overrideExisting If set to true, the method call initializes
+     *                                        the collection even if it is not empty
+     *
+     * @return void
+     */
+    public function initPaymentsRelatedById(bool $overrideExisting = true): void
+    {
+        if (null !== $this->collPaymentsRelatedById && !$overrideExisting) {
+            return;
+        }
+
+        $collectionClassName = PaymentTableMap::getTableMap()->getCollectionClassName();
+
+        $this->collPaymentsRelatedById = new $collectionClassName;
+        $this->collPaymentsRelatedById->setModel('\Model\Payment');
+    }
+
+    /**
+     * Gets an array of ChildPayment objects which contain a foreign key that references this object.
+     *
+     * If the $criteria is not null, it is used to always fetch the results from the database.
+     * Otherwise the results are fetched from the database the first time, then cached.
+     * Next time the same method is called without $criteria, the cached collection is returned.
+     * If this ChildPayment is new, it will return
+     * an empty collection or the current collection; the criteria is ignored on a new object.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @return ObjectCollection|ChildPayment[] List of ChildPayment objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildPayment> List of ChildPayment objects
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function getPaymentsRelatedById(?Criteria $criteria = null, ?ConnectionInterface $con = null)
+    {
+        $partial = $this->collPaymentsRelatedByIdPartial && !$this->isNew();
+        if (null === $this->collPaymentsRelatedById || null !== $criteria || $partial) {
+            if ($this->isNew()) {
+                // return empty collection
+                if (null === $this->collPaymentsRelatedById) {
+                    $this->initPaymentsRelatedById();
+                } else {
+                    $collectionClassName = PaymentTableMap::getTableMap()->getCollectionClassName();
+
+                    $collPaymentsRelatedById = new $collectionClassName;
+                    $collPaymentsRelatedById->setModel('\Model\Payment');
+
+                    return $collPaymentsRelatedById;
+                }
+            } else {
+                $collPaymentsRelatedById = ChildPaymentQuery::create(null, $criteria)
+                    ->filterByPaymentRelatedByOriginalId($this)
+                    ->find($con);
+
+                if (null !== $criteria) {
+                    if (false !== $this->collPaymentsRelatedByIdPartial && count($collPaymentsRelatedById)) {
+                        $this->initPaymentsRelatedById(false);
+
+                        foreach ($collPaymentsRelatedById as $obj) {
+                            if (false == $this->collPaymentsRelatedById->contains($obj)) {
+                                $this->collPaymentsRelatedById->append($obj);
+                            }
+                        }
+
+                        $this->collPaymentsRelatedByIdPartial = true;
+                    }
+
+                    return $collPaymentsRelatedById;
+                }
+
+                if ($partial && $this->collPaymentsRelatedById) {
+                    foreach ($this->collPaymentsRelatedById as $obj) {
+                        if ($obj->isNew()) {
+                            $collPaymentsRelatedById[] = $obj;
+                        }
+                    }
+                }
+
+                $this->collPaymentsRelatedById = $collPaymentsRelatedById;
+                $this->collPaymentsRelatedByIdPartial = false;
+            }
+        }
+
+        return $this->collPaymentsRelatedById;
+    }
+
+    /**
+     * Sets a collection of ChildPayment objects related by a one-to-many relationship
+     * to the current object.
+     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+     * and new objects from the given Propel collection.
+     *
+     * @param Collection $paymentsRelatedById A Propel collection.
+     * @param ConnectionInterface $con Optional connection object
+     * @return $this The current object (for fluent API support)
+     */
+    public function setPaymentsRelatedById(Collection $paymentsRelatedById, ?ConnectionInterface $con = null)
+    {
+        /** @var ChildPayment[] $paymentsRelatedByIdToDelete */
+        $paymentsRelatedByIdToDelete = $this->getPaymentsRelatedById(new Criteria(), $con)->diff($paymentsRelatedById);
+
+
+        $this->paymentsRelatedByIdScheduledForDeletion = $paymentsRelatedByIdToDelete;
+
+        foreach ($paymentsRelatedByIdToDelete as $paymentRelatedByIdRemoved) {
+            $paymentRelatedByIdRemoved->setPaymentRelatedByOriginalId(null);
+        }
+
+        $this->collPaymentsRelatedById = null;
+        foreach ($paymentsRelatedById as $paymentRelatedById) {
+            $this->addPaymentRelatedById($paymentRelatedById);
+        }
+
+        $this->collPaymentsRelatedById = $paymentsRelatedById;
+        $this->collPaymentsRelatedByIdPartial = false;
+
+        return $this;
+    }
+
+    /**
+     * Returns the number of related Payment objects.
+     *
+     * @param Criteria $criteria
+     * @param bool $distinct
+     * @param ConnectionInterface $con
+     * @return int Count of related Payment objects.
+     * @throws \Propel\Runtime\Exception\PropelException
+     */
+    public function countPaymentsRelatedById(?Criteria $criteria = null, bool $distinct = false, ?ConnectionInterface $con = null): int
+    {
+        $partial = $this->collPaymentsRelatedByIdPartial && !$this->isNew();
+        if (null === $this->collPaymentsRelatedById || null !== $criteria || $partial) {
+            if ($this->isNew() && null === $this->collPaymentsRelatedById) {
+                return 0;
+            }
+
+            if ($partial && !$criteria) {
+                return count($this->getPaymentsRelatedById());
+            }
+
+            $query = ChildPaymentQuery::create(null, $criteria);
+            if ($distinct) {
+                $query->distinct();
+            }
+
+            return $query
+                ->filterByPaymentRelatedByOriginalId($this)
+                ->count($con);
+        }
+
+        return count($this->collPaymentsRelatedById);
+    }
+
+    /**
+     * Method called to associate a ChildPayment object to this object
+     * through the ChildPayment foreign key attribute.
+     *
+     * @param ChildPayment $l ChildPayment
+     * @return $this The current object (for fluent API support)
+     */
+    public function addPaymentRelatedById(ChildPayment $l)
+    {
+        if ($this->collPaymentsRelatedById === null) {
+            $this->initPaymentsRelatedById();
+            $this->collPaymentsRelatedByIdPartial = true;
+        }
+
+        if (!$this->collPaymentsRelatedById->contains($l)) {
+            $this->doAddPaymentRelatedById($l);
+
+            if ($this->paymentsRelatedByIdScheduledForDeletion and $this->paymentsRelatedByIdScheduledForDeletion->contains($l)) {
+                $this->paymentsRelatedByIdScheduledForDeletion->remove($this->paymentsRelatedByIdScheduledForDeletion->search($l));
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ChildPayment $paymentRelatedById The ChildPayment object to add.
+     */
+    protected function doAddPaymentRelatedById(ChildPayment $paymentRelatedById): void
+    {
+        $this->collPaymentsRelatedById[]= $paymentRelatedById;
+        $paymentRelatedById->setPaymentRelatedByOriginalId($this);
+    }
+
+    /**
+     * @param ChildPayment $paymentRelatedById The ChildPayment object to remove.
+     * @return $this The current object (for fluent API support)
+     */
+    public function removePaymentRelatedById(ChildPayment $paymentRelatedById)
+    {
+        if ($this->getPaymentsRelatedById()->contains($paymentRelatedById)) {
+            $pos = $this->collPaymentsRelatedById->search($paymentRelatedById);
+            $this->collPaymentsRelatedById->remove($pos);
+            if (null === $this->paymentsRelatedByIdScheduledForDeletion) {
+                $this->paymentsRelatedByIdScheduledForDeletion = clone $this->collPaymentsRelatedById;
+                $this->paymentsRelatedByIdScheduledForDeletion->clear();
+            }
+            $this->paymentsRelatedByIdScheduledForDeletion[]= $paymentRelatedById;
+            $paymentRelatedById->setPaymentRelatedByOriginalId(null);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Payment is new, it will return
+     * an empty collection; or if this Payment has previously
+     * been saved, it will retrieve related PaymentsRelatedById from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Payment.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildPayment[] List of ChildPayment objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildPayment}> List of ChildPayment objects
+     */
+    public function getPaymentsRelatedByIdJoinSite(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildPaymentQuery::create(null, $criteria);
+        $query->joinWith('Site', $joinBehavior);
+
+        return $this->getPaymentsRelatedById($query, $con);
+    }
+
+
+    /**
+     * If this collection has already been initialized with
+     * an identical criteria, it returns the collection.
+     * Otherwise if this Payment is new, it will return
+     * an empty collection; or if this Payment has previously
+     * been saved, it will retrieve related PaymentsRelatedById from storage.
+     *
+     * This method is protected by default in order to keep the public
+     * api reasonable.  You can provide public methods for those you
+     * actually need in Payment.
+     *
+     * @param Criteria $criteria optional Criteria object to narrow the query
+     * @param ConnectionInterface $con optional connection object
+     * @param string $joinBehavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+     * @return ObjectCollection|ChildPayment[] List of ChildPayment objects
+     * @phpstan-return ObjectCollection&\Traversable<ChildPayment}> List of ChildPayment objects
+     */
+    public function getPaymentsRelatedByIdJoinOrder(?Criteria $criteria = null, ?ConnectionInterface $con = null, $joinBehavior = Criteria::LEFT_JOIN)
+    {
+        $query = ChildPaymentQuery::create(null, $criteria);
+        $query->joinWith('Order', $joinBehavior);
+
+        return $this->getPaymentsRelatedById($query, $con);
+    }
+
+    /**
      * Clears the current object, sets all attributes to their default values and removes
      * outgoing references as well as back-references (from other objects to this one. Results probably in a database
      * change of those foreign objects when you call `save` there).
@@ -1746,6 +2346,9 @@ abstract class Payment implements ActiveRecordInterface
         if (null !== $this->aOrder) {
             $this->aOrder->removePayment($this);
         }
+        if (null !== $this->aPaymentRelatedByOriginalId) {
+            $this->aPaymentRelatedByOriginalId->removePaymentRelatedById($this);
+        }
         $this->payment_id = null;
         $this->site_id = null;
         $this->order_id = null;
@@ -1756,6 +2359,8 @@ abstract class Payment implements ActiveRecordInterface
         $this->payment_created = null;
         $this->payment_executed = null;
         $this->payment_updated = null;
+        $this->payment_refunded_at = null;
+        $this->payment_original_id = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
         $this->resetModified();
@@ -1777,10 +2382,17 @@ abstract class Payment implements ActiveRecordInterface
     public function clearAllReferences(bool $deep = false)
     {
         if ($deep) {
+            if ($this->collPaymentsRelatedById) {
+                foreach ($this->collPaymentsRelatedById as $o) {
+                    $o->clearAllReferences($deep);
+                }
+            }
         } // if ($deep)
 
+        $this->collPaymentsRelatedById = null;
         $this->aSite = null;
         $this->aOrder = null;
+        $this->aPaymentRelatedByOriginalId = null;
         return $this;
     }
 

@@ -381,6 +381,7 @@ class ModelFactory
         string    $providerId = "stripe-1234",
         string    $url = null,
         ?DateTime $executedAt = new DateTime(),
+        ?DateTime $refundedAt = null,
     ): Payment
     {
         $payment = new Payment();
@@ -390,6 +391,7 @@ class ModelFactory
         $payment->setProviderId($providerId);
         $payment->setUrl($url);
         $payment->setExecuted($executedAt);
+        $payment->setRefundedAt($refundedAt);
         $payment->save();
 
         return $payment;
