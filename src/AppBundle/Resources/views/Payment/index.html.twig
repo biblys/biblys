@@ -67,11 +67,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         <th>Commande n°</th>
         <th>Mode</th>
         <th>Montant</th>
+        <th>Actions</th>
       </tr>
     </thead>
     <tbody>
     {% for payment in payments %}
-      <tr>
+      <tr{% if payment.refundedAt %} style="text-decoration: line-through; color: gray;"{% endif %}>
         <td>{{ payment.executed|date('d/m/Y') }}</td>
         <td>
           <a href="{{ path('orders_show', { 'id': payment.orderId }) }}">
@@ -79,13 +80,28 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           </a>
         </td>
         <td>{{ payment.mode }}</td>
-        <td class="text-right">{{ payment.amount|currency(true)|raw }}</td>
+        <td class="text-right{% if payment.amount < 0 %} text-danger{% endif %}">
+          {{ payment.amount|currency(true)|raw }}
+        </td>
+        <td>
+          {% if payment.refundedAt is null and payment.amount > 0 %}
+            <form method="POST" action="{{ path('payment_refund', { 'id': payment.id }) }}" style="display: inline;">
+              <button
+                type="submit"
+                class="btn btn-sm btn-outline-danger"
+                onclick="return confirm('Confirmer le remboursement ? Si le paiement a été effectué via Stripe, PayPlug ou PayPal, pensez à effectuer également le remboursement dans l\'interface du prestataire.')"
+              >
+                Rembourser
+              </button>
+            </form>
+          {% endif %}
+        </td>
       </tr>
     {% endfor %}
     </tbody>
     <tfoot>
       <tr>
-        <th colspan="3" class="text-right">Total</th>
+        <th colspan="4" class="text-right">Total</th>
         <th class="text-right">{{ total|currency(true)|raw }}</th>
       </tr>
     </tfoot>
