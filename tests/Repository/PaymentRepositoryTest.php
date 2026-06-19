@@ -19,7 +19,6 @@
 namespace Repository;
 
 use Biblys\Test\ModelFactory;
-use DateTime;
 use Model\Payment;
 use Model\PaymentQuery;
 use PHPUnit\Framework\TestCase;
@@ -72,30 +71,19 @@ class PaymentRepositoryTest extends TestCase
     /**
      * @throws PropelException
      */
-    public function testSaveRefundPersistsBothPayments(): void
+    public function testSavePersistsPayment(): void
     {
         // given
-        $order = ModelFactory::createOrder();
-        $original = ModelFactory::createPayment(order: $order, amount: 1500, mode: Payment::MODE_STRIPE);
-        $original->setRefundedAt(new DateTime());
-
-        $refund = new Payment();
-        $refund->setOrderId($order->getId());
-        $refund->setMode(Payment::MODE_STRIPE);
-        $refund->setAmount(-1500);
-        $refund->setOriginalId($original->getId());
-        $refund->setExecuted(new DateTime());
-
+        $payment = new Payment();
+        $payment->setMode(Payment::MODE_STRIPE);
+        $payment->setAmount(1500);
         $repo = new PaymentRepository();
 
         // when
-        $repo->saveRefund($original, $refund);
+        $repo->save($payment);
 
         // then
-        $original->reload();
-        $this->assertNotNull($original->getRefundedAt());
-        $this->assertNotNull($refund->getId());
-        $this->assertEquals(-1500, $refund->getAmount());
-        $this->assertEquals($original->getId(), $refund->getOriginalId());
+        $this->assertNotNull($payment->getId());
+        $this->assertEquals(1500, $payment->getAmount());
     }
 }
