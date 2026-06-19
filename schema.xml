@@ -945,6 +945,8 @@
     <column name="payment_created" phpName="CreatedAt" type="TIMESTAMP"/>
     <column name="payment_executed" phpName="Executed" type="TIMESTAMP"/>
     <column name="payment_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
+    <column name="payment_refunded_at" phpName="RefundedAt" type="TIMESTAMP"/>
+    <column name="payment_original_id" phpName="OriginalId" type="INTEGER"/>
     <behavior name="timestampable">
       <parameter name="create_column" value="payment_created" />
       <parameter name="update_column" value="payment_updated" />
@@ -957,6 +959,9 @@
     </foreign-key>
     <foreign-key foreignTable="orders" skipSql="true">
       <reference local="order_id" foreign="order_id"/>
+    </foreign-key>
+    <foreign-key foreignTable="payments" skipSql="true">
+      <reference local="payment_original_id" foreign="payment_id"/>
     </foreign-key>
   </table>
   <table name="people" idMethod="native" phpName="People" description="Intervenants">
