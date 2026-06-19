@@ -19,8 +19,11 @@
 namespace Usecase;
 
 use DateTime;
+use Exception;
+use Model\Map\PaymentTableMap;
 use Model\Payment;
 use Propel\Runtime\Exception\PropelException;
+use Propel\Runtime\Propel;
 use Repository\PaymentRepository;
 
 class RefundPaymentUsecase
@@ -55,7 +58,16 @@ class RefundPaymentUsecase
         $refund->setOriginalId($payment->getId());
         $refund->setExecuted(clone $now);
 
-        $this->paymentRepository->saveRefund($payment, $refund);
+        $con = Propel::getWriteConnection(PaymentTableMap::DATABASE_NAME);
+        $con->beginTransaction();
+        try {
+            $this->paymentRepository->save($payment);
+            $this->paymentRepository->save($refund);
+            $con->commit();
+        } catch (Exception $e) {
+            $con->rollBack();
+            throw $e;
+        }
 
         return $refund;
     }

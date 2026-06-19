@@ -18,12 +18,9 @@
 
 namespace Repository;
 
-use Exception;
-use Model\Map\PaymentTableMap;
 use Model\Payment;
 use Model\PaymentQuery;
 use Propel\Runtime\Exception\PropelException;
-use Propel\Runtime\Propel;
 
 class PaymentRepository
 {
@@ -38,18 +35,8 @@ class PaymentRepository
     /**
      * @throws PropelException
      */
-    public function saveRefund(Payment $original, Payment $refund): void
+    public function save(Payment $payment): void
     {
-        $con = Propel::getWriteConnection(PaymentTableMap::DATABASE_NAME);
-        $con->beginTransaction();
-
-        try {
-            $original->save($con);
-            $refund->save($con);
-            $con->commit();
-        } catch (Exception $e) {
-            $con->rollBack();
-            throw $e;
-        }
+        $payment->save();
     }
 }
