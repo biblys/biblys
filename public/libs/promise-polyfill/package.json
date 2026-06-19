@@ -49,7 +49,7 @@
     "prettier": "^3.0.0",
     "promises-aplus-tests": "*",
     "rimraf": "^6.0.0",
-    "rollup": "^2.80.0",
+    "rollup": "^4.0.0",
     "rollup-plugin-uglify": "^2.0.1",
     "sinon": "^1.17.2"
   },
