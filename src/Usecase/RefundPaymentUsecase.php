@@ -19,8 +19,11 @@
 namespace Usecase;
 
 use DateTime;
+use Exception;
+use Model\Map\PaymentTableMap;
 use Model\Payment;
 use Propel\Runtime\Exception\PropelException;
+use Propel\Runtime\Propel;
 
 class RefundPaymentUsecase
 {
@@ -39,17 +42,27 @@ class RefundPaymentUsecase
         }
 
         $now = new DateTime();
+        $con = Propel::getWriteConnection(PaymentTableMap::DATABASE_NAME);
+        $con->beginTransaction();
 
-        $payment->setRefundedAt($now);
-        $payment->save();
+        try {
+            $payment->setRefundedAt($now);
+            $payment->save($con);
 
-        $refund = new Payment();
-        $refund->setOrderId($payment->getOrderId());
-        $refund->setMode($payment->getMode());
-        $refund->setAmount(-$payment->getAmount());
-        $refund->setOriginalId($payment->getId());
-        $refund->setExecuted($now);
-        $refund->save();
+            $refund = new Payment();
+            $refund->setSiteId($payment->getSiteId());
+            $refund->setOrderId($payment->getOrderId());
+            $refund->setMode($payment->getMode());
+            $refund->setAmount(-$payment->getAmount());
+            $refund->setOriginalId($payment->getId());
+            $refund->setExecuted(clone $now);
+            $refund->save($con);
+
+            $con->commit();
+        } catch (Exception $e) {
+            $con->rollBack();
+            throw $e;
+        }
 
         return $refund;
     }
