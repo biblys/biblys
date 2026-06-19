@@ -10,6 +10,9 @@
 ### Confirmité NF525
 
 - Les paiements effectués lors d'une vente en caisse sont désormais enregistrés.
+- Il est désormais possible de marquer un paiement comme remboursé depuis la page
+  de gestion des paiements. Un paiement négatif est créé en base pour la commande,
+  lié au paiement d'origine.
 
 ### Amélorations
 
