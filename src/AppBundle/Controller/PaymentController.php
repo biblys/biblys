@@ -68,6 +68,7 @@ use Usecase\AddArticleToUserLibraryUsecase;
 use Usecase\AddPaymentToOrderAndExecuteUsecase;
 use Usecase\BusinessRuleException;
 use Usecase\MarkOrderAsPaidUsecase;
+use Usecase\RefundPaymentUsecase;
 
 class PaymentController extends Controller
 {
@@ -133,6 +134,35 @@ class PaymentController extends Controller
             "pages" => $pagination,
             "total" => $total,
         ], isPrivate: true);
+    }
+
+    /**
+     * POST /admin/payments/{id}/refund
+     *
+     * @throws PropelException
+     */
+    public function refundAction(
+        int                  $id,
+        CurrentUser          $currentUser,
+        FlashMessagesService $flashMessages,
+    ): RedirectResponse
+    {
+        $currentUser->authAdmin();
+
+        $payment = PaymentQuery::create()->findPk($id);
+        if ($payment === null) {
+            throw new NotFoundHttpException("Paiement #$id introuvable.");
+        }
+
+        try {
+            $usecase = new RefundPaymentUsecase();
+            $usecase->execute($payment);
+            $flashMessages->add("success", "Le paiement a été remboursé.");
+        } catch (BusinessRuleException $e) {
+            $flashMessages->add("danger", $e->getMessage());
+        }
+
+        return new RedirectResponse("/admin/payments/");
     }
 
     /**

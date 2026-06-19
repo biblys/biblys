@@ -456,6 +456,11 @@ payment_create:
   methods: POST
   controller: AppBundle\Controller\PaymentController::createAction
 
+payment_refund:
+  path: /admin/payments/{id}/refund
+  methods: POST
+  controller: AppBundle\Controller\PaymentController::refundAction
+
 payment_pay:
   path: /order/{slug}/pay
   methods: GET
