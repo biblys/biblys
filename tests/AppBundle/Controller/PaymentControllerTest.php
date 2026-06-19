@@ -1115,4 +1115,75 @@ class PaymentControllerTest extends TestCase
         $order->reload();
         $this->assertTrue($order->isPaid());
     }
+
+    /** refundAction */
+
+    /**
+     * @throws PropelException
+     */
+    public function testRefundActionRefundsPayment(): void
+    {
+        // given
+        $controller = new PaymentController();
+        $order = ModelFactory::createOrder();
+        $payment = ModelFactory::createPayment(order: $order, amount: 2000, mode: Payment::MODE_STRIPE);
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->once()->andReturn();
+
+        $flashMessages = Mockery::mock(FlashMessagesService::class);
+        $flashMessages->expects("add")->with("success", "Le paiement a été remboursé.")->once();
+
+        // when
+        $response = $controller->refundAction($payment->getId(), $currentUser, $flashMessages);
+
+        // then
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals("/admin/payments/", $response->getTargetUrl());
+        $payment->reload();
+        $this->assertNotNull($payment->getRefundedAt());
+        $refund = PaymentQuery::create()->findOneByOriginalId($payment->getId());
+        $this->assertNotNull($refund);
+        $this->assertEquals(-2000, $refund->getAmount());
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testRefundActionReturns404IfPaymentNotFound(): void
+    {
+        // given
+        $controller = new PaymentController();
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->once()->andReturn();
+        $flashMessages = Mockery::mock(FlashMessagesService::class);
+
+        // when / then
+        $this->expectException(\Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class);
+
+        $controller->refundAction(999999, $currentUser, $flashMessages);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testRefundActionRedirectsWithErrorIfAlreadyRefunded(): void
+    {
+        // given
+        $controller = new PaymentController();
+        $payment = ModelFactory::createPayment(refundedAt: new DateTime());
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->once()->andReturn();
+
+        $flashMessages = Mockery::mock(FlashMessagesService::class);
+        $flashMessages->expects("add")->with("danger", "Ce paiement a déjà été remboursé.")->once();
+
+        // when
+        $response = $controller->refundAction($payment->getId(), $currentUser, $flashMessages);
+
+        // then
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals("/admin/payments/", $response->getTargetUrl());
+    }
 }
