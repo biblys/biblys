@@ -28,7 +28,10 @@ use Repository\PaymentRepository;
 
 class RefundPaymentUsecase
 {
-    public function __construct(private readonly PaymentRepository $paymentRepository)
+    public function __construct(
+        private readonly PaymentRepository $paymentRepository,
+        private readonly MarkOrderAsUnpaidUsecase $markOrderAsUnpaidUsecase,
+    )
     {
     }
 
@@ -63,6 +66,13 @@ class RefundPaymentUsecase
         try {
             $this->paymentRepository->save($payment);
             $this->paymentRepository->save($refund);
+
+            $order = $payment->getOrder();
+            if ($order !== null) {
+                $order->clearPayments();
+                $this->markOrderAsUnpaidUsecase->execute($order);
+            }
+
             $con->commit();
         } catch (Exception $e) {
             $con->rollBack();
