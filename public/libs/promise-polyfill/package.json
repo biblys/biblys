@@ -50,7 +50,7 @@
     "promises-aplus-tests": "*",
     "rimraf": "^6.0.0",
     "rollup": "^4.0.0",
-    "rollup-plugin-uglify": "^2.0.1",
+    "rollup-plugin-uglify": "^6.0.0",
     "sinon": "^1.17.2"
   },
   "keywords": [
