@@ -607,7 +607,7 @@ function reloadEvents(scope) {
   });
 
   // DateTimePicker
-  if (jQuery.isFunction(jQuery.fn.datetimepicker)) {
+  if (typeof jQuery.fn.datetimepicker === "function") {
     $('.datetime').datetimepicker({
       dateFormat: 'yy-mm-dd',
       timeFormat: 'hh:mm:ss'
