@@ -3,7 +3,7 @@
     "@babel/core": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
     "@symfony/webpack-encore": "^6.0.0",
-    "eslint": "^8.0.0",
+    "eslint": "^10.0.0",
     "jest": "^30.0.5",
     "vitest": "^4.1.9",
     "webpack": "^5.72.0",
