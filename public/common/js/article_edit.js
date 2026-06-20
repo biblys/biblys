@@ -92,7 +92,7 @@ function initPublisherAutocomplete() {
           },
           success: function (data) {
             $('#collection_publisher').removeClass('loading');
-            const res = jQuery.parseJSON(data);
+            const res = JSON.parse(data);
             if (res.error) window._alert(res.error);
             else choose_publisher(res.publisher_id, res.publisher_name);
           },
