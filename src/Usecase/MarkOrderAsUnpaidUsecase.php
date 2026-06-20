@@ -1,0 +1,43 @@
+<?php
+/*
+ * Copyright (C) 2026 Clément Latzarus
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, version 3.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+namespace Usecase;
+
+use Model\Order;
+use Propel\Runtime\Exception\PropelException;
+
+class MarkOrderAsUnpaidUsecase
+{
+    /**
+     * @throws PropelException
+     */
+    public function execute(Order $order): void
+    {
+        $payments = $order->getPayments()->getArrayCopy();
+        $executedPayments = array_filter($payments, fn($payment) => $payment->isExecuted());
+        $totalPaid = array_reduce(
+            $executedPayments,
+            fn($carry, $payment) => $carry + $payment->getAmount(),
+            0
+        );
+
+        if ($totalPaid < $order->getTotalAmountWithShipping()) {
+            $order->setPaymentDate(null);
+            $order->save();
+        }
+    }
+}
