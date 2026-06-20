@@ -51,7 +51,7 @@
     "rimraf": "^6.0.0",
     "rollup": "^4.0.0",
     "rollup-plugin-uglify": "^6.0.0",
-    "sinon": "^1.17.2"
+    "sinon": "^22.0.0"
   },
   "keywords": [
     "promise",
