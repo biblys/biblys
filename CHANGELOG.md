@@ -6,6 +6,7 @@
 
 - L'adapter jQuery de CKEditor a été mis à jour vers la version CKEditor 4 LTS (2025),
   en préparation de la migration vers jQuery 4.
+- jQuery a été mis à jour de la version 1.12.4 (2016) vers la version 3.7.1 (LTS).
 
 ### Confirmité NF525
 
