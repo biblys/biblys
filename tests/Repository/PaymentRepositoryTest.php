@@ -19,6 +19,7 @@
 namespace Repository;
 
 use Biblys\Test\ModelFactory;
+use Model\Order;
 use Model\Payment;
 use Model\PaymentQuery;
 use PHPUnit\Framework\TestCase;
@@ -66,6 +67,25 @@ class PaymentRepositoryTest extends TestCase
 
         // then
         $this->assertNull($found);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testFindByOrderReturnsPaymentsForOrder(): void
+    {
+        // given
+        $order = ModelFactory::createOrder();
+        $payment = ModelFactory::createPayment(order: $order, amount: 1500);
+        ModelFactory::createPayment(amount: 500);
+        $repo = new PaymentRepository();
+
+        // when
+        $found = $repo->findByOrder($order);
+
+        // then
+        $this->assertCount(1, $found);
+        $this->assertEquals($payment->getId(), $found[0]->getId());
     }
 
     /**
