@@ -39,8 +39,10 @@ class MarkOrderAsUnpaidUsecase
             0
         );
 
-        if ($totalPaid < $order->getTotalAmountWithShipping()) {
+        $orderTotal = $order->getTotalAmountWithShipping();
+        if ($totalPaid < $orderTotal) {
             $order->setPaymentDate(null);
+            $order->setAmountTobepaid($orderTotal - $totalPaid);
             $order->save();
         }
     }

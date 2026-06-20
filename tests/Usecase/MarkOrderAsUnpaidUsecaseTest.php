@@ -54,6 +54,29 @@ class MarkOrderAsUnpaidUsecaseTest extends TestCase
         // then
         $order->reload();
         $this->assertNull($order->getPaymentDate(), "la commande est marquée comme non payée");
+        $this->assertEquals(1500, $order->getAmountTobepaid(), "le montant restant à payer est restauré");
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testRestoresAmountTobepaidAfterPartialRefund(): void
+    {
+        // given
+        $order = ModelFactory::createOrder(paymentDate: new DateTime());
+        ModelFactory::createStockItem(order: $order, sellingPrice: 2000);
+        ModelFactory::createPayment(order: $order, amount: 1000);
+        ModelFactory::createPayment(order: $order, amount: 1000);
+        ModelFactory::createPayment(order: $order, amount: -500);
+
+        // when
+        $usecase = new MarkOrderAsUnpaidUsecase(new PaymentRepository());
+        $usecase->execute($order);
+
+        // then
+        $order->reload();
+        $this->assertNull($order->getPaymentDate(), "la commande est marquée comme non payée");
+        $this->assertEquals(500, $order->getAmountTobepaid(), "le montant restant à payer reflète le remboursement partiel");
     }
 
     /**
