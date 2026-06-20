@@ -13,6 +13,8 @@
 - Il est désormais possible de marquer un paiement comme remboursé depuis la page
   de gestion des paiements. Un paiement négatif est créé en base pour la commande,
   lié au paiement d'origine.
+- Une commande est automatiquement marquée comme non payée si la somme de ses
+  paiements exécutés devient inférieure à son total (ex. : après un remboursement).
 
 ### Amélorations
 
