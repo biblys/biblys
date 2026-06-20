@@ -25,6 +25,7 @@ use Model\PaymentQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Repository\PaymentRepository;
+use Usecase\MarkOrderAsUnpaidUsecase;
 
 require_once __DIR__ . "/../setUp.php";
 
@@ -49,7 +50,7 @@ class RefundPaymentUsecaseTest extends TestCase
         $payment = ModelFactory::createPayment(order: $order, amount: 1500, mode: Payment::MODE_STRIPE);
 
         // when
-        $usecase = new RefundPaymentUsecase(new PaymentRepository());
+        $usecase = new RefundPaymentUsecase(new PaymentRepository(), new MarkOrderAsUnpaidUsecase());
         $refund = $usecase->execute($payment);
 
         // then
@@ -65,6 +66,29 @@ class RefundPaymentUsecaseTest extends TestCase
 
     /**
      * @throws PropelException
+     * @throws BusinessRuleException
+     */
+    public function testMarksOrderAsUnpaidAfterFullRefund(): void
+    {
+        // given
+        $order = ModelFactory::createOrder(paymentDate: new DateTime());
+        ModelFactory::createStockItem(order: $order, sellingPrice: 1500);
+        $payment = ModelFactory::createPayment(order: $order, amount: 1500, mode: Payment::MODE_STRIPE);
+
+        // when
+        $usecase = new RefundPaymentUsecase(
+            new PaymentRepository(),
+            new MarkOrderAsUnpaidUsecase(),
+        );
+        $usecase->execute($payment);
+
+        // then
+        $order->reload();
+        $this->assertNull($order->getPaymentDate(), "la commande est marquée comme non payée");
+    }
+
+    /**
+     * @throws PropelException
      */
     public function testThrowsIfAlreadyRefunded(): void
     {
@@ -75,7 +99,7 @@ class RefundPaymentUsecaseTest extends TestCase
         $this->expectException(BusinessRuleException::class);
         $this->expectExceptionMessage("Ce paiement a déjà été remboursé.");
 
-        $usecase = new RefundPaymentUsecase(new PaymentRepository());
+        $usecase = new RefundPaymentUsecase(new PaymentRepository(), new MarkOrderAsUnpaidUsecase());
         $usecase->execute($payment);
     }
 
@@ -91,7 +115,7 @@ class RefundPaymentUsecaseTest extends TestCase
         $this->expectException(BusinessRuleException::class);
         $this->expectExceptionMessage("Impossible de rembourser un paiement négatif.");
 
-        $usecase = new RefundPaymentUsecase(new PaymentRepository());
+        $usecase = new RefundPaymentUsecase(new PaymentRepository(), new MarkOrderAsUnpaidUsecase());
         $usecase->execute($payment);
     }
 }
