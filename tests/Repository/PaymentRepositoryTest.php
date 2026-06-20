@@ -91,6 +91,25 @@ class PaymentRepositoryTest extends TestCase
     /**
      * @throws PropelException
      */
+    public function testFindExecutedByOrderReturnsOnlyExecutedPayments(): void
+    {
+        // given
+        $order = ModelFactory::createOrder();
+        $executed = ModelFactory::createPayment(order: $order, amount: 1500);
+        ModelFactory::createPayment(order: $order, amount: 500, executedAt: null);
+        $repo = new PaymentRepository();
+
+        // when
+        $found = $repo->findExecutedByOrder($order);
+
+        // then
+        $this->assertCount(1, $found);
+        $this->assertEquals($executed->getId(), $found[0]->getId());
+    }
+
+    /**
+     * @throws PropelException
+     */
     public function testSavePersistsPayment(): void
     {
         // given
