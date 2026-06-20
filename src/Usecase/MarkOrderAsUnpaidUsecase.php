@@ -32,8 +32,7 @@ class MarkOrderAsUnpaidUsecase
      */
     public function execute(Order $order): void
     {
-        $payments = $this->paymentRepository->findByOrder($order);
-        $executedPayments = array_filter($payments, fn($payment) => $payment->isExecuted());
+        $executedPayments = $this->paymentRepository->findExecutedByOrder($order);
         $totalPaid = array_reduce(
             $executedPayments,
             fn($carry, $payment) => $carry + $payment->getAmount(),

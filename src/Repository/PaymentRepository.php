@@ -44,6 +44,18 @@ class PaymentRepository
     /**
      * @throws PropelException
      */
+    public function findExecutedByOrder(Order $order): array
+    {
+        return PaymentQuery::create()
+            ->filterByOrder($order)
+            ->filterByExecuted(null, \Propel\Runtime\ActiveQuery\Criteria::ISNOTNULL)
+            ->find()
+            ->getArrayCopy();
+    }
+
+    /**
+     * @throws PropelException
+     */
     public function save(Payment $payment): void
     {
         $payment->save();
