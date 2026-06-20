@@ -606,14 +606,6 @@ function reloadEvents(scope) {
     }
   });
 
-  // DateTimePicker
-  if (typeof jQuery.fn.datetimepicker === "function") {
-    $('.datetime').datetimepicker({
-      dateFormat: 'yy-mm-dd',
-      timeFormat: 'hh:mm:ss'
-    });
-  }
-
   // Select goto
   $('select.goto').change(function() {
     var valeur = $(this).val();
