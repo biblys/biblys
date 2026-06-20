@@ -69,6 +69,7 @@ use Usecase\AddArticleToUserLibraryUsecase;
 use Usecase\AddPaymentToOrderAndExecuteUsecase;
 use Usecase\BusinessRuleException;
 use Usecase\MarkOrderAsPaidUsecase;
+use Usecase\MarkOrderAsUnpaidUsecase;
 use Usecase\RefundPaymentUsecase;
 
 class PaymentController extends Controller
@@ -157,7 +158,7 @@ class PaymentController extends Controller
         }
 
         try {
-            $usecase = new RefundPaymentUsecase($paymentRepository);
+            $usecase = new RefundPaymentUsecase($paymentRepository, new MarkOrderAsUnpaidUsecase($paymentRepository));
             $usecase->execute($payment);
             $flashMessages->add("success", "Le paiement a été remboursé.");
         } catch (BusinessRuleException $e) {
