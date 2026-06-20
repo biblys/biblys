@@ -69,6 +69,8 @@ bin/console               # Symfony Console application
 ### ORM
 Uses Propel 2.x ORM. Database schema is defined in `schema.xml`. Run `composer propel:build` after schema changes to regenerate model classes.
 
+Prefer using repository classes (e.g. `PaymentRepository`) for reading and writing data rather than calling Propel model relations directly (e.g. `$order->getPayments()`). Repositories live in `src/Repository/` and ensure fresh DB queries, avoiding Propel's in-memory collection cache.
+
 ### Legacy Code
 The `inc/` directory contains legacy entity classes that extend a base `Entity` class implementing ArrayAccess. These are being gradually replaced by Propel models in `src/Model/`.
 
