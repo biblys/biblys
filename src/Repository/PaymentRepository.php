@@ -18,6 +18,7 @@
 
 namespace Repository;
 
+use Model\Order;
 use Model\Payment;
 use Model\PaymentQuery;
 use Propel\Runtime\Exception\PropelException;
@@ -30,6 +31,14 @@ class PaymentRepository
     public function findById(int $id): ?Payment
     {
         return PaymentQuery::create()->findPk($id);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function findByOrder(Order $order): array
+    {
+        return PaymentQuery::create()->filterByOrder($order)->find()->getArrayCopy();
     }
 
     /**

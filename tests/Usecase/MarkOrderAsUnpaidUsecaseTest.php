@@ -22,6 +22,7 @@ use DateTime;
 use Model\PaymentQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
+use Repository\PaymentRepository;
 
 require_once __DIR__ . "/../setUp.php";
 
@@ -47,7 +48,7 @@ class MarkOrderAsUnpaidUsecaseTest extends TestCase
         ModelFactory::createPayment(order: $order, amount: -1500);
 
         // when
-        $usecase = new MarkOrderAsUnpaidUsecase();
+        $usecase = new MarkOrderAsUnpaidUsecase(new PaymentRepository());
         $usecase->execute($order);
 
         // then
@@ -66,7 +67,7 @@ class MarkOrderAsUnpaidUsecaseTest extends TestCase
         ModelFactory::createPayment(order: $order, amount: 1000);
 
         // when
-        $usecase = new MarkOrderAsUnpaidUsecase();
+        $usecase = new MarkOrderAsUnpaidUsecase(new PaymentRepository());
         $usecase->execute($order);
 
         // then
@@ -85,7 +86,7 @@ class MarkOrderAsUnpaidUsecaseTest extends TestCase
         ModelFactory::createPayment(order: $order, amount: 2000);
 
         // when
-        $usecase = new MarkOrderAsUnpaidUsecase();
+        $usecase = new MarkOrderAsUnpaidUsecase(new PaymentRepository());
         $usecase->execute($order);
 
         // then
