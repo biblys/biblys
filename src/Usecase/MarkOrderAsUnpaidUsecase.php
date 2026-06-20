@@ -19,15 +19,20 @@ namespace Usecase;
 
 use Model\Order;
 use Propel\Runtime\Exception\PropelException;
+use Repository\PaymentRepository;
 
 class MarkOrderAsUnpaidUsecase
 {
+    public function __construct(private readonly PaymentRepository $paymentRepository)
+    {
+    }
+
     /**
      * @throws PropelException
      */
     public function execute(Order $order): void
     {
-        $payments = $order->getPayments()->getArrayCopy();
+        $payments = $this->paymentRepository->findByOrder($order);
         $executedPayments = array_filter($payments, fn($payment) => $payment->isExecuted());
         $totalPaid = array_reduce(
             $executedPayments,

@@ -69,7 +69,6 @@ class RefundPaymentUsecase
 
             $order = $payment->getOrder();
             if ($order !== null) {
-                $order->clearPayments();
                 $this->markOrderAsUnpaidUsecase->execute($order);
             }
 
