@@ -84,6 +84,16 @@ Tests use PHPUnit 10. Test setup in `tests/setUp.php` initializes Propel and cre
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md) for the git flow branching model, versioning, and commit conventions used in this repository.
 
+### Langue — règle critique
+
+- **Titres de PR et issues** : en français, **sans** préfixe Conventional Commits (`feat:`, `fix:`, `chore:`…)
+- **Messages de commit et noms de branches** : en anglais, avec préfixe Conventional Commits
+
+| ❌ FAUX (titre de PR) | ✅ CORRECT (titre de PR) |
+|---|---|
+| `feat: add point-of-sale scaffolding` | `Caisse : scaffolding et template Twig` |
+| `fix: correct HTML entity escaping` | `Corriger l'échappement des entités HTML` |
+
 ## Docker Development
 
 ```bash
