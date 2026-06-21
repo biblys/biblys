@@ -409,6 +409,13 @@ openid_callback:
   controller: AppBundle\Controller\OpenIDConnectController::callback
   methods: GET
 
+# Point of Sale
+
+point_of_sale_index:
+  path: /admin/point-of-sale
+  controller: AppBundle\Controller\PointOfSaleController::indexAction
+  methods: [GET]
+
 # Orders
 
 order_index:
