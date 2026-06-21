@@ -95,7 +95,8 @@ return function (Request $request, UrlGenerator $urlGenerator): Response|Redirec
 // Delete order
     if ($request->query->get('delete', false)) {
         try {
-            (new CancelOrderUsecase(new PaymentRepository()))->execute($order->get('id'));
+            $cancelOrderUsecase = new CancelOrderUsecase(new PaymentRepository());
+            $cancelOrderUsecase->execute($order->get('id'));
             return new RedirectResponse("/pages/adm_order?deleted={$order->get("id")}");
         } catch (BusinessRuleException $e) {
             $message = '<p class="alert alert-danger">' . $e->getMessage() . '</p>';

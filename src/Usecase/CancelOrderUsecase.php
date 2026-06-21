@@ -61,26 +61,26 @@ class CancelOrderUsecase
         $sm = new StockManager();
         $stocks = $sm->getAll(['order_id' => $legacyOrder->get('id')]);
 
-        $removedTitles = array_map(fn($stock) => $stock->get('article')->get('title'), $stocks);
+        $removedArticles = array_map(fn($stock) => $stock->get('article')->get('title'), $stocks);
 
         foreach ($stocks as $stock) {
             $om->removeStock($legacyOrder, $stock);
         }
         $om->updateFromStock($legacyOrder);
 
-        $this->_sendCancellationMail($legacyOrder, $removedTitles);
+        $this->_sendCancellationMail($legacyOrder, $removedArticles);
 
         $order->setCancelDate(new DateTime());
         $order->save();
     }
 
-    private function _sendCancellationMail(Order $legacyOrder, array $removedTitles): void
+    private function _sendCancellationMail(Order $legacyOrder, array $removedArticles): void
     {
         if ($legacyOrder->get('type') !== 'web') {
             return;
         }
 
-        $removedCount = count($removedTitles);
+        $removedCount = count($removedArticles);
 
         $subject = 'Commande n° ' . $legacyOrder->get('id') . ' annulée';
         $siteDomain = LegacyCodeHelper::getGlobalSite(ignoreDeprecation: true)->get('domain');
@@ -97,7 +97,7 @@ class CancelOrderUsecase
                     <p>
                         Pour mémoire, cette commande concernait le' . s($removedCount) . ' article' . s($removedCount) . ' suivant' . s($removedCount) . '&nbsp;:
                     </p>
-                    <ul><li>' . implode('</li><li>', $removedTitles) . '</li></ul>
+                    <ul><li>' . implode('</li><li>', $removedArticles) . '</li></ul>
 
                     <p>
                         A très bientôt !
