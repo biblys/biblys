@@ -16,6 +16,9 @@
   lié au paiement d'origine.
 - Une commande est automatiquement marquée comme non payée si la somme de ses
   paiements exécutés devient inférieure à son total (ex. : après un remboursement).
+- L'annulation d'une commande est désormais bloquée si des paiements non remboursés
+  existent pour cette commande. Un message indique le montant payé et invite à
+  effectuer un remboursement préalable.
 
 ### Amélorations
 
