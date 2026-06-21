@@ -18,12 +18,9 @@
 
 namespace AppBundle\Controller\Legacy;
 
-use Biblys\Service\CurrentSite;
-use Biblys\Service\CurrentUser;
 use Biblys\Service\FlashMessagesService;
 use Biblys\Service\Images\ImagesService;
 use Biblys\Test\EntityFactory;
-use Biblys\Test\ModelFactory;
 use Mockery;
 use Model\Payment;
 use Model\PaymentQuery;
@@ -59,7 +56,6 @@ class AdmCheckoutTest extends TestCase
     {
         // given
         $controller = $this->getController();
-        $site = ModelFactory::createSite();
         $cart = EntityFactory::createCart();
 
         $_GET["cart_id"] = $cart->get("id");
@@ -74,14 +70,9 @@ class AdmCheckoutTest extends TestCase
         $request->query->set("cart_id", $cart->get("id"));
         $request->headers->set("X-Requested-With", "XMLHttpRequest");
 
-        $currentSite = Mockery::mock(CurrentSite::class);
-        $currentSite->shouldReceive("getSite")->andReturn($site);
-
         // when
         $controller(
             $request,
-            Mockery::mock(CurrentUser::class),
-            $currentSite,
             Mockery::mock(ImagesService::class),
             Mockery::mock(FlashMessagesService::class),
         );

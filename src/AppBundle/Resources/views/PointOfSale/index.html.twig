@@ -208,7 +208,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
     <br>
     <h3>Autres paniers</h3>
-    <p><a href="/pages/adm_checkout?new_cart" class="btn btn-primary">Nouveau panier</a></p>
+    <p><a href="/admin/caisse" class="btn btn-primary">Nouveau panier</a></p>
 
     <table class="admin-table">
       <thead>
@@ -224,7 +224,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       <tbody>
         {% for shopCart in shop_carts %}
           <tr>
-            <td><a href="/pages/adm_checkout?cart_id={{ shopCart.id }}">{{ shopCart.title }}</a></td>
+            <td><a href="/admin/caisse?cart_id={{ shopCart.id }}">{{ shopCart.title }}</a></td>
             <td>{{ shopCart.seller_email }}</td>
             <td>{{ shopCart.customer_name }}</td>
             <td class="right">{{ shopCart.count }}</td>
