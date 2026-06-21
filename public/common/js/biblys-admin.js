@@ -376,7 +376,7 @@ function reloadAdminEvents() {
           data: data,
           dataType: 'json'
         })
-          .success(function() {
+          .done(function() {
             window.location.href = '/admin/caisse';
           })
           .fail(function(res) {
