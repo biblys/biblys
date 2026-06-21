@@ -412,7 +412,7 @@ openid_callback:
 # Point of Sale
 
 point_of_sale_index:
-  path: /admin/point-of-sale
+  path: /admin/caisse
   controller: AppBundle\Controller\PointOfSaleController::indexAction
   methods: [GET]
 

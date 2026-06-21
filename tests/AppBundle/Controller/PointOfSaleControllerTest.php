@@ -114,7 +114,7 @@ class PointOfSaleControllerTest extends TestCase
 
         // then
         $this->assertEquals(302, $response->getStatusCode());
-        $this->assertEquals("/admin/point-of-sale", $response->headers->get("Location"));
+        $this->assertEquals("/admin/caisse", $response->headers->get("Location"));
         $this->assertNotNull($response->headers->getCookies()[0] ?? null, "should set bypass cookie");
         $this->assertEquals("bypass_cash_register_check", $response->headers->getCookies()[0]->getName());
     }
@@ -148,7 +148,7 @@ class PointOfSaleControllerTest extends TestCase
 
         // then
         $this->assertEquals(302, $response->getStatusCode());
-        $this->assertStringStartsWith("/admin/point-of-sale?cart_id=", $response->headers->get("Location"));
+        $this->assertStringStartsWith("/admin/caisse?cart_id=", $response->headers->get("Location"));
     }
 
     /**

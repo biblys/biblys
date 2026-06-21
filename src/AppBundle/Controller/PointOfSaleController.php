@@ -63,7 +63,7 @@ class PointOfSaleController extends Controller
 
         $enableTemporaryAccess = $request->query->getInt("enable_temporary_access");
         if ($enableTemporaryAccess === 1) {
-            $redirectResponse = new RedirectResponse("/admin/point-of-sale");
+            $redirectResponse = new RedirectResponse("/admin/caisse");
             $bypassCookie = new Cookie("bypass_cash_register_check", "1", new DateTime("tomorrow"));
             $redirectResponse->headers->setCookie($bypassCookie);
             $flashMessagesService->add("info", "La caisse a été réactivée jusqu'à demain.");
@@ -89,14 +89,14 @@ class PointOfSaleController extends Controller
             ]);
 
             if ($cartForCurrentSeller) {
-                return new RedirectResponse("/admin/point-of-sale?cart_id={$cartForCurrentSeller->get('id')}");
+                return new RedirectResponse("/admin/caisse?cart_id={$cartForCurrentSeller->get('id')}");
             }
 
             $newCart = $cm->create();
             $newCart->set("cart_type", "shop");
             $newCart->set("cart_seller_id", $currentUser->getUser()->getId());
             $newCart = $cm->update($newCart);
-            return new RedirectResponse("/admin/point-of-sale?cart_id={$newCart->get('id')}");
+            return new RedirectResponse("/admin/caisse?cart_id={$newCart->get('id')}");
         }
 
         $cart = $cm->get(['cart_id' => $cartId]);
