@@ -103,7 +103,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     </form>
 
     <h3>
-      <span id="cart_title" class="event pointer" contenteditable>{{ cart.get('cart_title') }}</span>
+      <span id="cart_title" class="event pointer" contenteditable>{{ cart.get('cart_title')|raw }}</span>
     </h3>
 
     <form>
@@ -160,12 +160,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       </thead>
       <tbody>
         <tr>
-          <td class="right" id="cart_total" data-value="{{ cart_total }}">{{ cart_total|currency(true) }}</td>
+          <td class="right" id="cart_total" data-value="{{ cart_total }}">{{ cart_total|currency(true)|raw }}</td>
           <td class="center"><input id="cart_cash" class="cart_payment" type="number" step="0.01" min=0 max=999 style="text-align: right;"></td>
           <td class="center"><input id="cart_cheque" class="cart_payment" type="number" step="0.01" min=0 max=999 style="text-align: right;"></td>
           <td class="center"><input id="cart_card" class="cart_payment" type="number" step="0.01" min=0 max=999 style="text-align: right;"></td>
-          <td id="cart_topay" data-value="{{ cart_total }}" class="right">{{ cart_total|currency(true) }}</td>
-          <td id="cart_togive" data-value=0 class="right">{{ 0|currency(true) }}</td>
+          <td id="cart_topay" data-value="{{ cart_total }}" class="right">{{ cart_total|currency(true)|raw }}</td>
+          <td id="cart_togive" data-value=0 class="right">{{ 0|currency(true)|raw }}</td>
         </tr>
       </tbody>
     </table>
@@ -228,7 +228,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
             <td>{{ shopCart.seller_email }}</td>
             <td>{{ shopCart.customer_name }}</td>
             <td class="right">{{ shopCart.count }}</td>
-            <td class="right">{{ shopCart.amount|currency(true) }}</td>
+            <td class="right">{{ shopCart.amount|currency(true)|raw }}</td>
             <td class="center">
               <a href="/pages/adm_checkout?cart_id={{ shopCart.id }}&vacuum_cart=1"
                  data-confirm="Voulez-vous vraiment VIDER ce panier et remettre {{ shopCart.count }} exemplaire{% if shopCart.count > 1 %}s{% endif %} en vente ?"
