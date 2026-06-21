@@ -34,6 +34,7 @@ use Model\PaymentQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
@@ -250,5 +251,75 @@ class OrderControllerTest extends TestCase
         $updatedOrder = OrderQuery::create()->findPk($order->getId());
         $this->assertNotNull($updatedOrder->getShippingDate());
         $this->assertEquals("123456789", $updatedOrder->getTrackNumber());
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testUpdateActionCancelIsBlockedWhenOrderHasPayments(): void
+    {
+        // given
+        $controller = new OrderController();
+        $order = ModelFactory::createOrder();
+        ModelFactory::createPayment(order: $order, amount: 1000);
+
+        $payload = json_encode(["payment_mode" => null, "tracking_number" => null]);
+        $request = new Request(content: $payload);
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->once()->andReturn();
+        $templateService = Mockery::mock(TemplateService::class);
+        $mailer = Mockery::mock(Mailer::class);
+
+        // then
+        $this->expectException(BadRequestHttpException::class);
+        $this->expectExceptionMessage("Effectuez d'abord un remboursement.");
+
+        // when
+        $controller->updateAction(
+            $request,
+            $currentSite,
+            $currentUser,
+            $templateService,
+            $mailer,
+            urlGenerator: Mockery::mock(UrlGenerator::class),
+            id: $order->getId(),
+            action: "cancel",
+        );
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testUpdateActionCancelIsAllowedWhenOrderHasNoPayments(): void
+    {
+        // given
+        $controller = new OrderController();
+        $order = ModelFactory::createOrder();
+
+        $payload = json_encode(["payment_mode" => null, "tracking_number" => null]);
+        $request = new Request(content: $payload);
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->once()->andReturn();
+        $templateService = Mockery::mock(TemplateService::class);
+        $mailer = Mockery::mock(Mailer::class);
+
+        // when
+        $response = $controller->updateAction(
+            $request,
+            $currentSite,
+            $currentUser,
+            $templateService,
+            $mailer,
+            urlGenerator: Mockery::mock(UrlGenerator::class),
+            id: $order->getId(),
+            action: "cancel",
+        );
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $updatedOrder = OrderQuery::create()->findPk($order->getId());
+        $this->assertNotNull($updatedOrder->getCancelDate());
     }
 }
