@@ -175,7 +175,7 @@ export default class Order {
 
             // Si erreur
             if (data.error) {
-              window._alert(data.error);
+              window._alert(data.error.message);
               return;
             }
 
