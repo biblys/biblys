@@ -2,6 +2,10 @@
 
 ## 3.14.0 (DEV)
 
+### Caisse
+
+- La caisse est désormais accessible via la nouvelle URL `/admin/caisse`.
+
 ### Maintenance
 
 - L'adapter jQuery de CKEditor a été mis à jour vers la version CKEditor 4 LTS (2025),
