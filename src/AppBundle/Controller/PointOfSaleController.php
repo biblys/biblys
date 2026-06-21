@@ -22,6 +22,7 @@ use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\FlashMessagesService;
 use Biblys\Service\Images\ImagesService;
+use Biblys\Service\QueryParamsService;
 use Biblys\Service\TemplateService;
 use CartManager;
 use CustomerManager;
@@ -55,13 +56,17 @@ class PointOfSaleController extends Controller
         FlashMessagesService $flashMessagesService,
         TemplateService      $templateService,
         UrlGenerator         $urlGenerator,
+        QueryParamsService   $queryParams,
     ): Response|RedirectResponse
     {
         $currentUser->authAdmin();
 
-        $request->attributes->set('page_title', 'Caisse');
+        $queryParams->parse([
+            "enable_temporary_access" => ["type" => "numeric", "default" => 0],
+            "cart_id" => ["type" => "numeric", "default" => null],
+        ]);
 
-        $enableTemporaryAccess = $request->query->getInt("enable_temporary_access");
+        $enableTemporaryAccess = $queryParams->getInteger("enable_temporary_access");
         if ($enableTemporaryAccess === 1) {
             $redirectResponse = new RedirectResponse("/admin/caisse");
             $bypassCookie = new Cookie("bypass_cash_register_check", "1", new DateTime("tomorrow"));
@@ -80,7 +85,7 @@ class PointOfSaleController extends Controller
 
         $cm = new CartManager();
 
-        $cartId = $request->query->get("cart_id");
+        $cartId = $queryParams->getInteger("cart_id");
         if (!$cartId) {
             $cartForCurrentSeller = $cm->get([
                 "cart_type" => "shop",
