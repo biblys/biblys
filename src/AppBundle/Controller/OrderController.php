@@ -43,6 +43,7 @@ use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
+use Repository\PaymentRepository;
 use Usecase\AddArticleToUserLibraryUsecase;
 use Usecase\AddPaymentToOrderAndExecuteUsecase;
 use Usecase\MarkOrderAsPaidUsecase;
@@ -225,6 +226,19 @@ class OrderController extends Controller
             $om->followUp($orderEntity);
             $notice = 'Le client '.$orderEntity->get('firstname').' '.$orderEntity->get('lastname').' a été relancée pour la commande n°&nbsp;'.$orderEntity->get('id').'.';
         } elseif ($action == 'cancel') {
+            $paymentRepository = new PaymentRepository();
+            $executedPayments = $paymentRepository->findExecutedByOrder($order);
+            $totalPaid = array_reduce(
+                $executedPayments,
+                fn($carry, $payment) => $carry + $payment->getAmount(),
+                0
+            );
+            if ($totalPaid > 0) {
+                throw new BadRequestHttpException(
+                    "Cette commande ne peut pas être annulée car elle a été payée (total : " .
+                    currency($totalPaid / 100) . "). Effectuez d'abord un remboursement."
+                );
+            }
             $om->cancel($orderEntity);
             $notice = 'La commande n°&nbsp;'.$orderEntity->get('id').' de '.$orderEntity->get('firstname').' '.$orderEntity->get('lastname').' a été annulée.';
         }
