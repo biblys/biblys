@@ -49,7 +49,8 @@ public function execute(int $orderId): void
 
 ```php
 // ✅
-(new CancelOrderUsecase(new PaymentRepository()))->execute($id);
+$cancelOrderUsecase = new CancelOrderUsecase(new PaymentRepository());
+$cancelOrderUsecase->execute($id);
 
 // ❌ (non disponible pour l'instant)
 $usecase->execute($id);  // injecté via container
