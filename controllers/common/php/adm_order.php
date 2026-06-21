@@ -21,11 +21,14 @@ use Model\CountryQuery;
 use Model\ShippingOptionQuery;
 use Model\StockQuery;
 use Propel\Runtime\Exception\PropelException;
+use Repository\PaymentRepository;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
+use Usecase\BusinessRuleException;
+use Usecase\CancelOrderUsecase;
 
 /**
  * @throws PropelException
@@ -91,8 +94,12 @@ return function (Request $request, UrlGenerator $urlGenerator): Response|Redirec
 
 // Delete order
     if ($request->query->get('delete', false)) {
-        $om->cancel($order);
-        return new RedirectResponse("/pages/adm_order?deleted={$order->get("id")}");
+        try {
+            (new CancelOrderUsecase(new PaymentRepository()))->execute($order->get('id'));
+            return new RedirectResponse("/pages/adm_order?deleted={$order->get("id")}");
+        } catch (BusinessRuleException $e) {
+            $message = '<p class="alert alert-danger">' . $e->getMessage() . '</p>';
+        }
     } // Ajouter un exemplaire
     elseif (isset($_GET['stock_add'])) {
         if ($stock = $sm->get(array('stock_id' => $_GET['stock_add']))) {
