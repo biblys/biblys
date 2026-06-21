@@ -18,10 +18,15 @@
 
 namespace Usecase;
 
+use Biblys\Legacy\LegacyCodeHelper;
+use Biblys\Service\Mailer;
+use DateTime;
 use Model\OrderQuery;
+use Order;
 use OrderManager;
 use Propel\Runtime\Exception\PropelException;
 use Repository\PaymentRepository;
+use StockManager;
 
 class CancelOrderUsecase
 {
@@ -52,6 +57,58 @@ class CancelOrderUsecase
 
         $om = new OrderManager();
         $legacyOrder = $om->getById($orderId);
-        $om->cancel($legacyOrder);
+
+        $sm = new StockManager();
+        $stocks = $sm->getAll(['order_id' => $legacyOrder->get('id')]);
+
+        $removedTitles = array_map(fn($stock) => $stock->get('article')->get('title'), $stocks);
+
+        foreach ($stocks as $stock) {
+            $om->removeStock($legacyOrder, $stock);
+        }
+        $om->updateFromStock($legacyOrder);
+
+        $this->_sendCancellationMail($legacyOrder, $removedTitles);
+
+        $order->setCancelDate(new DateTime());
+        $order->save();
+    }
+
+    private function _sendCancellationMail(Order $legacyOrder, array $removedTitles): void
+    {
+        if ($legacyOrder->get('type') !== 'web') {
+            return;
+        }
+
+        $removedCount = count($removedTitles);
+
+        $subject = 'Commande n° ' . $legacyOrder->get('id') . ' annulée';
+        $siteDomain = LegacyCodeHelper::getGlobalSite(ignoreDeprecation: true)->get('domain');
+        $message = '
+            <html>
+                <head>
+                    <title>' . $subject . '</title>
+                </head>
+                <body>
+                    <p>Bonjour,</p>
+
+                    <p>La commande n° ' . $legacyOrder->get('id') . ' a été annulée.</p>
+
+                    <p>
+                        Pour mémoire, cette commande concernait le' . s($removedCount) . ' article' . s($removedCount) . ' suivant' . s($removedCount) . '&nbsp;:
+                    </p>
+                    <ul><li>' . implode('</li><li>', $removedTitles) . '</li></ul>
+
+                    <p>
+                        A très bientôt !
+                    </p>
+
+                    <p><a href="">http://' . $siteDomain . '/</a></p>
+                </body>
+            </html>
+        ';
+
+        $mailer = new Mailer(LegacyCodeHelper::getGlobalConfig(ignoreDeprecation: true));
+        $mailer->send($legacyOrder->get('email'), $subject, $message);
     }
 }

@@ -388,48 +388,6 @@ class OrderTest extends PHPUnit\Framework\TestCase
         $om->delete($order);
     }
 
-    /**
-     * @throws Exception
-     */
-    public function testCancel()
-    {
-        // given
-        $om = new OrderManager();
-        $order = $om->create([
-            "order_email" => "customer@biblys.fr",
-        ]);
-
-        // when
-        $om->cancel($order);
-
-        // then
-        $this->assertTrue(
-            $order->has("order_cancel_date"),
-            "it should have a cancel date"
-        );
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function testCancelShopOrder()
-    {
-        // given
-        $om = new OrderManager();
-        $order = $om->create([
-            "order_type" => "shop",
-        ]);
-
-        // when
-        $om->cancel($order);
-
-        // then
-        $this->assertTrue(
-            $order->has("order_cancel_date"),
-            "it should have a cancel date"
-        );
-    }
-
     public function testGetCountryWithCountryName()
     {
         // given
