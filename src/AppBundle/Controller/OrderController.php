@@ -229,7 +229,8 @@ class OrderController extends Controller
             $notice = 'Le client '.$orderEntity->get('firstname').' '.$orderEntity->get('lastname').' a été relancée pour la commande n°&nbsp;'.$orderEntity->get('id').'.';
         } elseif ($action == 'cancel') {
             try {
-                (new CancelOrderUsecase(new PaymentRepository()))->execute($id);
+                $cancelOrderUsecase = new CancelOrderUsecase(new PaymentRepository());
+                $cancelOrderUsecase->execute($id);
             } catch (BusinessRuleException $e) {
                 throw new BadRequestHttpException($e->getMessage());
             }
