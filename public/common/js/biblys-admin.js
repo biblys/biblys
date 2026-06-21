@@ -376,8 +376,8 @@ function reloadAdminEvents() {
           data: data,
           dataType: 'json'
         })
-          .success(function(res) {
-            window.location.href = '/pages/adm_checkout?order_created=' + res.created_order;
+          .success(function() {
+            window.location.href = '/admin/caisse';
           })
           .fail(function(res) {
             var json = res.responseJSON;
