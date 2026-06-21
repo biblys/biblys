@@ -46,6 +46,8 @@ use Twig\Error\SyntaxError;
 use Repository\PaymentRepository;
 use Usecase\AddArticleToUserLibraryUsecase;
 use Usecase\AddPaymentToOrderAndExecuteUsecase;
+use Usecase\BusinessRuleException;
+use Usecase\CancelOrderUsecase;
 use Usecase\MarkOrderAsPaidUsecase;
 use Usecase\MarkOrderAsShippedUsecase;
 
@@ -226,7 +228,12 @@ class OrderController extends Controller
             $om->followUp($orderEntity);
             $notice = 'Le client '.$orderEntity->get('firstname').' '.$orderEntity->get('lastname').' a été relancée pour la commande n°&nbsp;'.$orderEntity->get('id').'.';
         } elseif ($action == 'cancel') {
-            $notice = $this->_cancelOrder($order, $orderEntity, $om);
+            try {
+                (new CancelOrderUsecase(new PaymentRepository()))->execute($id);
+            } catch (BusinessRuleException $e) {
+                throw new BadRequestHttpException($e->getMessage());
+            }
+            $notice = 'La commande n°&nbsp;'.$orderEntity->get('id').' de '.$orderEntity->get('firstname').' '.$orderEntity->get('lastname').' a été annulée.';
         }
 
         /** @var Order $orderEntity */
@@ -236,28 +243,6 @@ class OrderController extends Controller
             "notice" => $notice,
             "order" => $this->_jsonOrder($updatedOrder),
         ]);
-    }
-
-    /**
-     * @throws PropelException
-     */
-    private function _cancelOrder(\Model\Order $order, Order $orderEntity, OrderManager $om): string
-    {
-        $paymentRepository = new PaymentRepository();
-        $executedPayments = $paymentRepository->findExecutedByOrder($order);
-        $totalPaid = array_reduce(
-            $executedPayments,
-            fn($carry, $payment) => $carry + $payment->getAmount(),
-            0
-        );
-        if ($totalPaid > 0) {
-            throw new BadRequestHttpException(
-                "Cette commande ne peut pas être annulée car elle a été payée (total : " .
-                currency($totalPaid / 100) . "). Effectuez d'abord un remboursement."
-            );
-        }
-        $om->cancel($orderEntity);
-        return 'La commande n°&nbsp;'.$orderEntity->get('id').' de '.$orderEntity->get('firstname').' '.$orderEntity->get('lastname').' a été annulée.';
     }
 
     /**
