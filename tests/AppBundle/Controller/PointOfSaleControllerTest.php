@@ -22,12 +22,11 @@ use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\FlashMessagesService;
 use Biblys\Service\Images\ImagesService;
+use Biblys\Service\QueryParamsService;
 use Biblys\Test\EntityFactory;
 use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
-use CartManager;
 use Mockery;
-use Model\Site;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
@@ -76,6 +75,7 @@ class PointOfSaleControllerTest extends TestCase
             Mockery::mock(FlashMessagesService::class),
             Helpers::getTemplateService(),
             Mockery::mock(UrlGenerator::class),
+            new QueryParamsService($request),
         );
 
         // then
@@ -110,6 +110,7 @@ class PointOfSaleControllerTest extends TestCase
             $flashMessages,
             Helpers::getTemplateService(),
             Mockery::mock(UrlGenerator::class),
+            new QueryParamsService($request),
         );
 
         // then
@@ -144,6 +145,7 @@ class PointOfSaleControllerTest extends TestCase
             Mockery::mock(FlashMessagesService::class),
             Helpers::getTemplateService(),
             Mockery::mock(UrlGenerator::class),
+            new QueryParamsService($request),
         );
 
         // then
@@ -173,6 +175,7 @@ class PointOfSaleControllerTest extends TestCase
             Mockery::mock(FlashMessagesService::class),
             Helpers::getTemplateService(),
             Mockery::mock(UrlGenerator::class),
+            new QueryParamsService($request),
         );
 
         // then
@@ -204,6 +207,7 @@ class PointOfSaleControllerTest extends TestCase
             Mockery::mock(FlashMessagesService::class),
             Helpers::getTemplateService(),
             Mockery::mock(UrlGenerator::class),
+            new QueryParamsService($request),
         );
     }
 }
