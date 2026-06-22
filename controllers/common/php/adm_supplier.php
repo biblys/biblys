@@ -62,9 +62,11 @@ if ($request->getMethod() === 'POST') {
 
 	// Updated linked articles
 	$params['articles_to_update'] = 0;
-	$articles = $_SQL->query("SELECT `articles`.`article_id` FROM `articles` JOIN `publishers` USING(`publisher_id`) JOIN `links` USING(`publisher_id`) WHERE `supplier_id` = '".$_POST["supplier_id"]."'");
+	$articles = $_SQL->prepare("SELECT `articles`.`article_id` FROM `articles` JOIN `publishers` USING(`publisher_id`) JOIN `links` USING(`publisher_id`) WHERE `supplier_id` = :supplier_id");
+	$articles->execute(['supplier_id' => $_POST["supplier_id"]]);
 	while ($a = $articles->fetch(PDO::FETCH_ASSOC)) {
-		$_SQL->exec("UPDATE `articles` SET `article_keywords_generated` = NULL, `article_updated` = NOW() WHERE `article_id` = ".$a["article_id"]." LIMIT 1");
+		$updateStmt = $_SQL->prepare("UPDATE `articles` SET `article_keywords_generated` = NULL, `article_updated` = NOW() WHERE `article_id` = :article_id LIMIT 1");
+		$updateStmt->execute(['article_id' => $a["article_id"]]);
 		$params['articles_to_update']++;
 	}
 
