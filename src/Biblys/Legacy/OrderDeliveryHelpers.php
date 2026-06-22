@@ -85,6 +85,12 @@ class OrderDeliveryHelpers
             );
         }
 
+        if (strlen((string) $request->request->get('order_postalcode')) > 16) {
+            throw new OrderDetailsValidationException(
+                'Le champ &laquo;&nbsp;Code Postal&nbsp;&raquo; ne doit pas d&eacute;passer 16 caract&egrave;res.'
+            );
+        }
+
         if (empty($request->request->get('order_city'))) {
             throw new OrderDetailsValidationException(
                 'Le champ &laquo;&nbsp;Ville&nbsp;&raquo; est obligatoire !'

@@ -685,7 +685,7 @@ return function (
                     Code postal
                     <span class="required-field-indicator">*</span>
                 </label>
-                <input type="text" name="order_postalcode" id="order_postalcode" value="' . $orderEntity->get('postalcode') . '" class="order-delivery-form__input" required />
+                <input type="text" name="order_postalcode" id="order_postalcode" value="' . $orderEntity->get('postalcode') . '" class="order-delivery-form__input" maxlength="16" required />
             </div>
 
             <div class="order-delivery-form__field order-delivery-form__field--half">
