@@ -1,13 +1,15 @@
 # Analyse de migration : classes legacy dans `inc/`
 
 **Date :** 2026-06-22  
-**Statut :** Analyse — pas encore de décision de migration
+**Statut :** En cours
 
 ---
 
 ## Contexte
 
-Le répertoire `inc/` contient 44 classes Entity legacy (+ 2 utilitaires) héritant d'une classe de base `Entity` qui implémente `ArrayAccess`. Ces classes coexistent avec des modèles Propel générés depuis `schema.xml` qui couvrent les mêmes tables.
+Le répertoire `inc/` contient des classes Entity legacy héritant d'une classe de base `Entity` qui implémente `ArrayAccess`. Ces classes coexistent avec des modèles Propel générés depuis `schema.xml` qui couvrent les mêmes tables.
+
+Toutes les 44 classes Entity ont un modèle Propel correspondant sur la même table — aucune migration de schéma n'est nécessaire.
 
 ---
 
@@ -15,9 +17,7 @@ Le répertoire `inc/` contient 44 classes Entity legacy (+ 2 utilitaires) hérit
 
 ### Correspondance legacy → Propel
 
-Toutes les 44 classes Entity legacy ont un modèle Propel correspondant sur la même table. Aucune migration de schéma n'est nécessaire.
-
-Cas où les noms de classes diffèrent :
+Toutes les 44 classes Entity ont un modèle Propel sur la même table — aucune migration de schéma n'est nécessaire. Les noms de classes diffèrent dans 7 cas :
 
 | Classe legacy | Modèle Propel |
 |---|---|
@@ -31,8 +31,33 @@ Cas où les noms de classes diffèrent :
 
 ### Classes utilitaires (pas de table)
 
-- **`Media`** — logique de gestion de fichiers, remplacée par `ImagesService`
-- **`Visitor`** — wrapper de session utilisateur, utilise `UserQuery` en interne
+- **`Media`** — logique de gestion de fichiers ; partiellement remplacée par `ImagesService`
+- **`Visitor`** — wrapper de session utilisateur ; utilise `UserQuery` en interne
+
+---
+
+## Avancement
+
+### Supprimées (2026-06-22)
+
+`Price`, `Redirection`, `Signing`, `Subscription` — aucun usage dans `src/`, `tests/` ni dans les autres classes `inc/`. Modèles Propel déjà utilisés.
+
+### Bloquées par dépendances croisées internes à `inc/`
+
+Ces classes n'ont aucun usage direct dans `src/` mais sont encore appelées par d'autres classes legacy :
+
+| Classe | Appelée par |
+|---|---|
+| `Alert` | `Order.class.php` |
+| `Download` | `File.class.php` |
+| `Media` | `Article.class.php`, `Post.class.php`, `People.class.php` |
+| `Option` | `Site.class.php` |
+| `Right` | `Publisher.class.php`, `Visitor.class.php` |
+| `Session` | `Visitor.class.php` |
+| `Wish` | `Cart.class.php` |
+| `Wishlist` | `Cart.class.php` |
+
+Elles pourront être supprimées une fois leurs classes appelantes migrées.
 
 ---
 
@@ -40,8 +65,10 @@ Cas où les noms de classes diffèrent :
 
 | Métrique | Valeur |
 |---|---|
-| Classes legacy dans `inc/` | 46 (44 Entity + 2 utilitaires) |
-| Lignes de code legacy | ~8 000 |
+| Classes legacy dans `inc/` au départ | 46 (44 Entity + 2 utilitaires) |
+| Classes supprimées | 4 |
+| Classes restantes | 42 |
+| Lignes de code legacy restantes | ~7 800 |
 | Instanciations de `*Manager` dans `src/` | 129 |
 | Instanciations de `*Manager` dans `tests/` | 244 |
 | Fichiers `src/` touchés | 28 |
@@ -79,18 +106,22 @@ Cas où les noms de classes diffèrent :
 
 **Globale : Très difficile** (projet de plusieurs mois)
 
-### Stratégie recommandée
+### Stratégie de migration
 
-**Étape 1 — Suppression rapide (risque quasi nul)**  
-Classes sans usage actif dans `src/`, modèle Propel existant, ≤ 67 lignes :  
-`Alert`, `Customer`, `Download`, `Lang`, `Link`, `Option`, `Price`, `Redirection`, `Right`, `Role`, `Session`, `Signing`, `Subscription`, `Wish`, `Wishlist`
+**Étape 1 — ✅ Suppression directe** *(fait)*  
+`Price`, `Redirection`, `Signing`, `Subscription`
 
 **Étape 2 — Migration des classes moyennes**  
-Classes avec peu d'usages dans `src/` : `People`, `Publisher`, `Post`, `File`, `Site`, `Tag`, `Supplier`, `Inventory`, `Signing`
+Migrer d'abord leurs appelants dans `src/`, ce qui débloquera la suppression des classes bloquées (cf. tableau ci-dessus) :  
+`File` → `Site` → `Publisher` → `Cart` → `Order`  
+Puis : `People`, `Post`, `Tag`, `Supplier`, `Inventory`, `Customer`, `Lang`, `Link`, `Role`
 
 **Étape 3 — Migration des classes majeures**  
 À traiter une par une, en commençant par les contrôleurs puis les templates :  
 `Order` → `Stock` → `Cart` → `Article`
 
-**Étape 4 — Suppression de `Entity` et `EntityManager`**  
+**Étape 4 — Classes utilitaires**  
+`Visitor` (wrapper de session) → `Media` (logique fichiers, déjà partiellement remplacée par `ImagesService`)
+
+**Étape 5 — Suppression de `Entity` et `EntityManager`**  
 Une fois toutes les sous-classes migrées.
