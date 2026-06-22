@@ -127,6 +127,42 @@ class OrderDeliveryHelpersTest extends TestCase
      * @throws OrderDetailsValidationException
      * @throws Exception
      */
+    public function testValidateOrderDetailsThrowsWhenPostalCodeIsTooLong()
+    {
+        // given
+        $request = new Request();
+        $request->request->set("order_firstname", "Victor");
+        $request->request->set("order_lastname", "Hugo");
+        $request->request->set("order_address1", "Place des Vosges");
+        $request->request->set("order_postalcode", "12345678901234567");
+        $request->request->set("order_city", "Paris");
+        $request->request->set("country_id", 1);
+        $request->request->set("order_email", "victor.hugo@biblys.fr");
+        $request->request->set("cgv_checkbox", 1);
+        $request->request->set("order_phone", "");
+
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getOption")
+            ->with("order_phone_required")
+            ->andReturn(0);
+
+        $cart = Mockery::mock(Cart::class);
+        $cart->shouldReceive("containsDownloadableArticles")->andReturn(false);
+
+        // then
+        $this->expectException(OrderDetailsValidationException::class);
+        $this->expectExceptionMessage(
+            "Le champ &laquo;&nbsp;Code Postal&nbsp;&raquo; ne doit pas d&eacute;passer 16 caract&egrave;res."
+        );
+
+        // when
+        OrderDeliveryHelpers::validateOrderDetails($request, $currentSite, $cart);
+    }
+
+    /**
+     * @throws OrderDetailsValidationException
+     * @throws Exception
+     */
     public function testValidateOrderDetailsSucceedsWhenPhoneIsRequiredAndPresent()
     {
         // given
