@@ -21,8 +21,10 @@
 */
 
 use Biblys\Legacy\LegacyCodeHelper;
+use Biblys\Service\CurrentUser;
 use Biblys\Test\EntityFactory;
 use Biblys\Test\ModelFactory;
+use Model\AlertQuery;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
@@ -535,5 +537,70 @@ class OrderTest extends PHPUnit\Framework\TestCase
             $updatedOrder->get("order_amount_tobepaid"),
             "does not updates order's amount to be paid"
         );
+    }
+
+    public function testDeleteRelatedAlertsDoesNothingIfNotAuthenticated(): void
+    {
+        // given
+        $order = EntityFactory::createOrder();
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->method('isAuthenticated')->willReturn(false);
+
+        // when
+        $order->deleteRelatedAlerts($currentUser);
+
+        // then — no exception thrown
+        $this->expectNotToPerformAssertions();
+    }
+
+    public function testDeleteRelatedAlertsDeletesMatchingAlerts(): void
+    {
+        // given
+        $om = new OrderManager();
+        $user = ModelFactory::createUser();
+        $article = ModelFactory::createArticle();
+        $stock = EntityFactory::createStock(["article_id" => $article->getId()]);
+        $order = EntityFactory::createOrder();
+        $om->addStock($order, $stock);
+        ModelFactory::createAlert(user: $user, article: $article);
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->method('isAuthenticated')->willReturn(true);
+        $currentUser->method('getUser')->willReturn($user);
+
+        // when
+        $order->deleteRelatedAlerts($currentUser);
+
+        // then
+        $alert = AlertQuery::create()
+            ->filterByUserId($user->getId())
+            ->filterByArticleId($article->getId())
+            ->findOne();
+        $this->assertNull($alert, "L'alerte doit être supprimée.");
+    }
+
+    public function testDeleteRelatedAlertsIgnoresAlertsOfOtherUsers(): void
+    {
+        // given
+        $om = new OrderManager();
+        $user = ModelFactory::createUser();
+        $otherUser = ModelFactory::createUser();
+        $article = ModelFactory::createArticle();
+        $stock = EntityFactory::createStock(["article_id" => $article->getId()]);
+        $order = EntityFactory::createOrder();
+        $om->addStock($order, $stock);
+        ModelFactory::createAlert(user: $otherUser, article: $article);
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->method('isAuthenticated')->willReturn(true);
+        $currentUser->method('getUser')->willReturn($user);
+
+        // when
+        $order->deleteRelatedAlerts($currentUser);
+
+        // then
+        $alert = AlertQuery::create()
+            ->filterByUserId($otherUser->getId())
+            ->filterByArticleId($article->getId())
+            ->findOne();
+        $this->assertNotNull($alert, "L'alerte d'un autre utilisateur ne doit pas être supprimée.");
     }
 }
