@@ -60,6 +60,8 @@ Toutes les 44 classes Entity ont un modèle Propel sur la même table — aucune
 | `Subscription` | Suppression directe | Aucun usage, modèle Propel déjà utilisé |
 | `Download` | Migration de `File::addDownloadBy()` | Remplacé par `Model\Download` + `->save()` |
 | `Alert` | Migration de `Order::deleteRelatedAlerts()` et `log_myalerts.php` | Remplacé par `AlertQuery` |
+| `Wish` | Migration de `Cart::removeStock()` et `log_mywishes.php` | Remplacé par `WishQuery` |
+| `Wishlist` | Migration de `log_mywishes.php` et `log_wishlist.php` | Remplacé par `WishlistQuery` |
 
 ### Bloquées par dépendances croisées internes à `inc/`
 
@@ -71,8 +73,6 @@ Ces classes n'ont aucun usage direct dans `src/` mais sont encore appelées par 
 | `Option` | `Site.class.php` |
 | `Right` | `Publisher.class.php`, `Visitor.class.php` |
 | `Session` | `Visitor.class.php` |
-| `Wish` | `Cart.class.php` |
-| `Wishlist` | `Cart.class.php` |
 
 Elles pourront être supprimées une fois leurs classes appelantes migrées.
 
@@ -83,9 +83,9 @@ Elles pourront être supprimées une fois leurs classes appelantes migrées.
 | Métrique | Valeur |
 |---|---|
 | Classes legacy dans `inc/` au départ | 46 (44 Entity + 2 utilitaires) |
-| Classes supprimées | 6 |
-| Classes restantes | 40 |
-| Lignes de code legacy restantes | ~7 600 |
+| Classes supprimées | 8 |
+| Classes restantes | 38 |
+| Lignes de code legacy restantes | ~7 400 |
 | Instanciations de `*Manager` dans `src/` | 129 |
 | Instanciations de `*Manager` dans `tests/` | 244 |
 | Fichiers `src/` touchés | 28 |
@@ -135,7 +135,7 @@ Migrer les appels legacy dans les classes encore dépendantes pour débloquer le
 |---|---|---|---|
 | `File.class.php` | `DownloadManager` → `Model\Download` | `Download` | ✅ fait |
 | `Order.class.php` + `log_myalerts.php` | `AlertManager` → `AlertQuery` | `Alert` | ✅ fait |
-| `Cart.class.php` | `WishManager`, `WishlistManager` | `Wish`, `Wishlist` | ⏳ à faire |
+| `Cart.class.php` + `log_mywishes.php` + `log_wishlist.php` | `WishManager`, `WishlistManager` | `Wish`, `Wishlist` | ✅ fait |
 | `Site.class.php` | `OptionManager` | `Option` | ⏳ à faire |
 | `Publisher.class.php` | `RightManager` | `Right` (partiel) | ⏳ à faire |
 | `Visitor.class.php` | `RightManager`, `SessionManager` | `Right`, `Session` | ⏳ à faire |
