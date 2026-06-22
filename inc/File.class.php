@@ -19,6 +19,7 @@
 use Biblys\Exception\InvalidEntityException;
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\CurrentUser;
+use Model\Download;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class File extends Entity
@@ -77,21 +78,18 @@ class File extends Entity
     {
         $request = LegacyCodeHelper::getGlobalRequest();
 
-        $dm = new DownloadManager();
-
-        $download = $dm->create();
-
-        $download->set('file_id', $this->get('id'));
-        $download->set('article_id', $this->get('article_id'));
-        $download->set('download_filetype', $this->get('type'));
-        $download->set('download_version', $this->get('version'));
-        $download->set('download_ip', $request->getClientIp());
+        $download = new Download();
+        $download->setFileId($this->get('id'));
+        $download->setArticleId($this->get('article_id'));
+        $download->setFiletype($this->get('type'));
+        $download->setVersion($this->get('version'));
+        $download->setIp($request->getClientIp());
 
         if ($currentUser->isAuthenticated()) {
-            $download->set('user_id', $currentUser->getUser()->getId());
+            $download->setUserId($currentUser->getUser()->getId());
         }
 
-        $dm->update($download);
+        $download->save();
     }
 
     /* Get file dir and create it if needed */
