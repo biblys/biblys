@@ -25,6 +25,7 @@ use Biblys\Service\CurrentUser;
 use Biblys\Service\Log;
 use Biblys\Service\Mailer;
 use Biblys\Test\Helpers;
+use Model\AlertQuery;
 use Model\OrderQuery;
 use Model\StockQuery;
 use Model\UserQuery;
@@ -223,22 +224,13 @@ class Order extends Entity
             return;
         }
 
-        $alm = new AlertManager();
-
         $copies = $this->getCopies();
         foreach ($copies as $copy) {
-            // Get alert for this user and article
-            $alert = $alm->get(
-                [
-                    "user_id" => $currentUser->getUser()->getId(),
-                    "article_id" => $copy->get("article_id")
-                ]
-            );
-
-            // If it exists, delete it
-            if ($alert) {
-                $alm->delete($alert);
-            }
+            AlertQuery::create()
+                ->filterByUserId($currentUser->getUser()->getId())
+                ->filterByArticleId($copy->get("article_id"))
+                ->findOne()
+                ?->delete();
         }
     }
 

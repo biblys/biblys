@@ -40,8 +40,6 @@ return function (
     }
     $currentUser = $currentUserService->getUser();
 
-    $am = new AlertManager();
-
     $result = array();
 
     if ($request->getMethod() === "POST") {
@@ -75,9 +73,9 @@ return function (
 
     $alertToDeleteId = $request->query->get('del');
     if ($alertToDeleteId) {
-        $alert = $am->getById($alertToDeleteId);
+        $alert = AlertQuery::create()->findPk($alertToDeleteId);
         if ($alert) {
-            $am->delete($alert);
+            $alert->delete();
         }
         return new RedirectResponse('/pages/log_myalerts?deleted=1');
     }
