@@ -16,6 +16,9 @@
  */
 
 
+use Model\Option;
+use Model\OptionQuery;
+
 class Site extends Entity
 {
     protected $prefix = 'site',
@@ -23,43 +26,36 @@ class Site extends Entity
 
     public function getOpt($key)
     {
-        $om = new OptionManager();
-        
         // Load and cache all site options
         if ($this->options === null) {
-            $this->options = $om->getAll();
+            $this->options = OptionQuery::create()->find()->getArrayCopy();
         }
 
-        // Get options for key
-        $options = array_values(array_filter($this->options, function($option) use($key) {
-            return $option->get('key') === $key;
-        }));
-
-        // If option for key does not exist, return false 
-        if (count($options) === 0) {
-            return false;
+        foreach ($this->options as $option) {
+            if ($option->getKey() === $key) {
+                return $option->getValue();
+            }
         }
 
-        // Else return option value
-        $option = $options[0];
-        return $option->get('value');
+        return false;
     }
 
     public function setOpt($key, $value)
     {
-        $om = new OptionManager();
-
-        $option = $om->get(['option_key' => $key]);
+        $option = OptionQuery::create()->filterByKey($key)->findOne();
 
         // If option already exists, update it
         if ($option) {
-            $option->set('option_value', $value);
-            $om->update($option);
+            $option->setValue($value);
+            $option->save();
             return $this;
         }
 
         // Else, create a new one
-        $option = $om->create(['option_key' => $key, 'option_value' => $value]);
+        $option = new Option();
+        $option->setKey($key);
+        $option->setValue($value);
+        $option->save();
 
         // Reset cached options
         $this->options = null;
