@@ -1,5 +1,11 @@
 # Historique des modifications
 
+## 3.13.2 (24 juin 2026)
+
+### Corrections
+
+- Une injection SQL dans la page d'administration des fournisseurs a été corrigée.
+
 ## 3.13.1 (16 juin 2026)
 
 ### Corrections
