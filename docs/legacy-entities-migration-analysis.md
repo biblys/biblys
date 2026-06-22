@@ -40,7 +40,14 @@ Toutes les 44 classes Entity ont un modèle Propel sur la même table — aucune
 
 ### Supprimées (2026-06-22)
 
-`Price`, `Redirection`, `Signing`, `Subscription` — aucun usage dans `src/`, `tests/` ni dans les autres classes `inc/`. Modèles Propel déjà utilisés.
+| Classe | Méthode | Notes |
+|---|---|---|
+| `Price` | Suppression directe | Aucun usage, modèle Propel déjà utilisé |
+| `Redirection` | Suppression directe | Aucun usage, modèle Propel déjà utilisé |
+| `Signing` | Suppression directe | Aucun usage, modèle Propel déjà utilisé |
+| `Subscription` | Suppression directe | Aucun usage, modèle Propel déjà utilisé |
+| `Download` | Migration de `File::addDownloadBy()` | Remplacé par `Model\Download` + `->save()` |
+| `Alert` | Migration de `Order::deleteRelatedAlerts()` et `log_myalerts.php` | Remplacé par `AlertQuery` |
 
 ### Bloquées par dépendances croisées internes à `inc/`
 
@@ -48,8 +55,6 @@ Ces classes n'ont aucun usage direct dans `src/` mais sont encore appelées par 
 
 | Classe | Appelée par |
 |---|---|
-| `Alert` | `Order.class.php` |
-| `Download` | `File.class.php` |
 | `Media` | `Article.class.php`, `Post.class.php`, `People.class.php` |
 | `Option` | `Site.class.php` |
 | `Right` | `Publisher.class.php`, `Visitor.class.php` |
@@ -66,9 +71,9 @@ Elles pourront être supprimées une fois leurs classes appelantes migrées.
 | Métrique | Valeur |
 |---|---|
 | Classes legacy dans `inc/` au départ | 46 (44 Entity + 2 utilitaires) |
-| Classes supprimées | 4 |
-| Classes restantes | 42 |
-| Lignes de code legacy restantes | ~7 800 |
+| Classes supprimées | 6 |
+| Classes restantes | 40 |
+| Lignes de code legacy restantes | ~7 600 |
 | Instanciations de `*Manager` dans `src/` | 129 |
 | Instanciations de `*Manager` dans `tests/` | 244 |
 | Fichiers `src/` touchés | 28 |
@@ -111,9 +116,19 @@ Elles pourront être supprimées une fois leurs classes appelantes migrées.
 **Étape 1 — ✅ Suppression directe** *(fait)*  
 `Price`, `Redirection`, `Signing`, `Subscription`
 
-**Étape 2 — Migration des classes moyennes**  
-Migrer d'abord leurs appelants dans `src/`, ce qui débloquera la suppression des classes bloquées (cf. tableau ci-dessus) :  
-`File` → `Site` → `Publisher` → `Cart` → `Order`  
+**Étape 2 — Migration des dépendances croisées** *(en cours)*  
+Migrer les appels legacy dans les classes encore dépendantes pour débloquer leur suppression :
+
+| Classe appelante | Appel migré | Classe débloquée | Statut |
+|---|---|---|---|
+| `File.class.php` | `DownloadManager` → `Model\Download` | `Download` | ✅ fait |
+| `Order.class.php` + `log_myalerts.php` | `AlertManager` → `AlertQuery` | `Alert` | ✅ fait |
+| `Cart.class.php` | `WishManager`, `WishlistManager` | `Wish`, `Wishlist` | ⏳ à faire |
+| `Site.class.php` | `OptionManager` | `Option` | ⏳ à faire |
+| `Publisher.class.php` | `RightManager` | `Right` (partiel) | ⏳ à faire |
+| `Visitor.class.php` | `RightManager`, `SessionManager` | `Right`, `Session` | ⏳ à faire |
+| `Article/Post/People.class.php` | `Media` | `Media` | ⏳ à faire |
+
 Puis : `People`, `Post`, `Tag`, `Supplier`, `Inventory`, `Customer`, `Lang`, `Link`, `Role`
 
 **Étape 3 — Migration des classes majeures**  
