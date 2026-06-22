@@ -13,6 +13,18 @@ Toutes les 44 classes Entity ont un modèle Propel correspondant sur la même ta
 
 ---
 
+## Processus par étape
+
+Pour chaque classe legacy à migrer :
+
+1. **Écrire des tests de non-régression** sur les méthodes concernées (si elles ne sont pas déjà couvertes)
+2. **Implémenter les modifications** : remplacer les appels `*Manager` par des requêtes Propel (`*Query`) ou des modèles Propel directs
+3. **Supprimer les fichiers devenus inutiles** (`inc/*.class.php`)
+4. **Vérifier que les tests passent** et corriger si besoin
+5. **Mettre à jour ce document** (tableau d'avancement, chiffres clés)
+
+---
+
 ## Inventaire
 
 ### Correspondance legacy → Propel
