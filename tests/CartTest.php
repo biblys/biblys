@@ -26,6 +26,7 @@ use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Images\ImagesService;
 use Biblys\Test\EntityFactory;
 use Biblys\Test\ModelFactory;
+use Model\WishQuery;
 use Entity\Exception\CartException;
 use Propel\Runtime\Exception\PropelException;
 
@@ -581,5 +582,24 @@ class CartTest extends PHPUnit\Framework\TestCase
         $isShopCart = $cm->getById($shopCart->get('id'));
         $this->assertFalse($isWebCart);
         $this->assertFalse($isShopCart);
+    }
+
+    public function testRemoveStockResetsWishBoughtWhenStockHadWishId(): void
+    {
+        // given
+        $user = ModelFactory::createUser();
+        $wishlist = ModelFactory::createWishlist(user: $user);
+        $wish = ModelFactory::createWish(wishlist: $wishlist);
+        $wish->setBought(new DateTime())->save();
+
+        $stock = EntityFactory::createStock(['wish_id' => $wish->getId()]);
+        $cm = new CartManager();
+
+        // when
+        $cm->removeStock($stock);
+
+        // then
+        $wish->reload();
+        $this->assertNull($wish->getBought(), "wish_bought doit être remis à null.");
     }
 }

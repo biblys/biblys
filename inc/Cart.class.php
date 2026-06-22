@@ -504,10 +504,9 @@ class CartManager extends EntityManager
 
         // If added as a wish, re-add to wishlist
         if ($stock->has('wish_id')) {
-            $wm = new WishManager();
-            if ($w = $wm->get(array('wish_id' => $stock->get('wish_id')))) {
-                $w->set('wish_bought', null);
-                $wm->update($w);
+            $wish = WishQuery::create()->findPk($stock->get('wish_id'));
+            if ($wish) {
+                $wish->setBought(null)->save();
                 $stock->set('wish_id', null);
             }
         }

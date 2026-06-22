@@ -18,6 +18,10 @@
 
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
+use Model\Wish;
+use Model\WishlistQuery;
+use Model\Wishlist;
+use Model\WishQuery;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -37,30 +41,30 @@ return function (
     CurrentSite $currentSiteService
 ): Response|JsonResponse|RedirectResponse
 {
-    $wlm = new WishlistManager();
-    $wm = new WishManager();
     $am = new ArticleManager();
 
     $content = "";
 
     // Get or create current wishlist
-    $wishlist = $wlm->get([
-        "user_id" => $currentUserService->getUser()->getId(),
-        "wishlist_current" => 1
-    ]);
+    $wishlist = WishlistQuery::create()
+        ->filterByUserId($currentUserService->getUser()->getId())
+        ->filterByCurrent(true)
+        ->findOne();
     if (!$wishlist) {
-
         // Create a current wishlist for current user
-        $wishlist = $wlm->create([
-            'user_id' => $currentUserService->getUser()->getId(),
-            'wishlist_current' => 1
-        ]);
+        $wishlist = new Wishlist();
+        $wishlist->setUserId($currentUserService->getUser()->getId());
+        $wishlist->setCurrent(true);
+        $wishlist->save();
 
         // Add wishes
-        $wishes = $wm->getAll(['user_id' => $currentUserService->getUser()->getId(), 'wishlist_id' => 'NULL']);
+        $wishes = WishQuery::create()
+            ->filterByUserId($currentUserService->getUser()->getId())
+            ->filterByWishlistId(null)
+            ->find();
         foreach ($wishes as $wish) {
-            $wish->set('wishlist', $wishlist);
-            $wm->update($wish);
+            $wish->setWishlistId($wishlist->getId());
+            $wish->save();
         }
     }
 
@@ -75,20 +79,23 @@ return function (
             trigger_error('Article #' . $articleId . ' introuvable.');
         }
 
-        $wish = $wm->get(array('article_id' => $article->get('id'), 'wishlist_id' => $wishlist->get('id')));
+        $wish = WishQuery::create()
+            ->filterByArticleId($article->get('id'))
+            ->filterByWishlistId($wishlist->getId())
+            ->findOne();
 
         // If wish exists, delete it
         if ($wish) {
-            $wm->delete($wish);
+            $wish->delete();
             $p['deleted'] = 1;
             $p['message'] = "&laquo;&nbsp;" . $article->get('title') . "&nbsp;&raquo a bien été retiré de votre <a href='/pages/log_mywishes'>liste d'envies</a>.";
         } // Else create it
         else {
-            $wish = $wm->create();
-            $wish->set('user_id', $currentUserService->getUser()->getId());
-            $wish->set('article', $article);
-            $wish->set('wishlist', $wishlist);
-            $wm->update($wish);
+            $wish = new Wish();
+            $wish->setUserId($currentUserService->getUser()->getId());
+            $wish->setArticleId($article->get('id'));
+            $wish->setWishlistId($wishlist->getId());
+            $wish->save();
             $p['created'] = 1;
             $p['message'] = "&laquo;&nbsp;" . $article->get('title') . "&nbsp;&raquo a bien été ajouté à votre <a href='/pages/log_mywishes'>liste d'envies</a>.";
         }
@@ -101,17 +108,17 @@ return function (
     } // Show wish list
     else {
 
-        $request->attributes->set("page_title", $wishlist->get('name'));
+        $request->attributes->set("page_title", $wishlist->getName());
 
         $content .= '
 
 			<div class="float-right">
-				<a href="/pages/log_wishlist?id=' . $wishlist->get('id') . '" class="btn btn-info">
+				<a href="/pages/log_wishlist?id=' . $wishlist->getId() . '" class="btn btn-info">
 					<i class="fa fa-cog"></i> Modifier
 				</a>
 			</div>
 
-			<h2>' . $wishlist->get("name") . '</h2>
+			<h2>' . $wishlist->getName() . '</h2>
 		';
 
         $wishes = $currentUserService->getUser()->getWishes();
