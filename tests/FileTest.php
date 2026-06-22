@@ -20,7 +20,11 @@
 * @backupStaticAttributes disabled
 */
 
+use Biblys\Service\CurrentUser;
 use Biblys\Test\EntityFactory;
+use Biblys\Test\ModelFactory;
+use Model\DownloadQuery;
+use Symfony\Component\HttpFoundation\Request;
 
 require_once "setUp.php";
 
@@ -100,6 +104,53 @@ class FileTest extends PHPUnit\Framework\TestCase
 
         $this->assertEquals($soldCopy->get('file_updated'), 1, "Sold copy should be marked as updated.");
         $this->assertEquals($availableCopy->get('file_updated'), 0, "Available copy should not be marked as updated.");
+    }
+
+    public function testAddDownloadByCreatesDownloadRecord(): void
+    {
+        // given
+        $fm = new FileManager();
+        $article = EntityFactory::createArticle();
+        $file = $fm->create([
+            'article_id' => $article->get('id'),
+            'file_type' => 'application/epub+zip',
+            'file_version' => '1.0',
+        ]);
+        $GLOBALS['LEGACY_REQUEST'] = Request::create('/');
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->method('isAuthenticated')->willReturn(false);
+
+        // when
+        $file->addDownloadBy($currentUser);
+
+        // then
+        $download = DownloadQuery::create()->filterByFileId($file->get('id'))->findOne();
+        $this->assertNotNull($download, 'Un enregistrement Download doit être créé.');
+        $this->assertEquals($article->get('id'), $download->getArticleId());
+        $this->assertEquals('application/epub+zip', $download->getFiletype());
+        $this->assertEquals('1.0', $download->getVersion());
+        $this->assertNull($download->getUserId());
+    }
+
+    public function testAddDownloadBySetsUserIdWhenAuthenticated(): void
+    {
+        // given
+        $fm = new FileManager();
+        $article = EntityFactory::createArticle();
+        $file = $fm->create(['article_id' => $article->get('id')]);
+        $GLOBALS['LEGACY_REQUEST'] = Request::create('/');
+        $user = ModelFactory::createUser();
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->method('isAuthenticated')->willReturn(true);
+        $currentUser->method('getUser')->willReturn($user);
+
+        // when
+        $file->addDownloadBy($currentUser);
+
+        // then
+        $download = DownloadQuery::create()->filterByFileId($file->get('id'))->findOne();
+        $this->assertNotNull($download, 'Un enregistrement Download doit être créé.');
+        $this->assertEquals($user->getId(), $download->getUserId());
     }
 
     /**
