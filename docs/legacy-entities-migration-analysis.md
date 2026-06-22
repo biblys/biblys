@@ -62,6 +62,7 @@ Toutes les 44 classes Entity ont un modèle Propel sur la même table — aucune
 | `Alert` | Migration de `Order::deleteRelatedAlerts()` et `log_myalerts.php` | Remplacé par `AlertQuery` |
 | `Wish` | Migration de `Cart::removeStock()` et `log_mywishes.php` | Remplacé par `WishQuery` |
 | `Wishlist` | Migration de `log_mywishes.php` et `log_wishlist.php` | Remplacé par `WishlistQuery` |
+| `Option` | Migration de `Site::getOpt()` et `Site::setOpt()` | Remplacé par `OptionQuery` (corrige aussi un bug de mise à jour) |
 
 ### Bloquées par dépendances croisées internes à `inc/`
 
@@ -70,7 +71,6 @@ Ces classes n'ont aucun usage direct dans `src/` mais sont encore appelées par 
 | Classe | Appelée par |
 |---|---|
 | `Media` | `Article.class.php`, `Post.class.php`, `People.class.php` |
-| `Option` | `Site.class.php` |
 | `Right` | `Publisher.class.php`, `Visitor.class.php` |
 | `Session` | `Visitor.class.php` |
 
@@ -83,9 +83,9 @@ Elles pourront être supprimées une fois leurs classes appelantes migrées.
 | Métrique | Valeur |
 |---|---|
 | Classes legacy dans `inc/` au départ | 46 (44 Entity + 2 utilitaires) |
-| Classes supprimées | 8 |
-| Classes restantes | 38 |
-| Lignes de code legacy restantes | ~7 400 |
+| Classes supprimées | 9 |
+| Classes restantes | 37 |
+| Lignes de code legacy restantes | ~7 300 |
 | Instanciations de `*Manager` dans `src/` | 129 |
 | Instanciations de `*Manager` dans `tests/` | 244 |
 | Fichiers `src/` touchés | 28 |
@@ -136,7 +136,7 @@ Migrer les appels legacy dans les classes encore dépendantes pour débloquer le
 | `File.class.php` | `DownloadManager` → `Model\Download` | `Download` | ✅ fait |
 | `Order.class.php` + `log_myalerts.php` | `AlertManager` → `AlertQuery` | `Alert` | ✅ fait |
 | `Cart.class.php` + `log_mywishes.php` + `log_wishlist.php` | `WishManager`, `WishlistManager` | `Wish`, `Wishlist` | ✅ fait |
-| `Site.class.php` | `OptionManager` | `Option` | ⏳ à faire |
+| `Site.class.php` | `OptionManager` → `OptionQuery` | `Option` | ✅ fait |
 | `Publisher.class.php` | `RightManager` | `Right` (partiel) | ⏳ à faire |
 | `Visitor.class.php` | `RightManager`, `SessionManager` | `Right`, `Session` | ⏳ à faire |
 | `Article/Post/People.class.php` | `Media` | `Media` | ⏳ à faire |
