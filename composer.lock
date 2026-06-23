@@ -3450,28 +3450,28 @@
         },
         {
             "name": "propel/propel",
-            "version": "2.0.0-beta4",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/propelorm/Propel2.git",
-                "reference": "f4889ff200d6f5c2c660eac7f0e20bd8b6966fb4"
+                "reference": "38fcf4cb553025a6b711033ba37bcf15d950fafc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/propelorm/Propel2/zipball/f4889ff200d6f5c2c660eac7f0e20bd8b6966fb4",
-                "reference": "f4889ff200d6f5c2c660eac7f0e20bd8b6966fb4",
+                "url": "https://api.github.com/repos/propelorm/Propel2/zipball/38fcf4cb553025a6b711033ba37bcf15d950fafc",
+                "reference": "38fcf4cb553025a6b711033ba37bcf15d950fafc",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.4",
+                "php": ">=8.0",
                 "psr/log": "^1.0 || ^2.0 || ^3.0",
-                "symfony/config": "^4.4.0 || ^5.0.0 || ^6.0.0 || ^7.0.0",
-                "symfony/console": "^4.4.0 || ^5.0.0 || ^6.0.0 || ^7.0.0",
-                "symfony/filesystem": "^4.4.0 || ^5.0.0 || ^6.0.0 || ^7.0.0",
-                "symfony/finder": "^4.4.0 || ^5.0.0 || ^6.0.0 || ^7.0.0",
-                "symfony/translation": "^4.4.0 || ^5.0.0 || ^6.0.0 || ^7.0.0",
-                "symfony/validator": "^4.4.0 || ^5.0.0 || ^6.0.0 || ^7.0.0",
-                "symfony/yaml": "^4.4.0 || ^5.0.0 || ^6.0.0 || ^7.0.0"
+                "symfony/config": "^6.0.0 || ^7.0.0",
+                "symfony/console": "^6.0.0 || ^7.0.0",
+                "symfony/filesystem": "^6.0.0 || ^7.0.0",
+                "symfony/finder": "^6.0.0 || ^7.0.0",
+                "symfony/translation": "^6.0.0 || ^7.0.0",
+                "symfony/validator": "^6.4.11 || ^7.1.4",
+                "symfony/yaml": "^6.4.40 || ^7.4.12"
             },
             "require-dev": {
                 "ext-json": "*",
@@ -3479,7 +3479,9 @@
                 "ext-xml": "*",
                 "mikey179/vfsstream": "^1.6",
                 "monolog/monolog": "^1.3 || ^2.3 || ^3.0",
-                "phpstan/phpstan": "^1.2",
+                "phpstan/extension-installer": "^1.4",
+                "phpstan/phpstan": "^2.0",
+                "phpstan/phpstan-deprecation-rules": "^2.0",
                 "phpunit/phpunit": "^9.5.0",
                 "psalm/phar": "^4.23",
                 "spryker/code-sniffer": "^0.17.2"
@@ -3520,9 +3522,9 @@
             ],
             "support": {
                 "issues": "https://github.com/propelorm/Propel2/issues",
-                "source": "https://github.com/propelorm/Propel2/tree/2.0.0-beta4"
+                "source": "https://github.com/propelorm/Propel2/tree/2.0.0"
             },
-            "time": "2024-03-23T13:31:50+00:00"
+            "time": "2026-06-23T13:37:50+00:00"
         },
         {
             "name": "psr/cache",
