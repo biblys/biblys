@@ -66,14 +66,13 @@ Toutes les 44 classes Entity ont un modèle Propel sur la même table — aucune
 | `Right` | Migration de `Publisher::getRights()` et `Visitor::getCurrentRight()` + 4 contrôleurs legacy | Remplacé par `RightQuery` |
 | `Session` | Migration de `Visitor::_setUserFromToken()` | Remplacé par `SessionQuery` |
 
-### Bloquées par dépendances croisées internes à `inc/`
+### Bloquées par l'API de thèmes
 
-Ces classes n'ont aucun usage direct dans `src/` mais sont encore appelées par d'autres classes legacy :
+Ces classes sont utilisées dans des méthodes `@deprecated` de classes legacy qui font partie de l'**API publique consommée par les thèmes Biblys** (fichiers dans `app/`, propres à chaque site, non versionnés dans ce dépôt). Leur suppression ne peut intervenir qu'en version majeure ou après audit des thèmes actifs.
 
-| Classe | Appelée par |
-|---|---|
-| `Media` | `Article.class.php`, `Post.class.php`, `People.class.php` |
-Elles pourront être supprimées une fois leurs classes appelantes migrées.
+| Classe | Méthodes concernées | Statut |
+|---|---|---|
+| `Media` | `Article::getCover()`, `Post::getIllustration()`, `People::getPhoto()` et variantes | ⏸️ différé — compatibilité thèmes |
 
 ---
 
