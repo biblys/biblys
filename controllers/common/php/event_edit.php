@@ -35,7 +35,7 @@ $where = [];
 
 if (!LegacyCodeHelper::getGlobalVisitor()->isAdmin())
 {
-    if (LegacyCodeHelper::getGlobalVisitor()->isPublisher()) $where = array_merge($where, array('events`.`publisher_id' => LegacyCodeHelper::getGlobalVisitor()->getCurrentRight()->get('publisher_id')));
+    if (LegacyCodeHelper::getGlobalVisitor()->isPublisher()) $where = array_merge($where, array('events`.`publisher_id' => LegacyCodeHelper::getGlobalVisitor()->getCurrentRight()?->getPublisherId()));
 }
 
 // Edit an existing event
@@ -104,7 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
             // Associate to current right
             if (!LegacyCodeHelper::getGlobalVisitor()->isAdmin()) {
-                if (LegacyCodeHelper::getGlobalVisitor()->isPublisher()) $e->set('publisher_id', LegacyCodeHelper::getGlobalVisitor()->getCurrentRight()->get('publisher_id'));
+                if (LegacyCodeHelper::getGlobalVisitor()->isPublisher()) $e->set('publisher_id', LegacyCodeHelper::getGlobalVisitor()->getCurrentRight()?->getPublisherId());
             }
 
             // URL

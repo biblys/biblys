@@ -44,4 +44,38 @@ class VisitorTest extends TestCase
             "should set user when request has a session token"
         );
     }
+
+    /**
+     * @throws PropelException
+     */
+    public function testIsPublisherReturnsTrueWhenUserHasRight(): void
+    {
+        // given
+        $publisher = ModelFactory::createPublisher();
+        $request = RequestFactory::createAuthRequestForPublisherUser(publisher: $publisher);
+        $visitor = new Visitor($request);
+
+        // when / then
+        $this->assertTrue(
+            $visitor->isPublisher(),
+            "should return true when user has a publisher right"
+        );
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testIsPublisherReturnsFalseWhenUserHasNoRight(): void
+    {
+        // given
+        $user = ModelFactory::createUser();
+        $request = RequestFactory::createAuthRequest("", $user);
+        $visitor = new Visitor($request);
+
+        // when / then
+        $this->assertFalse(
+            $visitor->isPublisher(),
+            "should return false when user has no publisher right"
+        );
+    }
 }

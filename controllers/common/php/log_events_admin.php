@@ -36,7 +36,7 @@ $where = [];
 
 if (!LegacyCodeHelper::getGlobalVisitor()->isAdmin())
 {
-    if (LegacyCodeHelper::getGlobalVisitor()->isPublisher()) $where = array_merge($where, array('events`.`publisher_id' => LegacyCodeHelper::getGlobalVisitor()->getCurrentRight()->get('publisher_id')));
+    if (LegacyCodeHelper::getGlobalVisitor()->isPublisher()) $where = array_merge($where, array('events`.`publisher_id' => LegacyCodeHelper::getGlobalVisitor()->getCurrentRight()?->getPublisherId()));
 }
 
 $events = $em->getAll(

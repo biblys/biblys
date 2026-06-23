@@ -30,7 +30,7 @@ if (!LegacyCodeHelper::getGlobalVisitor()->isAdmin() && !LegacyCodeHelper::getGl
 	{
 		if ($s = $sm->get(array('signing_id' => $_GET['id'])))
 		{
-            if (LegacyCodeHelper::getGlobalVisitor()->isPublisher() && $s->get('publisher_id') != LegacyCodeHelper::getGlobalVisitor()->getCurrentRight()->get('publisher_id') && !LegacyCodeHelper::getGlobalVisitor()->isAdmin()) trigger_error("Vous n'avez pas le droit de modifier cette dédicace");
+            if (LegacyCodeHelper::getGlobalVisitor()->isPublisher() && $s->get('publisher_id') != LegacyCodeHelper::getGlobalVisitor()->getCurrentRight()?->getPublisherId() && !LegacyCodeHelper::getGlobalVisitor()->isAdmin()) trigger_error("Vous n'avez pas le droit de modifier cette dédicace");
             \Biblys\Legacy\LegacyCodeHelper::setGlobalPageTitle('Modifier la dédicace');
             $buttons .= ' <button type="submit" form="signing" formaction="?delete" class="btn btn-danger" formnovalidate data-confirm="Voulez-vous vraiment SUPPRIMER cette dédicace ?"><i class="fa fa-trash-can"></i> Supprimer</button>';
 		}
@@ -97,7 +97,7 @@ if (!LegacyCodeHelper::getGlobalVisitor()->isAdmin() && !LegacyCodeHelper::getGl
                 // Associate to current right
                 if (!LegacyCodeHelper::getGlobalVisitor()->isAdmin())
                 {
-                    if (LegacyCodeHelper::getGlobalVisitor()->isPublisher()) $s->set('publisher_id', LegacyCodeHelper::getGlobalVisitor()->getCurrentRight()->get('publisher_id'));
+                    if (LegacyCodeHelper::getGlobalVisitor()->isPublisher()) $s->set('publisher_id', LegacyCodeHelper::getGlobalVisitor()->getCurrentRight()?->getPublisherId());
                 }
                 
                 $s = $sm->update($s);

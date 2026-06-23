@@ -63,6 +63,7 @@ Toutes les 44 classes Entity ont un modèle Propel sur la même table — aucune
 | `Wish` | Migration de `Cart::removeStock()` et `log_mywishes.php` | Remplacé par `WishQuery` |
 | `Wishlist` | Migration de `log_mywishes.php` et `log_wishlist.php` | Remplacé par `WishlistQuery` |
 | `Option` | Migration de `Site::getOpt()` et `Site::setOpt()` | Remplacé par `OptionQuery` (corrige aussi un bug de mise à jour) |
+| `Right` | Migration de `Publisher::getRights()` et `Visitor::getCurrentRight()` + 4 contrôleurs legacy | Remplacé par `RightQuery` |
 
 ### Bloquées par dépendances croisées internes à `inc/`
 
@@ -71,7 +72,6 @@ Ces classes n'ont aucun usage direct dans `src/` mais sont encore appelées par 
 | Classe | Appelée par |
 |---|---|
 | `Media` | `Article.class.php`, `Post.class.php`, `People.class.php` |
-| `Right` | `Publisher.class.php`, `Visitor.class.php` |
 | `Session` | `Visitor.class.php` |
 
 Elles pourront être supprimées une fois leurs classes appelantes migrées.
@@ -83,8 +83,8 @@ Elles pourront être supprimées une fois leurs classes appelantes migrées.
 | Métrique | Valeur |
 |---|---|
 | Classes legacy dans `inc/` au départ | 46 (44 Entity + 2 utilitaires) |
-| Classes supprimées | 9 |
-| Classes restantes | 37 |
+| Classes supprimées | 10 |
+| Classes restantes | 36 |
 | Lignes de code legacy restantes | ~7 300 |
 | Instanciations de `*Manager` dans `src/` | 129 |
 | Instanciations de `*Manager` dans `tests/` | 244 |
@@ -137,8 +137,9 @@ Migrer les appels legacy dans les classes encore dépendantes pour débloquer le
 | `Order.class.php` + `log_myalerts.php` | `AlertManager` → `AlertQuery` | `Alert` | ✅ fait |
 | `Cart.class.php` + `log_mywishes.php` + `log_wishlist.php` | `WishManager`, `WishlistManager` | `Wish`, `Wishlist` | ✅ fait |
 | `Site.class.php` | `OptionManager` → `OptionQuery` | `Option` | ✅ fait |
-| `Publisher.class.php` | `RightManager` | `Right` (partiel) | ⏳ à faire |
-| `Visitor.class.php` | `RightManager`, `SessionManager` | `Right`, `Session` | ⏳ à faire |
+| `Publisher.class.php` | `RightManager` → `RightQuery` | `Right` | ✅ fait |
+| `Visitor.class.php` | `RightManager` → `RightQuery` + 4 contrôleurs | `Right` | ✅ fait |
+| `Visitor.class.php` | `SessionManager` | `Session` | ⏳ à faire |
 | `Article/Post/People.class.php` | `Media` | `Media` | ⏳ à faire |
 
 Puis : `People`, `Post`, `Tag`, `Supplier`, `Inventory`, `Customer`, `Lang`, `Link`, `Role`
