@@ -20,6 +20,7 @@ use Biblys\Service\Config;
 use Biblys\Service\CurrentUser;
 use Model\ArticleQuery;
 use Model\RightQuery;
+use Model\SessionQuery;
 use Model\StockQuery;
 use Model\User;
 use Model\UserQuery;
@@ -180,17 +181,16 @@ class Visitor
 
     private function _setUserFromToken(string $token): void
     {
-        $sm = new SessionManager();
-        $session = $sm->get(['session_token' => $token]);
+        $session = SessionQuery::create()->filterByToken($token)->findOne();
         if (!$session) {
             return;
         }
 
-        if (($session->get('expires') < date('Y-m-d H:i:s'))) {
+        if ($session->getExpiresAt() < new \DateTime()) {
             return;
         }
 
-        $user = UserQuery::create()->findPk($session->get('user_id'));
+        $user = UserQuery::create()->findPk($session->getUserId());
         if (!$user) {
             return;
         }
