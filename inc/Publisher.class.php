@@ -19,6 +19,7 @@
 use Biblys\Exception\EntityAlreadyExistsException;
 use Biblys\Exception\InvalidEntityException;
 use Biblys\Legacy\LegacyCodeHelper;
+use Model\RightQuery;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class Publisher extends Entity
@@ -155,8 +156,7 @@ class Publisher extends Entity
 
     public function getRights(): array
     {
-        $rm = new RightManager();
-        return $rm->getAll(["publisher_id" => $this->get('id')]);
+        return RightQuery::create()->filterByPublisherId($this->get('id'))->find()->getArrayCopy();
     }
 }
 

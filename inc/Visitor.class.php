@@ -19,6 +19,7 @@
 use Biblys\Service\Config;
 use Biblys\Service\CurrentUser;
 use Model\ArticleQuery;
+use Model\RightQuery;
 use Model\StockQuery;
 use Model\User;
 use Model\UserQuery;
@@ -96,7 +97,7 @@ class Visitor
     public function isPublisher(): bool
     {
         $right = $this->getCurrentRight();
-        if ($right->has('publisher_id')) {
+        if ($right !== null && $right->getPublisherId() !== null) {
             return true;
         }
 
@@ -172,17 +173,9 @@ class Visitor
         return $currentUser->isAdmin();
     }
 
-    /**
-     * @throws Exception
-     */
-    public function getCurrentRight(): Right
+    public function getCurrentRight(): ?\Model\Right
     {
-        $rm = new RightManager();
-        if ($right = $rm->get(['user_id' => $this->get('id')])) {
-            return $right;
-        }
-
-        return new Right([]);
+        return RightQuery::create()->filterByUserId($this->get('id'))->findOne();
     }
 
     private function _setUserFromToken(string $token): void

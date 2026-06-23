@@ -33,7 +33,7 @@ if (LegacyCodeHelper::getGlobalVisitor()->isAdmin()) $mode = 'admin';
     $where = array();
     if (!LegacyCodeHelper::getGlobalVisitor()->isAdmin())
     {
-        if (LegacyCodeHelper::getGlobalVisitor()->isPublisher()) $where = array_merge($where, array('publisher_id' => LegacyCodeHelper::getGlobalVisitor()->getCurrentRight()->get('publisher_id')));
+        if (LegacyCodeHelper::getGlobalVisitor()->isPublisher()) $where = array_merge($where, array('publisher_id' => LegacyCodeHelper::getGlobalVisitor()->getCurrentRight()?->getPublisherId()));
     }
     
     $signings = $sm->getAll($where, array('order' => 'signing_date', 'sort' => 'desc'));
