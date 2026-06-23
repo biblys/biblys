@@ -23,6 +23,7 @@
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Test\ModelFactory;
 use Model\PublisherQuery;
+use Model\Right;
 
 require_once "setUp.php";
 
@@ -153,6 +154,27 @@ class PublisherTest extends PHPUnit\Framework\TestCase
         $pm = new PublisherManager();
 
         $pm->create(['publisher_name' => '']);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testGetRightsReturnsRightsForPublisher(): void
+    {
+        // given
+        $propelPublisher = ModelFactory::createPublisher();
+        $pm = new PublisherManager();
+        /** @var Publisher $publisher */
+        $publisher = $pm->getById($propelPublisher->getId());
+        $this->publisher = $publisher;
+        ModelFactory::createRight(publisher: $propelPublisher);
+
+        // when
+        $rights = $publisher->getRights();
+
+        // then
+        $this->assertCount(1, $rights);
+        $this->assertInstanceOf(Right::class, $rights[0]);
     }
 
     /**
