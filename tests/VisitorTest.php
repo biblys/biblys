@@ -18,8 +18,10 @@
 
 use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
+use Model\Session;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
+use Symfony\Component\HttpFoundation\Request;
 
 require_once "setUp.php";
 
@@ -59,6 +61,32 @@ class VisitorTest extends TestCase
         $this->assertTrue(
             $visitor->isPublisher(),
             "should return true when user has a publisher right"
+        );
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testConstructorIgnoresExpiredSession(): void
+    {
+        // given
+        $user = ModelFactory::createUser();
+        $session = new Session();
+        $session->setUser($user);
+        $session->setToken(Session::generateToken());
+        $session->setExpiresAt(new DateTime('yesterday'));
+        $session->save();
+
+        $request = Request::create("", "", [], [], [], [], "");
+        $request->cookies->set("user_uid", $session->getToken());
+
+        // when
+        $visitor = new Visitor($request);
+
+        // then
+        $this->assertNull(
+            $visitor->get('id'),
+            "should return null when session is expired"
         );
     }
 
