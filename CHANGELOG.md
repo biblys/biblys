@@ -24,6 +24,11 @@
   existent pour cette commande. Un message indique le montant payé et invite à
   effectuer un remboursement préalable.
 
+### Corrections
+
+- Le code postal de livraison est désormais limité à 16 caractères pour éviter les
+  erreurs lors de l'enregistrement d'une commande.
+
 ### Amélorations
 
 - Lors de la connexion avec Axys, si le compte utilisateur existe déjà sur le site,
