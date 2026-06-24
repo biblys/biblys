@@ -85,8 +85,10 @@ Ces classes sont utilisées dans des méthodes `@deprecated` de classes legacy q
 | Classes restantes | 35 |
 | Lignes de code legacy restantes | ~7 300 |
 | Instanciations de `*Manager` dans `src/` | 129 |
+| Instanciations de `*Manager` dans `controllers/` | 109 |
 | Instanciations de `*Manager` dans `tests/` | 244 |
 | Fichiers `src/` touchés | 28 |
+| Fichiers `controllers/` touchés | 55 |
 | Fichiers de tests touchés | 27+ |
 
 ### Top 5 classes les plus utilisées
