@@ -1,5 +1,10 @@
 # Historique des modifications
 
+## 3.13.3 (DEV)
+
+- Les commandes contenant uniquement un abonnement n'étaient plus marquées 
+  comme expédiée automatiquement. C'est corrigé.
+
 ## 3.13.2 (24 juin 2026)
 
 ### Corrections
