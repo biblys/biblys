@@ -156,6 +156,55 @@ class MarkOrderAsPaidUsecaseTest extends TestCase
      * @throws TransportExceptionInterface
      * @throws \Exception
      */
+    public function testMarkingAsPaidOrderWithSubscriptionArticle(): void
+    {
+        // given
+        $subscriptionArticle = ModelFactory::createArticle(typeId: ArticleType::SUBSCRIPTION);
+        $stockItem = ModelFactory::createStockItem(article: $subscriptionArticle);
+        $order = ModelFactory::createOrder(
+            slug: "order-sub",
+            email: "payer@paronymie.fr",
+        );
+        $order->addStockItem($stockItem);
+
+        $urlGenerator = $this->createMock(UrlGeneratorInterface::class);
+        $urlGenerator->expects($this->once())->method("generate")->with(
+            "legacy_order",
+            ["url" => "order-sub"],
+        )->willReturn("https://paronymie.fr/order/order-sub");
+        $templateService = Helpers::getTemplateService();
+        $mailer = $this->createMock(Mailer::class);
+        $mailer->expects($this->once())->method("send");
+
+        $addArticleToUserLibraryUsecase = $this->getMockBuilder(AddArticleToUserLibraryUsecase::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(["execute"])
+            ->getMock();
+        $addArticleToUserLibraryUsecase->expects($this->never())->method("execute");
+
+        $usecase = new MarkOrderAsPaidUsecase(
+            urlGenerator: $urlGenerator,
+            templateService: $templateService,
+            mailer: $mailer,
+            addArticleToUserLibraryUsecase: $addArticleToUserLibraryUsecase,
+        );
+
+        // when
+        $usecase->execute($order, payedAmountInCents: 999, paymentMode: "Carte bancaire");
+
+        // then
+        $order->reload();
+        $this->assertTrue($order->isPaid(), "order is marked as paid");
+        $this->assertTrue($order->isShipped(), "order is automatically marked as shipped");
+    }
+
+    /**
+     * @throws PropelException
+     * @throws InvalidEmailAddressException
+     * @throws Exception
+     * @throws TransportExceptionInterface
+     * @throws \Exception
+     */
     public function testMarkingAsPaidOrderWithBothArticleTypes(): void
     {
         // given
