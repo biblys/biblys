@@ -57,12 +57,14 @@ class OrderControllerTest extends TestCase
 
         $site = ModelFactory::createSite();
         $shippingFee = ModelFactory::createShippingOption(type: "mondial-relay");
+        $country = ModelFactory::createCountry(name: "Belgique", code: "BE");
         $order = ModelFactory::createOrder(
             shippingOption: $shippingFee,
             firstName: "Éléonore",
             lastName: "Champollion",
             postalCode: "02330",
             city: "Plymouth",
+            country: $country,
             phone: "+33.6-01 02/03;04",
             mondialRelayPickupPointCode: "123456",
         );
@@ -98,7 +100,7 @@ class OrderControllerTest extends TestCase
             "APPARTEMENT 2",           # F - Adresse du destinataire (Complément d'adresse) (F)
             "PLYMOUTH",                # G - Ville du destinataire (O)
             "02330",                   # H - Code Postal du destinataire (O)
-            "FR",                      # I - Pays du destinataire (O)
+            "BE",                      # I - Pays du destinataire (O)
             "+33601020304",            # J - Téléphone fixe du destinataire (F)
             "",                        # K - Téléphone cellulaire (F)
             "SILAS.COADE@PARONYMIE.FR", # L - Adresse e-mail du destinataire (F)
@@ -107,7 +109,7 @@ class OrderControllerTest extends TestCase
             "FR",                      # O - Code Pays Collecte
             "R",                       # P - Type Livraison (R = Relais)
             "123456",                  # Q - Id Relais de Livraison
-            "FR",                      # R - Code Pays du Relais de Livraison (FR = France)
+            "BE",                      # R - Code Pays du Relais de Livraison
             "24R",                     # S - Mode de livraison (24R = Point Relais)
             "FR",                      # T - Code Langue du Destinataire
             "1",                       # U - Nombre de colis
