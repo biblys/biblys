@@ -4,6 +4,9 @@
 
 - Les commandes contenant uniquement un abonnement n'étaient plus marquées 
   comme expédiée automatiquement. C'est corrigé.
+- Le fichier d'export pour Mondial Relay indiquait toujours la France comme
+  pays du point relais de livraison, même pour une commande expédiée vers un
+  point relais d'un autre pays (ex. Belgique). C'est corrigé.
 
 ## 3.13.2 (24 juin 2026)
 

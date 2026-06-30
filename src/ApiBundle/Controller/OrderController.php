@@ -112,7 +112,7 @@ class OrderController extends Controller
                 "FR",                                                            # O - Code Pays Collecte
                 "R",                                                             # P - Type Livraison (R = Relais)
                 $order->getMondialRelayPickupPointCode(),                        # Q - Id Relais de Livraison
-                "FR",                                                            # R - Code Pays du Relais de Livraison (FR = France)
+                $order->getCountry()->getCode(),                                 # R - Code Pays du Relais de Livraison
                 "24R",                                                           # S - Mode de livraison (24R = Point Relais)
                 "FR",                                                            # T - Code Langue du Destinataire
                 "1",                                                             # U - Nombre de colis
