@@ -434,18 +434,30 @@ function reloadAdminEvents() {
 
   // Ajouter un exemplaire au panier
   async function add_to_cart(cartId, stockId) {
-    const response = await fetch(`/pages/adm_checkout?cart_id=${cartId}&add=stock&id=${stockId}&_=${Date.now()}`, {
+    const response = await fetch(`/admin/pos/carts/${cartId}/items`, {
+      method: 'POST',
       headers: {
         'Accept': 'application/json',
-      }
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: `stock_id=${stockId}`,
     });
-    const json = await response.json();
 
     $('#checkout_add_input').removeClass('loading');
 
-    if (json.error) {
-      window._alert(json.error);
+    if (!response.ok) {
+      let message = "L'exemplaire n'a pas pu être ajouté au panier.";
+      try {
+        const error = await response.json();
+        if (error && error.message) message = error.message;
+      } catch (e) {
+        // réponse d'erreur non-JSON : on conserve le message générique
+      }
+      window._alert(message);
+      return;
     }
+
+    const json = await response.json();
 
     $('#checkout_add_results').html('');
     $('#checkout_add_input').val('');
