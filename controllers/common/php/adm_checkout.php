@@ -21,7 +21,7 @@ use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\FlashMessagesService;
 use Biblys\Service\Images\ImagesService;
 use Model\Payment;
-use Usecase\RecordShopPaymentsUsecase;
+use Usecase\RecordPointOfSalePaymentsUsecase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -76,7 +76,7 @@ return function (
             $_O->hydrateFromCart($order, $cart);
             $order = $_O->update($order);
 
-            $shopPaymentsUsecase = new RecordShopPaymentsUsecase();
+            $shopPaymentsUsecase = new RecordPointOfSalePaymentsUsecase();
             $shopPaymentsUsecase->execute((int) $order->get('order_id'), [
                 Payment::MODE_CASH  => (int) $_POST['cart_cash'],
                 Payment::MODE_CHECK => (int) $_POST['cart_cheque'],

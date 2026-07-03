@@ -21,7 +21,7 @@ use DateTime;
 use Model\Payment;
 use Propel\Runtime\Exception\PropelException;
 
-class RecordShopPaymentsUsecase
+class RecordPointOfSalePaymentsUsecase
 {
     /**
      * @param int $orderId

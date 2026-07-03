@@ -24,7 +24,7 @@ use Model\PaymentQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 
-class RecordShopPaymentsUsecaseTest extends TestCase
+class RecordPointOfSalePaymentsUsecaseTest extends TestCase
 {
     /**
      * @throws PropelException
@@ -33,7 +33,7 @@ class RecordShopPaymentsUsecaseTest extends TestCase
     {
         // given
         $order = ModelFactory::createOrder();
-        $usecase = new RecordShopPaymentsUsecase();
+        $usecase = new RecordPointOfSalePaymentsUsecase();
 
         // when
         $usecase->execute($order->getId(), [Payment::MODE_CASH => 1000]);
@@ -53,7 +53,7 @@ class RecordShopPaymentsUsecaseTest extends TestCase
     {
         // given
         $order = ModelFactory::createOrder();
-        $usecase = new RecordShopPaymentsUsecase();
+        $usecase = new RecordPointOfSalePaymentsUsecase();
 
         // when
         $usecase->execute($order->getId(), [
@@ -73,7 +73,7 @@ class RecordShopPaymentsUsecaseTest extends TestCase
     {
         // given
         $order = ModelFactory::createOrder();
-        $usecase = new RecordShopPaymentsUsecase();
+        $usecase = new RecordPointOfSalePaymentsUsecase();
 
         // when
         $usecase->execute($order->getId(), [
