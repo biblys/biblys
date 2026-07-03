@@ -222,17 +222,17 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         </tr>
       </thead>
       <tbody>
-        {% for shopCart in shop_carts %}
+        {% for pointOfSaleCart in point_of_sale_carts %}
           <tr>
-            <td><a href="/admin/caisse?cart_id={{ shopCart.id }}">{{ shopCart.title }}</a></td>
-            <td>{{ shopCart.seller_email }}</td>
-            <td>{{ shopCart.customer_name }}</td>
-            <td class="right">{{ shopCart.count }}</td>
-            <td class="right">{{ shopCart.amount|currency(true)|raw }}</td>
+            <td><a href="/admin/caisse?cart_id={{ pointOfSaleCart.id }}">{{ pointOfSaleCart.title }}</a></td>
+            <td>{{ pointOfSaleCart.seller_email }}</td>
+            <td>{{ pointOfSaleCart.customer_name }}</td>
+            <td class="right">{{ pointOfSaleCart.count }}</td>
+            <td class="right">{{ pointOfSaleCart.amount|currency(true)|raw }}</td>
             <td class="center">
-              <a href="/pages/adm_checkout?cart_id={{ shopCart.id }}&vacuum_cart=1"
-                 data-confirm="Voulez-vous vraiment VIDER ce panier et remettre {{ shopCart.count }} exemplaire{% if shopCart.count > 1 %}s{% endif %} en vente ?"
-                 title="Vider le panier et remettre {{ shopCart.count }} exemplaire{% if shopCart.count > 1 %}s{% endif %} en vente."
+              <a href="/pages/adm_checkout?cart_id={{ pointOfSaleCart.id }}&vacuum_cart=1"
+                 data-confirm="Voulez-vous vraiment VIDER ce panier et remettre {{ pointOfSaleCart.count }} exemplaire{% if pointOfSaleCart.count > 1 %}s{% endif %} en vente ?"
+                 title="Vider le panier et remettre {{ pointOfSaleCart.count }} exemplaire{% if pointOfSaleCart.count > 1 %}s{% endif %} en vente."
                  class="btn btn-danger btn-sm">
                 <i class="fa fa-trash-can"></i>
               </a>

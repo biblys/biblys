@@ -416,6 +416,13 @@ point_of_sale_index:
   controller: AppBundle\Controller\PointOfSaleController::indexAction
   methods: [GET]
 
+point_of_sale_add_item:
+  path: /admin/pos/carts/{cartId}/items
+  controller: AppBundle\Controller\PointOfSaleController::addItemAction
+  methods: [POST]
+  requirements:
+    cartId: \d+
+
 # Orders
 
 order_index:

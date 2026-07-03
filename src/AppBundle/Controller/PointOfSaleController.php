@@ -18,6 +18,8 @@
 
 namespace AppBundle\Controller;
 
+use Biblys\Exception\CannotAddStockItemToCartException;
+use Biblys\Service\BodyParamsService;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\FlashMessagesService;
@@ -31,11 +33,14 @@ use Framework\Controller;
 use Model\UserQuery;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
+use Usecase\AddStockItemToPointOfSaleCartUsecase;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -130,24 +135,24 @@ class PointOfSaleController extends Controller
         }
         $cm->updateFromStock($cart);
 
-        $shopCarts = [];
-        foreach ($cm->getAll() as $shopCart) {
-            if ($shopCart->get('cart_count') > 0 && $shopCart->get('cart_type') === 'shop') {
+        $pointOfSaleCarts = [];
+        foreach ($cm->getAll() as $pointOfSaleCart) {
+            if ($pointOfSaleCart->get('cart_count') > 0 && $pointOfSaleCart->get('cart_type') === 'shop') {
                 $cartSeller = null;
-                if ($shopCart->has('seller_user_id')) {
-                    $cartSeller = UserQuery::create()->findPk($shopCart->get('seller_user_id'));
-                } elseif ($shopCart->has('seller_id')) {
-                    $cartSeller = UserQuery::create()->findPk($shopCart->get('seller_id'));
+                if ($pointOfSaleCart->has('seller_user_id')) {
+                    $cartSeller = UserQuery::create()->findPk($pointOfSaleCart->get('seller_user_id'));
+                } elseif ($pointOfSaleCart->has('seller_id')) {
+                    $cartSeller = UserQuery::create()->findPk($pointOfSaleCart->get('seller_id'));
                 }
-                $shopCarts[] = [
-                    'id' => $shopCart->get('cart_id'),
-                    'title' => $shopCart->get('cart_title'),
+                $pointOfSaleCarts[] = [
+                    'id' => $pointOfSaleCart->get('cart_id'),
+                    'title' => $pointOfSaleCart->get('cart_title'),
                     'seller_email' => $cartSeller?->getEmail() ?? "Vendeur inconnu",
-                    'customer_name' => $shopCart->has('customer')
-                        ? $shopCart->get('customer')->get('first_name') . ' ' . $shopCart->get('customer')->get('last_name')
+                    'customer_name' => $pointOfSaleCart->has('customer')
+                        ? $pointOfSaleCart->get('customer')->get('first_name') . ' ' . $pointOfSaleCart->get('customer')->get('last_name')
                         : null,
-                    'count' => $shopCart->get('cart_count'),
-                    'amount' => $shopCart->get('cart_amount'),
+                    'count' => $pointOfSaleCart->get('cart_count'),
+                    'amount' => $pointOfSaleCart->get('cart_amount'),
                 ];
             }
         }
@@ -161,7 +166,52 @@ class PointOfSaleController extends Controller
             'cart_total' => $cartTotal,
             'seller' => $seller,
             'customer' => $customer,
-            'shop_carts' => $shopCarts,
+            'point_of_sale_carts' => $pointOfSaleCarts,
         ], isPrivate: true);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function addItemAction(
+        Request           $request,
+        CurrentUser       $currentUser,
+        ImagesService     $imagesService,
+        BodyParamsService $bodyParams,
+        int               $cartId,
+    ): Response
+    {
+        $currentUser->authAdmin();
+
+        $cm = new CartManager();
+        $cart = $cm->getById($cartId);
+        if (!$cart) {
+            throw new NotFoundHttpException("Panier $cartId introuvable");
+        }
+
+        $bodyParams->parse(["stock_id" => ["type" => "numeric", "default" => 0]]);
+        $stockItemId = $bodyParams->getInteger("stock_id");
+
+        try {
+            $usecase = new AddStockItemToPointOfSaleCartUsecase();
+            $usecase->execute($cartId, $stockItemId);
+        } catch (CannotAddStockItemToCartException $exception) {
+            throw new BadRequestHttpException($exception->getMessage(), $exception);
+        }
+
+        if (in_array("application/json", $request->getAcceptableContentTypes())) {
+            $line = "";
+            foreach ($cm->getStock($cart) as $stockItem) {
+                if ($stockItem->get("id") == $stockItemId) {
+                    $line = $cart->getLine($imagesService, $stockItem);
+                }
+            }
+            return new JsonResponse([
+                "success" => "L'exemplaire n° $stockItemId a été ajouté au panier.",
+                "line" => $line,
+            ]);
+        }
+
+        return new RedirectResponse("/admin/caisse?cart_id=$cartId");
     }
 }
