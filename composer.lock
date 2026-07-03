@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "053f0c9ef4cebd79bf71ca8a896784d6",
+    "content-hash": "b5f6b214c7ee8c9571776ee6dfc7af3f",
     "packages": [
         {
             "name": "apimatic/core",
@@ -995,16 +995,16 @@
         },
         {
             "name": "getbrevo/brevo-php",
-            "version": "4.0.16",
+            "version": "5.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/getbrevo/brevo-php.git",
-                "reference": "7dd6020089242ad91a3e5520466962fbb3ffc494"
+                "reference": "227c17e33bd67b6f9c13b838f74c37a3d885ab27"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/getbrevo/brevo-php/zipball/7dd6020089242ad91a3e5520466962fbb3ffc494",
-                "reference": "7dd6020089242ad91a3e5520466962fbb3ffc494",
+                "url": "https://api.github.com/repos/getbrevo/brevo-php/zipball/227c17e33bd67b6f9c13b838f74c37a3d885ab27",
+                "reference": "227c17e33bd67b6f9c13b838f74c37a3d885ab27",
                 "shasum": ""
             },
             "require": {
@@ -1022,7 +1022,7 @@
                 "friendsofphp/php-cs-fixer": "3.5.0",
                 "guzzlehttp/guzzle": "^7.4",
                 "phpstan/phpstan": "^1.12",
-                "phpunit/phpunit": "^9.0"
+                "phpunit/phpunit": "^12.5.22"
             },
             "type": "library",
             "autoload": {
@@ -1042,9 +1042,9 @@
             ],
             "support": {
                 "issues": "https://github.com/getbrevo/brevo-php/issues",
-                "source": "https://github.com/getbrevo/brevo-php/tree/v4.0.16"
+                "source": "https://github.com/getbrevo/brevo-php/tree/v5.0.1"
             },
-            "time": "2026-06-15T13:22:33+00:00"
+            "time": "2026-07-03T12:32:58+00:00"
         },
         {
             "name": "gitonomy/gitlib",
