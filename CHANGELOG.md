@@ -5,6 +5,8 @@
 ### Caisse
 
 - La caisse est désormais accessible via la nouvelle URL `/admin/caisse`.
+- L'ajout d'un exemplaire au panier de caisse passe désormais par une route dédiée
+  du nouveau contrôleur Point of Sale.
 
 ### Maintenance
 
