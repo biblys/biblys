@@ -250,6 +250,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                 <i class="fa-solid fa-clock"></i>&nbsp;
                 Votre commande sera expédiée après réception et encaissement de votre chèque.
               </p>
+            {% elseif orderWillBeCollected %}
+              <p class="alert alert-warning mt-3 mb-0">
+                <i class="fa-solid fa-clock"></i>&nbsp;
+                Remettez votre chèque lors du retrait de votre commande en magasin.
+              </p>
             {% endif %}
           </div>
         </div>

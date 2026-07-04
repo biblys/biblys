@@ -643,6 +643,46 @@ class PaymentControllerTest extends TestCase
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertStringContainsString("Chèque", $response->getContent());
         $this->assertStringContainsString("L’ordre", $response->getContent());
+        $this->assertStringContainsString("Envoyez votre chèque", $response->getContent());
+        $this->assertStringNotContainsString(
+            "Remettez votre chèque lors du retrait",
+            $response->getContent()
+        );
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws PropelException
+     * @throws LoaderError
+     * @throws Exception
+     */
+    public function testSelectMethodActionWithCheckAndInStorePickup()
+    {
+        // given
+        $controller = new PaymentController();
+        $shippingOption = ModelFactory::createShippingOption(type: "magasin");
+        $order = ModelFactory::createOrder(shippingOption: $shippingOption);
+        $config = new Config();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getOption")->with("payment_iban")->andReturn(null);
+        $currentSite->shouldReceive("getOption")->with("payment_check")->andReturn(1);
+        $currentSite->shouldReceive("getOption")->with("name_for_check_payment")->andReturn("L’ordre");
+        $templateService = Helpers::getTemplateService();
+        $paymentService = Mockery::mock(PaymentService::class);
+        $paymentService->expects("getPayableOrderBySlug")->andReturn($order);
+
+        // when
+        $response = $controller->selectMethodAction($paymentService, $config, $currentSite, $templateService, $order->getSlug());
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertStringContainsString("Chèque", $response->getContent());
+        $this->assertStringContainsString(
+            "Remettez votre chèque lors du retrait de votre commande en magasin.",
+            $response->getContent()
+        );
+        $this->assertStringNotContainsString("Envoyez votre chèque", $response->getContent());
     }
 
     /** createPayplugPaymentAction */

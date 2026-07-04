@@ -34,6 +34,12 @@
   le compte Axys sera lié au compte utilisateur existant. Sinon, un nouveau compte
   sera créé.
 
+### Corrections
+
+- Lors du paiement par chèque d'une commande à retirer en magasin, le bloc chèque
+  affiche désormais un message indiquant que le chèque sera remis au retrait, au lieu
+  de rester sans indication (l'adresse d'expédition n'est plus attendue dans ce cas).
+
 ## 3.13.3 (1er juillet 2026)
 
 - Les commandes contenant uniquement un abonnement n'étaient plus marquées 
