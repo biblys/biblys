@@ -1,20 +1,6 @@
 # Historique des modifications
 
-## 3.14.0 (DEV)
-
-### Caisse
-
-- La caisse est désormais accessible via la nouvelle URL `/admin/caisse`.
-- L'ajout d'un exemplaire au panier de caisse passe désormais par une route dédiée
-  du nouveau contrôleur Point of Sale.
-
-### Maintenance
-
-- Plusieurs classes Entity legacy sans usage ont été supprimées (`Price`, `Redirection`,
-  `Signing`, `Subscription`, `Alert`, `Download`) au profit des modèles Propel équivalents.
-- L'adapter jQuery de CKEditor a été mis à jour vers la version CKEditor 4 LTS (2025),
-  en préparation de la migration vers jQuery 4.
-- jQuery a été mis à jour de la version 1.12.4 (2016) vers la version 3.7.1 (LTS).
+## 3.14.0 (4 juillet 2026)
 
 ### Confirmité NF525
 
@@ -39,6 +25,14 @@
 - Lors du paiement par chèque d'une commande à retirer en magasin, le bloc chèque
   affiche désormais un message indiquant que le chèque sera remis au retrait, au lieu
   de rester sans indication (l'adresse d'expédition n'est plus attendue dans ce cas).
+
+### Maintenance
+
+- Plusieurs classes Entity legacy sans usage ont été supprimées (`Price`, `Redirection`,
+  `Signing`, `Subscription`, `Alert`, `Download`) au profit des modèles Propel équivalents.
+- L'adapter jQuery de CKEditor a été mis à jour vers la version CKEditor 4 LTS (2025),
+  en préparation de la migration vers jQuery 4.
+- jQuery a été mis à jour de la version 1.12.4 (2016) vers la version 3.7.1 (LTS).
 
 ## 3.13.3 (1er juillet 2026)
 
