@@ -18,7 +18,10 @@
 
 namespace Model;
 
+use DateTime;
 use Model\Base\Payment as BasePayment;
+use Propel\Runtime\ActiveQuery\Criteria;
+use Propel\Runtime\Connection\ConnectionInterface;
 use Propel\Runtime\Exception\PropelException;
 
 /**
@@ -62,5 +65,39 @@ class Payment extends BasePayment
     public function isExecuted(): bool
     {
         return $this->getExecuted() !== null;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function preInsert(?ConnectionInterface $con = null): bool
+    {
+        if (!parent::preInsert($con)) {
+            return false;
+        }
+
+        // Le comportement timestampable renseigne payment_created APRÈS preInsert.
+        // On fige donc la date ici si elle n'est pas déjà fixée, pour que le hash
+        // porte sur la valeur réellement stockée (timestampable respectera ensuite
+        // cette valeur via son test !isColumnModified).
+        if ($this->getCreatedAt() === null) {
+            $this->setCreatedAt(new DateTime());
+        }
+
+        $previous = PaymentQuery::create()
+            ->orderById(Criteria::DESC)
+            ->findOne($con);
+        $previousHash = $previous?->getHash() ?? "";
+
+        $this->setHashVersion(PaymentHash::CURRENT_VERSION);
+        $this->setHash(PaymentHash::compute(
+            PaymentHash::CURRENT_VERSION,
+            $this->getAmount(),
+            $this->getCreatedAt(),
+            $this->getOrderId(),
+            $previousHash
+        ));
+
+        return true;
     }
 }
