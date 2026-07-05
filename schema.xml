@@ -947,6 +947,8 @@
     <column name="payment_updated" phpName="UpdatedAt" type="TIMESTAMP"/>
     <column name="payment_refunded_at" phpName="RefundedAt" type="TIMESTAMP"/>
     <column name="payment_original_id" phpName="OriginalId" type="INTEGER"/>
+    <column name="payment_hash" phpName="Hash" type="VARCHAR" size="64"/>
+    <column name="payment_hash_version" phpName="HashVersion" type="TINYINT" default="1"/>
     <behavior name="timestampable">
       <parameter name="create_column" value="payment_created" />
       <parameter name="update_column" value="payment_updated" />
