@@ -154,6 +154,21 @@ abstract class Payment implements ActiveRecordInterface
     protected $payment_original_id;
 
     /**
+     * The value for the payment_hash field.
+     *
+     * @var        string|null
+     */
+    protected $payment_hash;
+
+    /**
+     * The value for the payment_hash_version field.
+     *
+     * Note: this column has a database default value of: 1
+     * @var        int|null
+     */
+    protected $payment_hash_version;
+
+    /**
      * @var        ChildSite
      */
     protected $aSite;
@@ -191,10 +206,23 @@ abstract class Payment implements ActiveRecordInterface
     protected $paymentsRelatedByIdScheduledForDeletion = null;
 
     /**
+     * Applies default values to this object.
+     * This method should be called from the object's constructor (or
+     * equivalent initialization method).
+     * @see __construct()
+     */
+    public function applyDefaultValues(): void
+    {
+        $this->payment_hash_version = 1;
+    }
+
+    /**
      * Initializes internal state of Model\Base\Payment object.
+     * @see applyDefaults()
      */
     public function __construct()
     {
+        $this->applyDefaultValues();
     }
 
     /**
@@ -499,7 +527,7 @@ abstract class Payment implements ActiveRecordInterface
      *
      * @psalm-return ($format is null ? DateTime|null : string|null)
      */
-    public function getCreatedAt($format = null)
+    public function getCreatedAt(?string $format = null)
     {
         if ($format === null) {
             return $this->payment_created;
@@ -521,7 +549,7 @@ abstract class Payment implements ActiveRecordInterface
      *
      * @psalm-return ($format is null ? DateTime|null : string|null)
      */
-    public function getExecuted($format = null)
+    public function getExecuted(?string $format = null)
     {
         if ($format === null) {
             return $this->payment_executed;
@@ -543,7 +571,7 @@ abstract class Payment implements ActiveRecordInterface
      *
      * @psalm-return ($format is null ? DateTime|null : string|null)
      */
-    public function getUpdatedAt($format = null)
+    public function getUpdatedAt(?string $format = null)
     {
         if ($format === null) {
             return $this->payment_updated;
@@ -565,7 +593,7 @@ abstract class Payment implements ActiveRecordInterface
      *
      * @psalm-return ($format is null ? DateTime|null : string|null)
      */
-    public function getRefundedAt($format = null)
+    public function getRefundedAt(?string $format = null)
     {
         if ($format === null) {
             return $this->payment_refunded_at;
@@ -582,6 +610,26 @@ abstract class Payment implements ActiveRecordInterface
     public function getOriginalId()
     {
         return $this->payment_original_id;
+    }
+
+    /**
+     * Get the [payment_hash] column value.
+     *
+     * @return string|null
+     */
+    public function getHash()
+    {
+        return $this->payment_hash;
+    }
+
+    /**
+     * Get the [payment_hash_version] column value.
+     *
+     * @return int|null
+     */
+    public function getHashVersion()
+    {
+        return $this->payment_hash_version;
     }
 
     /**
@@ -837,6 +885,46 @@ abstract class Payment implements ActiveRecordInterface
     }
 
     /**
+     * Set the value of [payment_hash] column.
+     *
+     * @param string|null $v New value
+     * @return $this The current object (for fluent API support)
+     */
+    public function setHash($v)
+    {
+        if ($v !== null) {
+            $v = (string) $v;
+        }
+
+        if ($this->payment_hash !== $v) {
+            $this->payment_hash = $v;
+            $this->modifiedColumns[PaymentTableMap::COL_PAYMENT_HASH] = true;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set the value of [payment_hash_version] column.
+     *
+     * @param int|null $v New value
+     * @return $this The current object (for fluent API support)
+     */
+    public function setHashVersion($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->payment_hash_version !== $v) {
+            $this->payment_hash_version = $v;
+            $this->modifiedColumns[PaymentTableMap::COL_PAYMENT_HASH_VERSION] = true;
+        }
+
+        return $this;
+    }
+
+    /**
      * Indicates whether the columns in this object are only set to default values.
      *
      * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -846,6 +934,10 @@ abstract class Payment implements ActiveRecordInterface
      */
     public function hasOnlyDefaultValues(): bool
     {
+            if ($this->payment_hash_version !== 1) {
+                return false;
+            }
+
         // otherwise, everything was equal, so return TRUE
         return true;
     }
@@ -920,6 +1012,12 @@ abstract class Payment implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : PaymentTableMap::translateFieldName('OriginalId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->payment_original_id = (null !== $col) ? (int) $col : null;
 
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 12 + $startcol : PaymentTableMap::translateFieldName('Hash', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->payment_hash = (null !== $col) ? (string) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 13 + $startcol : PaymentTableMap::translateFieldName('HashVersion', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->payment_hash_version = (null !== $col) ? (int) $col : null;
+
             $this->resetModified();
             $this->setNew(false);
 
@@ -927,7 +1025,7 @@ abstract class Payment implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 12; // 12 = PaymentTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 14; // 14 = PaymentTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\Payment'), 0, $e);
@@ -1070,19 +1168,18 @@ abstract class Payment implements ActiveRecordInterface
             if ($isInsert) {
                 $ret = $ret && $this->preInsert($con);
                 // timestampable behavior
-                $time = time();
-                $highPrecision = \Propel\Runtime\Util\PropelDateTime::createHighPrecision();
+                $mtime = microtime(true);
                 if (!$this->isColumnModified(PaymentTableMap::COL_PAYMENT_CREATED)) {
-                    $this->setCreatedAt($highPrecision);
+                    $this->setCreatedAt(PropelDateTime::createHighPrecision(PropelDateTime::formatMicrotime($mtime), 'DateTime'));
                 }
                 if (!$this->isColumnModified(PaymentTableMap::COL_PAYMENT_UPDATED)) {
-                    $this->setUpdatedAt($highPrecision);
+                    $this->setUpdatedAt(PropelDateTime::createHighPrecision(PropelDateTime::formatMicrotime($mtime), 'DateTime'));
                 }
             } else {
                 $ret = $ret && $this->preUpdate($con);
                 // timestampable behavior
                 if ($this->isModified() && !$this->isColumnModified(PaymentTableMap::COL_PAYMENT_UPDATED)) {
-                    $this->setUpdatedAt(\Propel\Runtime\Util\PropelDateTime::createHighPrecision());
+                    $this->setUpdatedAt(PropelDateTime::createHighPrecision(null, 'DateTime'));
                 }
             }
             if ($ret) {
@@ -1236,6 +1333,12 @@ abstract class Payment implements ActiveRecordInterface
         if ($this->isColumnModified(PaymentTableMap::COL_PAYMENT_ORIGINAL_ID)) {
             $modifiedColumns[':p' . $index++]  = 'payment_original_id';
         }
+        if ($this->isColumnModified(PaymentTableMap::COL_PAYMENT_HASH)) {
+            $modifiedColumns[':p' . $index++]  = 'payment_hash';
+        }
+        if ($this->isColumnModified(PaymentTableMap::COL_PAYMENT_HASH_VERSION)) {
+            $modifiedColumns[':p' . $index++]  = 'payment_hash_version';
+        }
 
         $sql = sprintf(
             'INSERT INTO payments (%s) VALUES (%s)',
@@ -1293,6 +1396,14 @@ abstract class Payment implements ActiveRecordInterface
                         break;
                     case 'payment_original_id':
                         $stmt->bindValue($identifier, $this->payment_original_id, PDO::PARAM_INT);
+
+                        break;
+                    case 'payment_hash':
+                        $stmt->bindValue($identifier, $this->payment_hash, PDO::PARAM_STR);
+
+                        break;
+                    case 'payment_hash_version':
+                        $stmt->bindValue($identifier, $this->payment_hash_version, PDO::PARAM_INT);
 
                         break;
                 }
@@ -1393,6 +1504,12 @@ abstract class Payment implements ActiveRecordInterface
             case 11:
                 return $this->getOriginalId();
 
+            case 12:
+                return $this->getHash();
+
+            case 13:
+                return $this->getHashVersion();
+
             default:
                 return null;
         } // switch()
@@ -1433,6 +1550,8 @@ abstract class Payment implements ActiveRecordInterface
             $keys[9] => $this->getUpdatedAt(),
             $keys[10] => $this->getRefundedAt(),
             $keys[11] => $this->getOriginalId(),
+            $keys[12] => $this->getHash(),
+            $keys[13] => $this->getHashVersion(),
         ];
         if ($result[$keys[7]] instanceof \DateTimeInterface) {
             $result[$keys[7]] = $result[$keys[7]]->format('Y-m-d H:i:s.u');
@@ -1588,6 +1707,12 @@ abstract class Payment implements ActiveRecordInterface
             case 11:
                 $this->setOriginalId($value);
                 break;
+            case 12:
+                $this->setHash($value);
+                break;
+            case 13:
+                $this->setHashVersion($value);
+                break;
         } // switch()
 
         return $this;
@@ -1649,6 +1774,12 @@ abstract class Payment implements ActiveRecordInterface
         }
         if (array_key_exists($keys[11], $arr)) {
             $this->setOriginalId($arr[$keys[11]]);
+        }
+        if (array_key_exists($keys[12], $arr)) {
+            $this->setHash($arr[$keys[12]]);
+        }
+        if (array_key_exists($keys[13], $arr)) {
+            $this->setHashVersion($arr[$keys[13]]);
         }
 
         return $this;
@@ -1728,6 +1859,12 @@ abstract class Payment implements ActiveRecordInterface
         }
         if ($this->isColumnModified(PaymentTableMap::COL_PAYMENT_ORIGINAL_ID)) {
             $criteria->add(PaymentTableMap::COL_PAYMENT_ORIGINAL_ID, $this->payment_original_id);
+        }
+        if ($this->isColumnModified(PaymentTableMap::COL_PAYMENT_HASH)) {
+            $criteria->add(PaymentTableMap::COL_PAYMENT_HASH, $this->payment_hash);
+        }
+        if ($this->isColumnModified(PaymentTableMap::COL_PAYMENT_HASH_VERSION)) {
+            $criteria->add(PaymentTableMap::COL_PAYMENT_HASH_VERSION, $this->payment_hash_version);
         }
 
         return $criteria;
@@ -1828,6 +1965,8 @@ abstract class Payment implements ActiveRecordInterface
         $copyObj->setUpdatedAt($this->getUpdatedAt());
         $copyObj->setRefundedAt($this->getRefundedAt());
         $copyObj->setOriginalId($this->getOriginalId());
+        $copyObj->setHash($this->getHash());
+        $copyObj->setHashVersion($this->getHashVersion());
 
         if ($deepCopy) {
             // important: temporarily setNew(false) because this affects the behavior of
@@ -1877,7 +2016,7 @@ abstract class Payment implements ActiveRecordInterface
      * @return $this The current object (for fluent API support)
      * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function setSite(ChildSite $v = null)
+    public function setSite(?ChildSite $v = null)
     {
         if ($v === null) {
             $this->setSiteId(NULL);
@@ -1928,7 +2067,7 @@ abstract class Payment implements ActiveRecordInterface
      * @return $this The current object (for fluent API support)
      * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function setOrder(ChildOrder $v = null)
+    public function setOrder(?ChildOrder $v = null)
     {
         if ($v === null) {
             $this->setOrderId(NULL);
@@ -1979,7 +2118,7 @@ abstract class Payment implements ActiveRecordInterface
      * @return $this The current object (for fluent API support)
      * @throws \Propel\Runtime\Exception\PropelException
      */
-    public function setPaymentRelatedByOriginalId(ChildPayment $v = null)
+    public function setPaymentRelatedByOriginalId(?ChildPayment $v = null)
     {
         if ($v === null) {
             $this->setOriginalId(NULL);
@@ -2361,8 +2500,11 @@ abstract class Payment implements ActiveRecordInterface
         $this->payment_updated = null;
         $this->payment_refunded_at = null;
         $this->payment_original_id = null;
+        $this->payment_hash = null;
+        $this->payment_hash_version = null;
         $this->alreadyInSave = false;
         $this->clearAllReferences();
+        $this->applyDefaultValues();
         $this->resetModified();
         $this->setNew(true);
         $this->setDeleted(false);

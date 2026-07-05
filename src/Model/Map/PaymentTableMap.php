@@ -63,7 +63,7 @@ class PaymentTableMap extends TableMap
     /**
      * The total number of columns
      */
-    public const NUM_COLUMNS = 12;
+    public const NUM_COLUMNS = 14;
 
     /**
      * The number of lazy-loaded columns
@@ -73,7 +73,7 @@ class PaymentTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    public const NUM_HYDRATE_COLUMNS = 12;
+    public const NUM_HYDRATE_COLUMNS = 14;
 
     /**
      * the column name for the payment_id field
@@ -136,6 +136,16 @@ class PaymentTableMap extends TableMap
     public const COL_PAYMENT_ORIGINAL_ID = 'payments.payment_original_id';
 
     /**
+     * the column name for the payment_hash field
+     */
+    public const COL_PAYMENT_HASH = 'payments.payment_hash';
+
+    /**
+     * the column name for the payment_hash_version field
+     */
+    public const COL_PAYMENT_HASH_VERSION = 'payments.payment_hash_version';
+
+    /**
      * The default string format for model objects of the related table
      */
     public const DEFAULT_STRING_FORMAT = 'YAML';
@@ -149,11 +159,11 @@ class PaymentTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldNames = [
-        self::TYPE_PHPNAME       => ['Id', 'SiteId', 'OrderId', 'Amount', 'Mode', 'ProviderId', 'Url', 'CreatedAt', 'Executed', 'UpdatedAt', 'RefundedAt', 'OriginalId', ],
-        self::TYPE_CAMELNAME     => ['id', 'siteId', 'orderId', 'amount', 'mode', 'providerId', 'url', 'createdAt', 'executed', 'updatedAt', 'refundedAt', 'originalId', ],
-        self::TYPE_COLNAME       => [PaymentTableMap::COL_PAYMENT_ID, PaymentTableMap::COL_SITE_ID, PaymentTableMap::COL_ORDER_ID, PaymentTableMap::COL_PAYMENT_AMOUNT, PaymentTableMap::COL_PAYMENT_MODE, PaymentTableMap::COL_PAYMENT_PROVIDER_ID, PaymentTableMap::COL_PAYMENT_URL, PaymentTableMap::COL_PAYMENT_CREATED, PaymentTableMap::COL_PAYMENT_EXECUTED, PaymentTableMap::COL_PAYMENT_UPDATED, PaymentTableMap::COL_PAYMENT_REFUNDED_AT, PaymentTableMap::COL_PAYMENT_ORIGINAL_ID, ],
-        self::TYPE_FIELDNAME     => ['payment_id', 'site_id', 'order_id', 'payment_amount', 'payment_mode', 'payment_provider_id', 'payment_url', 'payment_created', 'payment_executed', 'payment_updated', 'payment_refunded_at', 'payment_original_id', ],
-        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, ]
+        self::TYPE_PHPNAME       => ['Id', 'SiteId', 'OrderId', 'Amount', 'Mode', 'ProviderId', 'Url', 'CreatedAt', 'Executed', 'UpdatedAt', 'RefundedAt', 'OriginalId', 'Hash', 'HashVersion', ],
+        self::TYPE_CAMELNAME     => ['id', 'siteId', 'orderId', 'amount', 'mode', 'providerId', 'url', 'createdAt', 'executed', 'updatedAt', 'refundedAt', 'originalId', 'hash', 'hashVersion', ],
+        self::TYPE_COLNAME       => [PaymentTableMap::COL_PAYMENT_ID, PaymentTableMap::COL_SITE_ID, PaymentTableMap::COL_ORDER_ID, PaymentTableMap::COL_PAYMENT_AMOUNT, PaymentTableMap::COL_PAYMENT_MODE, PaymentTableMap::COL_PAYMENT_PROVIDER_ID, PaymentTableMap::COL_PAYMENT_URL, PaymentTableMap::COL_PAYMENT_CREATED, PaymentTableMap::COL_PAYMENT_EXECUTED, PaymentTableMap::COL_PAYMENT_UPDATED, PaymentTableMap::COL_PAYMENT_REFUNDED_AT, PaymentTableMap::COL_PAYMENT_ORIGINAL_ID, PaymentTableMap::COL_PAYMENT_HASH, PaymentTableMap::COL_PAYMENT_HASH_VERSION, ],
+        self::TYPE_FIELDNAME     => ['payment_id', 'site_id', 'order_id', 'payment_amount', 'payment_mode', 'payment_provider_id', 'payment_url', 'payment_created', 'payment_executed', 'payment_updated', 'payment_refunded_at', 'payment_original_id', 'payment_hash', 'payment_hash_version', ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, ]
     ];
 
     /**
@@ -165,11 +175,11 @@ class PaymentTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldKeys = [
-        self::TYPE_PHPNAME       => ['Id' => 0, 'SiteId' => 1, 'OrderId' => 2, 'Amount' => 3, 'Mode' => 4, 'ProviderId' => 5, 'Url' => 6, 'CreatedAt' => 7, 'Executed' => 8, 'UpdatedAt' => 9, 'RefundedAt' => 10, 'OriginalId' => 11, ],
-        self::TYPE_CAMELNAME     => ['id' => 0, 'siteId' => 1, 'orderId' => 2, 'amount' => 3, 'mode' => 4, 'providerId' => 5, 'url' => 6, 'createdAt' => 7, 'executed' => 8, 'updatedAt' => 9, 'refundedAt' => 10, 'originalId' => 11, ],
-        self::TYPE_COLNAME       => [PaymentTableMap::COL_PAYMENT_ID => 0, PaymentTableMap::COL_SITE_ID => 1, PaymentTableMap::COL_ORDER_ID => 2, PaymentTableMap::COL_PAYMENT_AMOUNT => 3, PaymentTableMap::COL_PAYMENT_MODE => 4, PaymentTableMap::COL_PAYMENT_PROVIDER_ID => 5, PaymentTableMap::COL_PAYMENT_URL => 6, PaymentTableMap::COL_PAYMENT_CREATED => 7, PaymentTableMap::COL_PAYMENT_EXECUTED => 8, PaymentTableMap::COL_PAYMENT_UPDATED => 9, PaymentTableMap::COL_PAYMENT_REFUNDED_AT => 10, PaymentTableMap::COL_PAYMENT_ORIGINAL_ID => 11, ],
-        self::TYPE_FIELDNAME     => ['payment_id' => 0, 'site_id' => 1, 'order_id' => 2, 'payment_amount' => 3, 'payment_mode' => 4, 'payment_provider_id' => 5, 'payment_url' => 6, 'payment_created' => 7, 'payment_executed' => 8, 'payment_updated' => 9, 'payment_refunded_at' => 10, 'payment_original_id' => 11, ],
-        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, ]
+        self::TYPE_PHPNAME       => ['Id' => 0, 'SiteId' => 1, 'OrderId' => 2, 'Amount' => 3, 'Mode' => 4, 'ProviderId' => 5, 'Url' => 6, 'CreatedAt' => 7, 'Executed' => 8, 'UpdatedAt' => 9, 'RefundedAt' => 10, 'OriginalId' => 11, 'Hash' => 12, 'HashVersion' => 13, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'siteId' => 1, 'orderId' => 2, 'amount' => 3, 'mode' => 4, 'providerId' => 5, 'url' => 6, 'createdAt' => 7, 'executed' => 8, 'updatedAt' => 9, 'refundedAt' => 10, 'originalId' => 11, 'hash' => 12, 'hashVersion' => 13, ],
+        self::TYPE_COLNAME       => [PaymentTableMap::COL_PAYMENT_ID => 0, PaymentTableMap::COL_SITE_ID => 1, PaymentTableMap::COL_ORDER_ID => 2, PaymentTableMap::COL_PAYMENT_AMOUNT => 3, PaymentTableMap::COL_PAYMENT_MODE => 4, PaymentTableMap::COL_PAYMENT_PROVIDER_ID => 5, PaymentTableMap::COL_PAYMENT_URL => 6, PaymentTableMap::COL_PAYMENT_CREATED => 7, PaymentTableMap::COL_PAYMENT_EXECUTED => 8, PaymentTableMap::COL_PAYMENT_UPDATED => 9, PaymentTableMap::COL_PAYMENT_REFUNDED_AT => 10, PaymentTableMap::COL_PAYMENT_ORIGINAL_ID => 11, PaymentTableMap::COL_PAYMENT_HASH => 12, PaymentTableMap::COL_PAYMENT_HASH_VERSION => 13, ],
+        self::TYPE_FIELDNAME     => ['payment_id' => 0, 'site_id' => 1, 'order_id' => 2, 'payment_amount' => 3, 'payment_mode' => 4, 'payment_provider_id' => 5, 'payment_url' => 6, 'payment_created' => 7, 'payment_executed' => 8, 'payment_updated' => 9, 'payment_refunded_at' => 10, 'payment_original_id' => 11, 'payment_hash' => 12, 'payment_hash_version' => 13, ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, ]
     ];
 
     /**
@@ -274,6 +284,22 @@ class PaymentTableMap extends TableMap
         'COL_PAYMENT_ORIGINAL_ID' => 'PAYMENT_ORIGINAL_ID',
         'payment_original_id' => 'PAYMENT_ORIGINAL_ID',
         'payments.payment_original_id' => 'PAYMENT_ORIGINAL_ID',
+        'Hash' => 'PAYMENT_HASH',
+        'Payment.Hash' => 'PAYMENT_HASH',
+        'hash' => 'PAYMENT_HASH',
+        'payment.hash' => 'PAYMENT_HASH',
+        'PaymentTableMap::COL_PAYMENT_HASH' => 'PAYMENT_HASH',
+        'COL_PAYMENT_HASH' => 'PAYMENT_HASH',
+        'payment_hash' => 'PAYMENT_HASH',
+        'payments.payment_hash' => 'PAYMENT_HASH',
+        'HashVersion' => 'PAYMENT_HASH_VERSION',
+        'Payment.HashVersion' => 'PAYMENT_HASH_VERSION',
+        'hashVersion' => 'PAYMENT_HASH_VERSION',
+        'payment.hashVersion' => 'PAYMENT_HASH_VERSION',
+        'PaymentTableMap::COL_PAYMENT_HASH_VERSION' => 'PAYMENT_HASH_VERSION',
+        'COL_PAYMENT_HASH_VERSION' => 'PAYMENT_HASH_VERSION',
+        'payment_hash_version' => 'PAYMENT_HASH_VERSION',
+        'payments.payment_hash_version' => 'PAYMENT_HASH_VERSION',
     ];
 
     /**
@@ -305,6 +331,8 @@ class PaymentTableMap extends TableMap
         $this->addColumn('payment_updated', 'UpdatedAt', 'TIMESTAMP', false, null, null);
         $this->addColumn('payment_refunded_at', 'RefundedAt', 'TIMESTAMP', false, null, null);
         $this->addForeignKey('payment_original_id', 'OriginalId', 'INTEGER', 'payments', 'payment_id', false, null, null);
+        $this->addColumn('payment_hash', 'Hash', 'VARCHAR', false, 64, null);
+        $this->addColumn('payment_hash_version', 'HashVersion', 'TINYINT', false, null, 1);
     }
 
     /**
@@ -511,6 +539,8 @@ class PaymentTableMap extends TableMap
             $criteria->addSelectColumn(PaymentTableMap::COL_PAYMENT_UPDATED);
             $criteria->addSelectColumn(PaymentTableMap::COL_PAYMENT_REFUNDED_AT);
             $criteria->addSelectColumn(PaymentTableMap::COL_PAYMENT_ORIGINAL_ID);
+            $criteria->addSelectColumn(PaymentTableMap::COL_PAYMENT_HASH);
+            $criteria->addSelectColumn(PaymentTableMap::COL_PAYMENT_HASH_VERSION);
         } else {
             $criteria->addSelectColumn($alias . '.payment_id');
             $criteria->addSelectColumn($alias . '.site_id');
@@ -524,6 +554,8 @@ class PaymentTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.payment_updated');
             $criteria->addSelectColumn($alias . '.payment_refunded_at');
             $criteria->addSelectColumn($alias . '.payment_original_id');
+            $criteria->addSelectColumn($alias . '.payment_hash');
+            $criteria->addSelectColumn($alias . '.payment_hash_version');
         }
     }
 
@@ -554,6 +586,8 @@ class PaymentTableMap extends TableMap
             $criteria->removeSelectColumn(PaymentTableMap::COL_PAYMENT_UPDATED);
             $criteria->removeSelectColumn(PaymentTableMap::COL_PAYMENT_REFUNDED_AT);
             $criteria->removeSelectColumn(PaymentTableMap::COL_PAYMENT_ORIGINAL_ID);
+            $criteria->removeSelectColumn(PaymentTableMap::COL_PAYMENT_HASH);
+            $criteria->removeSelectColumn(PaymentTableMap::COL_PAYMENT_HASH_VERSION);
         } else {
             $criteria->removeSelectColumn($alias . '.payment_id');
             $criteria->removeSelectColumn($alias . '.site_id');
@@ -567,6 +601,8 @@ class PaymentTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.payment_updated');
             $criteria->removeSelectColumn($alias . '.payment_refunded_at');
             $criteria->removeSelectColumn($alias . '.payment_original_id');
+            $criteria->removeSelectColumn($alias . '.payment_hash');
+            $criteria->removeSelectColumn($alias . '.payment_hash_version');
         }
     }
 
