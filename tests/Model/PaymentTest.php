@@ -18,8 +18,10 @@
 
 namespace Model;
 
+use Biblys\Test\ModelFactory;
 use DateTime;
 use PHPUnit\Framework\TestCase;
+use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Exception\PropelException;
 
 class PaymentTest extends TestCase
@@ -56,5 +58,44 @@ class PaymentTest extends TestCase
 
         // then
         $this->assertTrue($result);
+    }
+
+    /** preInsert */
+
+    /**
+     * @throws PropelException
+     */
+    public function testPreInsertBuildsSignatureChain(): void
+    {
+        // given
+        $order = ModelFactory::createOrder();
+
+        // when — trois paiements créés successivement
+        $first = ModelFactory::createPayment($order, 1500);
+        $second = ModelFactory::createPayment($order, 900);
+        $third = ModelFactory::createPayment($order, 300);
+
+        // then — chaque hash est calculable à partir du précédent
+        $this->assertSame(PaymentHash::CURRENT_VERSION, $third->getHashVersion());
+        $this->assertSame(
+            PaymentHash::compute(
+                PaymentHash::CURRENT_VERSION,
+                $second->getAmount(),
+                $second->getCreatedAt(),
+                $second->getOrderId(),
+                $first->getHash()
+            ),
+            $second->getHash()
+        );
+        $this->assertSame(
+            PaymentHash::compute(
+                PaymentHash::CURRENT_VERSION,
+                $third->getAmount(),
+                $third->getCreatedAt(),
+                $third->getOrderId(),
+                $second->getHash()
+            ),
+            $third->getHash()
+        );
     }
 }
