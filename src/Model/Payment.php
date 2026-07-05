@@ -84,6 +84,23 @@ class Payment extends BasePayment
             $this->setCreatedAt(new DateTime());
         }
 
+        // La colonne payment_created est un TIMESTAMP sans précision fractionnaire :
+        // seule la seconde entière est stockée. Or l'arrondi des sous-secondes au
+        // stockage dépend du moteur (MariaDB tronque, MySQL 8 arrondit à la seconde
+        // supérieure dès .5). Si on hachait la date brute (avec microsecondes), le
+        // hash porterait sur une valeur différente de celle réellement persistée sur
+        // MySQL 8, faisant échouer toute vérification d'intégrité future. On fige
+        // donc ici la date à la seconde entière, AVANT le calcul du hash, afin que la
+        // valeur hachée soit strictement identique à la valeur stockée quel que soit
+        // le moteur. On reconstruit la date dans le même fuseau horaire pour ne pas
+        // décaler l'heure murale.
+        $createdAt = $this->getCreatedAt();
+        $this->setCreatedAt(DateTime::createFromFormat(
+            "Y-m-d H:i:s",
+            $createdAt->format("Y-m-d H:i:s"),
+            $createdAt->getTimezone()
+        ));
+
         $previous = PaymentQuery::create()
             ->orderById(Criteria::DESC)
             ->findOne($con);
