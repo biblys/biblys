@@ -31,6 +31,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPaymentQuery orderByUpdatedAt($order = Criteria::ASC) Order by the payment_updated column
  * @method     ChildPaymentQuery orderByRefundedAt($order = Criteria::ASC) Order by the payment_refunded_at column
  * @method     ChildPaymentQuery orderByOriginalId($order = Criteria::ASC) Order by the payment_original_id column
+ * @method     ChildPaymentQuery orderByHash($order = Criteria::ASC) Order by the payment_hash column
+ * @method     ChildPaymentQuery orderByHashVersion($order = Criteria::ASC) Order by the payment_hash_version column
  *
  * @method     ChildPaymentQuery groupById() Group by the payment_id column
  * @method     ChildPaymentQuery groupBySiteId() Group by the site_id column
@@ -44,6 +46,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPaymentQuery groupByUpdatedAt() Group by the payment_updated column
  * @method     ChildPaymentQuery groupByRefundedAt() Group by the payment_refunded_at column
  * @method     ChildPaymentQuery groupByOriginalId() Group by the payment_original_id column
+ * @method     ChildPaymentQuery groupByHash() Group by the payment_hash column
+ * @method     ChildPaymentQuery groupByHashVersion() Group by the payment_hash_version column
  *
  * @method     ChildPaymentQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     ChildPaymentQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -110,6 +114,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPayment|null findOneByUpdatedAt(string $payment_updated) Return the first ChildPayment filtered by the payment_updated column
  * @method     ChildPayment|null findOneByRefundedAt(string $payment_refunded_at) Return the first ChildPayment filtered by the payment_refunded_at column
  * @method     ChildPayment|null findOneByOriginalId(int $payment_original_id) Return the first ChildPayment filtered by the payment_original_id column
+ * @method     ChildPayment|null findOneByHash(string $payment_hash) Return the first ChildPayment filtered by the payment_hash column
+ * @method     ChildPayment|null findOneByHashVersion(int $payment_hash_version) Return the first ChildPayment filtered by the payment_hash_version column
  *
  * @method     ChildPayment requirePk($key, ?ConnectionInterface $con = null) Return the ChildPayment by primary key and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPayment requireOne(?ConnectionInterface $con = null) Return the first ChildPayment matching the query and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
@@ -126,6 +132,8 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildPayment requireOneByUpdatedAt(string $payment_updated) Return the first ChildPayment filtered by the payment_updated column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPayment requireOneByRefundedAt(string $payment_refunded_at) Return the first ChildPayment filtered by the payment_refunded_at column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  * @method     ChildPayment requireOneByOriginalId(int $payment_original_id) Return the first ChildPayment filtered by the payment_original_id column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildPayment requireOneByHash(string $payment_hash) Return the first ChildPayment filtered by the payment_hash column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
+ * @method     ChildPayment requireOneByHashVersion(int $payment_hash_version) Return the first ChildPayment filtered by the payment_hash_version column and throws \Propel\Runtime\Exception\EntityNotFoundException when not found
  *
  * @method     ChildPayment[]|Collection find(?ConnectionInterface $con = null) Return ChildPayment objects based on current ModelCriteria
  * @psalm-method Collection&\Traversable<ChildPayment> find(?ConnectionInterface $con = null) Return ChildPayment objects based on current ModelCriteria
@@ -154,6 +162,10 @@ use Propel\Runtime\Exception\PropelException;
  * @psalm-method Collection&\Traversable<ChildPayment> findByRefundedAt(string|array<string> $payment_refunded_at) Return ChildPayment objects filtered by the payment_refunded_at column
  * @method     ChildPayment[]|Collection findByOriginalId(int|array<int> $payment_original_id) Return ChildPayment objects filtered by the payment_original_id column
  * @psalm-method Collection&\Traversable<ChildPayment> findByOriginalId(int|array<int> $payment_original_id) Return ChildPayment objects filtered by the payment_original_id column
+ * @method     ChildPayment[]|Collection findByHash(string|array<string> $payment_hash) Return ChildPayment objects filtered by the payment_hash column
+ * @psalm-method Collection&\Traversable<ChildPayment> findByHash(string|array<string> $payment_hash) Return ChildPayment objects filtered by the payment_hash column
+ * @method     ChildPayment[]|Collection findByHashVersion(int|array<int> $payment_hash_version) Return ChildPayment objects filtered by the payment_hash_version column
+ * @psalm-method Collection&\Traversable<ChildPayment> findByHashVersion(int|array<int> $payment_hash_version) Return ChildPayment objects filtered by the payment_hash_version column
  *
  * @method     ChildPayment[]|\Propel\Runtime\Util\PropelModelPager paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
  * @psalm-method \Propel\Runtime\Util\PropelModelPager&\Traversable<ChildPayment> paginate($page = 1, $maxPerPage = 10, ?ConnectionInterface $con = null) Issue a SELECT query based on the current ModelCriteria and uses a page and a maximum number of results per page to compute an offset and a limit
@@ -169,7 +181,7 @@ abstract class PaymentQuery extends ModelCriteria
      * @param string $modelName The phpName of a model, e.g. 'Book'
      * @param string $modelAlias The alias for the model in this query, e.g. 'b'
      */
-    public function __construct($dbName = 'default', $modelName = '\\Model\\Payment', $modelAlias = null)
+    public function __construct($dbName = 'default', $modelName = '\\Model\\Payment', ?string $modelAlias = null)
     {
         parent::__construct($dbName, $modelName, $modelAlias);
     }
@@ -253,7 +265,7 @@ abstract class PaymentQuery extends ModelCriteria
      */
     protected function findPkSimple($key, ConnectionInterface $con)
     {
-        $sql = 'SELECT payment_id, site_id, order_id, payment_amount, payment_mode, payment_provider_id, payment_url, payment_created, payment_executed, payment_updated, payment_refunded_at, payment_original_id FROM payments WHERE payment_id = :p0';
+        $sql = 'SELECT payment_id, site_id, order_id, payment_amount, payment_mode, payment_provider_id, payment_url, payment_created, payment_executed, payment_updated, payment_refunded_at, payment_original_id, payment_hash, payment_hash_version FROM payments WHERE payment_id = :p0';
         try {
             $stmt = $con->prepare($sql);
             $stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -833,6 +845,77 @@ abstract class PaymentQuery extends ModelCriteria
     }
 
     /**
+     * Filter the query on the payment_hash column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByHash('fooValue');   // WHERE payment_hash = 'fooValue'
+     * $query->filterByHash('%fooValue%', Criteria::LIKE); // WHERE payment_hash LIKE '%fooValue%'
+     * $query->filterByHash(['foo', 'bar']); // WHERE payment_hash IN ('foo', 'bar')
+     * </code>
+     *
+     * @param string|string[] $hash The value to use as filter.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByHash($hash = null, ?string $comparison = null)
+    {
+        if (null === $comparison) {
+            if (is_array($hash)) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        $this->addUsingAlias(PaymentTableMap::COL_PAYMENT_HASH, $hash, $comparison);
+
+        return $this;
+    }
+
+    /**
+     * Filter the query on the payment_hash_version column
+     *
+     * Example usage:
+     * <code>
+     * $query->filterByHashVersion(1234); // WHERE payment_hash_version = 1234
+     * $query->filterByHashVersion(array(12, 34)); // WHERE payment_hash_version IN (12, 34)
+     * $query->filterByHashVersion(array('min' => 12)); // WHERE payment_hash_version > 12
+     * </code>
+     *
+     * @param mixed $hashVersion The value to use as filter.
+     *              Use scalar values for equality.
+     *              Use array values for in_array() equivalent.
+     *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+     *
+     * @return $this The current query, for fluid interface
+     */
+    public function filterByHashVersion($hashVersion = null, ?string $comparison = null)
+    {
+        if (is_array($hashVersion)) {
+            $useMinMax = false;
+            if (isset($hashVersion['min'])) {
+                $this->addUsingAlias(PaymentTableMap::COL_PAYMENT_HASH_VERSION, $hashVersion['min'], Criteria::GREATER_EQUAL);
+                $useMinMax = true;
+            }
+            if (isset($hashVersion['max'])) {
+                $this->addUsingAlias(PaymentTableMap::COL_PAYMENT_HASH_VERSION, $hashVersion['max'], Criteria::LESS_EQUAL);
+                $useMinMax = true;
+            }
+            if ($useMinMax) {
+                return $this;
+            }
+            if (null === $comparison) {
+                $comparison = Criteria::IN;
+            }
+        }
+
+        $this->addUsingAlias(PaymentTableMap::COL_PAYMENT_HASH_VERSION, $hashVersion, $comparison);
+
+        return $this;
+    }
+
+    /**
      * Filter the query by a related \Model\Site object
      *
      * @param \Model\Site|ObjectCollection $site The related object(s) to use as filter
@@ -904,7 +987,7 @@ abstract class PaymentQuery extends ModelCriteria
      *
      * @return \Model\SiteQuery A secondary query class using the current class as primary query
      */
-    public function useSiteQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function useSiteQuery(?string $relationAlias = null, string $joinType = Criteria::LEFT_JOIN)
     {
         return $this
             ->joinSite($relationAlias, $joinType)
@@ -924,7 +1007,7 @@ abstract class PaymentQuery extends ModelCriteria
      */
     public function withSiteQuery(
         callable $callable,
-        string $relationAlias = null,
+        ?string $relationAlias = null,
         ?string $joinType = Criteria::LEFT_JOIN
     ) {
         $relatedQuery = $this->useSiteQuery(
@@ -948,7 +1031,7 @@ abstract class PaymentQuery extends ModelCriteria
      *
      * @return \Model\SiteQuery The inner query object of the EXISTS statement
      */
-    public function useSiteExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    public function useSiteExistsQuery(?string $modelAlias = null, ?string $queryClass = null, string $typeOfExists = 'EXISTS')
     {
         /** @var $q \Model\SiteQuery */
         $q = $this->useExistsQuery('Site', $modelAlias, $queryClass, $typeOfExists);
@@ -965,7 +1048,7 @@ abstract class PaymentQuery extends ModelCriteria
      *
      * @return \Model\SiteQuery The inner query object of the NOT EXISTS statement
      */
-    public function useSiteNotExistsQuery($modelAlias = null, $queryClass = null)
+    public function useSiteNotExistsQuery(?string $modelAlias = null, ?string $queryClass = null)
     {
         /** @var $q \Model\SiteQuery */
         $q = $this->useExistsQuery('Site', $modelAlias, $queryClass, 'NOT EXISTS');
@@ -983,7 +1066,7 @@ abstract class PaymentQuery extends ModelCriteria
      *
      * @return \Model\SiteQuery The inner query object of the IN statement
      */
-    public function useInSiteQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    public function useInSiteQuery(?string $modelAlias = null, ?string $queryClass = null, string $typeOfIn = 'IN')
     {
         /** @var $q \Model\SiteQuery */
         $q = $this->useInQuery('Site', $modelAlias, $queryClass, $typeOfIn);
@@ -1000,7 +1083,7 @@ abstract class PaymentQuery extends ModelCriteria
      *
      * @return \Model\SiteQuery The inner query object of the NOT IN statement
      */
-    public function useNotInSiteQuery($modelAlias = null, $queryClass = null)
+    public function useNotInSiteQuery(?string $modelAlias = null, ?string $queryClass = null)
     {
         /** @var $q \Model\SiteQuery */
         $q = $this->useInQuery('Site', $modelAlias, $queryClass, 'NOT IN');
@@ -1079,7 +1162,7 @@ abstract class PaymentQuery extends ModelCriteria
      *
      * @return \Model\OrderQuery A secondary query class using the current class as primary query
      */
-    public function useOrderQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function useOrderQuery(?string $relationAlias = null, string $joinType = Criteria::LEFT_JOIN)
     {
         return $this
             ->joinOrder($relationAlias, $joinType)
@@ -1099,7 +1182,7 @@ abstract class PaymentQuery extends ModelCriteria
      */
     public function withOrderQuery(
         callable $callable,
-        string $relationAlias = null,
+        ?string $relationAlias = null,
         ?string $joinType = Criteria::LEFT_JOIN
     ) {
         $relatedQuery = $this->useOrderQuery(
@@ -1123,7 +1206,7 @@ abstract class PaymentQuery extends ModelCriteria
      *
      * @return \Model\OrderQuery The inner query object of the EXISTS statement
      */
-    public function useOrderExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    public function useOrderExistsQuery(?string $modelAlias = null, ?string $queryClass = null, string $typeOfExists = 'EXISTS')
     {
         /** @var $q \Model\OrderQuery */
         $q = $this->useExistsQuery('Order', $modelAlias, $queryClass, $typeOfExists);
@@ -1140,7 +1223,7 @@ abstract class PaymentQuery extends ModelCriteria
      *
      * @return \Model\OrderQuery The inner query object of the NOT EXISTS statement
      */
-    public function useOrderNotExistsQuery($modelAlias = null, $queryClass = null)
+    public function useOrderNotExistsQuery(?string $modelAlias = null, ?string $queryClass = null)
     {
         /** @var $q \Model\OrderQuery */
         $q = $this->useExistsQuery('Order', $modelAlias, $queryClass, 'NOT EXISTS');
@@ -1158,7 +1241,7 @@ abstract class PaymentQuery extends ModelCriteria
      *
      * @return \Model\OrderQuery The inner query object of the IN statement
      */
-    public function useInOrderQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    public function useInOrderQuery(?string $modelAlias = null, ?string $queryClass = null, string $typeOfIn = 'IN')
     {
         /** @var $q \Model\OrderQuery */
         $q = $this->useInQuery('Order', $modelAlias, $queryClass, $typeOfIn);
@@ -1175,7 +1258,7 @@ abstract class PaymentQuery extends ModelCriteria
      *
      * @return \Model\OrderQuery The inner query object of the NOT IN statement
      */
-    public function useNotInOrderQuery($modelAlias = null, $queryClass = null)
+    public function useNotInOrderQuery(?string $modelAlias = null, ?string $queryClass = null)
     {
         /** @var $q \Model\OrderQuery */
         $q = $this->useInQuery('Order', $modelAlias, $queryClass, 'NOT IN');
@@ -1254,7 +1337,7 @@ abstract class PaymentQuery extends ModelCriteria
      *
      * @return \Model\PaymentQuery A secondary query class using the current class as primary query
      */
-    public function usePaymentRelatedByOriginalIdQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function usePaymentRelatedByOriginalIdQuery(?string $relationAlias = null, string $joinType = Criteria::LEFT_JOIN)
     {
         return $this
             ->joinPaymentRelatedByOriginalId($relationAlias, $joinType)
@@ -1274,7 +1357,7 @@ abstract class PaymentQuery extends ModelCriteria
      */
     public function withPaymentRelatedByOriginalIdQuery(
         callable $callable,
-        string $relationAlias = null,
+        ?string $relationAlias = null,
         ?string $joinType = Criteria::LEFT_JOIN
     ) {
         $relatedQuery = $this->usePaymentRelatedByOriginalIdQuery(
@@ -1298,7 +1381,7 @@ abstract class PaymentQuery extends ModelCriteria
      *
      * @return \Model\PaymentQuery The inner query object of the EXISTS statement
      */
-    public function usePaymentRelatedByOriginalIdExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    public function usePaymentRelatedByOriginalIdExistsQuery(?string $modelAlias = null, ?string $queryClass = null, string $typeOfExists = 'EXISTS')
     {
         /** @var $q \Model\PaymentQuery */
         $q = $this->useExistsQuery('PaymentRelatedByOriginalId', $modelAlias, $queryClass, $typeOfExists);
@@ -1315,7 +1398,7 @@ abstract class PaymentQuery extends ModelCriteria
      *
      * @return \Model\PaymentQuery The inner query object of the NOT EXISTS statement
      */
-    public function usePaymentRelatedByOriginalIdNotExistsQuery($modelAlias = null, $queryClass = null)
+    public function usePaymentRelatedByOriginalIdNotExistsQuery(?string $modelAlias = null, ?string $queryClass = null)
     {
         /** @var $q \Model\PaymentQuery */
         $q = $this->useExistsQuery('PaymentRelatedByOriginalId', $modelAlias, $queryClass, 'NOT EXISTS');
@@ -1333,7 +1416,7 @@ abstract class PaymentQuery extends ModelCriteria
      *
      * @return \Model\PaymentQuery The inner query object of the IN statement
      */
-    public function useInPaymentRelatedByOriginalIdQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    public function useInPaymentRelatedByOriginalIdQuery(?string $modelAlias = null, ?string $queryClass = null, string $typeOfIn = 'IN')
     {
         /** @var $q \Model\PaymentQuery */
         $q = $this->useInQuery('PaymentRelatedByOriginalId', $modelAlias, $queryClass, $typeOfIn);
@@ -1350,7 +1433,7 @@ abstract class PaymentQuery extends ModelCriteria
      *
      * @return \Model\PaymentQuery The inner query object of the NOT IN statement
      */
-    public function useNotInPaymentRelatedByOriginalIdQuery($modelAlias = null, $queryClass = null)
+    public function useNotInPaymentRelatedByOriginalIdQuery(?string $modelAlias = null, ?string $queryClass = null)
     {
         /** @var $q \Model\PaymentQuery */
         $q = $this->useInQuery('PaymentRelatedByOriginalId', $modelAlias, $queryClass, 'NOT IN');
@@ -1427,7 +1510,7 @@ abstract class PaymentQuery extends ModelCriteria
      *
      * @return \Model\PaymentQuery A secondary query class using the current class as primary query
      */
-    public function usePaymentRelatedByIdQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+    public function usePaymentRelatedByIdQuery(?string $relationAlias = null, string $joinType = Criteria::LEFT_JOIN)
     {
         return $this
             ->joinPaymentRelatedById($relationAlias, $joinType)
@@ -1447,7 +1530,7 @@ abstract class PaymentQuery extends ModelCriteria
      */
     public function withPaymentRelatedByIdQuery(
         callable $callable,
-        string $relationAlias = null,
+        ?string $relationAlias = null,
         ?string $joinType = Criteria::LEFT_JOIN
     ) {
         $relatedQuery = $this->usePaymentRelatedByIdQuery(
@@ -1471,7 +1554,7 @@ abstract class PaymentQuery extends ModelCriteria
      *
      * @return \Model\PaymentQuery The inner query object of the EXISTS statement
      */
-    public function usePaymentRelatedByIdExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
+    public function usePaymentRelatedByIdExistsQuery(?string $modelAlias = null, ?string $queryClass = null, string $typeOfExists = 'EXISTS')
     {
         /** @var $q \Model\PaymentQuery */
         $q = $this->useExistsQuery('PaymentRelatedById', $modelAlias, $queryClass, $typeOfExists);
@@ -1488,7 +1571,7 @@ abstract class PaymentQuery extends ModelCriteria
      *
      * @return \Model\PaymentQuery The inner query object of the NOT EXISTS statement
      */
-    public function usePaymentRelatedByIdNotExistsQuery($modelAlias = null, $queryClass = null)
+    public function usePaymentRelatedByIdNotExistsQuery(?string $modelAlias = null, ?string $queryClass = null)
     {
         /** @var $q \Model\PaymentQuery */
         $q = $this->useExistsQuery('PaymentRelatedById', $modelAlias, $queryClass, 'NOT EXISTS');
@@ -1506,7 +1589,7 @@ abstract class PaymentQuery extends ModelCriteria
      *
      * @return \Model\PaymentQuery The inner query object of the IN statement
      */
-    public function useInPaymentRelatedByIdQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
+    public function useInPaymentRelatedByIdQuery(?string $modelAlias = null, ?string $queryClass = null, string $typeOfIn = 'IN')
     {
         /** @var $q \Model\PaymentQuery */
         $q = $this->useInQuery('PaymentRelatedById', $modelAlias, $queryClass, $typeOfIn);
@@ -1523,7 +1606,7 @@ abstract class PaymentQuery extends ModelCriteria
      *
      * @return \Model\PaymentQuery The inner query object of the NOT IN statement
      */
-    public function useNotInPaymentRelatedByIdQuery($modelAlias = null, $queryClass = null)
+    public function useNotInPaymentRelatedByIdQuery(?string $modelAlias = null, ?string $queryClass = null)
     {
         /** @var $q \Model\PaymentQuery */
         $q = $this->useInQuery('PaymentRelatedById', $modelAlias, $queryClass, 'NOT IN');
