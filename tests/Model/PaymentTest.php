@@ -15,14 +15,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-
 namespace Model;
 
 use Biblys\Test\ModelFactory;
 use DateTime;
 use Model\Map\PaymentTableMap;
 use PHPUnit\Framework\TestCase;
-use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Exception\PropelException;
 
 class PaymentTest extends TestCase
