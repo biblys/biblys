@@ -1,5 +1,14 @@
 # Historique des modifications
 
+## 3.15.0 (DEV)
+
+### Conformité NF525
+
+- Chaque paiement enregistré est désormais signé par un hash chaîné au paiement
+  précédent (chaîne de signatures). L'historique des paiements devient ainsi
+  inaltérable : toute modification a posteriori du montant, de la date ou de la
+  commande d'un paiement est détectable.
+
 ## 3.14.2 (18 juillet 2026)
 
 ### Corrections
