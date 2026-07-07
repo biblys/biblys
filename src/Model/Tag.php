@@ -18,7 +18,9 @@
 
 namespace Model;
 
+use Biblys\Service\SlugService;
 use Model\Base\Tag as BaseTag;
+use Propel\Runtime\Connection\ConnectionInterface;
 
 /**
  * Skeleton subclass for representing a row from the 'tags' table.
@@ -31,5 +33,10 @@ use Model\Base\Tag as BaseTag;
  */
 class Tag extends BaseTag
 {
-
+    public function preSave(?ConnectionInterface $con = null): bool
+    {
+        $slugService = new SlugService();
+        $this->setUrl($slugService->slugify($this->getName()));
+        return true;
+    }
 }

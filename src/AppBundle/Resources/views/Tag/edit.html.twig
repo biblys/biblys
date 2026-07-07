@@ -51,11 +51,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       </p>
       <p>
         <label class="after">Date de création :</label>
-        <input value="{{ tag.has('created') ? tag.created }}" class="form-control" readonly>
+        <input value="{{ tag.createdAt is not null ? tag.createdAt|date('Y-m-d H:i:s') }}" class="form-control" readonly>
       </p>
       <p>
         <label class="after">Date de modification :</label>
-        <input value="{{ tag.has('updated') ? tag.updated }}" class="form-control" readonly>
+        <input value="{{ tag.updatedAt is not null ? tag.updatedAt|date('Y-m-d H:i:s') }}" class="form-control" readonly>
       </p>
     </fieldset>
   </form>

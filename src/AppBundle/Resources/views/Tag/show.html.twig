@@ -24,7 +24,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
   <h1>{{ tag.name }}</h1>
 
-  {% if tag.has('description') %}
+  {% if tag.description is not empty %}
     {{ tag.description|raw }}
   {% endif %}
 
