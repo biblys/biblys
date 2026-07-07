@@ -68,7 +68,11 @@ Toutes les 44 classes Entity ont un modèle Propel sur la même table — aucune
 
 ### Bloquées par l'API de thèmes
 
-Ces classes sont utilisées dans des méthodes `@deprecated` de classes legacy qui font partie de l'**API publique consommée par les thèmes Biblys** (fichiers dans `app/`, propres à chaque site, non versionnés dans ce dépôt). Leur suppression ne peut intervenir qu'en version majeure ou après audit des thèmes actifs.
+Ces classes sont utilisées dans des méthodes `@deprecated` de classes legacy qui font partie de l'**API publique consommée par les thèmes Biblys**. Le périmètre à auditer est double :
+- les thèmes versionnés dans `../sites/` (dépôt séparé)
+- le thème actuellement chargé dans `app/` (copie de travail locale, non versionnée ici)
+
+Leur suppression ne peut intervenir qu'après audit complet de ces deux emplacements.
 
 | Classe | Méthodes concernées | Statut |
 |---|---|---|
