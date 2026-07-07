@@ -57,6 +57,11 @@ if (!isset($defaultOrderBy)) {
     $defaultOrderBy = null;
 }
 $listOrderBy = $request->query->get('o', $defaultOrderBy);
+// Une chaîne vide (ex. paramètre `o` dupliqué dans l'URL : `?o=x&o=`) est
+// traitée comme absente pour éviter un `ORDER BY ``` invalide.
+if ($listOrderBy === '') {
+    $listOrderBy = $defaultOrderBy;
+}
 
 if (!isset($defaultSortOrder)) {
     $defaultSortOrder = 1;
