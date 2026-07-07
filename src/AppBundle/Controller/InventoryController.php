@@ -24,7 +24,7 @@ use Biblys\Service\CurrentUser;
 use Exception;
 use Framework\Controller;
 use InventoryItemManager;
-use InventoryManager;
+use Model\InventoryQuery;
 use PDO;
 use Propel\Runtime\Exception\PropelException;
 use StockManager;
@@ -50,8 +50,7 @@ class InventoryController extends Controller
     {
         $currentUser->authAdmin();
 
-        $im = new InventoryManager();
-        $inventories = $im->getAll();
+        $inventories = InventoryQuery::create()->find()->getArrayCopy();
 
         return $this->render('AppBundle:Inventory:index.html.twig', [
             "inventories" => $inventories
@@ -76,8 +75,7 @@ class InventoryController extends Controller
     {
         $currentUser->authAdmin();
 
-        $im = new InventoryManager();
-        $inventory = $im->getById($id);
+        $inventory = InventoryQuery::create()->findPk($id);
         if (!$inventory) {
             throw new Exception("Inventory $id not found.");
         }
@@ -89,7 +87,7 @@ class InventoryController extends Controller
 
             // If there already is an item with this ean in this inventory, update quantity
             $iim = new InventoryItemManager();
-            $item = $iim->get(['inventory_id' => $inventory->get('id'), 'ii_ean' => $ean]);
+            $item = $iim->get(['inventory_id' => $inventory->getId(), 'ii_ean' => $ean]);
             if ($item) {
                 $quantity = $item->get('quantity') + 1;
                 $item->set('ii_quantity', $quantity);
@@ -98,7 +96,7 @@ class InventoryController extends Controller
             // Else create a new item in this inventory with this ean and quantity 1
             else {
                 $item = $iim->create();
-                $item->set('inventory_id', $inventory->get('id'));
+                $item->set('inventory_id', $inventory->getId());
                 $item->set('ii_ean', $ean);
                 $item->set('ii_quantity', 1);
             }
@@ -122,7 +120,7 @@ class InventoryController extends Controller
             $iim->update($item);
 
             return new RedirectResponse(
-                $urlGenerator->generate('inventory_show', ["id" => $inventory->get('id')])
+                $urlGenerator->generate('inventory_show', ["id" => $inventory->getId()])
             );
         }
 
@@ -133,7 +131,7 @@ class InventoryController extends Controller
         }
 
         $iim = new InventoryItemManager();
-        $items = $iim->getAll(['inventory_id' => $inventory->get('id')], $items_options);
+        $items = $iim->getAll(['inventory_id' => $inventory->getId()], $items_options);
 
         return $this->render('AppBundle:Inventory:show.html.twig', [
             "inventory" => $inventory,
@@ -154,8 +152,7 @@ class InventoryController extends Controller
     {
         global $_SQL;
 
-        $im = new InventoryManager();
-        $inventory = $im->getById($id);
+        $inventory = InventoryQuery::create()->findPk($id);
         if (!$inventory) {
             throw new Exception("Inventory $id not found.");
         }
@@ -220,7 +217,7 @@ class InventoryController extends Controller
 
         $dateIsMissing = $date === false;
         $importInProgress = $offset < $total;
-        $nextStepUrl = $urlGenerator->generate('inventory_import', ['id' => $inventory->get('id'), 'offset'
+        $nextStepUrl = $urlGenerator->generate('inventory_import', ['id' => $inventory->getId(), 'offset'
         => $offset + $limit, 'date' => $date, 'time' => $time]);
 
         $progress = 0;
@@ -257,7 +254,7 @@ class InventoryController extends Controller
 
         $iim = new InventoryItemManager();
         $iim->delete($item);
-        return new RedirectResponse($urlGenerator->generate('inventory_show', ["id" => $inventory->get('id')]));
+        return new RedirectResponse($urlGenerator->generate('inventory_show', ["id" => $inventory->getId()]));
     }
 
     // Remove this item and all copies completely
@@ -284,7 +281,7 @@ class InventoryController extends Controller
             $iim->update($item);
         }
 
-        return new RedirectResponse($urlGenerator->generate('inventory_show', ["id" => $inventory->get('id')]));
+        return new RedirectResponse($urlGenerator->generate('inventory_show', ["id" => $inventory->getId()]));
     }
 
     /**
@@ -295,14 +292,13 @@ class InventoryController extends Controller
      */
     public function _getInventoryAndItem($inventory_id, $id): array
     {
-        $im = new InventoryManager();
-        $inventory = $im->getById($inventory_id);
+        $inventory = InventoryQuery::create()->findPk($inventory_id);
         if (!$inventory) {
             throw new Exception("Inventory $inventory_id not found.");
         }
 
         $iim = new InventoryItemManager();
-        $item = $iim->get(['ii_id' => $id, 'inventory_id' => $inventory->get('id')]);
+        $item = $iim->get(['ii_id' => $id, 'inventory_id' => $inventory->getId()]);
         if (!$item) {
             throw new Exception("Item $id not found.");
         }
