@@ -65,6 +65,8 @@ Toutes les 44 classes Entity ont un modèle Propel sur la même table — aucune
 | `Option` | Migration de `Site::getOpt()` et `Site::setOpt()` | Remplacé par `OptionQuery` (corrige aussi un bug de mise à jour) |
 | `Right` | Migration de `Publisher::getRights()` et `Visitor::getCurrentRight()` + 4 contrôleurs legacy | Remplacé par `RightQuery` |
 | `Session` | Migration de `Visitor::_setUserFromToken()` | Remplacé par `SessionQuery` |
+| `Tag` | Migration de `TagController` + `Article::countAllFromTag/getAllFromTag` | Remplacé par `TagQuery`, hook `preSave` pour le slug |
+| `Inventory` | Migration de `InventoryController` (4 méthodes) | Remplacé par `InventoryQuery` |
 
 ### Bloquées par l'API de thèmes
 
@@ -85,8 +87,8 @@ Leur suppression ne peut intervenir qu'après audit complet de ces deux emplacem
 | Métrique | Valeur |
 |---|---|
 | Classes legacy dans `inc/` au départ | 46 (44 Entity + 2 utilitaires) |
-| Classes supprimées | 11 |
-| Classes restantes | 35 |
+| Classes supprimées | 13 |
+| Classes restantes | 33 |
 | Lignes de code legacy restantes | ~7 300 |
 | Instanciations de `*Manager` dans `src/` | 129 |
 | Instanciations de `*Manager` dans `controllers/` | 109 |
@@ -144,6 +146,8 @@ Migrer les appels legacy dans les classes encore dépendantes pour débloquer le
 | `Publisher.class.php` | `RightManager` → `RightQuery` | `Right` | ✅ fait |
 | `Visitor.class.php` | `RightManager` → `RightQuery` + 4 contrôleurs | `Right` | ✅ fait |
 | `Visitor.class.php` | `SessionManager` → `SessionQuery` | `Session` | ✅ fait |
+| `TagController.php` | `TagManager` → `TagQuery` | `Tag` | ✅ fait |
+| `InventoryController.php` | `InventoryManager` → `InventoryQuery` | `Inventory` | ✅ fait |
 | `Article/Post/People.class.php` | `Media` | `Media` | ⏳ à faire |
 
 Puis : `People`, `Post`, `Tag`, `Supplier`, `Inventory`, `Customer`, `Lang`, `Link`, `Role`
