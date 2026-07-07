@@ -35,8 +35,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       {% for inventory in inventories %}
         <tr>
           <td><a href="{{ path("inventory_show", { id: inventory.id }) }}">{{ inventory.title }}</a></td>
-          <td>{{ inventory.created|date }}</td>
-          <td>{{ inventory.updated|date }}</td>
+          <td>{{ inventory.createdAt|date }}</td>
+          <td>{{ inventory.updatedAt|date }}</td>
         </tr>
       {% endfor %}
     </tbody>
