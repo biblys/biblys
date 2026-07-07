@@ -33,6 +33,7 @@ use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Slug\SlugService;
 use Model\PeopleQuery;
+use Model\TagQuery;
 use Symfony\Component\HttpFoundation\Request;
 
 class Article extends Entity
@@ -801,30 +802,18 @@ class Article extends Entity
     }
 
     /**
-     * @return Tag[]
+     * @return \Model\Tag[]
      * @throws Exception
      */
     public function getTags(): array
     {
-        global $_SQL;
-
-        /** @noinspection SqlCheckUsingColumns */
-        $sql = $_SQL->prepare("
-            SELECT `tags`.`tag_id`, `tag_name`, `tag_url` 
-            FROM `tags_articles` 
-            JOIN `tags` ON `tags_articles`.`tag_id` = `tags`.`tag_id` 
-            WHERE `tags_articles`.`article_id` = :article_id 
-            ORDER BY `tag_name`
-        ");
-        $sql->execute([':article_id' => $this->get('id')]);
-        $tags = $sql->fetchAll();
-
-        $the_tags = [];
-        foreach ($tags as $tag) {
-            $the_tags[] = new Tag($tag);
-        }
-
-        return $the_tags;
+        return TagQuery::create()
+            ->useArticleTagQuery()
+                ->filterByArticleId($this->get('id'))
+            ->endUse()
+            ->orderByName()
+            ->find()
+            ->getArrayCopy();
     }
 
     /**
@@ -1299,7 +1288,7 @@ class ArticleManager extends EntityManager
      */
     public function countAllFromTag($tag)
     {
-        $where = ["article_links" => "LIKE %[tag:" . $tag->get('id') . "]%"];
+        $where = ["article_links" => "LIKE %[tag:" . $tag->getId() . "]%"];
 
         return $this->_countAllForWhere($where);
     }
@@ -1310,7 +1299,7 @@ class ArticleManager extends EntityManager
      */
     public function getAllFromTag($tag, $options = [], bool $withJoins = true): array
     {
-        $where = ["article_links" => "LIKE %[tag:" . $tag->get('id') . "]%"];
+        $where = ["article_links" => "LIKE %[tag:" . $tag->getId() . "]%"];
 
         return $this->getAll($where, $options, $withJoins);
     }
@@ -1542,8 +1531,8 @@ class ArticleManager extends EntityManager
 
         $tags = $article->getTags();
         foreach ($tags as $tag) {
-            $keywords .= ' ' . $tag->get('name');
-            $links .= ' [tag:' . $tag->get('id') . ']';
+            $keywords .= ' ' . $tag->getName();
+            $links .= ' [tag:' . $tag->getId() . ']';
         }
 
         $rayons = $article->getLinked('rayon');

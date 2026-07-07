@@ -23,6 +23,7 @@ use Biblys\Service\CurrentUser;
 use Biblys\Service\Pagination;
 use Exception;
 use Framework\Controller;
+use Model\TagQuery;
 
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,7 +36,6 @@ use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Routing\Generator\UrlGenerator;
-use TagManager;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -57,10 +57,9 @@ class TagController extends Controller
      */
     public function showAction(Request $request, $slug): Response
     {
-        $tm = new TagManager();
         $am = new ArticleManager();
 
-        $tag = $tm->get(["tag_url" => $slug]);
+        $tag = TagQuery::create()->filterByUrl($slug)->findOne();
         if (!$tag) {
             throw new NotFoundException("Tag $slug not found");
         }
@@ -104,9 +103,7 @@ class TagController extends Controller
     {
         $currentUser->authAdmin();
 
-        $tm = new TagManager();
-
-        $tag = $tm->get(["tag_id" => $id]);
+        $tag = TagQuery::create()->findPk($id);
         if (!$tag) {
             throw new NotFoundException("Tag $id not found.");
         }
@@ -114,8 +111,8 @@ class TagController extends Controller
         $formFactory = $this->getFormFactory();
 
         $defaults = [
-            'name' => $tag->get('name'),
-            'description' => $tag->get('description')
+            'name' => $tag->getName(),
+            'description' => $tag->getDescription()
         ];
 
         $form = $formFactory->createBuilder(FormType::class, $defaults)
@@ -129,19 +126,18 @@ class TagController extends Controller
             $form->handleRequest($request);
             $data = $form->getData();
 
-            $updated = clone $tag;
-            $updated->set('tag_name', $data['name'])
-                ->set('tag_description', $data['description']);
+            $tag->setName($data['name']);
+            $tag->setDescription($data['description']);
 
             try {
-                $updated = $tm->update($updated);
+                $tag->save();
             } catch (Exception $e) {
                 $error = $e->getMessage();
             }
 
             if (!$error) {
                 return new RedirectResponse(
-                    $urlGenerator->generate('tag_show', ['slug' => $updated->get('url')])
+                    $urlGenerator->generate('tag_show', ['slug' => $tag->getUrl()])
                 );
             }
         }
