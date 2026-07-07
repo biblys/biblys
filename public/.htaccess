@@ -1,6 +1,13 @@
 Options +FollowSymlinks
 
 RewriteEngine on
+
+# Security
+RewriteRule (^|/)\.env       - [F,L,NC]
+RewriteRule (^|/)\.git       - [F,L,NC]
+RewriteRule ^adminer(\.php)?$ - [F,L,NC]
+RewriteRule ^(wp-login\.php|xmlrpc\.php|wp-admin) - [F,L,NC]
+
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^(.*)$  /index.php [QSA,L]
 
