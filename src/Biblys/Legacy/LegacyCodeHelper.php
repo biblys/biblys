@@ -87,6 +87,7 @@ class LegacyCodeHelper
             "site_domain" => $site->getDomain(),
             "site_contact" => $site->getContact(),
             "site_tag" => $site->getTag(),
+            "site_tva" => $site->getTva(),
         ]);
     }
 

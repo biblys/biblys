@@ -32,11 +32,9 @@ class StockTest extends PHPUnit\Framework\TestCase
     public static function setUpBeforeClass(): void
     {
         $site = ModelFactory::createSite();
+        $site->setTva('fr');
+        $site->save();
         LegacyCodeHelper::setGlobalSite($site);
-        $globalSite = LegacyCodeHelper::getGlobalSite(ignoreDeprecation: true);
-        $sm = new SiteManager();
-        $globalSite->set('site_tva', 'fr');
-        $sm->update($globalSite);
     }
 
     /**
