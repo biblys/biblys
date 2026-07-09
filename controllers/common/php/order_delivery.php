@@ -23,6 +23,7 @@ use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUrlService;
 use Biblys\Service\CurrentUser;
+use Biblys\Service\LoggerService;
 use Biblys\Service\Mailer;
 use Biblys\Service\MailingList\MailingListService;
 use Biblys\Service\QueryParamsService;
@@ -346,7 +347,14 @@ return function (
                     }
                 }
 
-                /** @var Order $orderEntity */
+            } catch (Exception $exception) {
+                $db->rollBack();
+                throw $exception;
+            }
+
+            $db->commit();
+
+            try {
                 OrderDeliveryHelpers::sendOrderConfirmationMail(
                     $order,
                     $shipping,
@@ -356,11 +364,13 @@ return function (
                     $termsPage
                 );
             } catch (Exception $exception) {
-                $db->rollBack();
-                throw $exception;
+                $loggerService = new LoggerService();
+                $loggerService->log(
+                    logger: "errors",
+                    level: "ERROR",
+                    message: "Order {$order->getId()} was saved but its confirmation email could not be sent: " . $exception->getMessage(),
+                );
             }
-
-            $db->commit();
 
             $orderSlug = $order->getSlug();
             if ($isUpdatingAnExistingOrder) {

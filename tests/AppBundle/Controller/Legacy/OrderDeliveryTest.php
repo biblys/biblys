@@ -19,12 +19,12 @@
 namespace AppBundle\Controller\Legacy;
 
 use Biblys\Data\ArticleType;
+use Biblys\Exception\UnreachableExternalServiceException;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Mailer;
 use Biblys\Service\QueryParamsService;
-use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
 use EntityManager;
 use Mockery;
@@ -443,7 +443,7 @@ class OrderDeliveryTest extends TestCase
      * @throws Exception
      * @throws \Exception
      */
-    public function testOrderCreationIsRevertIfMailerFails()
+    public function testOrderIsStillCreatedWhenMailerFails()
     {
         // given
         $controller = require __DIR__ . "/../../../../controllers/common/php/order_delivery.php";
@@ -495,7 +495,7 @@ class OrderDeliveryTest extends TestCase
         $mailer = $this->createMock(Mailer::class);
         $mailer->expects($this->once())
             ->method('send')
-            ->willThrowException(new \Exception("Mail not sent"));
+            ->willThrowException(new UnreachableExternalServiceException("SMTP unreachable"));
 
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("getCart")->andReturn($cart);
@@ -504,18 +504,18 @@ class OrderDeliveryTest extends TestCase
         $config = new Config();
 
         // when
-        $exception = Helpers::runAndCatchException(function() use ($controller, $request, $currentSite, $urlGenerator, $currentUser, $mailer, $queryParamsService, $config) {
-            $controller($request, $currentSite, $urlGenerator, $currentUser, $mailer, $queryParamsService, $config);
-        });
+        $response = $controller($request, $currentSite, $urlGenerator, $currentUser, $mailer, $queryParamsService, $config);
 
         // then
-        $this->assertEquals("Mail not sent", $exception->getMessage(), "Exception should be thrown");
+        $this->assertInstanceOf(
+            "Symfony\Component\HttpFoundation\RedirectResponse",
+            $response,
+            "it should redirect to the order despite the mail failure"
+        );
         $ordersCount = OrderQuery::create()->count();
-        $this->assertEquals(0, $ordersCount, "Order should not be created");
-        $customersCount = OrderQuery::create()->count();
-        $this->assertEquals(0, $customersCount, "Customer should not be created");
+        $this->assertEquals(1, $ordersCount, "Order should still be created");
         $stockItemInCart = StockQuery::create()->filterByCart($cart)->exists();
-        $this->assertTrue($stockItemInCart, "Stock item should still be in cart");
+        $this->assertFalse($stockItemInCart, "Stock item should have been moved from cart to order");
     }
 
 
