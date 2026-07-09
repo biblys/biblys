@@ -28,7 +28,6 @@ use Rollbar\Rollbar;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 
 // Default error level
 ini_set('display_errors', 'On');
@@ -130,13 +129,18 @@ if (is_array($maintenanceMode) && $maintenanceMode["enabled"] === true) {
     die();
 }
 
-try {
-    $_SQL = Biblys\Database\Connection::init($config);
-} catch (ServiceUnavailableHttpException $exception) {
-    $response = new Response($exception->getMessage(), 503);
-    $response->send();
-    die();
-}
+// The legacy connection is opened lazily: requests that never touch legacy
+// SQL (e.g. pages served entirely through Propel) do not open it, which halves
+// the number of concurrent MySQL connections under load.
+//
+// Trade-off: a connection failure is no longer caught here (initLazy() never
+// connects). It now surfaces at the first query. If that query is a legacy
+// one, LazyPdo throws a ServiceUnavailableHttpException rendered as a 503 by
+// the kernel's ErrorController; a Propel-first failure surfaces as a generic
+// 500 instead. During a full outage the error page itself may fail to render
+// (it needs the database) — an accepted degradation, since fewer connections
+// make such outages rarer.
+$_SQL = Biblys\Database\Connection::initLazy($config);
 
 $config = Config::load();
 Biblys\Database\Connection::initPropel($config);
