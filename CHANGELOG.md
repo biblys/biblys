@@ -9,6 +9,9 @@
 - Les pages de liste (collections, éditeurs, etc.) renvoyaient une erreur
   lorsqu'un paramètre de tri vide était présent dans l'URL (généralement via
   des robots). C'est corrigé.
+- La TVA n'était plus calculée lors de l'enregistrement d'une commande. C'est corrigé,
+  et la commande `orders:recalculate-tax` permet de recalculer la TVA des commandes
+  passées concernées.
 
 ### Sécurité
 
