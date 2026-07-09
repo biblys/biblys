@@ -61,6 +61,24 @@ class Connection
     }
 
     /**
+     * Builds a lazily-connecting legacy PDO connection and registers it as the
+     * global `$_SQL`. The MySQL connection is only opened when the connection
+     * is first used, so requests that never touch legacy SQL do not open it.
+     */
+    public static function initLazy(Config $config): PDO
+    {
+        $connection = new LazyPdo(
+            self::getDsnFromConfig($config),
+            $config->get("db.user"),
+            $config->get("db.pass"),
+            $config->get("db.host") . ":" . $config->get("db.port"),
+        );
+        $GLOBALS["_SQL"] = $connection;
+
+        return $connection;
+    }
+
+    /**
      * @throws PropelException
      */
     public static function initPropel(Config $config): void
