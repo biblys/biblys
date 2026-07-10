@@ -993,11 +993,9 @@ legacy_article:
   requirements:
     slug: .+
 
-legacy_invoice:
+order_invoice:
   path: /invoice/{url}
-  controller: AppBundle\Controller\LegacyController::defaultAction
-  defaults:
-    page: order_invoice
+  controller: AppBundle\Controller\OrderController::invoiceAction
 
 legacy_o_collection:
   path: /o/collection/{url}
