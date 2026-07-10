@@ -74,6 +74,14 @@ Prefer using repository classes (e.g. `PaymentRepository`) for reading and writi
 ### Legacy Code
 The `inc/` directory contains legacy entity classes that extend a base `Entity` class implementing ArrayAccess. These are being gradually replaced by Propel models in `src/Model/`.
 
+### Assets
+Frontend assets are built with Webpack Encore. Source lives in `assets/` (e.g. `assets/js/`). There are two build outputs with **different Git tracking**:
+
+- `composer build:prod` writes to `public/assets/bundle/` — **this directory is committed to Git** (content-hashed filenames + `manifest.json`/`entrypoints.json`). After changing a source asset, run `composer build:prod` and commit the regenerated bundle, otherwise deployed pages serve the old code.
+- `composer build` / `composer build:watch` (dev mode) writes to `public/build/` — **gitignored**, so dev builds never produce anything to commit.
+
+Do not run formatters on the generated bundle files; they are minified build artifacts, not source.
+
 ### Configuration
 Copy `config.example.yml` to `app/config.yml`. Configuration includes database, SMTP, payment providers (Stripe, PayPlug, PayPal), mailing services (Mailjet, Brevo), and various integrations.
 
