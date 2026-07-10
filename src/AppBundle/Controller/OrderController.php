@@ -259,10 +259,10 @@ class OrderController extends Controller
         CurrentUser     $currentUser,
         CurrentSite     $currentSite,
         TemplateService $templateService,
-        string          $url,
+        string          $slug,
     ): Response
     {
-        $order = OrderQuery::create()->filterBySlug($url)->findOne();
+        $order = OrderQuery::create()->filterBySlug($slug)->findOne();
         if (!$order) {
             throw new ResourceNotFoundException();
         }
