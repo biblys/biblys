@@ -36,6 +36,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -244,6 +245,55 @@ class OrderController extends Controller
             "notice" => $notice,
             "order" => $this->_jsonOrder($updatedOrder),
         ]);
+    }
+
+    /**
+     * @throws PropelException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
+    public function invoiceAction(
+        Request         $request,
+        CurrentUser     $currentUser,
+        CurrentSite     $currentSite,
+        TemplateService $templateService,
+        string          $url,
+    ): Response
+    {
+        $order = OrderQuery::create()->filterBySlug($url)->findOne();
+        if (!$order) {
+            throw new ResourceNotFoundException();
+        }
+
+        if (
+            !$this->_isAnonymousOrder($order)
+            && !$this->_orderBelongsToVisitor($order, $currentUser)
+            && !$currentUser->isAdmin()
+        ) {
+            throw new AccessDeniedHttpException();
+        }
+
+        $pageTitle = "Facture n° {$order->getId()}";
+        $request->attributes->set("page_title", $pageTitle);
+
+        return $templateService->renderResponse("AppBundle:Order:invoice.html.twig", [
+            "page_title" => $pageTitle,
+        ], isPrivate: true);
+    }
+
+    private function _isAnonymousOrder(\Model\Order $order): bool
+    {
+        return !$order->getUserId();
+    }
+
+    private function _orderBelongsToVisitor(\Model\Order $order, CurrentUser $currentUser): bool
+    {
+        if (!$currentUser->isAuthenticated()) {
+            return false;
+        }
+
+        return $order->getUserId() === $currentUser->getUser()->getId();
     }
 
     /**
