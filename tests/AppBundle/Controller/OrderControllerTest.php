@@ -31,11 +31,15 @@ use Mockery;
 use Model\OrderQuery;
 use Model\Payment;
 use Model\PaymentQuery;
+use Model\Site;
+use Model\User;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -321,5 +325,70 @@ class OrderControllerTest extends TestCase
         $this->assertEquals(200, $response->getStatusCode());
         $updatedOrder = OrderQuery::create()->findPk($order->getId());
         $this->assertNotNull($updatedOrder->getCancelDate());
+    }
+
+    private function _mockCurrentSiteForInvoice(): CurrentSite
+    {
+        $site = Mockery::mock(Site::class);
+        $site->shouldReceive("getShop")->andReturn(false);
+        $site->shouldReceive("getTva")->andReturn(1);
+        $site->shouldReceive("getAddress")->andReturn("1 rue du Livre|33000 Bordeaux");
+
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getSite")->andReturn($site);
+        $currentSite->shouldReceive("getTitle")->andReturn("Ma librairie");
+        $currentSite->shouldReceive("getOption")->with("invoice_notice")->andReturn(null);
+        return $currentSite;
+    }
+
+    public function testInvoiceActionForAnonymousOrder(): void
+    {
+        // given
+        $controller = new OrderController();
+        $request = new Request();
+        $order = ModelFactory::createOrder(slug: "invoice-anon-1"); // pas de user → anonyme
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("isAuthenticated")->andReturn(false);
+        $currentUser->shouldReceive("isAdmin")->andReturn(false);
+        $currentSite = $this->_mockCurrentSiteForInvoice();
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $controller->invoiceAction($request, $currentUser, $currentSite, $templateService, "invoice-anon-1");
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertStringContainsString("Facture n° {$order->getId()}", $response->getContent());
+    }
+
+    public function testInvoiceActionThrowsNotFoundForUnknownOrder(): void
+    {
+        $controller = new OrderController();
+        $request = new Request();
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentSite = $this->_mockCurrentSiteForInvoice();
+        $templateService = Helpers::getTemplateService();
+
+        $this->expectException(ResourceNotFoundException::class);
+        $controller->invoiceAction($request, $currentUser, $currentSite, $templateService, "does-not-exist");
+    }
+
+    public function testInvoiceActionThrowsAccessDeniedForOtherUser(): void
+    {
+        $controller = new OrderController();
+        $request = new Request();
+        $owner = ModelFactory::createUser(email: "owner-invoice@example.org");
+        $order = ModelFactory::createOrder(user: $owner, slug: "invoice-owned-1");
+
+        $intruder = ModelFactory::createUser(email: "intruder-invoice@example.org");
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("isAuthenticated")->andReturn(true);
+        $currentUser->shouldReceive("isAdmin")->andReturn(false);
+        $currentUser->shouldReceive("getUser")->andReturn($intruder);
+        $currentSite = $this->_mockCurrentSiteForInvoice();
+        $templateService = Helpers::getTemplateService();
+
+        $this->expectException(AccessDeniedHttpException::class);
+        $controller->invoiceAction($request, $currentUser, $currentSite, $templateService, "invoice-owned-1");
     }
 }
