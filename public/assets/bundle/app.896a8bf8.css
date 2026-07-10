@@ -1,0 +1,94 @@
+/**
+ * Copyright (C) 2024 Clément Latzarus
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, version 3.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+body {
+  background-color: lightgray;
+}
+
+/**
+ * Copyright (C) 2024 Clément Latzarus
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, version 3.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+.OverallMenu {
+  align-items: center;
+  background: rgba(15,15,15);
+  display: flex;
+  font-size: 16px;
+  height: 48px;
+  padding: 8px;
+  justify-content: space-between;
+}
+
+.OverallMenu a {
+  color: white;
+}
+
+.OverallMenu a:hover {
+  color: #ff6600;
+  text-decoration: none;
+}
+
+.OverallMenu__entry {
+  align-items: start;
+  display: inline-flex;
+  flex-direction: row;
+  gap: 4px;
+  padding: 0 4px;
+  position: relative;
+}
+
+.OverallMenu__entry.with-badge {
+  margin-right: 12px;
+}
+
+.OverallMenu__entry .fa,
+.OverallMenu__entry__icon {
+  font-size: 1.25rem;
+}
+
+.OverallMenu__entry__label {
+  display: none;
+}
+
+.OverallMenu .icon-badge {
+  font-size: 10px;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  transition: opacity 400ms;
+  z-index: 10;
+  bottom: 0;
+  right: -14px;
+}
+
+@media(min-width: 768px) {
+  .OverallMenu__entry__label {
+    display: inline;
+    margin-right: 4px;
+  }
+}
+
