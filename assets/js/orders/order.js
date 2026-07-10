@@ -101,7 +101,7 @@ export default class Order {
           <td>${formatDate(self.created_at, 'short')}</td>
           <td class="text-left customer">${self.data.customer}</td>
           <td class="text-right">${self.data.total}</td>
-          <td><a href="/invoice/${self.data.url}" class="btn btn-sm btn-light" title="Imprimer la facture" ><i class="fa fa-print"></i></a></td>
+          <td><a href="/order/${self.data.url}/invoice" class="btn btn-sm btn-light" title="Imprimer la facture" ><i class="fa fa-print"></i></a></td>
           <td>${self.data.payment_mode ? `<img src="/assets/icons/payment_${self.data.payment_mode}.png" alt="${self.data.payment_mode}" title="${self.data.payment_mode}" width=20 />` : ''}</td>
           <td>${self.payed ? formatDate(self.payed_at, 'short') : '<div class="btn-group">' + payedButton + followupButton + '</div>'}</td>
           <td>${self.shipped ? formatDate(self.shipped_at, 'short') : shippedButton}</td>
