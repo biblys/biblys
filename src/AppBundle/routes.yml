@@ -485,6 +485,11 @@ payment_payplug:
   methods: POST
   controller: AppBundle\Controller\PaymentController::createPayplugPaymentAction
 
+order_invoice:
+  path: /order/{slug}/invoice
+  methods: GET
+  controller: AppBundle\Controller\OrderController::invoiceAction
+
 payment_stripe_webhook:
   path: /payment/stripe-webhook
   controller: AppBundle\Controller\PaymentController::stripeWebhookAction
@@ -993,9 +998,6 @@ legacy_article:
   requirements:
     slug: .+
 
-order_invoice:
-  path: /invoice/{url}
-  controller: AppBundle\Controller\OrderController::invoiceAction
 
 legacy_o_collection:
   path: /o/collection/{url}
