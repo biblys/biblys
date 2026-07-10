@@ -398,6 +398,7 @@ class OrderControllerTest extends TestCase
         $this->assertStringContainsString("Silas", $content); // prénom client (fixture par défaut)
         $this->assertStringNotContainsString("<em>de", $content); // auteurs supprimés
         $this->assertStringContainsString("0,3", $content); // poids 300 g → 0,3 kg
+        $this->assertStringNotContainsString("OverallMenu", $content); // pas de chrome du site (layout minimal)
     }
 
     public function testInvoiceActionRendersLineWithNullSellingPrice(): void
