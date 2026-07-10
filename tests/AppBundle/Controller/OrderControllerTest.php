@@ -373,6 +373,80 @@ class OrderControllerTest extends TestCase
         $controller->invoiceAction($request, $currentUser, $currentSite, $templateService, "does-not-exist");
     }
 
+    public function testInvoiceActionRendersOrderContent(): void
+    {
+        // given
+        $controller = new OrderController();
+        $request = new Request();
+        $order = ModelFactory::createOrder(slug: "invoice-content1", amount: 2000, shippingCost: 500);
+        $article = ModelFactory::createArticle(title: "Le Livre Test");
+        ModelFactory::createStockItem(article: $article, order: $order, sellingPrice: 2000, weight: 300);
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("isAuthenticated")->andReturn(false);
+        $currentUser->shouldReceive("isAdmin")->andReturn(false);
+        $currentSite = $this->_mockCurrentSiteForInvoice();
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $controller->invoiceAction($request, $currentUser, $currentSite, $templateService, "invoice-content1");
+        $content = $response->getContent();
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertStringContainsString("Le Livre Test", $content);
+        $this->assertStringContainsString("Silas", $content); // prénom client (fixture par défaut)
+        $this->assertStringNotContainsString("<em>de", $content); // auteurs supprimés
+        $this->assertStringContainsString("0,3", $content); // poids 300 g → 0,3 kg
+    }
+
+    public function testInvoiceActionRendersLineWithNullSellingPrice(): void
+    {
+        // given
+        $controller = new OrderController();
+        $request = new Request();
+        $order = ModelFactory::createOrder(slug: "invoice-null", amount: 0, shippingCost: 0);
+        $article = ModelFactory::createArticle(title: "Le Livre Test");
+        $stock = ModelFactory::createStockItem(article: $article, order: $order);
+        $stock->setSellingPrice(null)->save();
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("isAuthenticated")->andReturn(false);
+        $currentUser->shouldReceive("isAdmin")->andReturn(false);
+        $currentSite = $this->_mockCurrentSiteForInvoice();
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $controller->invoiceAction($request, $currentUser, $currentSite, $templateService, "invoice-null");
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode(), "Un prix de vente null ne doit pas lever d'exception currency(null)");
+        $this->assertStringContainsString("Le Livre Test", $response->getContent());
+    }
+
+    public function testInvoiceActionRendersPaidOrderWithoutPaymentMode(): void
+    {
+        // given : commande réglée (date de paiement) mais sans mode de paiement
+        $controller = new OrderController();
+        $request = new Request();
+        $order = ModelFactory::createOrder(slug: "invoice-nomode", paymentDate: new \DateTime());
+        $article = ModelFactory::createArticle(title: "Le Livre Test");
+        ModelFactory::createStockItem(article: $article, order: $order, sellingPrice: 2000);
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("isAuthenticated")->andReturn(false);
+        $currentUser->shouldReceive("isAdmin")->andReturn(false);
+        $currentSite = $this->_mockCurrentSiteForInvoice();
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $controller->invoiceAction($request, $currentUser, $currentSite, $templateService, "invoice-nomode");
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode(), "Une commande réglée sans mode de paiement ne doit pas lever d'erreur ucwords(null)");
+        $this->assertStringContainsString("Règlement effectué", $response->getContent());
+    }
+
     public function testInvoiceActionThrowsAccessDeniedForOtherUser(): void
     {
         $controller = new OrderController();
