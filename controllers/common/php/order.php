@@ -70,7 +70,7 @@ return function (
                 <div class="admin">
                     <p>Commande n° ' . $o["order_id"] . '</p>
                     <p><a href="/pages/adm_order?order_id=' . $o["order_id"] . '">modifier</a></p>
-                    <p><a href="/invoice/' . $o["order_url"] . '">facture</a></p>
+                    <p><a href="/order/' . $o["order_url"] . '/invoice">facture</a></p>
                 </div>
             ';
         }
