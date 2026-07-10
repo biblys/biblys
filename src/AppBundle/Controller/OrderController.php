@@ -29,6 +29,7 @@ use Exception;
 use Framework\Controller;
 use Model\OrderQuery;
 use Model\Payment;
+use Model\StockQuery;
 use Order;
 use OrderManager;
 use Propel\Runtime\Exception\PropelException;
@@ -277,8 +278,54 @@ class OrderController extends Controller
         $pageTitle = "Facture n° {$order->getId()}";
         $request->attributes->set("page_title", $pageTitle);
 
+        $stocks = StockQuery::create()->filterByOrderId($order->getId())->find();
+
+        $lines = [];
+        $totalHt = 0;
+        $totalTva = 0;
+        foreach ($stocks as $stock) {
+            $article = $stock->getArticle();
+            $totalHt += (int) $stock->getSellingPriceHt();
+            $totalTva += (int) $stock->getSellingPriceTva();
+
+            $title = $article->getTitle();
+            if ($article->getTypeId() == 2) {
+                $title .= " (numérique)";
+            }
+            if ($article->getPubdate() && $article->getPubdate() > $order->getCreatedAt()) {
+                $title .= " (précommande)";
+            }
+
+            $lines[] = [
+                "id" => $stock->getId(),
+                "title" => $title,
+                "collectionName" => $article->getCollectionName(),
+                "number" => $article->getNumber(),
+                "condition" => $stock->getCondition(),
+                "price" => (int) $stock->getSellingPrice(),
+            ];
+        }
+
+        $payment = null;
+        if ($order->getPaymentDate()) {
+            $payment = [
+                "date" => $order->getPaymentDate("d/m/Y"),
+                "mode" => ucwords($order->getPaymentMode() ?? ""),
+            ];
+        }
+
         return $templateService->renderResponse("AppBundle:Order:invoice.html.twig", [
             "page_title" => $pageTitle,
+            "order" => $order,
+            "lines" => $lines,
+            "total_ht" => $totalHt,
+            "total_tva" => $totalTva,
+            "is_shop" => (bool) $currentSite->getSite()->getShop(),
+            "has_tva" => (bool) $currentSite->getSite()->getTva(),
+            "payment" => $payment,
+            "invoice_notice" => $currentSite->getOption("invoice_notice"),
+            "site_title" => $currentSite->getTitle(),
+            "site_address" => $currentSite->getSite()->getAddress(),
         ], isPrivate: true);
     }
 
