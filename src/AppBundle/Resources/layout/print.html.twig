@@ -22,6 +22,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     <meta charset="utf-8">
     <title>{% block title %}{% endblock %} | {{ app.currentSite.title }}</title>
     {% include "layout:_assets_css.html.twig" %}
+    {% block stylesheets %}{% endblock %}
   </head>
   <body>
     <div class="container">

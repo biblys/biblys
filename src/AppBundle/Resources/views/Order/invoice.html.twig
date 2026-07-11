@@ -18,88 +18,158 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 {% block title %}{{ page_title }}{% endblock %}
 
+{% block stylesheets %}
+    <style>
+        body {
+            padding-top: 40pt;
+        }
+
+        .invoice-document,
+        .article-list {
+            font-size: 16pt;
+        }
+
+        .invoice-document h1 {
+            font-size: 22pt;
+        }
+
+        .invoice-document h2 {
+            font-size: 18pt;
+        }
+
+        .invoice-document .header {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .invoice-document .article-title {
+            font-size: 18pt;
+        }
+
+        .invoice-document .total {
+          background: rgba(0, 0, 0, 0.03);
+          display: flex;
+          font-size: 20pt;
+          justify-content: space-between;
+          padding: 10pt 20pt;
+        }
+
+        /* Alignements (print.css supprimé) : valables à l'écran et à l'impression. */
+        .invoice-document .text-right { text-align: right; }
+        .invoice-document .text-center { text-align: center; }
+        .invoice-document .align { vertical-align: middle; }
+    </style>
+{% endblock %}
+
 {% block main %}
-    {% set colspan = is_shop ? 3 : 2 %}
+    {% set colspan = is_shop ? 2 : 1 %}
 
-    <div class="float-right">
-        <h3>{{ order.title }} {{ order.firstname }} {{ order.lastname }}</h3>
-        <p>
-            {{ order.address1 }}<br>
-            {% if order.address2 %}{{ order.address2 }}<br>{% endif %}
-            {{ order.postalcode }} {{ order.city }}<br>
-            {{ order.countryName }}
-        </p>
-        <p>{{ order.email }}</p>
+    <a href="javascript:history.back()" class="btn btn-secondary d-print-none mb-3">← Retour</a>
+
+    <div class="invoice-document">
+
+        <header class="header">
+            <div>
+                <h3>{{ site_title }}</h3>
+                <p>{{ site_address|replace({'|': '<br>'})|raw }}</p>
+            </div>
+            <div>
+                <h3>{{ order.title }} {{ order.firstname }} {{ order.lastname }}</h3>
+                <p>
+                    {{ order.address1 }}<br>
+                    {% if order.address2 %}{{ order.address2 }}<br>{% endif %}
+                    {{ order.postalcode }} {{ order.city }}<br>
+                    {{ order.countryName }}
+                </p>
+                <p>{{ order.email }}</p>
+            </div>
+        </header>
+
+        <h1>Facture n° {{ order.id }}</h1>
+
+        <table class="table article-list mt-4">
+            <thead>
+                <tr>
+                    <th>Article</th>
+                    {% if is_shop %}<th>État</th>{% endif %}
+                    <th class="text-right">Prix</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for line in lines %}
+                    <tr class="p-4">
+                        <td>
+                            <p class="article-title py-1 m-0">
+                                {{ line.title }}
+                                {% for notice in line.notices %}
+                                    <small class="text-muted">({{ notice }})</small>
+                                {% endfor %}
+                            </p>
+                            <p class="text-muted">
+                                coll. {{ line.collectionName }}{% if line.number %} n° {{ line.number }}{% endif %}
+                            </p>
+                        </td>
+                        {% if is_shop %}<td class="text-center align">{{ line.condition }}</td>{% endif %}
+                        <td class="text-right align">{{ line.price|currency(true)|raw }}</td>
+                    </tr>
+                {% endfor %}
+
+                {% if order.shippingCost > 0 %}
+                    <tr class="p-4">
+                        <td>
+                            <p class="article-title py-1 m-0">
+                                Port
+                                <small class="text-muted">({{ order.shippingMode }})</small>
+                            </p>
+                        </td>
+                        <td class="text-right align">
+                            {{ order.shippingCost|currency(true)|raw }}
+                        </td>
+                    </tr>
+                {% endif %}
+            </tbody>
+            <tfoot>
+                {% if total_tva %}
+                    <tr>
+                        <th colspan="{{ colspan }}" class="text-right">Total H.T. :</th>
+                        <th class="text-right">{{ total_ht|currency(true)|raw }}</th>
+                    </tr>
+                    <tr>
+                        <th colspan="{{ colspan }}" class="text-right">T.V.A. :</th>
+                        <th class="text-right">{{ total_tva|currency(true)|raw }}</th>
+                    </tr>
+                {% endif %}
+            </tfoot>
+        </table>
+
+
+        <div class="total">
+          <div class="">
+              Total TTC
+          </div>
+          <div>
+            {{ (order.amount + order.shippingCost)|currency(true)|raw }}
+          </div>
+        </div>
+
+        <footer class="mt-4">
+            {% if not has_tva %}
+                <p class="text-center">
+                    TVA non applicable en application de l'article 293 B du CGI.
+                </p>
+            {% endif %}
+
+            {% if payment %}
+                <p class="text-center">
+                    Règlement effectué le {{ payment.date }} par {{ payment.mode }}.
+                </p>
+            {% endif %}
+
+            {% if invoice_notice %}
+                <p class="text-center">
+                    {{ invoice_notice|replace({'\\n': '<br>'})|raw }}
+                </p>
+            {% endif %}
+        </footer>
     </div>
-
-    <h3>{{ site_title }}<br>{{ site_address|replace({'|': '<br>'})|raw }}</h3>
-
-    <h2>{{ page_title }}</h2>
-
-    <br>
-    <table class="table invoice-table">
-        <thead>
-            <tr>
-                <th>Ref.</th>
-                <th>Articles</th>
-                {% if is_shop %}<th>État</th>{% endif %}
-                <th>Prix</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for line in lines %}
-                <tr>
-                    <td class="center">{{ line.id }}</td>
-                    <td>
-                        <strong>{{ line.title }}</strong><br>
-                        coll. {{ line.collectionName }}{% if line.number %} n° {{ line.number }}{% endif %}
-                    </td>
-                    {% if is_shop %}<td class="center">{{ line.condition }}</td>{% endif %}
-                    <td class="right">{{ line.price|currency(true)|raw }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-        <tfoot>
-            <tr>
-                <th colspan="{{ colspan }}" class="right">Articles :</th>
-                <th class="right">{{ article_count }}</th>
-            </tr>
-            {% if total_weight > 0 %}
-                <tr>
-                    <th colspan="{{ colspan }}" class="right">Poids :</th>
-                    <th class="right">{{ (total_weight / 1000)|round(2)|replace({'.': ','}) }}&nbsp;kg</th>
-                </tr>
-            {% endif %}
-            <tr>
-                <th colspan="{{ colspan }}" class="right">Frais de port ({{ order.shippingMode }}) :</th>
-                <th class="right">{{ order.shippingCost|currency(true)|raw }}</th>
-            </tr>
-            {% if total_tva %}
-                <tr>
-                    <th colspan="{{ colspan }}" class="right">Total H.T. :</th>
-                    <th class="right">{{ total_ht|currency(true)|raw }}</th>
-                </tr>
-                <tr>
-                    <th colspan="{{ colspan }}" class="right">T.V.A. :</th>
-                    <th class="right">{{ total_tva|currency(true)|raw }}</th>
-                </tr>
-            {% endif %}
-            <tr>
-                <th colspan="{{ colspan }}" class="right">Total T.T.C.&nbsp;:</th>
-                <th class="right">{{ (order.amount + order.shippingCost)|currency(true)|raw }}</th>
-            </tr>
-        </tfoot>
-    </table>
-
-    {% if not has_tva %}
-        <p class="center"><strong>TVA non applicable en application de l'article 293 B du CGI.</strong></p><br>
-    {% endif %}
-
-    {% if payment %}
-        <p class="center">Règlement effectué le {{ payment.date }} par {{ payment.mode }}.</p><br>
-    {% endif %}
-
-    {% if invoice_notice %}
-        <p class="text-center">{{ invoice_notice|replace({'\\n': '<br>'})|raw }}</p>
-    {% endif %}
 {% endblock %}
