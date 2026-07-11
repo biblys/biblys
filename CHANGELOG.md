@@ -9,6 +9,12 @@
   inaltérable : toute modification a posteriori du montant, de la date ou de la
   commande d'un paiement est détectable.
 
+### Améliorations
+
+- La page de facture d'une commande a été refondue : elle s'affiche désormais
+  dans une présentation épurée dédiée à l'impression (sans le menu ni l'habillage
+  du site), plus lisible, avec un bouton de retour. 
+
 ## 3.14.0 (4 juillet 2026)
 
 ### Confirmité NF525
