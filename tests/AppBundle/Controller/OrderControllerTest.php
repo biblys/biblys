@@ -395,10 +395,35 @@ class OrderControllerTest extends TestCase
         // then
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertStringContainsString("Le Livre Test", $content);
-        $this->assertStringContainsString("Silas", $content); // prénom client (fixture par défaut)
-        $this->assertStringNotContainsString("<em>de", $content); // auteurs supprimés
-        $this->assertStringContainsString("0,3", $content); // poids 300 g → 0,3 kg
-        $this->assertStringNotContainsString("OverallMenu", $content); // pas de chrome du site (layout minimal)
+        $this->assertStringContainsString("Silas", $content, "Le prénom du client (fixture par défaut) doit apparaître sur la facture");
+        $this->assertStringNotContainsString("<em>de", $content, "Les auteurs ne doivent plus être affichés sur la facture");
+        $this->assertStringNotContainsString("OverallMenu", $content, "La facture doit utiliser un layout minimal, sans le chrome du site");
+        $this->assertStringNotContainsString("Ref.", $content, "La colonne Ref. doit avoir été supprimée");
+        $this->assertStringContainsString("Port", $content, "La ligne de port doit être affichée quand des frais existent (500 c)");
+    }
+
+    public function testInvoiceActionHidesShippingLineWhenFree(): void
+    {
+        // given
+        $controller = new OrderController();
+        $request = new Request();
+        $order = ModelFactory::createOrder(slug: "invoice-freeship", amount: 2000, shippingCost: 0);
+        $article = ModelFactory::createArticle(title: "Le Livre Test");
+        ModelFactory::createStockItem(article: $article, order: $order, sellingPrice: 2000);
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("isAuthenticated")->andReturn(false);
+        $currentUser->shouldReceive("isAdmin")->andReturn(false);
+        $currentSite = $this->_mockCurrentSiteForInvoice();
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $controller->invoiceAction($request, $currentUser, $currentSite, $templateService, "invoice-freeship");
+        $content = $response->getContent();
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertStringNotContainsString("Port", $content, "La ligne de port doit être masquée quand elle est gratuite (0 €)");
     }
 
     public function testInvoiceActionRendersLineWithNullSellingPrice(): void

@@ -288,17 +288,17 @@ class OrderController extends Controller
             $totalHt += (int) $stock->getSellingPriceHt();
             $totalTva += (int) $stock->getSellingPriceTva();
 
-            $title = $article->getTitle();
+            $notices = [];
             if ($article->getTypeId() == 2) {
-                $title .= " (numérique)";
+                $notices[] = "numérique";
             }
             if ($article->getPubdate() && $article->getPubdate() > $order->getCreatedAt()) {
-                $title .= " (précommande)";
+                $notices[] = "précommande";
             }
 
             $lines[] = [
-                "id" => $stock->getId(),
-                "title" => $title,
+                "title" => $article->getTitle(),
+                "notices" => $notices,
                 "collectionName" => $article->getCollectionName(),
                 "number" => $article->getNumber(),
                 "condition" => $stock->getCondition(),
