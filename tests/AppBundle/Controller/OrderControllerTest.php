@@ -450,6 +450,67 @@ class OrderControllerTest extends TestCase
         $this->assertStringContainsString("Le Livre Test", $response->getContent());
     }
 
+    public function testInvoiceActionShowsVatBreakdownByRate(): void
+    {
+        // given : une commande mélangeant un livre (5,5 %) et un article standard (20 %)
+        $controller = new OrderController();
+        $request = new Request();
+        $order = ModelFactory::createOrder(slug: "invoice-vat-mix", amount: 3000, shippingCost: 0);
+        $book = ModelFactory::createArticle(title: "Le Livre Test");
+        $standardItem = ModelFactory::createArticle(title: "Un Objet Dérivé");
+
+        $bookStock = ModelFactory::createStockItem(article: $book, order: $order, sellingPrice: 2000);
+        $bookStock->setSellingPriceHt(1896)->setSellingPriceTva(104)->setTvaRate(5.5)->save();
+
+        $standardStock = ModelFactory::createStockItem(article: $standardItem, order: $order, sellingPrice: 1000);
+        $standardStock->setSellingPriceHt(833)->setSellingPriceTva(167)->setTvaRate(20)->save();
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("isAuthenticated")->andReturn(false);
+        $currentUser->shouldReceive("isAdmin")->andReturn(false);
+        $currentSite = $this->_mockCurrentSiteForInvoice();
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $controller->invoiceAction($request, $currentUser, $currentSite, $templateService, "invoice-vat-mix");
+        $content = $response->getContent();
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertStringContainsString("5,5 %", $content, "Le taux de TVA du livre doit apparaître dans la ventilation");
+        $this->assertStringContainsString("20 %", $content, "Le taux de TVA de l'article standard doit apparaître dans la ventilation");
+    }
+
+    public function testInvoiceActionGroupsUnknownVatRate(): void
+    {
+        // given : un exemplaire vendu sans taux de TVA renseigné (cas legacy),
+        // accompagné d'un article à taux connu pour que le bloc de ventilation s'affiche
+        $controller = new OrderController();
+        $request = new Request();
+        $order = ModelFactory::createOrder(slug: "invoice-vat-unk", amount: 4000, shippingCost: 0);
+        $article = ModelFactory::createArticle(title: "Le Livre Test");
+        $stock = ModelFactory::createStockItem(article: $article, order: $order, sellingPrice: 2000);
+        $stock->setSellingPriceHt(0)->setSellingPriceTva(0)->setTvaRate(null)->save();
+
+        $knownRateArticle = ModelFactory::createArticle(title: "Un Objet Dérivé");
+        $knownRateStock = ModelFactory::createStockItem(article: $knownRateArticle, order: $order, sellingPrice: 2000);
+        $knownRateStock->setSellingPriceHt(1667)->setSellingPriceTva(333)->setTvaRate(20)->save();
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("isAuthenticated")->andReturn(false);
+        $currentUser->shouldReceive("isAdmin")->andReturn(false);
+        $currentSite = $this->_mockCurrentSiteForInvoice();
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $controller->invoiceAction($request, $currentUser, $currentSite, $templateService, "invoice-vat-unk");
+        $content = $response->getContent();
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertStringContainsString("Taux inconnu", $content, "Un taux de TVA non renseigné doit être regroupé sous « Taux inconnu »");
+    }
+
     public function testInvoiceActionRendersPaidOrderWithoutPaymentMode(): void
     {
         // given : commande réglée (date de paiement) mais sans mode de paiement
