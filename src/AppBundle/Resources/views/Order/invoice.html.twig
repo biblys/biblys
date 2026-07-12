@@ -139,7 +139,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                 {% endif %}
             </tbody>
             <tfoot>
-                {% if total_tva %}
+                {% if total_vat %}
                     <tr>
                         <th colspan="{{ colspan }}" class="text-right">Taux</th>
                         <th class="text-right">Base HT</th>
@@ -177,7 +177,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         </div>
 
         <footer class="mt-4">
-            {% if not has_tva %}
+            {% if not has_vat %}
                 <p class="text-center">
                     TVA non applicable en application de l'article 293 B du CGI.
                 </p>
