@@ -14,6 +14,9 @@
 - La page de facture d'une commande a été refondue : elle s'affiche désormais
   dans une présentation épurée dédiée à l'impression (sans le menu ni l'habillage
   du site), plus lisible, avec un bouton de retour. 
+- La facture affiche désormais le détail de la TVA : taux, prix HT et TVA pour
+  chaque article, ainsi qu'un tableau de synthèse ventilant base HT, montant de
+  TVA et total TTC par taux appliqué sur la commande.
 
 ## 3.14.0 (4 juillet 2026)
 
