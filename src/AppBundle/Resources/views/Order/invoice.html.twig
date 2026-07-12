@@ -62,7 +62,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 {% endblock %}
 
 {% block main %}
-    {% set colspan = is_shop ? 2 : 1 %}
+    {% set colspan = is_shop ? 3 : 2 %}
 
     <a href="javascript:history.back()" class="btn btn-secondary d-print-none mb-3">← Retour</a>
 
@@ -92,7 +92,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                 <tr>
                     <th>Article</th>
                     {% if is_shop %}<th>État</th>{% endif %}
-                    <th class="text-right">Prix</th>
+                    <th class="text-right">Taux</th>
+                    <th class="text-right">Prix HT</th>
+                    <th class="text-right">TVA</th>
+                    <th class="text-right">Prix TTC</th>
                 </tr>
             </thead>
             <tbody>
@@ -110,6 +113,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                             </p>
                         </td>
                         {% if is_shop %}<td class="text-center align">{{ line.condition }}</td>{% endif %}
+                        <td class="text-right align">{{ line.vatRate is not null ? (line.vatRate|replace({'.': ','}) ~ ' %') : '—' }}</td>
+                        <td class="text-right align">{{ line.vatRate is not null ? line.priceHt|currency(true)|raw : '—' }}</td>
+                        <td class="text-right align">{{ line.vatRate is not null ? line.priceVat|currency(true)|raw : '—' }}</td>
                         <td class="text-right align">{{ line.price|currency(true)|raw }}</td>
                     </tr>
                 {% endfor %}
@@ -122,6 +128,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                                 <small class="text-muted">({{ order.shippingMode }})</small>
                             </p>
                         </td>
+                        {% if is_shop %}<td></td>{% endif %}
+                        <td class="text-right align">—</td>
+                        <td class="text-right align">—</td>
+                        <td class="text-right align">—</td>
                         <td class="text-right align">
                             {{ order.shippingCost|currency(true)|raw }}
                         </td>
@@ -131,12 +141,26 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
             <tfoot>
                 {% if total_tva %}
                     <tr>
-                        <th colspan="{{ colspan }}" class="text-right">Total H.T. :</th>
-                        <th class="text-right">{{ total_ht|currency(true)|raw }}</th>
+                        <th colspan="{{ colspan }}" class="text-right">Taux</th>
+                        <th class="text-right">Base HT</th>
+                        <th class="text-right">TVA</th>
+                        <th class="text-right">Total TTC</th>
                     </tr>
+                    {% for group in vat_breakdown %}
+                        <tr>
+                            <th colspan="{{ colspan }}" class="text-right">
+                                {{ group.rate is not null ? (group.rate|replace({'.': ','}) ~ ' %') : 'Taux inconnu' }}
+                            </th>
+                            <th class="text-right">{{ group.ht|currency(true)|raw }}</th>
+                            <th class="text-right">{{ group.vat|currency(true)|raw }}</th>
+                            <th class="text-right">{{ group.ttc|currency(true)|raw }}</th>
+                        </tr>
+                    {% endfor %}
                     <tr>
-                        <th colspan="{{ colspan }}" class="text-right">T.V.A. :</th>
-                        <th class="text-right">{{ total_tva|currency(true)|raw }}</th>
+                        <th colspan="{{ colspan }}" class="text-right">Total</th>
+                        <th class="text-right">{{ total_ht|currency(true)|raw }}</th>
+                        <th class="text-right">{{ total_vat|currency(true)|raw }}</th>
+                        <th class="text-right">{{ (total_ht + total_vat)|currency(true)|raw }}</th>
                     </tr>
                 {% endif %}
             </tfoot>
