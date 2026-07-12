@@ -347,7 +347,7 @@ class OrderController extends Controller
             "total_vat" => $totalVat,
             "vat_breakdown" => $vatBreakdown,
             "is_shop" => (bool) $currentSite->getSite()->getShop(),
-            "has_tva" => (bool) $currentSite->getSite()->getTva(),
+            "has_vat" => (bool) $currentSite->getSite()->getTva(),
             "payment" => $payment,
             "invoice_notice" => $currentSite->getOption("invoice_notice"),
             "site_title" => $currentSite->getTitle(),
