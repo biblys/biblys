@@ -282,11 +282,23 @@ class OrderController extends Controller
 
         $lines = [];
         $totalHt = 0;
-        $totalTva = 0;
+        $totalVat = 0;
+        $vatBreakdown = [];
         foreach ($stocks as $stock) {
             $article = $stock->getArticle();
-            $totalHt += (int) $stock->getSellingPriceHt();
-            $totalTva += (int) $stock->getSellingPriceTva();
+            $priceHt = (int) $stock->getSellingPriceHt();
+            $priceVat = (int) $stock->getSellingPriceTva();
+            $vatRate = $stock->getTvaRate();
+            $totalHt += $priceHt;
+            $totalVat += $priceVat;
+
+            $breakdownKey = $vatRate !== null ? (string) $vatRate : "unknown";
+            if (!isset($vatBreakdown[$breakdownKey])) {
+                $vatBreakdown[$breakdownKey] = ["rate" => $vatRate, "ht" => 0, "vat" => 0, "ttc" => 0];
+            }
+            $vatBreakdown[$breakdownKey]["ht"] += $priceHt;
+            $vatBreakdown[$breakdownKey]["vat"] += $priceVat;
+            $vatBreakdown[$breakdownKey]["ttc"] += $priceHt + $priceVat;
 
             $notices = [];
             if ($article->getTypeId() == 2) {
@@ -303,8 +315,21 @@ class OrderController extends Controller
                 "number" => $article->getNumber(),
                 "condition" => $stock->getCondition(),
                 "price" => (int) $stock->getSellingPrice(),
+                "priceHt" => $priceHt,
+                "priceVat" => $priceVat,
+                "vatRate" => $vatRate,
             ];
         }
+
+        uasort($vatBreakdown, function ($a, $b) {
+            if ($a["rate"] === null) {
+                return 1;
+            }
+            if ($b["rate"] === null) {
+                return -1;
+            }
+            return $a["rate"] <=> $b["rate"];
+        });
 
         $payment = null;
         if ($order->getPaymentDate()) {
@@ -319,7 +344,8 @@ class OrderController extends Controller
             "order" => $order,
             "lines" => $lines,
             "total_ht" => $totalHt,
-            "total_tva" => $totalTva,
+            "total_vat" => $totalVat,
+            "vat_breakdown" => $vatBreakdown,
             "is_shop" => (bool) $currentSite->getSite()->getShop(),
             "has_tva" => (bool) $currentSite->getSite()->getTva(),
             "payment" => $payment,
