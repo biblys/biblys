@@ -6,6 +6,8 @@
 
 - La section "Abonnements" du panier affichait par erreur les articles
   numériques à télécharger au lieu des abonnements. C'est corrigé.
+- Un article de type Abonnement était aussi affiché à tort dans la section
+  "Articles numériques à télécharger" du panier. C'est corrigé.
 
 ## 3.14.1 (11 juillet 2026)
 
