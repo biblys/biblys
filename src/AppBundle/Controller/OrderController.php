@@ -24,6 +24,7 @@ use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\InvalidSiteIdException;
 use Biblys\Service\Mailer;
+use Biblys\Service\ShippingVatAllocationService;
 use Biblys\Service\TemplateService;
 use Exception;
 use Framework\Controller;
@@ -321,6 +322,15 @@ class OrderController extends Controller
             ];
         }
 
+        $shippingParts = [];
+        if ($order->getShippingCost() > 0) {
+            $htByRate = array_map(fn($group) => $group["ht"], $vatBreakdown);
+            $shippingParts = ShippingVatAllocationService::allocate($htByRate, (int) $order->getShippingCost());
+            $vatBreakdown = ShippingVatAllocationService::mergeIntoBreakdown($vatBreakdown, $shippingParts);
+            $totalHt += array_sum(array_column($shippingParts, "ht"));
+            $totalVat += array_sum(array_column($shippingParts, "vat"));
+        }
+
         uasort($vatBreakdown, function ($a, $b) {
             if ($a["rate"] === null) {
                 return 1;
@@ -330,6 +340,8 @@ class OrderController extends Controller
             }
             return $a["rate"] <=> $b["rate"];
         });
+
+        $shippingVat = ShippingVatAllocationService::summarizeForDisplay($shippingParts, $vatBreakdown);
 
         $payment = null;
         if ($order->getPaymentDate()) {
@@ -346,6 +358,7 @@ class OrderController extends Controller
             "total_ht" => $totalHt,
             "total_vat" => $totalVat,
             "vat_breakdown" => $vatBreakdown,
+            "shipping_vat" => $shippingVat,
             "is_shop" => (bool) $currentSite->getSite()->getShop(),
             "has_vat" => (bool) $currentSite->getSite()->getTva(),
             "payment" => $payment,
