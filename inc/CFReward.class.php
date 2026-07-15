@@ -140,8 +140,9 @@ class CFReward extends Entity
                     throw new Exception("L'article n° $articleId n'existe pas.");
                 }
 
-                // if article is downloadable, quantity is unlimited
-                if ($article->get('type_id') == 2 || $article->get('type_id') == 10 || $article->get('type_id') == 11 || $article->get('type_id') == 16) {
+                // if article is downloadable or a service, quantity is unlimited
+                $type = $article->getType();
+                if ($type && ($type->isDownloadable() || $type->isService())) {
                     continue;
                 }
 
