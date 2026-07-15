@@ -143,4 +143,15 @@ class ArticleTypeTest extends PHPUnit\Framework\TestCase
 
         $this->assertEquals($options[2], '<option value="3" selected>CD</option>');
     }
+
+    public function testSubscriptionCppapType()
+    {
+        $type = ArticleType::getById(ArticleType::SUBSCRIPTION_CPPAP);
+
+        $this->assertEquals('Abonnement (CPPAP)', $type->getName());
+        $this->assertEquals('PERIODICAL', $type->getTax());
+        $this->assertFalse($type->isPhysical());
+        $this->assertFalse($type->isDownloadable());
+        $this->assertTrue($type->isService());
+    }
 }
