@@ -20,6 +20,7 @@
 
 namespace Biblys\Legacy;
 
+use Biblys\Data\ArticleType;
 use Biblys\Exception\InvalidEmailAddressException;
 use Biblys\Exception\OrderDetailsValidationException;
 use Biblys\Service\CurrentSite;
@@ -374,6 +375,54 @@ class OrderDeliveryHelpersTest extends TestCase
                 ['contact@paronymie.fr' => 'Marie Golade'],
                 ['reply-to' => 'customer@paronymie.fr'],
             )
+            ->andReturn(true);
+
+        // when
+        OrderDeliveryHelpers::sendOrderConfirmationMail(
+            OrderQuery::create()->findPk($order->get("id")),
+            $shipping,
+            $mailer,
+            $currentSite,
+            false,
+            $termsPage,
+        );
+
+        // then
+        $this->expectNotToPerformAssertions();
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testSendOrderConfirmationMailIncludesDownloadMessageForServiceType()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getSite")->andReturn($site);
+        $currentSite->shouldReceive("getOption")->andReturn(null);
+        $cm = new CartManager();
+        $om = new OrderManager();
+        $cart = EntityFactory::createCart();
+        $article = EntityFactory::createArticle([
+            "type_id" => ArticleType::SUBSCRIPTION_CPPAP,
+            "article_title" => "Abonnement CPPAP dans la commande",
+            "article_url" => "abonnement-cppap-dans-la-commande",
+        ]);
+        $copy = EntityFactory::createStock(["article_id" => $article->get("id")]);
+        $cm->addStock($cart, $copy);
+        $shipping = EntityFactory::createShipping(mode: "Colissimo", fee: 560);
+        $order = EntityFactory::createOrder(shippingId: $shipping->get("id"));
+        $om->hydrateFromCart($order, $cart);
+        $termsPage = ModelFactory::createPage();
+
+        $mailer = Mockery::mock(Mailer::class);
+        $mailer->shouldReceive("send")
+            ->withArgs(fn ($to, $subject, $body) => str_contains(
+                $body,
+                "vous pourrez télécharger les articles numériques de votre commande"
+            ))
+            ->twice()
             ->andReturn(true);
 
         // when

@@ -292,7 +292,7 @@ class OrderDeliveryHelpers
         $orderContainsDownloadable = false;
         foreach ($order->getStockItems() as $stockItem) {
             $article = $stockItem->getArticle();
-            $articleIsDownloadable = $article->getTypeId() === 2 || $article->getTypeId() === 10 || $article->getTypeId() === 11 || $article->getTypeId() === 16;
+            $articleIsDownloadable = $article->getType()->isDownloadable() || $article->isService();
             if ($articleIsDownloadable) {
                 $orderContainsDownloadable = true;
             }
