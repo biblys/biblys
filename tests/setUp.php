@@ -35,6 +35,18 @@ $_SERVER["SCRIPT_NAME"] = "index.php";
 $_SERVER["REMOTE_ADDR"] = "127.0.0.1";
 
 $config = Config::load();
+
+// Prevent tests being executed using any other table than the test database
+$testDbName = $config->get("db.base");
+if (!str_contains((string) $testDbName, "test")) {
+    fwrite(STDERR,
+        "Refusing to run tests: resolved database \"{$testDbName}\" does not look like a test database.\n" .
+        "Run tests via `composer test` or `composer test:path`, which set PHP_ENV=test, " .
+        "instead of calling vendor/bin/phpunit directly.\n"
+    );
+    exit(1);
+}
+
 Connection::initPropel($config);
 
 require_once __DIR__."/../inc/functions.php";
