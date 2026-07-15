@@ -46,6 +46,7 @@ class ArticleType
     public const PERIODICAL = 13;
     public const ROLEPLAY = 14;
     public const CARDS = 15;
+    public const SUBSCRIPTION_CPPAP = 16;
 
 
 
@@ -250,6 +251,15 @@ class ArticleType
         $type->setTax('STANDARD');
         $type->setPhysical(true);
         $type->setDownloadable(false);
+        $types[] = $type;
+
+        $type = new ArticleType();
+        $type->setId(self::SUBSCRIPTION_CPPAP);
+        $type->setName('Abonnement (CPPAP)');
+        $type->setTax('PERIODICAL');
+        $type->setPhysical(false);
+        $type->setDownloadable(false);
+        $type->setIsService(true);
         $types[] = $type;
 
         return $types;
