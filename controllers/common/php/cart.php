@@ -266,7 +266,7 @@ return function (
                 </tr>
             </thead>
             <tbody>
-                ' . implode($cartDownloadableItems) . '
+                ' . implode($cartServiceItems) . '
             </tbody>
         ';
     }

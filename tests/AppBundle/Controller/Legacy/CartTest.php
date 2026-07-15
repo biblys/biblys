@@ -18,6 +18,7 @@
 
 namespace AppBundle\Controller\Legacy;
 
+use Biblys\Data\ArticleType;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
@@ -107,6 +108,94 @@ class CartTest extends TestCase
             "it should display the finalize order button"
         );
     }
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testCartDisplayWithServiceAndDownloadableItems()
+    {
+        // given
+        $controller = require __DIR__ . "/../../../../controllers/common/php/cart.php";
+
+        ModelFactory::createCountry();
+        $flashBag = $this
+            ->getMockBuilder("Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface")
+            ->getMock();
+        $flashBag->method("get")->willReturn([]);
+        $session = $this
+            ->getMockBuilder("Symfony\Component\HttpFoundation\Session\Session")
+            ->getMock();
+        $session->method("getFlashBag")->willReturn($flashBag);
+        $request = new Request();
+
+        $site = ModelFactory::createSite();
+        $cart = ModelFactory::createCart();
+        $downloadableArticle = ModelFactory::createArticle(
+            title: "Le livre téléchargeable",
+            typeId: ArticleType::EBOOK,
+        );
+        ModelFactory::createStockItem(article: $downloadableArticle, cart: $cart);
+        $serviceArticle = ModelFactory::createArticle(
+            title: "L'abonnement",
+            typeId: ArticleType::SUBSCRIPTION,
+        );
+        ModelFactory::createStockItem(article: $serviceArticle, cart: $cart);
+
+        $config = new Config();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getSite")->andReturn($site);
+        $currentSite->shouldReceive("getOption")->andReturn(null);
+        $urlGenerator = $this->createMock(UrlGenerator::class);
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("getOrCreateCart")->andReturn($cart);
+        $currentUser->shouldReceive("isAuthenticated")->andReturn(false);
+        $currentUser->shouldReceive("isAdmin")->andReturn(false);
+        $currentUser->shouldReceive("hasPurchasedArticle")->andReturn(false);
+        $imagesService = Mockery::mock(ImagesService::class);
+        $imagesService->expects("imageExistsFor")->andReturn(true);
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService->expects("render");
+        $metaTagsService = Mockery::mock(MetaTagsService::class);
+        $metaTagsService->shouldReceive("disallowSeoIndexing");
+
+        // when
+        $response = $controller(
+            $request,
+            $config,
+            $currentSite,
+            $currentUser,
+            $urlGenerator,
+            $imagesService,
+            $templateService,
+            $metaTagsService,
+        );
+
+        // then
+        $content = $response->getContent();
+        $subscriptionsSectionStart = mb_strpos($content, '<th colspan="100">Abonnements</th>');
+        $this->assertNotFalse(
+            $subscriptionsSectionStart,
+            "it should display the Abonnements section"
+        );
+        $subscriptionsSectionEnd = mb_strpos($content, "</tbody>", $subscriptionsSectionStart);
+        $subscriptionsSection = mb_substr(
+            $content,
+            $subscriptionsSectionStart,
+            $subscriptionsSectionEnd - $subscriptionsSectionStart,
+        );
+
+        $this->assertStringContainsString(
+            "L'abonnement",
+            $subscriptionsSection,
+            "it should display the subscription line under the Abonnements section"
+        );
+        $this->assertStringNotContainsString(
+            "Le livre téléchargeable",
+            $subscriptionsSection,
+            "it should not repeat the downloadable article under the Abonnements section"
+        );
+    }
+
     /**
      * @throws PropelException
      * @throws Exception
