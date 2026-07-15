@@ -292,7 +292,7 @@ class OrderDeliveryHelpers
         $orderContainsDownloadable = false;
         foreach ($order->getStockItems() as $stockItem) {
             $article = $stockItem->getArticle();
-            $articleIsDownloadable = $article->getType()->isDownloadable() || $article->isService();
+            $articleIsDownloadable = $article->getType()->isDownloadable();
             if ($articleIsDownloadable) {
                 $orderContainsDownloadable = true;
             }
