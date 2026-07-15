@@ -773,7 +773,7 @@ class Article extends Entity
     public function isPhysical(): bool
     {
         $type = $this->get('type_id');
-        if ($type == 2 || $type == 10 || $type == 11) {
+        if ($type == 2 || $type == 10 || $type == 11 || $type == 16) {
             return false;
         }
         return true;
