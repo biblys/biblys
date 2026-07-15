@@ -511,6 +511,113 @@ class OrderControllerTest extends TestCase
         $this->assertStringContainsString("Taux inconnu", $content, "Un taux de TVA non renseigné doit être regroupé sous « Taux inconnu »");
     }
 
+    public function testInvoiceActionAllocatesShippingVatForSingleRate(): void
+    {
+        // given : une commande mono-taux (20 %) avec des frais de port
+        $controller = new OrderController();
+        $request = new Request();
+        $order = ModelFactory::createOrder(slug: "inv-ship-single", amount: 2000, shippingCost: 600);
+        $article = ModelFactory::createArticle(title: "Un Objet Dérivé");
+        $stock = ModelFactory::createStockItem(article: $article, order: $order, sellingPrice: 2000);
+        $stock->setSellingPriceHt(1667)->setSellingPriceTva(333)->setTvaRate(20)->save();
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("isAuthenticated")->andReturn(false);
+        $currentUser->shouldReceive("isAdmin")->andReturn(false);
+        $currentSite = $this->_mockCurrentSiteForInvoice();
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $controller->invoiceAction($request, $currentUser, $currentSite, $templateService, "inv-ship-single");
+        $content = $response->getContent();
+
+        // then : le port apparaît décomposé sous son propre taux, plus de tirets sur sa ligne,
+        // et le total TVA global inclut désormais la TVA du port (333 articles + 100 port = 433 c)
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertStringNotContainsString('<td class="text-right align">—</td>', $content);
+        // currency() rend l'entité HTML &euro;, pas le glyphe € directement
+        $this->assertStringContainsString("4,33&nbsp;&euro;", $content, "La TVA totale (article + port) doit apparaître dans le pied de facture");
+    }
+
+    public function testInvoiceActionAllocatesShippingVatAcrossMultipleRates(): void
+    {
+        // given : livre (5,5 %) + article standard (20 %), port 600 c
+        $controller = new OrderController();
+        $request = new Request();
+        $order = ModelFactory::createOrder(slug: "inv-ship-multi", amount: 3000, shippingCost: 600);
+        $book = ModelFactory::createArticle(title: "Le Livre Test");
+        $standardItem = ModelFactory::createArticle(title: "Un Objet Dérivé");
+
+        $bookStock = ModelFactory::createStockItem(article: $book, order: $order, sellingPrice: 2000);
+        $bookStock->setSellingPriceHt(1896)->setSellingPriceTva(104)->setTvaRate(5.5)->save();
+
+        $standardStock = ModelFactory::createStockItem(article: $standardItem, order: $order, sellingPrice: 1000);
+        $standardStock->setSellingPriceHt(833)->setSellingPriceTva(167)->setTvaRate(20)->save();
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("isAuthenticated")->andReturn(false);
+        $currentUser->shouldReceive("isAdmin")->andReturn(false);
+        $currentSite = $this->_mockCurrentSiteForInvoice();
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $controller->invoiceAction($request, $currentUser, $currentSite, $templateService, "inv-ship-multi");
+        $content = $response->getContent();
+
+        // then : la ligne de port affiche un taux recalculé (marqué d'une étoile), obtenu
+        // en agrégeant les parts HT/TVA du port réparties au prorata (395+153 c HT,
+        // 22+30 c TVA sur 600 c TTC) puis TVA ÷ HT = 52/548 ≈ 9,5 %, plus une notice
+        // explicative en pied de page
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertStringContainsString("9,5 %*", $content, "Le taux recalculé du port doit être marqué d'une étoile");
+        $this->assertStringContainsString("5,48&nbsp;&euro;", $content, "HT agrégé du port (395 + 153 c)");
+        $this->assertStringContainsString("0,52&nbsp;&euro;", $content, "TVA agrégée du port (22 + 30 c)");
+        $this->assertStringContainsString(
+            "les frais de port ont été",
+            $content,
+            "La notice explicative du taux recalculé doit apparaître en pied de page"
+        );
+    }
+
+    public function testInvoiceActionHidesVatColumnsWhenSiteHasNoVat(): void
+    {
+        // given : un site non soumis à la TVA (art. 293 B du CGI), commande avec port
+        $controller = new OrderController();
+        $request = new Request();
+        $order = ModelFactory::createOrder(slug: "invoice-no-vat", amount: 2000, shippingCost: 600);
+        $article = ModelFactory::createArticle(title: "Un Objet Dérivé");
+        $stock = ModelFactory::createStockItem(article: $article, order: $order, sellingPrice: 2000);
+        $stock->setSellingPriceHt(2000)->setSellingPriceTva(0)->setTvaRate(null)->save();
+
+        $site = Mockery::mock(Site::class);
+        $site->shouldReceive("getShop")->andReturn(false);
+        $site->shouldReceive("getTva")->andReturn(null);
+        $site->shouldReceive("getAddress")->andReturn("1 rue du Livre|33000 Bordeaux");
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getSite")->andReturn($site);
+        $currentSite->shouldReceive("getTitle")->andReturn("Ma librairie");
+        $currentSite->shouldReceive("getOption")->with("invoice_notice")->andReturn(null);
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("isAuthenticated")->andReturn(false);
+        $currentUser->shouldReceive("isAdmin")->andReturn(false);
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $controller->invoiceAction($request, $currentUser, $currentSite, $templateService, "invoice-no-vat");
+        $content = $response->getContent();
+
+        // then : les colonnes Taux/Prix HT/TVA sont masquées, seul le prix reste affiché
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertStringNotContainsString('<th class="text-right">Taux</th>', $content);
+        $this->assertStringNotContainsString('<th class="text-right">Prix HT</th>', $content);
+        $this->assertStringContainsString('<th class="text-right">Prix TTC</th>', $content);
+        $this->assertStringContainsString(
+            "TVA non applicable en application de l'article 293 B du CGI.",
+            $content
+        );
+    }
+
     public function testInvoiceActionRendersPaidOrderWithoutPaymentMode(): void
     {
         // given : commande réglée (date de paiement) mais sans mode de paiement
