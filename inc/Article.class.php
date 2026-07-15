@@ -772,11 +772,8 @@ class Article extends Entity
      */
     public function isPhysical(): bool
     {
-        $type = $this->get('type_id');
-        if ($type == 2 || $type == 10 || $type == 11 || $type == 16) {
-            return false;
-        }
-        return true;
+        $type = $this->getType();
+        return $type ? $type->isPhysical() : true;
     }
 
     /**
@@ -786,7 +783,8 @@ class Article extends Entity
      */
     public function isDownloadable(): bool
     {
-        return !$this->isPhysical();
+        $type = $this->getType();
+        return $type ? $type->isDownloadable() : false;
     }
 
     /**
