@@ -46,6 +46,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
             font-size: 18pt;
         }
 
+        .invoice-document .article-list thead th {
+            font-weight: normal;
+        }
+
         .invoice-document .total {
           background: rgba(0, 0, 0, 0.03);
           display: flex;
@@ -54,15 +58,39 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           padding: 10pt 20pt;
         }
 
-        /* Alignements (print.css supprimé) : valables à l'écran et à l'impression. */
-        .invoice-document .text-right { text-align: right; }
-        .invoice-document .text-center { text-align: center; }
-        .invoice-document .align { vertical-align: middle; }
+        .invoice-document .vat-breakdown {
+            margin-left: auto;
+            margin-right: 0;
+            width: auto;
+        }
+
+        .invoice-document .vat-breakdown th,
+        .invoice-document .vat-breakdown td {
+            background: rgba(0, 0, 0, 0.03);
+            border-color: rgba(0, 0, 0, 0.08);
+            padding: 8pt 12pt;
+        }
+
+        .invoice-document .vat-breakdown th {
+            font-weight: bold;
+        }
+
+        .invoice-document .text-right { 
+            text-align: right; 
+        }
+
+        .invoice-document .text-center { 
+            text-align: center; 
+        }
+
+        .invoice-document .align { 
+            vertical-align: middle; 
+        }
     </style>
 {% endblock %}
 
 {% block main %}
-    {% set colspan = is_shop ? 3 : 2 %}
+    {% set vatBreakdownColspan = 3 %}
 
     <a href="javascript:history.back()" class="btn btn-secondary d-print-none mb-3">← Retour</a>
 
@@ -79,7 +107,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                     {{ order.address1 }}<br>
                     {% if order.address2 %}{{ order.address2 }}<br>{% endif %}
                     {{ order.postalcode }} {{ order.city }}<br>
-                    {{ order.countryName }}
+                    {{ order.country.name }}
                 </p>
                 <p>{{ order.email }}</p>
             </div>
@@ -92,9 +120,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                 <tr>
                     <th>Article</th>
                     {% if is_shop %}<th>État</th>{% endif %}
-                    <th class="text-right">Taux</th>
-                    <th class="text-right">Prix HT</th>
-                    <th class="text-right">TVA</th>
+                    {% if has_vat %}
+                        <th class="text-right">Taux</th>
+                        <th class="text-right">Prix HT</th>
+                        <th class="text-right">TVA</th>
+                    {% endif %}
                     <th class="text-right">Prix TTC</th>
                 </tr>
             </thead>
@@ -113,9 +143,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                             </p>
                         </td>
                         {% if is_shop %}<td class="text-center align">{{ line.condition }}</td>{% endif %}
-                        <td class="text-right align">{{ line.vatRate is not null ? (line.vatRate|replace({'.': ','}) ~ ' %') : '—' }}</td>
-                        <td class="text-right align">{{ line.vatRate is not null ? line.priceHt|currency(true)|raw : '—' }}</td>
-                        <td class="text-right align">{{ line.vatRate is not null ? line.priceVat|currency(true)|raw : '—' }}</td>
+                        {% if has_vat %}
+                            <td class="text-right align">{{ line.vatRate is not null ? (line.vatRate|replace({'.': ','}) ~ ' %') : '—' }}</td>
+                            <td class="text-right align">{{ line.vatRate is not null ? line.priceHt|currency(true)|raw : '—' }}</td>
+                            <td class="text-right align">{{ line.vatRate is not null ? line.priceVat|currency(true)|raw : '—' }}</td>
+                        {% endif %}
                         <td class="text-right align">{{ line.price|currency(true)|raw }}</td>
                     </tr>
                 {% endfor %}
@@ -129,42 +161,51 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                             </p>
                         </td>
                         {% if is_shop %}<td></td>{% endif %}
-                        <td class="text-right align">—</td>
-                        <td class="text-right align">—</td>
-                        <td class="text-right align">—</td>
+                        {% if has_vat %}
+                            <td class="text-right align">
+                                {{ shipping_vat is not null and shipping_vat.rate is not null ? (shipping_vat.rate|replace({'.': ','}) ~ ' %') : (shipping_vat is not null ? 'Taux inconnu' : '—') }}{% if shipping_vat is not null and shipping_vat.recalculated %}*{% endif %}
+                            </td>
+                            <td class="text-right align">{{ shipping_vat is not null ? shipping_vat.ht|currency(true)|raw : '—' }}</td>
+                            <td class="text-right align">{{ shipping_vat is not null ? shipping_vat.vat|currency(true)|raw : '—' }}</td>
+                        {% endif %}
                         <td class="text-right align">
                             {{ order.shippingCost|currency(true)|raw }}
                         </td>
                     </tr>
                 {% endif %}
             </tbody>
-            <tfoot>
-                {% if total_vat %}
+        </table>
+
+        {% if total_vat %}
+            <table class="table vat-breakdown mt-4">
+                <thead>
                     <tr>
-                        <th colspan="{{ colspan }}" class="text-right">Taux</th>
+                        <th colspan="{{ vatBreakdownColspan }}" class="text-right">Taux</th>
                         <th class="text-right">Base HT</th>
                         <th class="text-right">TVA</th>
                         <th class="text-right">Total TTC</th>
                     </tr>
+                </thead>
+                <tbody>
                     {% for group in vat_breakdown %}
                         <tr>
-                            <th colspan="{{ colspan }}" class="text-right">
+                            <td colspan="{{ vatBreakdownColspan }}" class="text-right">
                                 {{ group.rate is not null ? (group.rate|replace({'.': ','}) ~ ' %') : 'Taux inconnu' }}
-                            </th>
-                            <th class="text-right">{{ group.ht|currency(true)|raw }}</th>
-                            <th class="text-right">{{ group.vat|currency(true)|raw }}</th>
-                            <th class="text-right">{{ group.ttc|currency(true)|raw }}</th>
+                            </td>
+                            <td class="text-right">{{ group.ht|currency(true)|raw }}</td>
+                            <td class="text-right">{{ group.vat|currency(true)|raw }}</td>
+                            <td class="text-right">{{ group.ttc|currency(true)|raw }}</td>
                         </tr>
                     {% endfor %}
                     <tr>
-                        <th colspan="{{ colspan }}" class="text-right">Total</th>
-                        <th class="text-right">{{ total_ht|currency(true)|raw }}</th>
-                        <th class="text-right">{{ total_vat|currency(true)|raw }}</th>
-                        <th class="text-right">{{ (total_ht + total_vat)|currency(true)|raw }}</th>
+                        <td colspan="{{ vatBreakdownColspan }}" class="text-right">Total</td>
+                        <td class="text-right">{{ total_ht|currency(true)|raw }}</td>
+                        <td class="text-right">{{ total_vat|currency(true)|raw }}</td>
+                        <td class="text-right">{{ (total_ht + total_vat)|currency(true)|raw }}</td>
                     </tr>
-                {% endif %}
-            </tfoot>
-        </table>
+                </tbody>
+            </table>
+        {% endif %}
 
 
         <div class="total">
@@ -192,6 +233,15 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
             {% if invoice_notice %}
                 <p class="text-center">
                     {{ invoice_notice|replace({'\\n': '<br>'})|raw }}
+                </p>
+            {% endif %}
+
+            {% if shipping_vat is not null and shipping_vat.recalculated %}
+                <p class="text-center text-muted">
+                    * Cette commande comporte plusieurs taux de TVA ; les frais de port ont été
+                    répartis entre eux au prorata du montant HT de chaque taux. Le taux affiché
+                    ici est recalculé à partir du total de TVA et de la base HT ainsi obtenus
+                    pour le port (TVA ÷ HT).
                 </p>
             {% endif %}
         </footer>
