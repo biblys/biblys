@@ -439,6 +439,53 @@ class OrderDeliveryHelpersTest extends TestCase
         $this->expectNotToPerformAssertions();
     }
 
+    /**
+     * @throws Exception
+     */
+    public function testSendOrderConfirmationMailIncludesDownloadMessageForDownloadableType()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getSite")->andReturn($site);
+        $currentSite->shouldReceive("getOption")->andReturn(null);
+        $cm = new CartManager();
+        $om = new OrderManager();
+        $cart = EntityFactory::createCart();
+        $article = EntityFactory::createArticle([
+            "type_id" => ArticleType::EBOOK,
+            "article_title" => "Ebook dans la commande",
+            "article_url" => "ebook-dans-la-commande",
+        ]);
+        $copy = EntityFactory::createStock(["article_id" => $article->get("id")]);
+        $cm->addStock($cart, $copy);
+        $shipping = EntityFactory::createShipping(mode: "Colissimo", fee: 560);
+        $order = EntityFactory::createOrder(shippingId: $shipping->get("id"));
+        $om->hydrateFromCart($order, $cart);
+        $termsPage = ModelFactory::createPage();
+
+        $mailer = Mockery::mock(Mailer::class);
+        $mailer->shouldReceive("send")
+            ->withArgs(fn ($to, $subject, $body) => str_contains(
+                $body,
+                "vous pourrez télécharger les articles numériques de votre commande"
+            ))
+            ->twice()
+            ->andReturn(true);
+
+        // when
+        OrderDeliveryHelpers::sendOrderConfirmationMail(
+            OrderQuery::create()->findPk($order->get("id")),
+            $shipping,
+            $mailer,
+            $currentSite,
+            false,
+            $termsPage,
+        );
+
+        // then
+        $this->expectNotToPerformAssertions();
+    }
 
     /**
      * @throws InvalidEmailAddressException
