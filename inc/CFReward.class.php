@@ -141,7 +141,7 @@ class CFReward extends Entity
                 }
 
                 // if article is downloadable, quantity is unlimited
-                if ($article->get('type_id') == 2 || $article->get('type_id') == 10 || $article->get('type_id') == 11) {
+                if ($article->get('type_id') == 2 || $article->get('type_id') == 10 || $article->get('type_id') == 11 || $article->get('type_id') == 16) {
                     continue;
                 }
 

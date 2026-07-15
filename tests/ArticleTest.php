@@ -424,6 +424,9 @@ class ArticleTest extends PHPUnit\Framework\TestCase
 
         $article->set('type_id', 1);
         $this->assertTrue($article->isPhysical());
+
+        $article->set('type_id', ArticleType::SUBSCRIPTION_CPPAP);
+        $this->assertFalse($article->isPhysical());
     }
 
     /**
@@ -439,6 +442,9 @@ class ArticleTest extends PHPUnit\Framework\TestCase
         $this->assertFalse($article->isDownloadable());
 
         $article->set('type_id', 2);
+        $this->assertTrue($article->isDownloadable());
+
+        $article->set('type_id', ArticleType::SUBSCRIPTION_CPPAP);
         $this->assertTrue($article->isDownloadable());
     }
 
