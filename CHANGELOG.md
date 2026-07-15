@@ -1,5 +1,12 @@
 # Historique des modifications
 
+## 3.14.2 (15 juillet 2026)
+
+### Corrections
+
+- La section "Abonnements" du panier affichait par erreur les articles
+  numériques à télécharger au lieu des abonnements. C'est corrigé.
+
 ## 3.14.1 (11 juillet 2026)
 
 ### Corrections
