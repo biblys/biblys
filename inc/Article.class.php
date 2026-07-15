@@ -777,7 +777,7 @@ class Article extends Entity
     }
 
     /**
-     * Returns true if article is downloadable (not physical type)
+     * Returns true if article is downloadable (per ArticleType::isDownloadable())
      * @return bool
      * @throws Exception
      */
