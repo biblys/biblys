@@ -16,6 +16,7 @@
  */
 
 
+use Biblys\Data\ArticleType;
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Test\EntityFactory;
 use Biblys\Test\ModelFactory;
@@ -129,6 +130,30 @@ class CFRewardTest extends PHPUnit\Framework\TestCase
 
         // then
         $this->assertEquals(2, $updatedReward->get("reward_quantity"));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testUpdateQuantityIsUnlimitedForServiceType()
+    {
+        // given
+        $GLOBALS["LEGACY_CURRENT_SITE"] = EntityFactory::createSite();
+        $article = EntityFactory::createArticle(["type_id" => ArticleType::SUBSCRIPTION_CPPAP]);
+        EntityFactory::createStock(["article_id" => $article->get('id')]);
+        EntityFactory::createStock(["article_id" => $article->get('id')]);
+        EntityFactory::createStock(["article_id" => $article->get('id')]);
+        $reward = EntityFactory::createCrowdfundingReward();
+        $reward->set("reward_quantity", 0);
+        $reward->set("reward_limited", 1);
+        $reward->set("reward_articles", "[{$article->get("id")}]");
+        $rm = new CFRewardManager();
+
+        // when
+        $updatedReward = $rm->updateQuantity($reward);
+
+        // then
+        $this->assertEquals(0, $updatedReward->get("reward_quantity"));
     }
 
     /**
