@@ -410,12 +410,6 @@ class ArticleTest extends PHPUnit\Framework\TestCase
         $this->assertTrue($article->isPreorderable());
     }
 
-    /**
-     * Test if article is of a physical type
-     * @throws Exception
-     * @throws Exception
-     * @throws PropelException
-     */
     public function testIsPhysical()
     {
         $article = EntityFactory::createArticle();
@@ -425,12 +419,15 @@ class ArticleTest extends PHPUnit\Framework\TestCase
         $article->set('type_id', 1);
         $this->assertTrue($article->isPhysical());
 
+        $article->set('type_id', ArticleType::SUBSCRIPTION);
+        $this->assertFalse($article->isPhysical());
+
         $article->set('type_id', ArticleType::SUBSCRIPTION_CPPAP);
         $this->assertFalse($article->isPhysical());
     }
 
     /**
-     * Test if article is downloadable (non-physical)
+     * Test if article is downloadable (per ArticleType::isDownloadable(), not merely non-physical)
      * @throws Exception
      * @throws Exception
      * @throws PropelException
@@ -444,8 +441,11 @@ class ArticleTest extends PHPUnit\Framework\TestCase
         $article->set('type_id', 2);
         $this->assertTrue($article->isDownloadable());
 
+        $article->set('type_id', ArticleType::SUBSCRIPTION);
+        $this->assertFalse($article->isDownloadable());
+
         $article->set('type_id', ArticleType::SUBSCRIPTION_CPPAP);
-        $this->assertTrue($article->isDownloadable());
+        $this->assertFalse($article->isDownloadable());
     }
 
     /**
