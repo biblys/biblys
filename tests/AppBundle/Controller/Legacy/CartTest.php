@@ -194,6 +194,11 @@ class CartTest extends TestCase
             $subscriptionsSection,
             "it should not repeat the downloadable article under the Abonnements section"
         );
+        $this->assertEquals(
+            1,
+            substr_count($content, "L'abonnement"),
+            "it should not also list the subscription article under the downloadable section"
+        );
     }
 
     /**
