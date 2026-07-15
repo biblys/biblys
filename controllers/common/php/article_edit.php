@@ -162,6 +162,9 @@ return function (
             if (in_array($_POST['type_id'], array(1, 2, 7, 8, 9, 12))) {
                 $_POST['article_tva'] = 1;
             }
+            if ($_POST['type_id'] == ArticleType::SUBSCRIPTION_CPPAP) {
+                $_POST['article_tva'] = 2;
+            }
         }
 
         // FICHIERS //
