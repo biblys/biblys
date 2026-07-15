@@ -394,7 +394,7 @@ class OrderDeliveryHelpersTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testSendOrderConfirmationMailIncludesDownloadMessageForServiceType()
+    public function testSendOrderConfirmationMailExcludesDownloadMessageForServiceType()
     {
         // given
         $site = ModelFactory::createSite();
@@ -418,7 +418,7 @@ class OrderDeliveryHelpersTest extends TestCase
 
         $mailer = Mockery::mock(Mailer::class);
         $mailer->shouldReceive("send")
-            ->withArgs(fn ($to, $subject, $body) => str_contains(
+            ->withArgs(fn ($to, $subject, $body) => !str_contains(
                 $body,
                 "vous pourrez télécharger les articles numériques de votre commande"
             ))
