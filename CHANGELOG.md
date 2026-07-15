@@ -19,6 +19,16 @@
   TVA et total TTC par taux appliqué sur la commande.
 - Les frais de port sont désormais ventilés par taux de TVA sur la facture,
   au prorata du montant HT de chaque taux présent sur la commande.
+- Un nouveau type d'article « Abonnement (CPPAP) » permet de vendre des
+  abonnements à des publications de presse inscrites à la CPPAP, avec le
+  taux de TVA réduit de 2,1 % applicable automatiquement.
+
+### Corrections
+
+- Un abonnement pouvait apparaître à tort dans la liste des articles
+  téléchargeables du panier, ou déclencher l'affichage erroné d'un message
+  invitant à le télécharger depuis la bibliothèque numérique dans l'e-mail
+  de confirmation de commande. C'est corrigé.
 
 ## 3.14.1 (11 juillet 2026)
 
