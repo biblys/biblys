@@ -17,6 +17,8 @@
 - La facture affiche désormais le détail de la TVA : taux, prix HT et TVA pour
   chaque article, ainsi qu'un tableau de synthèse ventilant base HT, montant de
   TVA et total TTC par taux appliqué sur la commande.
+- Les frais de port sont désormais ventilés par taux de TVA sur la facture,
+  au prorata du montant HT de chaque taux présent sur la commande.
 
 ## 3.14.2 (18 juillet 2026)
 
