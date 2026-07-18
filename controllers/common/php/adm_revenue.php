@@ -495,13 +495,13 @@ $content = '
         <h3>Chiffre d\'affaires ventilé par...</h3>
 
         <ul class="nav nav-tabs" role="tablist">
-            <li class="active"><a role="tab" data-toggle="tab" href="#tva">TVA</a></li>
-            <li><a href="#customers" role="tab" data-toggle="tab">Type de client</a></li>
-            <li><a href="#age" role="tab" data-toggle="tab">Ancienneté</a></li>
-            <li><a href="#condition" role="tab" data-toggle="tab">État</a></li>
-            <li><a href="#type" role="tab" data-toggle="tab">Type d\'article</a></li>
-            <li><a href="#location" role="tab" data-toggle="tab">Lieu de vente</a></li>
-            <li><a href="#rayon" role="tab" data-toggle="tab">Rayon</a></li>
+            <li class="nav-item"><a class="nav-link active" role="tab" data-toggle="tab" href="#tva">TVA</a></li>
+            <li class="nav-item"><a class="nav-link" href="#customers" role="tab" data-toggle="tab">Type de client</a></li>
+            <li class="nav-item"><a class="nav-link" href="#age" role="tab" data-toggle="tab">Ancienneté</a></li>
+            <li class="nav-item"><a class="nav-link" href="#condition" role="tab" data-toggle="tab">État</a></li>
+            <li class="nav-item"><a class="nav-link" href="#type" role="tab" data-toggle="tab">Type d\'article</a></li>
+            <li class="nav-item"><a class="nav-link" href="#location" role="tab" data-toggle="tab">Lieu de vente</a></li>
+            <li class="nav-item"><a class="nav-link" href="#rayon" role="tab" data-toggle="tab">Rayon</a></li>
         </ul>
 
         <div class="tab-content">

@@ -444,10 +444,10 @@ if (empty($_GET["date"])) $_GET["date"] = date("Y-m-d");
 		<h3>Stock ventilé par...</h3>
 
         <ul class="nav nav-tabs" role="tablist">
-            <li class="active"><a role="tab" data-toggle="tab" href="#rayon">Rayon</a></li>
-            <li><a href="#age" role="tab" data-toggle="tab">Ancienneté</a></li>
-            <li><a href="#condition" role="tab" data-toggle="tab">État</a></li>
-            <li><a href="#depot" role="tab" data-toggle="tab">Dépôt</a></li>
+            <li class="nav-item"><a class="nav-link active" role="tab" data-toggle="tab" href="#rayon">Rayon</a></li>
+            <li class="nav-item"><a class="nav-link" href="#age" role="tab" data-toggle="tab">Ancienneté</a></li>
+            <li class="nav-item"><a class="nav-link" href="#condition" role="tab" data-toggle="tab">État</a></li>
+            <li class="nav-item"><a class="nav-link" href="#depot" role="tab" data-toggle="tab">Dépôt</a></li>
         </ul>
 
 		<div class="tab-content">
