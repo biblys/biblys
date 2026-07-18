@@ -1,6 +1,6 @@
 # Historique des modifications
 
-## 3.14.2 (15 juillet 2026)
+## 3.14.2 (DEV)
 
 ### Corrections
 
@@ -8,6 +8,8 @@
   numériques à télécharger au lieu des abonnements. C'est corrigé.
 - Un article de type Abonnement était aussi affiché à tort dans la section
   "Articles numériques à télécharger" du panier. C'est corrigé.
+- L'affichage des actualités Biblys dans l'administration ne fonctionnait plus.
+  C'est corrigé.
 
 ## 3.14.1 (11 juillet 2026)
 
