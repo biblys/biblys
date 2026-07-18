@@ -29,6 +29,8 @@
   téléchargeables du panier, ou déclencher l'affichage erroné d'un message
   invitant à le télécharger depuis la bibliothèque numérique dans l'e-mail
   de confirmation de commande. C'est corrigé.
+- L'affichage des actualités Biblys dans l'administration ne fonctionnait plus.
+  C'est corrigé.
 
 ## 3.14.1 (11 juillet 2026)
 

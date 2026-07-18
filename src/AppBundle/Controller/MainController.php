@@ -512,7 +512,7 @@ class MainController extends Controller
     {
         try {
             $guzzle = new Client();
-            $response = $guzzle->request("GET", "https://blog.biblys.org/news.json");
+            $response = $guzzle->request("GET", "https://biblys.org/news.json");
             $body = $response->getBody();
             $biblysBlogPosts = json_decode($body, true);
             if ($biblysBlogPosts) {
