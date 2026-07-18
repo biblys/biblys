@@ -179,6 +179,14 @@ foreach ($sales as $s) {
         $rate = $s['stock_tva_rate'] * 10;
 
         if ($rate) {
+            if (!isset($tva[$rate])) {
+                $tva[$rate] = [
+                    'rate' => $s['stock_tva_rate'],
+                    'revenue_ht' => 0,
+                    'revenue_ttc' => 0,
+                    'revenue_tva' => 0,
+                ];
+            }
             $tva[$rate]['revenue_ht'] += $s['stock_selling_price_ht'];
             $tva[$rate]['revenue_ttc'] += $s['stock_selling_price'];
         }
