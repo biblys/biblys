@@ -359,7 +359,7 @@ return function (Request $request, CurrentSite $currentSite): Response
                             <td class="right">'.$v['rate'].' %</td>
                             <td class="right">'.price($v['tva_amount'], 'EUR').'</td>
                             <td class="right">'.price($v['revenue_ht'], 'EUR').'</td>
-                            <td class="right text-success bg-success">'.price($v['revenue_ttc'], 'EUR').'</td>
+                            <td class="right table-success">'.price($v['revenue_ttc'], 'EUR').'</td>
                         </tr>
                     ';
             }
@@ -378,7 +378,7 @@ return function (Request $request, CurrentSite $currentSite): Response
                         <tr>
                             <td>'.$v['name'].'</td>
                             <td class="right">'.price($v['revenue_ht'], 'EUR').'</td>
-                            <td class="right text-success bg-success">'.price($v['revenue_ttc'], 'EUR').'</td>
+                            <td class="right table-success">'.price($v['revenue_ttc'], 'EUR').'</td>
                         </tr>
                     ';
             }
@@ -401,7 +401,7 @@ return function (Request $request, CurrentSite $currentSite): Response
                             <td>'.$v['name'].'</td>
                             <td class="right"><a href="/pages/adm_sales_detail?date1='.$date1.'&time1='.$time1.'&date2='.$date2.'&time2='.$time2.'&rayon_id='.$k.'">'.count($v['sales']).'</a></td>
                             <td class="right">'.price($v['revenue_ht'], 'EUR').'</td>
-                            <td class="right text-success bg-success">'.price($v['revenue_ttc'], 'EUR').'</td>
+                            <td class="right table-success">'.price($v['revenue_ttc'], 'EUR').'</td>
                             <td class="right">'.$v['share'].'&nbsp;%</td>
                         </tr>
                     ';
@@ -411,64 +411,88 @@ return function (Request $request, CurrentSite $currentSite): Response
 
     $content = '
 
-            <h1>
+            <h1 class="mb-3">
               <i class="fa-solid fa-money-bills"></i>
               Chiffre d’affaires
             </h1>
 
-            <p>
-                <label for="d">Raccourcis :</label>
-                <select name="d" class="goto">
-                    <option>30 derniers jours...</option>
-                    '.join($dates).'
-                </select>
+            <div class="row g-2 align-items-center mb-3">
+                <div class="col-2">
+                    <label for="d" class="col-form-label">Raccourcis :</label>
+                </div>
+                <div class="col-auto">
+                    <select name="d" class="goto custom-select">
+                        <option>30 derniers jours...</option>
+                        '.join($dates).'
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <select name="m" class="goto custom-select">
+                        <option>Mois de...</option>
+                        '.join($months).'
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <select name="y" class="goto custom-select">
+                        <option>Année...</option>
+                        '.join($years).'
+                    </select>
+                </div>
+            </div>
 
-                <select name="m" class="goto">
-                    <option>Mois de...</option>
-                    '.join($months).'
-                </select>
-
-                <select name="y" class="goto">
-                    <option>Année...</option>
-                    '.join($years).'
-                </select>
-            </p>
-
-            <form class="fieldset">
+            <form>
                 <fieldset>
                     <legend>Filtres</legend>
 
-                    <p>
-                        <label for="date1">Du :</label>
-                        <input type="date" name="date1" id="date1" placeholder="AAAA-MM-JJ" value="'.$date1.'"> &agrave;
-                        <input type="time" name="time1" id="time1" placeholder="HH:SS" value="'.$time1.'">
-                    </p>
+                    <div class="row g-2 align-items-center mb-2">
+                        <div class="col-2">
+                            <label for="date1" class="col-form-label">Du :</label>
+                        </div>
+                        <div class="col-auto">
+                            <input type="date" name="date1" id="date1" class="form-control" placeholder="AAAA-MM-JJ" value="'.$date1.'">
+                        </div>
+                        <div class="col-auto">
+                            <input type="time" name="time1" id="time1" class="form-control" placeholder="HH:SS" value="'.$time1.'">
+                        </div>
+                    </div>
 
-                    <p>
-                        <label for="date2">Au :</label>
-                        <input type="date" name="date2" id="date2" placeholder="AAAA-MM-JJ" value="'.$date2.'"> &agrave;
-                        <input type="time" name="time2" id="time2" placeholder="HH:SS" value="'.$time2.'">
-                    </p>
+                    <div class="row g-2 align-items-center mb-2">
+                        <div class="col-2">
+                            <label for="date2" class="col-form-label">Au :</label>
+                        </div>
+                        <div class="col-auto">
+                            <input type="date" name="date2" id="date2" class="form-control" placeholder="AAAA-MM-JJ" value="'.$date2.'">
+                        </div>
+                        <div class="col-auto">
+                            <input type="time" name="time2" id="time2" class="form-control" placeholder="HH:SS" value="'.$time2.'">
+                        </div>
+                    </div>
 
-                    <p>
-                        <label for="stock_condition">État :</label>
-                        <select name="condition" id="stock_condition">
-                            <option value="all">Tous</a>
-                            <option value="new"'.($condition == "new" ? " selected" : null).'>Neuf</a>
-                            <option value="used"'.($condition == "used" ? " selected" : null).'>Occasion</a>
-                        </select>
-                    </p>
+                    <div class="row g-2 align-items-center mb-2">
+                        <div class="col-2">
+                            <label for="stock_condition" class="col-form-label">État :</label>
+                        </div>
+                        <div class="col-auto">
+                            <select name="condition" id="stock_condition" class="custom-select">
+                                <option value="all">Tous</option>
+                                <option value="new"'.($condition == "new" ? " selected" : null).'>Neuf</option>
+                                <option value="used"'.($condition == "used" ? " selected" : null).'>Occasion</option>
+                            </select>
+                        </div>
+                    </div>
 
-                    <p class="center">
-                        <button type="submit" class="btn btn-outline-secondary">Afficher le chiffre d\'affaire</button>
-                    </p>
+                    <div class="row">
+                        <div class="col offset-2">
+                            <button type="submit" class="btn btn-primary">Afficher le chiffre d\'affaire</button>
+                        </div>
+                    </div>
 
                 </fieldset>
             </form>
 
-            <h3>Chiffre d\'affaires total</h3>
+            <h2 class="mt-5 mb-4">Chiffre d\'affaires total</h2>
 
-            <table class="admin-table">
+            <table class="table table-striped table-bordered table-hover">
                 <thead>
                     <tr>
                         <th></th>
@@ -484,25 +508,25 @@ return function (Request $request, CurrentSite $currentSite): Response
                         <td class="right">'.count($total_sales).'</td>
                         <td class="right">'.count(array_unique($total_sales)).'</td>
                         <td class="right">'.price($total_ht,'EUR').'</td>
-                        <td class="right text-success bg-success">'.price($total_ttc,'EUR').'</td>
+                        <td class="right table-success">'.price($total_ttc,'EUR').'</td>
                     </tr>
                     <tr>
                         <td>Frais de port</td>
                         <td colspan=2></td>
                         <td class="right">'.price($total_port_ht,'EUR').'</td>
-                        <td class="right text-success bg-success">'.price($total_port_ttc,'EUR').'</td>
+                        <td class="right table-success">'.price($total_port_ttc,'EUR').'</td>
                     </tr>
                     <tr>
-                        <td class="text-primary bg-primary">Total</td>
-                        <td class="right text-primary bg-primary" colspan=2></td>
-                        <td class="right text-primary bg-primary">'.price($total_ht+$total_port_ht,'EUR').'</td>
-                        <td class="right text-primary bg-primary">'.price($total_ttc+$total_port_ttc,'EUR').'</td>
+                        <td class="table-primary">Total</td>
+                        <td class="right table-primary" colspan=2></td>
+                        <td class="right table-primary">'.price($total_ht+$total_port_ht,'EUR').'</td>
+                        <td class="right table-primary">'.price($total_ttc+$total_port_ttc,'EUR').'</td>
                     </tr>
                 </tbody>
             </table>
 
 
-            <h3>Chiffre d\'affaires ventilé par...</h3>
+            <h2 class="mt-5 mb-4">Chiffre d\'affaires ventilé par...</h2>
 
             <ul class="nav nav-tabs" role="tablist">
                 <li class="nav-item"><a class="nav-link active" role="tab" data-toggle="tab" href="#tva">TVA</a></li>
@@ -519,7 +543,7 @@ return function (Request $request, CurrentSite $currentSite): Response
 
                 <div class="tab-pane active" id="tva">
 
-                    <table class="admin-table tab-pane active">
+                    <table class="table table-striped table-bordered table-hover">
                         <thead>
                             <tr>
                                 <th>Taux</th>
@@ -537,7 +561,7 @@ return function (Request $request, CurrentSite $currentSite): Response
 
                 <div class="tab-pane" id="customers">
 
-                    <table class="admin-table tab-pane">
+                    <table class="table table-striped table-bordered table-hover">
                         <thead>
                             <tr>
                                 <th>Type de client</th>
@@ -548,46 +572,46 @@ return function (Request $request, CurrentSite $currentSite): Response
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="bg-success">
+                            <tr class="table-success">
                                 <td>Libraires</td>
                                 <td class="right">'.count($lib_sales).'</td>
                                 <td class="right">'.price($lib_ht, 'EUR').'</td>
-                                <td class="right text-success bg-success">'.price($lib_ttc, 'EUR').'</td>
+                                <td class="right table-success">'.price($lib_ttc, 'EUR').'</td>
                                 <td class="right">'.percent($lib_ttc, $total_ttc).'</td>
                             </tr>
-                            <tr class="bg-success">
+                            <tr class="table-success">
                                 <td>Non-Libraires</td>
                                 <td class="right">'.$nonlib_sales.'</td>
                                 <td class="right">'.price($nonlib_ht, 'EUR').'</td>
-                                <td class="right text-success bg-success">'.price($nonlib_ttc, 'EUR').'</td>
+                                <td class="right table-success">'.price($nonlib_ttc, 'EUR').'</td>
                                 <td class="right">'.percent($nonlib_ttc, $total_ttc).'</td>
                             </tr>
                             <tr>
                                 <td>Particuliers</td>
                                 <td class="right">'.count($part_sales).'</td>
                                 <td class="right">'.price($part_ht, 'EUR').'</td>
-                                <td class="right text-success bg-success">'.price($part_ttc, 'EUR').'</td>
+                                <td class="right table-success">'.price($part_ttc, 'EUR').'</td>
                                 <td class="right">'.percent($part_ttc, $total_ttc).'</td>
                             </tr>
                             <tr>
                                 <td>Professionnels</td>
                                 <td class="right">'.count($pro_sales).'</td>
                                 <td class="right">'.price($pro_ht, 'EUR').'</td>
-                                <td class="right text-success bg-success">'.price($pro_ttc, 'EUR').'</td>
+                                <td class="right table-success">'.price($pro_ttc, 'EUR').'</td>
                                 <td class="right">'.percent($pro_ttc, $total_ttc).'</td>
                             </tr>
                             <tr>
                                 <td>Collectivités</td>
                                 <td class="right">'.count($coll_sales).'</td>
                                 <td class="right">'.price($coll_ht, 'EUR').'</td>
-                                <td class="right text-success bg-success">'.price($coll_ttc, 'EUR').'</td>
+                                <td class="right table-success">'.price($coll_ttc, 'EUR').'</td>
                                 <td class="right">'.percent($coll_ttc, $total_ttc).'</td>
                             </tr>
                             <tr>
                                 <td>Clients inconnus</td>
                                 <td class="right">'.count($ukc_sales).'</td>
                                 <td class="right">'.price($ukc_ht, 'EUR').'</td>
-                                <td class="right text-success bg-success">'.price($ukc_ttc, 'EUR').'</td>
+                                <td class="right table-success">'.price($ukc_ttc, 'EUR').'</td>
                                 <td class="right">'.percent($ukc_ttc, $total_ttc).'</td>
                             </tr>
                         </tbody>
@@ -597,7 +621,7 @@ return function (Request $request, CurrentSite $currentSite): Response
 
                 <div class="tab-pane" id="age">
 
-                    <table id="revenue-age" class="admin-table">
+                    <table id="revenue-age" class="table table-striped table-bordered table-hover">
                         <thead>
                             <tr>
                                 <th title="Par rapport à la date de parution au moment de la vente">Ancienneté</th>
@@ -609,22 +633,22 @@ return function (Request $request, CurrentSite $currentSite): Response
                             <tr>
                                 <td>Moins de 3 mois (nouveautés)</td>
                                 <td class="right">'.price($m3_ht,'EUR').'</td>
-                                <td class="right text-success bg-success">'.price($m3_ttc,'EUR').'</td>
+                                <td class="right table-success">'.price($m3_ttc,'EUR').'</td>
                             </tr>
                             <tr>
                                 <td>Moins d\'un an</td>
                                 <td class="right">'.price($y1_ht,'EUR').'</td>
-                                <td class="right text-success bg-success">'.price($y1_ttc,'EUR').'</td>
+                                <td class="right table-success">'.price($y1_ttc,'EUR').'</td>
                             </tr>
                             <tr>
                                 <td>Un an ou plus (fonds)</td>
                                 <td class="right">'.price($old_ht,'EUR').'</td>
-                                <td class="right text-success bg-success">'.price($old_ttc,'EUR').'</td>
+                                <td class="right table-success">'.price($old_ttc,'EUR').'</td>
                             </tr>
                             <tr>
                                 <td>Date de parution inconnue</td>
                                 <td class="right">'.price($uk_ht,'EUR').'</td>
-                                <td class="right text-success bg-success">'.price($uk_ttc,'EUR').'</td>
+                                <td class="right table-success">'.price($uk_ttc,'EUR').'</td>
                             </tr>
                         </tbody>
                     </table>
@@ -633,7 +657,7 @@ return function (Request $request, CurrentSite $currentSite): Response
 
                 <div class="tab-pane" id="condition">
 
-                    <table class="admin-table">
+                    <table class="table table-striped table-bordered table-hover">
                         <thead>
                             <tr>
                                 <th>État des exemplaires</th>
@@ -645,12 +669,12 @@ return function (Request $request, CurrentSite $currentSite): Response
                             <tr>
                                 <td>Neuf</td>
                                 <td class="right">'.price($total_new_ht,'EUR').'</td>
-                                <td class="right text-success bg-success">'.price($total_new_ttc,'EUR').'</td>
+                                <td class="right table-success">'.price($total_new_ttc,'EUR').'</td>
                             </tr>
                             <tr>
                                 <td>Occasion</td>
                                 <td class="right">'.price($total_used_ht,'EUR').'</td>
-                                <td class="right text-success bg-success">'.price($total_used_ttc,'EUR').'</td>
+                                <td class="right table-success">'.price($total_used_ttc,'EUR').'</td>
                             </tr>
                         </tbody>
                     </table>
@@ -659,7 +683,7 @@ return function (Request $request, CurrentSite $currentSite): Response
 
                 <div class="tab-pane" id="type">
 
-                    <table class="admin-table">
+                    <table class="table table-striped table-bordered table-hover">
                         <thead>
                             <tr>
                                 <th>Type d\'article</th>
@@ -676,7 +700,7 @@ return function (Request $request, CurrentSite $currentSite): Response
 
                 <div class="tab-pane" id="location">
 
-                    <table id="revenue-location" class="admin-table">
+                    <table id="revenue-location" class="table table-striped table-bordered table-hover">
                         <thead>
                             <tr>
                                 <th>Lieu de vente</th>
@@ -688,12 +712,12 @@ return function (Request $request, CurrentSite $currentSite): Response
                             <tr>
                                 <td>En magasin</td>
                                 <td class="right">'.price($total_shop_ht,'EUR').'</td>
-                                <td class="right text-success bg-success">'.price($total_shop_ttc,'EUR').'</td>
+                                <td class="right table-success">'.price($total_shop_ttc,'EUR').'</td>
                             </tr>
                             <tr>
                                 <td>En VPC</td>
                                 <td class="right">'.price($total_web_ht,'EUR').'</td>
-                                <td class="right text-success bg-success">'.price($total_web_ttc,'EUR').'</td>
+                                <td class="right table-success">'.price($total_web_ttc,'EUR').'</td>
                             </tr>
                         </tbody>
                     </table>
@@ -701,7 +725,7 @@ return function (Request $request, CurrentSite $currentSite): Response
                 </div>
 
                 <div class="tab-pane" id="rayon">
-                    <table id="revenue-rayon" class="admin-table">
+                    <table id="revenue-rayon" class="table table-striped table-bordered table-hover">
                         <thead>
                             <tr>
                                 <th>Rayon</th>
