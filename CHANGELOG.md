@@ -1,5 +1,12 @@
 # Historique des modifications
 
+## 3.14.3 (20 juillet 2026)
+
+### Corrections
+
+- La page d'édition d'un article provoquait une erreur fatale lorsque le type
+  de l'article était introuvable (`type_id` invalide ou orphelin). C'est corrigé.
+
 ## 3.14.2 (18 juillet 2026)
 
 ### Corrections
