@@ -423,6 +423,14 @@ point_of_sale_add_item:
   requirements:
     cartId: \d+
 
+point_of_sale_remove_item:
+  path: /admin/pos/carts/{cartId}/items/{stockId}
+  controller: AppBundle\Controller\PointOfSaleController::removeItemAction
+  methods: [DELETE]
+  requirements:
+    cartId: \d+
+    stockId: \d+
+
 # Orders
 
 order_index:

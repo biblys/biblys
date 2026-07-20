@@ -19,6 +19,7 @@
 namespace AppBundle\Controller;
 
 use Biblys\Exception\CannotAddStockItemToCartException;
+use Biblys\Exception\CannotRemoveStockItemFromCartException;
 use Biblys\Service\BodyParamsService;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
@@ -41,6 +42,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Usecase\AddStockItemToPointOfSaleCartUsecase;
+use Usecase\RemoveStockItemFromPointOfSaleCartUsecase;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -209,6 +211,40 @@ class PointOfSaleController extends Controller
             return new JsonResponse([
                 "success" => "L'exemplaire n° $stockItemId a été ajouté au panier.",
                 "line" => $line,
+            ]);
+        }
+
+        return new RedirectResponse("/admin/caisse?cart_id=$cartId");
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function removeItemAction(
+        Request     $request,
+        CurrentUser $currentUser,
+        int         $cartId,
+        int         $stockId,
+    ): Response
+    {
+        $currentUser->authAdmin();
+
+        $cm = new CartManager();
+        $cart = $cm->getById($cartId);
+        if (!$cart) {
+            throw new NotFoundHttpException("Panier $cartId introuvable");
+        }
+
+        try {
+            $usecase = new RemoveStockItemFromPointOfSaleCartUsecase();
+            $usecase->execute($cartId, $stockId);
+        } catch (CannotRemoveStockItemFromCartException $exception) {
+            throw new NotFoundHttpException($exception->getMessage(), $exception);
+        }
+
+        if (in_array("application/json", $request->getAcceptableContentTypes())) {
+            return new JsonResponse([
+                "success" => "L'exemplaire n° $stockId a été retiré du panier et remis en stock.",
             ]);
         }
 
