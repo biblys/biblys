@@ -468,22 +468,36 @@ function reloadAdminEvents() {
   }
 
   // Supprimer un article
+  async function remove_from_cart(cartId, stockId) {
+    const response = await fetch(`/admin/pos/carts/${cartId}/items/${stockId}`, {
+      method: 'DELETE',
+      headers: {
+        'Accept': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      let message = "L'exemplaire n'a pas pu être retiré du panier.";
+      try {
+        const error = await response.json();
+        if (error && error.message) message = error.message;
+      } catch (e) {
+        // réponse d'erreur non-JSON : on conserve le message générique
+      }
+      window._alert(message);
+      return;
+    }
+
+    const json = await response.json();
+    $('#stock_' + stockId).remove();
+    notify(json.success);
+    update_cart();
+  }
+
   $('[data-remove_from_cart].event')
     .click(function() {
       var stock_id = $(this).attr('data-remove_from_cart');
-      $.get(
-        '/pages/adm_checkout?cart_id=' + $('#cart_id').val() + '&remove_stock=' + stock_id,
-        {},
-        function(r) {
-          if (r.error) _alert('Erreur : ' + r.error);
-          else {
-            $('#stock_' + stock_id).remove();
-            notify(r.success);
-            update_cart();
-          }
-        },
-        'json'
-      );
+      remove_from_cart($('#cart_id').val(), stock_id);
     })
     .removeClass('event');
 
