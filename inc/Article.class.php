@@ -772,7 +772,8 @@ class Article extends Entity
      */
     public function isPhysical(): bool
     {
-        return $this->getType()->isPhysical();
+        $type = $this->getType();
+        return $type ? $type->isPhysical() : true;
     }
 
     /**
@@ -782,7 +783,8 @@ class Article extends Entity
      */
     public function isDownloadable(): bool
     {
-        return $this->getType()->isDownloadable();
+        $type = $this->getType();
+        return $type ? $type->isDownloadable() : false;
     }
 
     /**
