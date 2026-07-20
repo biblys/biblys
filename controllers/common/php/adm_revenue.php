@@ -17,10 +17,11 @@
 
 
 use Biblys\Service\CurrentSite;
+use Biblys\Service\QueryParamsService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-return function (Request $request, CurrentSite $currentSite): Response
+return function (Request $request, CurrentSite $currentSite, QueryParamsService $queryParams): Response
 {
     global $_SQL;
 
@@ -33,13 +34,24 @@ return function (Request $request, CurrentSite $currentSite): Response
     $months = _getDatesOptions($currentSite->getId(), "%Y-%m", "F Y", "m");
     $years = _getDatesOptions($currentSite->getId(), "%Y", "Y", "y");
 
-    $d = $request->query->get('d');
-    $m = $request->query->get('m');
-    $y = $request->query->get('y');
-    $date1 = $request->query->get('date1');
-    $date2 = $request->query->get('date2');
-    $time1 = $request->query->get('time1');
-    $time2 = $request->query->get('time2');
+    $queryParams->parse([
+        "d" => ["type" => "date", "default" => null],
+        "m" => ["default" => null],
+        "y" => ["type" => "numeric", "default" => null],
+        "date1" => ["type" => "date", "default" => null],
+        "date2" => ["type" => "date", "default" => null],
+        "time1" => ["default" => null],
+        "time2" => ["default" => null],
+        "condition" => ["default" => null],
+    ]);
+
+    $d = $queryParams->get('d');
+    $m = $queryParams->get('m');
+    $y = $queryParams->get('y');
+    $date1 = $queryParams->get('date1');
+    $date2 = $queryParams->get('date2');
+    $time1 = $queryParams->get('time1');
+    $time2 = $queryParams->get('time2');
 
     // Affichage par défaut : ventes du jour courant
     if (empty($date1) && empty($d) && empty($m) && empty($y)) $m = date("Y-m");
@@ -74,7 +86,7 @@ return function (Request $request, CurrentSite $currentSite): Response
     }
 
     // Filtrer par état
-    $condition = $request->query->get('condition', false);
+    $condition = $queryParams->get('condition');
     if ($condition) {
         if ($condition == "new") {
             $_QUERY .= " AND `stock_condition` LIKE '%Neuf%' OR  `stock_condition` = '%Neuf%' ";
