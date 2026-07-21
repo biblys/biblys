@@ -381,7 +381,7 @@ function reloadAdminEvents() {
           })
           .fail(function(res) {
             var json = res.responseJSON;
-            _alert(json.error);
+            _alert(json.error.message);
           });
       }
     })
