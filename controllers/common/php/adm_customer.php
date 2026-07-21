@@ -54,6 +54,10 @@ if ($request->getMethod() === "POST") {
     $params["id"] = $customer->get("customer_id");
     $params["name"] = trim($customer->get('customer_first_name').' '.$customer->get('customer_last_name'));
 
+    if (isset($error)) {
+        $params["error"] = ["message" => $error->getMessage()];
+    }
+
     /** @var $request */
     if ($request->isXmlHttpRequest()) {
         return new JsonResponse($params);
