@@ -94,37 +94,41 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       </div>
     </div>
 
-    <h3>Encaissement</h3>
+    <div class="card mb-4">
+      <div class="card-header">Encaissement</div>
+      <div class="card-body">
 
-    <table class="admin-table">
-      <thead>
-        <tr>
-          <th>Montant</th>
-          <th>Espèces</th>
-          <th>Chèque</th>
-          <th>Carte</th>
-          <th>À régler</th>
-          <th>À rendre</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td class="right" id="cart_total" data-value="{{ cart_total }}">{{ cart_total|currency(true)|raw }}</td>
-          <td class="center"><input id="cart_cash" class="cart_payment" type="number" step="0.01" min=0 max=999 style="text-align: right;"></td>
-          <td class="center"><input id="cart_cheque" class="cart_payment" type="number" step="0.01" min=0 max=999 style="text-align: right;"></td>
-          <td class="center"><input id="cart_card" class="cart_payment" type="number" step="0.01" min=0 max=999 style="text-align: right;"></td>
-          <td id="cart_topay" data-value="{{ cart_total }}" class="right">{{ cart_total|currency(true)|raw }}</td>
-          <td id="cart_togive" data-value=0 class="right">{{ 0|currency(true)|raw }}</td>
-        </tr>
-      </tbody>
-    </table>
+        <table class="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th>Montant</th>
+              <th>Espèces</th>
+              <th>Chèque</th>
+              <th>Carte</th>
+              <th>À régler</th>
+              <th>À rendre</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-right" id="cart_total" data-value="{{ cart_total }}">{{ cart_total|currency(true)|raw }}</td>
+              <td class="text-center"><input id="cart_cash" class="cart_payment form-control form-control-sm text-right" type="number" step="0.01" min=0 max=999></td>
+              <td class="text-center"><input id="cart_cheque" class="cart_payment form-control form-control-sm text-right" type="number" step="0.01" min=0 max=999></td>
+              <td class="text-center"><input id="cart_card" class="cart_payment form-control form-control-sm text-right" type="number" step="0.01" min=0 max=999></td>
+              <td id="cart_topay" data-value="{{ cart_total }}" class="text-right">{{ cart_total|currency(true)|raw }}</td>
+              <td id="cart_togive" data-value=0 class="text-right">{{ 0|currency(true)|raw }}</td>
+            </tr>
+          </tbody>
+        </table>
 
-    <br>
-    <form id="checkout" class="event">
-      <fieldset class="center">
-        <button class="btn btn-primary" type="submit">Enregistrer la vente</button>
-      </fieldset>
-    </form>
+        <form id="checkout" class="event mb-0">
+          <fieldset class="text-center">
+            <button class="btn btn-primary" type="submit">Enregistrer la vente</button>
+          </fieldset>
+        </form>
+
+      </div>
+    </div>
 
     <h3>Panier en cours (<span id="cart_count">{{ cart_count }}</span> article<span id="cart_count_s">{% if cart_count > 1 %}s{% endif %}</span>)</h3>
 
