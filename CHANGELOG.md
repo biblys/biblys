@@ -22,6 +22,8 @@
 - Un nouveau type d'article « Abonnement (CPPAP) » permet de vendre des
   abonnements à des publications de presse inscrites à la CPPAP, avec le
   taux de TVA réduit de 2,1 % applicable automatiquement.
+- La page de caisse a été redessinée pour une présentation plus claire et
+  cohérente avec le reste de l'administration.
 
 ### Corrections
 
@@ -31,6 +33,9 @@
   de confirmation de commande. C'est corrigé.
 - L'affichage des actualités Biblys dans l'administration ne fonctionnait plus.
   C'est corrigé.
+- Dans la caisse, certains messages d'erreur (désélection d'un client,
+  validation d'une vente) s'affichaient sous la forme illisible
+  « [object Object] » au lieu du message réel. C'est corrigé.
 
 ## 3.14.3 (24 juillet 2026)
 
