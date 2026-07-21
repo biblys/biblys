@@ -207,40 +207,46 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       </div>
     </div>
 
-    <br>
-    <h3>Autres paniers</h3>
-    <p><a href="/admin/caisse" class="btn btn-primary">Nouveau panier</a></p>
+    <div class="card mb-4">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        Autres paniers
+        <a href="/admin/caisse" class="btn btn-primary btn-sm">Nouveau panier</a>
+      </div>
+      <div class="card-body">
 
-    <table class="admin-table">
-      <thead>
-        <tr>
-          <th>Nom</th>
-          <th>Libraire</th>
-          <th>Client</th>
-          <th>Articles</th>
-          <th>Montant</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for pointOfSaleCart in point_of_sale_carts %}
-          <tr>
-            <td><a href="/admin/caisse?cart_id={{ pointOfSaleCart.id }}">{{ pointOfSaleCart.title }}</a></td>
-            <td>{{ pointOfSaleCart.seller_email }}</td>
-            <td>{{ pointOfSaleCart.customer_name }}</td>
-            <td class="right">{{ pointOfSaleCart.count }}</td>
-            <td class="right">{{ pointOfSaleCart.amount|currency(true)|raw }}</td>
-            <td class="center">
-              <a href="/pages/adm_checkout?cart_id={{ pointOfSaleCart.id }}&vacuum_cart=1"
-                 data-confirm="Voulez-vous vraiment VIDER ce panier et remettre {{ pointOfSaleCart.count }} exemplaire{% if pointOfSaleCart.count > 1 %}s{% endif %} en vente ?"
-                 title="Vider le panier et remettre {{ pointOfSaleCart.count }} exemplaire{% if pointOfSaleCart.count > 1 %}s{% endif %} en vente."
-                 class="btn btn-danger btn-sm">
-                <i class="fa fa-trash-can"></i>
-              </a>
-            </td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+        <table class="table table-striped table-hover mb-0">
+          <thead>
+            <tr>
+              <th>Nom</th>
+              <th>Libraire</th>
+              <th>Client</th>
+              <th>Articles</th>
+              <th>Montant</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for pointOfSaleCart in point_of_sale_carts %}
+              <tr>
+                <td><a href="/admin/caisse?cart_id={{ pointOfSaleCart.id }}">{{ pointOfSaleCart.title }}</a></td>
+                <td>{{ pointOfSaleCart.seller_email }}</td>
+                <td>{{ pointOfSaleCart.customer_name }}</td>
+                <td class="text-right">{{ pointOfSaleCart.count }}</td>
+                <td class="text-right">{{ pointOfSaleCart.amount|currency(true)|raw }}</td>
+                <td class="text-center">
+                  <a href="/pages/adm_checkout?cart_id={{ pointOfSaleCart.id }}&vacuum_cart=1"
+                     data-confirm="Voulez-vous vraiment VIDER ce panier et remettre {{ pointOfSaleCart.count }} exemplaire{% if pointOfSaleCart.count > 1 %}s{% endif %} en vente ?"
+                     title="Vider le panier et remettre {{ pointOfSaleCart.count }} exemplaire{% if pointOfSaleCart.count > 1 %}s{% endif %} en vente."
+                     class="btn btn-danger btn-sm">
+                    <i class="fa fa-trash-can"></i>
+                  </a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+      </div>
+    </div>
 
 {% endblock %}
