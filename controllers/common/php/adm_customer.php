@@ -16,6 +16,7 @@
  */
 
 
+use Biblys\Legacy\LegacyCodeHelper;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -52,7 +53,7 @@ if ($request->getMethod() === "POST") {
     $params["name"] = trim($customer->get('customer_first_name').' '.$customer->get('customer_last_name'));
 
     if (isset($error)) {
-        $params["error"] = ["message" => $error->getMessage()];
+        $params["error"] = LegacyCodeHelper::jsonErrorMessage($error->getMessage());
     }
 
     /** @var $request */
