@@ -649,7 +649,7 @@ function reloadAdminEvents() {
           set_customer: ''
         },
         function(res) {
-          if (res.error) _alert(res.error);
+          if (res.error) _alert(res.error.message);
           else {
             $('#customer')
               .removeClass('pointer')
@@ -674,7 +674,7 @@ function reloadAdminEvents() {
         set_customer: '' + id + ''
       },
       function(res) {
-        if (res.error) _alert(res.error);
+        if (res.error) _alert(res.error.message);
         else {
           $('#customer')
             .addClass('pointer')
