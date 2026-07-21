@@ -266,4 +266,14 @@ class LegacyCodeHelper
 
         return $GLOBALS["LEGACY_URL_GENERATOR"];
     }
+
+    /**
+     * Shared shape for a JSON error response body's "error" value, so legacy
+     * controllers don't each hand-roll their own and risk sending the caught
+     * Exception object instead of its message.
+     */
+    public static function jsonErrorMessage(string $message): array
+    {
+        return ["message" => $message];
+    }
 }

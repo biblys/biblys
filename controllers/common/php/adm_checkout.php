@@ -126,7 +126,7 @@ return function (
         }
 
         if (isset($error)) {
-            $params['error'] = ['message' => $error->getMessage()];
+            $params['error'] = LegacyCodeHelper::jsonErrorMessage($error->getMessage());
         } elseif ($cart->get('customer_id') == $_POST['set_customer']) {
             $params['success'] = "Le client du panier a bien été modifié.";
         }
