@@ -23,17 +23,14 @@ use Biblys\Exception\CannotRemoveStockItemFromCartException;
 use Biblys\Service\BodyParamsService;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
-use Biblys\Service\FlashMessagesService;
 use Biblys\Service\Images\ImagesService;
 use Biblys\Service\QueryParamsService;
 use Biblys\Service\TemplateService;
 use CartManager;
 use CustomerManager;
-use DateTime;
 use Framework\Controller;
 use Model\UserQuery;
 use Propel\Runtime\Exception\PropelException;
-use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -60,7 +57,6 @@ class PointOfSaleController extends Controller
         CurrentUser          $currentUser,
         CurrentSite          $currentSite,
         ImagesService        $imagesService,
-        FlashMessagesService $flashMessagesService,
         TemplateService      $templateService,
         UrlGenerator         $urlGenerator,
         QueryParamsService   $queryParams,
@@ -69,26 +65,10 @@ class PointOfSaleController extends Controller
         $currentUser->authAdmin();
 
         $queryParams->parse([
-            "enable_temporary_access" => ["type" => "numeric", "default" => 0],
             "cart_id" => ["type" => "numeric", "default" => null],
         ]);
 
-        $enableTemporaryAccess = $queryParams->getInteger("enable_temporary_access");
-        if ($enableTemporaryAccess === 1) {
-            $redirectResponse = new RedirectResponse("/admin/caisse");
-            $bypassCookie = new Cookie("bypass_cash_register_check", "1", new DateTime("tomorrow"));
-            $redirectResponse->headers->setCookie($bypassCookie);
-            $flashMessagesService->add("info", "La caisse a été réactivée jusqu'à demain.");
-            return $redirectResponse;
-        }
-
         $isTvaEnabled = $currentSite->getSite()->getTva() === "fr";
-        $bypassCookie = $request->cookies->get("bypass_cash_register_check");
-        if ($isTvaEnabled && !$bypassCookie) {
-            return $templateService->renderResponse("AppBundle:PointOfSale:index.html.twig", [
-                'tva_blocked' => true,
-            ], isPrivate: true);
-        }
 
         $cm = new CartManager();
 
@@ -160,7 +140,6 @@ class PointOfSaleController extends Controller
         }
 
         return $templateService->renderResponse("AppBundle:PointOfSale:index.html.twig", [
-            'tva_blocked' => false,
             'is_tva_enabled' => $isTvaEnabled,
             'cart' => $cart,
             'cart_content' => $cartContent,

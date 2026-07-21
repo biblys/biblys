@@ -20,31 +20,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 {% block main %}
 
-  {% if tva_blocked %}
-
-    <div class="alert alert-danger">
-      <p class="alert-heading lead">
-        <span class="fa-solid fa-circle-xmark"></span>
-        <strong>La caisse est désactivée, car la gestion de la TVA est activée.</strong>
-      </p>
-      <p>
-        La loi de finances pour 2025 interdit l'usage d'un logiciel de caisse non certifié pour un
-        professionnel assujetti à la TVA. Pour réactiver la caisse, désactivez la gestion de la TVA.
-      </p>
-      <p>
-        <a class="btn btn-warning" href="https://blog.biblys.org/posts/certification-nf-525-logiciels-de-caisse/" target="_blank">
-          <i class="fa fa-external-link"></i>
-          En savoir plus
-        </a>
-        <a class="btn btn-danger" href="/admin/caisse?enable_temporary_access=1">
-          <i class="fa-solid fa-clock"></i>
-          Réactiver temporairement la caisse
-        </a>
-      </p>
-    </div>
-
-  {% else %}
-
     {% if is_tva_enabled %}
       <div class="alert alert-warning">
         <p>
@@ -241,7 +216,5 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         {% endfor %}
       </tbody>
     </table>
-
-  {% endif %}
 
 {% endblock %}
