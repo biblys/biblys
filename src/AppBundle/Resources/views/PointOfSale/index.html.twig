@@ -51,74 +51,87 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       Caisse
     </h1>
 
-    <form id="createCustomer" hidden>
-      <fieldset>
-        <p>
-          <label for="customer_last_name">Nom :</label>
-          <input type="text" id="customer_last_name" name="customer_last_name" required>
-        </p>
-        <p>
-          <label for="customer_first_name">Prénom :</label>
-          <input type="text" id="customer_first_name" name="customer_first_name">
-        </p>
-        <p>
-          <label for="customer_email">Adresse e-mail :</label>
-          <input type="email" id="customer_email" name="customer_email" class="long">
-        </p>
-        <p>
-          <label for="customer_phone">Téléphone :</label>
-          <input type="number" id="customer_phone" name="customer_phone">
-        </p>
-        <p class="center">
-          <input type="checkbox" name="customer_newsletter" id="customer_newsletter" value="1" checked>
-          <label for="customer_newsletter" class="after">Abonner à la newsletter</label>
-        </p>
-        <div class="right"><input type="submit" value="Valider"/></div>
-      </fieldset>
-    </form>
-
-    <h3>
+    <h3 class="mt-4 mb-3">
       <span id="cart_title" class="event pointer" contenteditable>{{ cart.get('cart_title')|raw }}</span>
     </h3>
 
-    <form>
+    <form id="createCustomer" hidden>
       <fieldset>
-
-        <input type="hidden" id="cart_id" name="cart_id" value="{{ cart.get('cart_id') }}">
-
-        <p>
-          <label for="seller">Libraire :</label>
-          {% if seller %}
-            <input type="text" name="seller" id="seller" value="{{ seller.getEmail() }}" class="long" required readonly>
-            <input type="hidden" name="seller_id" id="seller_id" value="{{ seller.getId() }}" required>
-          {% endif %}
-        </p>
-
-        <p>
-          <label for="customer">Client :</label>
-          {% if customer %}
-            <input type="text" name="customer" id="customer"
-                   placeholder="Rechercher un client..."
-                   value="{{ customer.get('customer_last_name') }}, {{ customer.get('customer_first_name') }} ({{ customer.get('customer_email') }})"
-                   readonly class="pointer event verylong">
-            <input type="hidden" name="customer_id" id="customer_id" value="{{ customer.get('customer_id') }}" required>
-            <span id="newsletter">
-              <input type="checkbox" name="customer_mailing" id="customer_mailing" value="1" disabled
-                  {% if customer.get('customer_newsletter') == 1 %}checked{% endif %}>
-              <label for="customer_mailing" class="after">Abonné à la newsletter</label>
-            </span>
-          {% else %}
-            <input type="text" name="customer" id="customer" placeholder="Rechercher un client..." class="event verylong">
-            <input type="hidden" name="customer_id" id="customer_id" required>
-            <span id="newsletter2" class="hidden">
-              <input type="checkbox" name="customer_mailing" id="customer_mailing" value="1" disabled>
-              <label for="customer_mailing" class="after">Abonné à la newsletter</label>
-            </span>
-          {% endif %}
-        </p>
-
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="customer_last_name">Nom :</label>
+            <input type="text" id="customer_last_name" name="customer_last_name" class="form-control" required>
+          </div>
+          <div class="form-group col-md-6">
+            <label for="customer_first_name">Prénom :</label>
+            <input type="text" id="customer_first_name" name="customer_first_name" class="form-control">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="customer_email">Adresse e-mail :</label>
+          <input type="email" id="customer_email" name="customer_email" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="customer_phone">Téléphone :</label>
+          <input type="number" id="customer_phone" name="customer_phone" class="form-control">
+        </div>
+        <div class="form-group">
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" name="customer_newsletter" id="customer_newsletter" value="1" class="custom-control-input" checked>
+            <label for="customer_newsletter" class="custom-control-label">Abonner à la newsletter</label>
+          </div>
+        </div>
+        <div class="text-right"><input type="submit" value="Valider" class="btn btn-primary"/></div>
       </fieldset>
     </form>
+
+    <div class="card mb-4">
+      <div class="card-header">Vendeur / Client</div>
+      <div class="card-body">
+        <form>
+          <fieldset>
+
+            <input type="hidden" id="cart_id" name="cart_id" value="{{ cart.get('cart_id') }}">
+
+            <div class="form-group row">
+              <label for="seller" class="col-2 col-form-label">Libraire</label>
+              <div class="col">
+                {% if seller %}
+                  <input type="text" name="seller" id="seller" value="{{ seller.getEmail() }}" class="form-control" required readonly>
+                  <input type="hidden" name="seller_id" id="seller_id" value="{{ seller.getId() }}" required>
+                {% endif %}
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="customer" class="col-2 col-form-label">Client</label>
+              <div class="col">
+                {% if customer %}
+                  <input type="text" name="customer" id="customer"
+                         placeholder="Rechercher un client..."
+                         value="{{ customer.get('customer_last_name') }}, {{ customer.get('customer_first_name') }} ({{ customer.get('customer_email') }})"
+                         readonly class="form-control pointer event">
+                  <input type="hidden" name="customer_id" id="customer_id" value="{{ customer.get('customer_id') }}" required>
+                  <div id="newsletter" class="custom-control custom-checkbox mt-2">
+                    <input type="checkbox" name="customer_mailing" id="customer_mailing" value="1" disabled class="custom-control-input"
+                        {% if customer.get('customer_newsletter') == 1 %}checked{% endif %}>
+                    <label for="customer_mailing" class="custom-control-label">Abonné à la newsletter</label>
+                  </div>
+                {% else %}
+                  <input type="text" name="customer" id="customer" placeholder="Rechercher un client..." class="form-control event">
+                  <input type="hidden" name="customer_id" id="customer_id" required>
+                  <div id="newsletter2" class="custom-control custom-checkbox mt-2 hidden">
+                    <input type="checkbox" name="customer_mailing" id="customer_mailing" value="1" disabled class="custom-control-input">
+                    <label for="customer_mailing" class="custom-control-label">Abonné à la newsletter</label>
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+
+          </fieldset>
+        </form>
+      </div>
+    </div>
 
     <h3>Encaissement</h3>
 
