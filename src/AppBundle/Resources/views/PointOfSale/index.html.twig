@@ -169,34 +169,43 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       </div>
     </div>
 
-    <h3>Panier en cours (<span id="cart_count">{{ cart_count }}</span> article<span id="cart_count_s">{% if cart_count > 1 %}s{% endif %}</span>)</h3>
+    <div class="card mb-4">
+      <div class="card-header">
+        Panier en cours (<span id="cart_count">{{ cart_count }}</span> article<span id="cart_count_s">{% if cart_count > 1 %}s{% endif %}</span>)
+      </div>
+      <div class="card-body">
 
-    <form id="checkout_add" class="event">
-      <fieldset>
-        <p>
-          <label for="checkout_add_input">Ajouter un article :</label>
-          <input type="text" name="checkout_add_input" id="checkout_add_input" class="verylong event" autocomplete="off" autofocus>
-        </p>
-      </fieldset>
-    </form>
+        <form id="checkout_add" class="event">
+          <fieldset>
+            <div class="form-group row">
+              <label for="checkout_add_input" class="col-auto col-form-label">Ajouter un article</label>
+              <div class="col">
+                <input type="text" name="checkout_add_input" id="checkout_add_input" class="form-control event" autocomplete="off" autofocus>
+              </div>
+            </div>
+          </fieldset>
+        </form>
 
-    <table id="checkout_add_results" class="admin-table">
-    </table>
+        <table id="checkout_add_results" class="table table-hover">
+        </table>
 
-    <table id="checkout_cart" class="admin-table">
-      <thead>
-        <tr>
-          <th>Ref.</th>
-          <th></th>
-          <th>Article</th>
-          <th>Prix</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        {{ cart_content|raw }}
-      </tbody>
-    </table>
+        <table id="checkout_cart" class="table table-striped table-hover mb-0">
+          <thead>
+            <tr>
+              <th>Ref.</th>
+              <th></th>
+              <th>Article</th>
+              <th>Prix</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {{ cart_content|raw }}
+          </tbody>
+        </table>
+
+      </div>
+    </div>
 
     <br>
     <h3>Autres paniers</h3>
