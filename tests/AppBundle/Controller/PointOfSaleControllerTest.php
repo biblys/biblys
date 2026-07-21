@@ -21,7 +21,6 @@ namespace AppBundle\Controller;
 use Biblys\Service\BodyParamsService;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
-use Biblys\Service\FlashMessagesService;
 use Biblys\Service\Images\ImagesService;
 use Biblys\Service\QueryParamsService;
 use Biblys\Test\EntityFactory;
@@ -58,11 +57,12 @@ class PointOfSaleControllerTest extends TestCase
     /**
      * @throws PropelException
      */
-    public function testIndexActionReturnsTvaBlockWhenTvaEnabledWithoutBypass(): void
+    public function testIndexActionReturnsPageWithCartIdWhenTvaEnabled(): void
     {
         // given
         $controller = $this->_getController();
-        $request = new Request();
+        $cart = EntityFactory::createCart();
+        $request = new Request(query: ['cart_id' => $cart->get('id')]);
 
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->expects("authAdmin");
@@ -73,7 +73,6 @@ class PointOfSaleControllerTest extends TestCase
             $currentUser,
             $this->_getCurrentSiteMock(tva: "fr"),
             Mockery::mock(ImagesService::class),
-            Mockery::mock(FlashMessagesService::class),
             Helpers::getTemplateService(),
             Mockery::mock(UrlGenerator::class),
             new QueryParamsService($request),
@@ -81,44 +80,7 @@ class PointOfSaleControllerTest extends TestCase
 
         // then
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertStringContainsString(
-            "La caisse est désactivée, car la gestion de la TVA est activée.",
-            $response->getContent()
-        );
-    }
-
-    /**
-     * @throws PropelException
-     */
-    public function testIndexActionRedirectsWhenTvaBypassIsRequested(): void
-    {
-        // given
-        $controller = $this->_getController();
-        $request = new Request(query: ['enable_temporary_access' => '1']);
-
-        $currentUser = Mockery::mock(CurrentUser::class);
-        $currentUser->expects("authAdmin");
-
-        $flashMessages = Mockery::mock(FlashMessagesService::class);
-        $flashMessages->expects("add")->with("info", "La caisse a été réactivée jusqu'à demain.");
-
-        // when
-        $response = $controller->indexAction(
-            $request,
-            $currentUser,
-            $this->_getCurrentSiteMock(tva: "fr"),
-            Mockery::mock(ImagesService::class),
-            $flashMessages,
-            Helpers::getTemplateService(),
-            Mockery::mock(UrlGenerator::class),
-            new QueryParamsService($request),
-        );
-
-        // then
-        $this->assertEquals(302, $response->getStatusCode());
-        $this->assertEquals("/admin/caisse", $response->headers->get("Location"));
-        $this->assertNotNull($response->headers->getCookies()[0] ?? null, "should set bypass cookie");
-        $this->assertEquals("bypass_cash_register_check", $response->headers->getCookies()[0]->getName());
+        $this->assertStringContainsString("Caisse", $response->getContent());
     }
 
     /**
@@ -143,7 +105,6 @@ class PointOfSaleControllerTest extends TestCase
             $currentUser,
             $this->_getCurrentSiteMock(),
             Mockery::mock(ImagesService::class),
-            Mockery::mock(FlashMessagesService::class),
             Helpers::getTemplateService(),
             Mockery::mock(UrlGenerator::class),
             new QueryParamsService($request),
@@ -173,7 +134,6 @@ class PointOfSaleControllerTest extends TestCase
             $currentUser,
             $this->_getCurrentSiteMock(),
             Mockery::mock(ImagesService::class),
-            Mockery::mock(FlashMessagesService::class),
             Helpers::getTemplateService(),
             Mockery::mock(UrlGenerator::class),
             new QueryParamsService($request),
@@ -205,7 +165,6 @@ class PointOfSaleControllerTest extends TestCase
             $currentUser,
             $this->_getCurrentSiteMock(),
             Mockery::mock(ImagesService::class),
-            Mockery::mock(FlashMessagesService::class),
             Helpers::getTemplateService(),
             Mockery::mock(UrlGenerator::class),
             new QueryParamsService($request),
