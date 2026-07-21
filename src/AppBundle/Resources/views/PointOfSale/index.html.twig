@@ -51,39 +51,48 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       Caisse
     </h1>
 
-    <h3>
+    <h3 class="mt-4 mb-3">
       <span id="cart_title" class="event pointer" contenteditable>{{ cart.get('cart_title')|raw }}</span>
     </h3>
 
-    <form>
-      <fieldset>
+    <div class="card mb-4">
+      <div class="card-header">Vendeur / Client</div>
+      <div class="card-body">
+        <form>
+          <fieldset>
 
-        <input type="hidden" id="cart_id" name="cart_id" value="{{ cart.get('cart_id') }}">
+            <input type="hidden" id="cart_id" name="cart_id" value="{{ cart.get('cart_id') }}">
 
-        <p>
-          <label for="seller">Libraire :</label>
-          {% if seller %}
-            <input type="text" name="seller" id="seller" value="{{ seller.getEmail() }}" class="long" required readonly>
-            <input type="hidden" name="seller_id" id="seller_id" value="{{ seller.getId() }}" required>
-          {% endif %}
-        </p>
+            <div class="form-group row">
+              <label for="seller" class="col-2 col-form-label">Libraire</label>
+              <div class="col">
+                {% if seller %}
+                  <input type="text" name="seller" id="seller" value="{{ seller.getEmail() }}" class="form-control" required readonly>
+                  <input type="hidden" name="seller_id" id="seller_id" value="{{ seller.getId() }}" required>
+                {% endif %}
+              </div>
+            </div>
 
-        <p>
-          <label for="customer">Client :</label>
-          {% if customer %}
-            <input type="text" name="customer" id="customer"
-                   placeholder="Rechercher un client..."
-                   value="{{ customer.get('customer_last_name') }}, {{ customer.get('customer_first_name') }} ({{ customer.get('customer_email') }})"
-                   readonly class="pointer event verylong">
-            <input type="hidden" name="customer_id" id="customer_id" value="{{ customer.get('customer_id') }}" required>
-          {% else %}
-            <input type="text" name="customer" id="customer" placeholder="Rechercher un client..." class="event verylong">
-            <input type="hidden" name="customer_id" id="customer_id" required>
-          {% endif %}
-        </p>
+            <div class="form-group row">
+              <label for="customer" class="col-2 col-form-label">Client</label>
+              <div class="col">
+                {% if customer %}
+                  <input type="text" name="customer" id="customer"
+                         placeholder="Rechercher un client..."
+                         value="{{ customer.get('customer_last_name') }}, {{ customer.get('customer_first_name') }} ({{ customer.get('customer_email') }})"
+                         readonly class="form-control pointer event">
+                  <input type="hidden" name="customer_id" id="customer_id" value="{{ customer.get('customer_id') }}" required>
+                {% else %}
+                  <input type="text" name="customer" id="customer" placeholder="Rechercher un client..." class="form-control event">
+                  <input type="hidden" name="customer_id" id="customer_id" required>
+                {% endif %}
+              </div>
+            </div>
 
-      </fieldset>
-    </form>
+          </fieldset>
+        </form>
+      </div>
+    </div>
 
     <h3>Encaissement</h3>
 
