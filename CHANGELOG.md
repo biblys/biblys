@@ -6,6 +6,9 @@
 
 - La page d'édition d'un article provoquait une erreur fatale lorsque le type
   de l'article était introuvable (`type_id` invalide ou orphelin). C'est corrigé.
+- Dans la caisse, choisir "=> Créer un nouveau client" dans les résultats de
+  recherche du champ Client ouvrait une popup vide. Ce lien ouvre désormais
+  la page de création d'un nouveau client dans un nouvel onglet.
 
 ## 3.14.2 (18 juillet 2026)
 

@@ -76,32 +76,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       Caisse
     </h1>
 
-    <form id="createCustomer" hidden>
-      <fieldset>
-        <p>
-          <label for="customer_last_name">Nom :</label>
-          <input type="text" id="customer_last_name" name="customer_last_name" required>
-        </p>
-        <p>
-          <label for="customer_first_name">Prénom :</label>
-          <input type="text" id="customer_first_name" name="customer_first_name">
-        </p>
-        <p>
-          <label for="customer_email">Adresse e-mail :</label>
-          <input type="email" id="customer_email" name="customer_email" class="long">
-        </p>
-        <p>
-          <label for="customer_phone">Téléphone :</label>
-          <input type="number" id="customer_phone" name="customer_phone">
-        </p>
-        <p class="center">
-          <input type="checkbox" name="customer_newsletter" id="customer_newsletter" value="1" checked>
-          <label for="customer_newsletter" class="after">Abonner à la newsletter</label>
-        </p>
-        <div class="right"><input type="submit" value="Valider"/></div>
-      </fieldset>
-    </form>
-
     <h3>
       <span id="cart_title" class="event pointer" contenteditable>{{ cart.get('cart_title')|raw }}</span>
     </h3>

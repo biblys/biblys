@@ -613,14 +613,7 @@ function reloadAdminEvents() {
       select: function(event, ui) {
         if (ui.item.create == '1') {
           // Creer un nouveau client
-          $('#customer_first_name')
-            .val(ui.item.value)
-            .focus();
-          $('#createCustomer').dialog({
-            title: 'Créer un nouveau client',
-            modal: true,
-            width: 500
-          });
+          window.open('/pages/adm_customer', '_blank');
         } else {
           // Selectionner un client existant
           selectCustomer(ui.item.id, ui.item.label, ui.item.newsletter);
@@ -674,29 +667,6 @@ function reloadAdminEvents() {
       }
     );
   }
-
-  // Créer un client
-  $('#createCustomer').submit(function(e) {
-    e.preventDefault();
-    $.post(
-      '/pages/adm_customer',
-      {
-        customer_last_name: '' + $('#customer_last_name').val() + '',
-        customer_first_name: '' + $('#customer_first_name').val() + '',
-        customer_email: '' + $('#customer_email').val() + '',
-        customer_phone: '' + $('#customer_phone').val() + '',
-        customer_newsletter: '' + $('#new_customer_newsletter:checked').val() + ''
-      },
-      function(res) {
-        if (res.error) _alert(res.error);
-        else {
-          $('#createCustomer').dialog('close');
-          selectCustomer(res.id, res.name, 0);
-          notify('Le client ' + res.name + ' a bien été créé.');
-        }
-      }
-    );
-  });
 
   document.addEventListener('keyup', function(event) {
     const { ctrlKey, shiftKey, key } = event;
