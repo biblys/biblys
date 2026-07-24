@@ -9,6 +9,9 @@
 - Dans la caisse, choisir "=> Créer un nouveau client" dans les résultats de
   recherche du champ Client ouvrait une popup vide. Ce lien ouvre désormais
   la page de création d'un nouveau client dans un nouvel onglet.
+- La case "Abonné à la newsletter" affichée dans la caisse et sur les pages
+  de gestion des clients ne pouvait jamais s'afficher cochée. Elle a été
+  retirée, ainsi que le code lié.
 
 ## 3.14.2 (18 juillet 2026)
 

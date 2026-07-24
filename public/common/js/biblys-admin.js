@@ -616,7 +616,7 @@ function reloadAdminEvents() {
           window.open('/pages/adm_customer', '_blank');
         } else {
           // Selectionner un client existant
-          selectCustomer(ui.item.id, ui.item.label, ui.item.newsletter);
+          selectCustomer(ui.item.id, ui.item.label);
         }
       }
       // Annuler la sélection du client
@@ -634,8 +634,6 @@ function reloadAdminEvents() {
               .removeClass('pointer')
               .removeAttr('readonly')
               .val('');
-            $('#customer_mailing').removeAttr('checked');
-            $('#newsletter').hide();
             $('#customer_id').val('');
             //notify(res.success);
           }
@@ -645,8 +643,7 @@ function reloadAdminEvents() {
     .removeClass('event');
 
   // Sélectionner un client
-  function selectCustomer(id, name, newsletter) {
-    if (newsletter == 1) $('#customer_mailing').attr('checked', 'checked');
+  function selectCustomer(id, name) {
     $.post(
       '/pages/adm_checkout?cart_id=' + $('#cart_id').val(),
       {
@@ -660,7 +657,6 @@ function reloadAdminEvents() {
             .attr('readonly', 'readonly')
             .val(name);
           $('#customer_id').val(id);
-          $('#newsletter').show();
           $('#article').focus();
           notify(res.success);
         }

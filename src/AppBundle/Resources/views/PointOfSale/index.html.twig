@@ -101,18 +101,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                    value="{{ customer.get('customer_last_name') }}, {{ customer.get('customer_first_name') }} ({{ customer.get('customer_email') }})"
                    readonly class="pointer event verylong">
             <input type="hidden" name="customer_id" id="customer_id" value="{{ customer.get('customer_id') }}" required>
-            <span id="newsletter">
-              <input type="checkbox" name="customer_mailing" id="customer_mailing" value="1" disabled
-                  {% if customer.get('customer_newsletter') == 1 %}checked{% endif %}>
-              <label for="customer_mailing" class="after">Abonné à la newsletter</label>
-            </span>
           {% else %}
             <input type="text" name="customer" id="customer" placeholder="Rechercher un client..." class="event verylong">
             <input type="hidden" name="customer_id" id="customer_id" required>
-            <span id="newsletter2" class="hidden">
-              <input type="checkbox" name="customer_mailing" id="customer_mailing" value="1" disabled>
-              <label for="customer_mailing" class="after">Abonné à la newsletter</label>
-            </span>
           {% endif %}
         </p>
 

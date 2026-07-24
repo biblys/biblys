@@ -38,9 +38,6 @@ if ($request->getMethod() === "POST") {
 
     // Update object
     foreach ($request->request->all() as $key => $val) {
-        if ($key === "customer_newsletter") {
-            continue;
-        }
         $customer->set($key, $val);
     }
 
@@ -73,12 +70,6 @@ if ($customer) {
 } else {
     $pageTitle = "Créer un nouveau client";
     $customer = new Customer([]);
-}
-
-if ($customer->get("customer_newsletter") == 1) {
-    $newsletterChecked = " checked";
-} else {
-    $newsletterChecked = NULL;
 }
 
 $message = NULL;
@@ -133,11 +124,6 @@ $content = '
             <p>
                 <label for="customer_privatization">Privatisation :</label>
                 <input type="date" name="customer_privatization" id="customer_privatization" value="'.$customer->get('customer_privatization').'" placeholder="AAAA-MM-JJ">
-            </p>
-
-            <p class="center">
-                <input type="checkbox" name="customer_newsletter" id="customer_newsletter" value="1" '.$newsletterChecked.' disabled>
-                <label for="customer_newsletter" class="after">Abonné à la newsletter</label>
             </p>
 
             <br>
