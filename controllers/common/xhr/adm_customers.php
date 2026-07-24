@@ -29,7 +29,6 @@
 			$ci['label'] = $c->get('customer_last_name').', '.$c->get('customer_first_name').' ('.$c->get('customer_email').')';
 			$ci['value'] = '';
 			$ci['id'] = $c->get('customer_id');
-			$ci['newsletter'] = $c->get('customer_newsletter');
 			$j[] = $ci;
 		}
 		

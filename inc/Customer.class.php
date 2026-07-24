@@ -58,8 +58,6 @@
 			$list = array();
 			while ($d = $q->fetch(PDO::FETCH_ASSOC))
 			{
-				$d['customer_newsletter'] = 0;
-				
 				$list[] = new Customer($d);
 			}
 			$q->closeCursor();
