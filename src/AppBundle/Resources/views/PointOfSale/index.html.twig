@@ -195,12 +195,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                 <td class="text-right">{{ pointOfSaleCart.count }}</td>
                 <td class="text-right">{{ pointOfSaleCart.amount|currency(true)|raw }}</td>
                 <td class="text-center">
-                  <a href="/pages/adm_checkout?cart_id={{ pointOfSaleCart.id }}&vacuum_cart=1"
+                  <button data-clear_cart="{{ pointOfSaleCart.id }}"
                      data-confirm="Voulez-vous vraiment VIDER ce panier et remettre {{ pointOfSaleCart.count }} exemplaire{% if pointOfSaleCart.count > 1 %}s{% endif %} en vente ?"
                      title="Vider le panier et remettre {{ pointOfSaleCart.count }} exemplaire{% if pointOfSaleCart.count > 1 %}s{% endif %} en vente."
                      class="btn btn-danger btn-sm">
                     <i class="fa fa-trash-can"></i>
-                  </a>
+                  </button>
                 </td>
               </tr>
             {% endfor %}
