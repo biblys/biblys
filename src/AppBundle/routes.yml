@@ -431,6 +431,13 @@ point_of_sale_remove_item:
     cartId: \d+
     stockId: \d+
 
+point_of_sale_clear_cart:
+  path: /admin/pos/carts/{cartId}/items
+  controller: AppBundle\Controller\PointOfSaleController::clearCartAction
+  methods: [DELETE]
+  requirements:
+    cartId: \d+
+
 # Orders
 
 order_index:

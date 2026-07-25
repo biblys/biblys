@@ -29,6 +29,7 @@ use Biblys\Service\TemplateService;
 use CartManager;
 use CustomerManager;
 use Framework\Controller;
+use Model\CartQuery;
 use Model\UserQuery;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -39,6 +40,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Usecase\AddStockItemToPointOfSaleCartUsecase;
+use Usecase\ClearPointOfSaleCartUsecase;
 use Usecase\RemoveStockItemFromPointOfSaleCartUsecase;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -228,5 +230,27 @@ class PointOfSaleController extends Controller
         }
 
         return new RedirectResponse("/admin/caisse?cart_id=$cartId");
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function clearCartAction(
+        CurrentUser $currentUser,
+        int         $cartId,
+    ): Response
+    {
+        $currentUser->authAdmin();
+
+        if (!CartQuery::create()->filterById($cartId)->exists()) {
+            throw new NotFoundHttpException("Panier $cartId introuvable");
+        }
+
+        $usecase = new ClearPointOfSaleCartUsecase();
+        $usecase->execute($cartId);
+
+        return new JsonResponse([
+            "success" => "Le panier a été vidé.",
+        ]);
     }
 }
