@@ -501,6 +501,37 @@ function reloadAdminEvents() {
     })
     .removeClass('event');
 
+  // Vider un panier
+  async function clear_cart(cartId) {
+    const response = await fetch(`/admin/pos/carts/${cartId}/items`, {
+      method: 'DELETE',
+      headers: {
+        'Accept': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      let message = "Le panier n'a pas pu être vidé.";
+      try {
+        const error = await response.json();
+        if (error && error.message) message = error.message;
+      } catch (e) {
+        // réponse d'erreur non-JSON : on conserve le message générique
+      }
+      window._alert(message);
+      return;
+    }
+
+    window.location.reload();
+  }
+
+  document.addEventListener('click', function(event) {
+    const button = event.target.closest('[data-clear_cart]');
+    if (button) {
+      clear_cart(button.getAttribute('data-clear_cart'));
+    }
+  });
+
   // Rechercher un article
   function checkout_lookup(event) {
     var input = $('#checkout_add_input').val();
