@@ -426,4 +426,56 @@ class PointOfSaleControllerTest extends TestCase
             $stock->getId(),
         );
     }
+
+    /**
+     * @throws PropelException
+     */
+    public function testClearCartActionClearsCartAndReturnsJsonSuccess(): void
+    {
+        // given
+        $controller = $this->_getController();
+        $cart = ModelFactory::createCart();
+        $cart->setType("shop");
+        $cart->save();
+        $stock = ModelFactory::createStockItem(cart: $cart, sellingPrice: 1899);
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authAdmin");
+
+        // when
+        $response = $controller->clearCartAction(
+            $currentUser,
+            $cart->getId(),
+        );
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $data = json_decode($response->getContent(), true);
+        $this->assertArrayHasKey('success', $data);
+        $stock->reload();
+        $this->assertNull($stock->getCartId());
+        $cart->reload();
+        $this->assertEquals(0, $cart->getCount());
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testClearCartActionReturns404WhenCartNotFound(): void
+    {
+        // given
+        $controller = $this->_getController();
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authAdmin");
+
+        // then
+        $this->expectException(\Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class);
+
+        // when
+        $controller->clearCartAction(
+            $currentUser,
+            99999,
+        );
+    }
 }
