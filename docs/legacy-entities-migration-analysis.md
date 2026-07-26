@@ -66,7 +66,6 @@ Toutes les 44 classes Entity ont un modèle Propel sur la même table — aucune
 | `Right` | Migration de `Publisher::getRights()` et `Visitor::getCurrentRight()` + 4 contrôleurs legacy | Remplacé par `RightQuery` |
 | `Session` | Migration de `Visitor::_setUserFromToken()` | Remplacé par `SessionQuery` |
 | `Tag` | Migration de `TagController` + `Article::countAllFromTag/getAllFromTag` | Remplacé par `TagQuery`, hook `preSave` pour le slug |
-| `Inventory` | Migration de `InventoryController` (4 méthodes) | Remplacé par `InventoryQuery` |
 
 ### Bloquées par l'API de thèmes
 
@@ -147,10 +146,9 @@ Migrer les appels legacy dans les classes encore dépendantes pour débloquer le
 | `Visitor.class.php` | `RightManager` → `RightQuery` + 4 contrôleurs | `Right` | ✅ fait |
 | `Visitor.class.php` | `SessionManager` → `SessionQuery` | `Session` | ✅ fait |
 | `TagController.php` | `TagManager` → `TagQuery` | `Tag` | ✅ fait |
-| `InventoryController.php` | `InventoryManager` → `InventoryQuery` | `Inventory` | ✅ fait |
 | `Article/Post/People.class.php` | `Media` | `Media` | ⏳ à faire |
 
-Puis : `People`, `Post`, `Tag`, `Supplier`, `Inventory`, `Customer`, `Lang`, `Link`, `Role`
+Puis : `People`, `Post`, `Tag`, `Supplier`, `Customer`, `Lang`, `Link`, `Role`
 
 **Étape 3 — Migration des classes majeures**  
 À traiter une par une, en commençant par les contrôleurs puis les templates :  
