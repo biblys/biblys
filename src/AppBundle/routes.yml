@@ -319,30 +319,6 @@ gallery_show:
   path: /galerie/{slug}
   controller: AppBundle\Controller\GalleryController::showAction
 
-# Inventory
-
-inventory_index:
-  path: /admin/inventories/
-  controller: AppBundle\Controller\InventoryController::indexAction
-
-inventory_item_delete:
-  path: /admin/inventories/{inventory_id}/item/{id}/delete
-  controller: AppBundle\Controller\InventoryController::itemDeleteAction
-
-inventory_item_remove:
-  path: /admin/inventories/{inventory_id}/item/{id}/remove
-  controller: AppBundle\Controller\InventoryController::itemRemoveAction
-
-inventory_import:
-  path: /admin/inventories/{id}/import
-  controller: AppBundle\Controller\InventoryController::importAction
-
-inventory_show:
-  path: /admin/inventories/{id}/{mode}
-  controller: AppBundle\Controller\InventoryController::showAction
-  defaults:
-    mode: null
-
 # Invitations
 
 invitation_new:
