@@ -532,6 +532,32 @@ function reloadAdminEvents() {
     }
   });
 
+  // Mettre à jour le titre et/ou le client d'un panier
+  async function update_cart_info(cartId, field, value) {
+    const response = await fetch(`/admin/pos/carts/${cartId}`, {
+      method: 'PATCH',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: `${field}=${encodeURIComponent(value)}`,
+    });
+
+    if (!response.ok) {
+      let message = "Le panier n'a pas pu être mis à jour.";
+      try {
+        const error = await response.json();
+        if (error && error.message) message = error.message;
+      } catch (e) {
+        // réponse d'erreur non-JSON : on conserve le message générique
+      }
+      window._alert(message);
+      return null;
+    }
+
+    return await response.json();
+  }
+
   // Rechercher un article
   function checkout_lookup(event) {
     var input = $('#checkout_add_input').val();
@@ -634,16 +660,13 @@ function reloadAdminEvents() {
         return true;
       }
 
-      $.post(
-        '/pages/adm_checkout?cart_id=' + $('#cart_id').val(),
-        {
-          set_title: '' + $(this).text() + ''
-        },
-        function(res) {
-          if (res.error) _alert(res.error);
-          else notify(res.success);
-        }
-      );
+      update_cart_info(
+        $('#cart_id').val(),
+        'title',
+        $(this).text()
+      ).then(function(res) {
+        if (res) notify(res.success);
+      });
 
       return true;
     })
@@ -667,46 +690,39 @@ function reloadAdminEvents() {
       // Annuler la sélection du client
     })
     .click(function() {
-      $.post(
-        '/pages/adm_checkout?cart_id=' + $('#cart_id').val(),
-        {
-          set_customer: ''
-        },
-        function(res) {
-          if (res.error) _alert(res.error.message);
-          else {
-            $('#customer')
-              .removeClass('pointer')
-              .removeAttr('readonly')
-              .val('');
-            $('#customer_id').val('');
-            //notify(res.success);
-          }
+      update_cart_info(
+        $('#cart_id').val(),
+        'customer_id',
+        0
+      ).then(function(res) {
+        if (res) {
+          $('#customer')
+            .removeClass('pointer')
+            .removeAttr('readonly')
+            .val('');
+          $('#customer_id').val('');
         }
-      );
+      });
     })
     .removeClass('event');
 
   // Sélectionner un client
   function selectCustomer(id, name) {
-    $.post(
-      '/pages/adm_checkout?cart_id=' + $('#cart_id').val(),
-      {
-        set_customer: '' + id + ''
-      },
-      function(res) {
-        if (res.error) _alert(res.error.message);
-        else {
-          $('#customer')
-            .addClass('pointer')
-            .attr('readonly', 'readonly')
-            .val(name);
-          $('#customer_id').val(id);
-          $('#article').focus();
-          notify(res.success);
-        }
+    update_cart_info(
+      $('#cart_id').val(),
+      'customer_id',
+      id
+    ).then(function(res) {
+      if (res) {
+        $('#customer')
+          .addClass('pointer')
+          .attr('readonly', 'readonly')
+          .val(name);
+        $('#customer_id').val(id);
+        $('#article').focus();
+        notify(res.success);
       }
-    );
+    });
   }
 
   document.addEventListener('keyup', function(event) {
