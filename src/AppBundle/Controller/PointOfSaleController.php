@@ -19,6 +19,7 @@
 namespace AppBundle\Controller;
 
 use Biblys\Exception\CannotAddStockItemToCartException;
+use Biblys\Exception\CannotFindCustomerException;
 use Biblys\Exception\CannotRemoveStockItemFromCartException;
 use Biblys\Service\BodyParamsService;
 use Biblys\Service\CurrentSite;
@@ -42,6 +43,7 @@ use Symfony\Component\Routing\Generator\UrlGenerator;
 use Usecase\AddStockItemToPointOfSaleCartUsecase;
 use Usecase\ClearPointOfSaleCartUsecase;
 use Usecase\RemoveStockItemFromPointOfSaleCartUsecase;
+use Usecase\UpdatePointOfSaleCartUsecase;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -251,6 +253,43 @@ class PointOfSaleController extends Controller
 
         return new JsonResponse([
             "success" => "Le panier a été vidé.",
+        ]);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function updateCartAction(
+        Request     $request,
+        CurrentUser $currentUser,
+        int         $cartId,
+    ): Response
+    {
+        $currentUser->authAdmin();
+
+        if (!CartQuery::create()->filterById($cartId)->exists()) {
+            throw new NotFoundHttpException("Panier $cartId introuvable");
+        }
+
+        $bodyParams = new BodyParamsService($request);
+        $bodyParams->parse([
+            "title" => ["type" => "string", "default" => null],
+            "customer_id" => ["type" => "numeric", "default" => null],
+        ]);
+
+        try {
+            $usecase = new UpdatePointOfSaleCartUsecase();
+            $usecase->execute(
+                $cartId,
+                title: $bodyParams->get("title"),
+                customerId: $bodyParams->getInteger("customer_id"),
+            );
+        } catch (CannotFindCustomerException $exception) {
+            throw new NotFoundHttpException($exception->getMessage(), $exception);
+        }
+
+        return new JsonResponse([
+            "success" => "Le panier a été mis à jour.",
         ]);
     }
 }

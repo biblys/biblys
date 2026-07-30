@@ -414,6 +414,13 @@ point_of_sale_clear_cart:
   requirements:
     cartId: \d+
 
+point_of_sale_update_cart:
+  path: /admin/pos/carts/{cartId}
+  controller: AppBundle\Controller\PointOfSaleController::updateCartAction
+  methods: [PATCH]
+  requirements:
+    cartId: \d+
+
 # Orders
 
 order_index:
