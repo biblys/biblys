@@ -478,4 +478,146 @@ class PointOfSaleControllerTest extends TestCase
             99999,
         );
     }
+
+    /**
+     * @throws PropelException
+     */
+    public function testUpdateCartActionRenamesCartAndReturnsJsonSuccess(): void
+    {
+        // given
+        $controller = $this->_getController();
+        $cart = ModelFactory::createCart();
+        $cart->setType("shop");
+        $cart->save();
+
+        $request = new Request(request: ['title' => 'Nouveau nom']);
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authAdmin");
+
+        // when
+        $response = $controller->updateCartAction(
+            $request,
+            $currentUser,
+            $cart->getId(),
+        );
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $data = json_decode($response->getContent(), true);
+        $this->assertArrayHasKey('success', $data);
+        $cart->reload();
+        $this->assertEquals('Nouveau nom', $cart->getTitle());
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testUpdateCartActionSetsCustomerAndReturnsJsonSuccess(): void
+    {
+        // given
+        $controller = $this->_getController();
+        $cart = ModelFactory::createCart();
+        $cart->setType("shop");
+        $cart->save();
+        $customer = ModelFactory::createCustomer();
+
+        $request = new Request(request: ['customer_id' => $customer->getId()]);
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authAdmin");
+
+        // when
+        $response = $controller->updateCartAction(
+            $request,
+            $currentUser,
+            $cart->getId(),
+        );
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $cart->reload();
+        $this->assertEquals($customer->getId(), $cart->getCustomerId());
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testUpdateCartActionUnsetsCustomerWhenCustomerIdIsEmpty(): void
+    {
+        // given
+        $controller = $this->_getController();
+        $cart = ModelFactory::createCart();
+        $cart->setType("shop");
+        $customer = ModelFactory::createCustomer();
+        $cart->setCustomerId($customer->getId());
+        $cart->save();
+
+        $request = new Request(request: ['customer_id' => '0']);
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authAdmin");
+
+        // when
+        $response = $controller->updateCartAction(
+            $request,
+            $currentUser,
+            $cart->getId(),
+        );
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $cart->reload();
+        $this->assertNull($cart->getCustomerId());
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testUpdateCartActionReturns404WhenCartNotFound(): void
+    {
+        // given
+        $controller = $this->_getController();
+        $request = new Request(request: ['title' => 'Nouveau nom']);
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authAdmin");
+
+        // then
+        $this->expectException(\Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class);
+
+        // when
+        $controller->updateCartAction(
+            $request,
+            $currentUser,
+            99999,
+        );
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testUpdateCartActionReturns404WhenCustomerNotFound(): void
+    {
+        // given
+        $controller = $this->_getController();
+        $cart = ModelFactory::createCart();
+        $cart->setType("shop");
+        $cart->save();
+
+        $request = new Request(request: ['customer_id' => '99999']);
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authAdmin");
+
+        // then
+        $this->expectException(\Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class);
+
+        // when
+        $controller->updateCartAction(
+            $request,
+            $currentUser,
+            $cart->getId(),
+        );
+    }
 }
