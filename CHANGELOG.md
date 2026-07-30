@@ -24,6 +24,7 @@
   taux de TVA réduit de 2,1 % applicable automatiquement.
 - La page de caisse a été redessinée pour une présentation plus claire et
   cohérente avec le reste de l'administration.
+- La fonctionnalité Inventaires a été supprimée de l'administration.
 
 ### Corrections
 
