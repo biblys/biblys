@@ -2753,7 +2753,7 @@
         },
         {
             "name": "mailjet/mailjet-apiv3-php",
-            "version": "v1.6.7",
+            "version": "v1.6.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mailjet/mailjet-apiv3-php.git",
@@ -2816,7 +2816,7 @@
             ],
             "support": {
                 "issues": "https://github.com/mailjet/mailjet-apiv3-php/issues",
-                "source": "https://github.com/mailjet/mailjet-apiv3-php/tree/v1.6.7"
+                "source": "https://github.com/mailjet/mailjet-apiv3-php/tree/v1.6.8"
             },
             "time": "2026-02-25T21:58:12+00:00"
         },
