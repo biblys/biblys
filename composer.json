@@ -62,7 +62,7 @@
     "symfony/config": "^6.0",
     "monolog/monolog": "^3.0",
     "google/recaptcha": "^1.1",
-    "guzzlehttp/guzzle": "~7.4",
+    "guzzlehttp/guzzle": "~8.0",
     "biblys/isbn": "~3.0",
     "symfony/form": "^6.0",
     "symfony/security-csrf": "^6.0",
