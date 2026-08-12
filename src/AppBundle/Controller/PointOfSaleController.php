@@ -24,6 +24,7 @@ use Biblys\Exception\CannotRemoveStockItemFromCartException;
 use Biblys\Service\BodyParamsService;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
+use Biblys\Service\FlashMessagesService;
 use Biblys\Service\Images\ImagesService;
 use Biblys\Service\QueryParamsService;
 use Biblys\Service\TemplateService;
@@ -42,6 +43,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Usecase\AddStockItemToPointOfSaleCartUsecase;
 use Usecase\ClearPointOfSaleCartUsecase;
+use Usecase\CreatePointOfSaleOrderUsecase;
 use Usecase\RemoveStockItemFromPointOfSaleCartUsecase;
 use Usecase\UpdatePointOfSaleCartUsecase;
 use Twig\Error\LoaderError;
@@ -291,5 +293,56 @@ class PointOfSaleController extends Controller
         return new JsonResponse([
             "success" => "Le panier a été mis à jour.",
         ]);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function createSaleAction(
+        Request               $request,
+        CurrentUser           $currentUser,
+        FlashMessagesService  $flashMessagesService,
+        int                   $cartId,
+    ): Response
+    {
+        $currentUser->authAdmin();
+
+        if (!CartQuery::create()->filterById($cartId)->exists()) {
+            throw new NotFoundHttpException("Panier $cartId introuvable");
+        }
+
+        $bodyParams = new BodyParamsService($request);
+        $bodyParams->parse([
+            "seller_id" => ["type" => "numeric", "default" => null],
+            "customer_id" => ["type" => "numeric", "default" => null],
+            "cart_cash" => ["type" => "numeric", "default" => 0],
+            "cart_cheque" => ["type" => "numeric", "default" => 0],
+            "cart_card" => ["type" => "numeric", "default" => 0],
+            "cart_topay" => ["type" => "numeric", "default" => 0],
+            "cart_togive" => ["type" => "numeric", "default" => 0],
+        ]);
+
+        $usecase = new CreatePointOfSaleOrderUsecase();
+        $orderId = $usecase->execute(
+            $cartId,
+            sellerId: $bodyParams->getInteger("seller_id"),
+            customerId: $bodyParams->getInteger("customer_id"),
+            cashAmount: $bodyParams->getInteger("cart_cash"),
+            chequeAmount: $bodyParams->getInteger("cart_cheque"),
+            cardAmount: $bodyParams->getInteger("cart_card"),
+            amountToBePaid: $bodyParams->getInteger("cart_topay"),
+            paymentLeft: $bodyParams->getInteger("cart_togive"),
+        );
+
+        $flashMessagesService->add("success", "La vente a été enregistrée.");
+
+        if (in_array("application/json", $request->getAcceptableContentTypes())) {
+            return new JsonResponse([
+                "success" => "La vente a été enregistrée.",
+                "order_id" => $orderId,
+            ]);
+        }
+
+        return new RedirectResponse("/admin/caisse");
     }
 }
