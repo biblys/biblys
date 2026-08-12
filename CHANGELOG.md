@@ -1,6 +1,6 @@
 # Historique des modifications
 
-## 3.15.0 (DEV)
+## 3.15.0 (12 août 2026)
 
 ### Conformité NF525
 
@@ -37,6 +37,9 @@
 - Dans la caisse, certains messages d'erreur (désélection d'un client,
   validation d'une vente) s'affichaient sous la forme illisible
   « [object Object] » au lieu du message réel. C'est corrigé.
+- Dans la caisse, la liste de résultats affichée lors de la recherche d'un
+  article à ajouter au panier pouvait apparaître tronquée, masquée par la
+  section « Autres paniers » située juste en dessous. C'est corrigé.
 
 ## 3.14.3 (24 juillet 2026)
 
