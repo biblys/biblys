@@ -361,8 +361,7 @@ function reloadAdminEvents() {
       }
 
       if (go == 1) {
-        var data = {
-          validate: 1,
+        create_sale($('#cart_id').val(), {
           seller_id: $('#seller_id').val(),
           customer_id: $('#customer_id').val(),
           cart_cash: $('#cart_cash').val() * 100,
@@ -370,22 +369,36 @@ function reloadAdminEvents() {
           cart_card: $('#cart_card').val() * 100,
           cart_topay: $('#cart_topay').attr('data-value'),
           cart_togive: $('#cart_togive').attr('data-value')
-        };
-        $.post({
-          url: '/pages/adm_checkout?cart_id=' + $('#cart_id').val(),
-          data: data,
-          dataType: 'json'
-        })
-          .done(function() {
-            window.location.href = '/admin/caisse';
-          })
-          .fail(function(res) {
-            var json = res.responseJSON;
-            _alert(json.error.message);
-          });
+        });
       }
     })
     .removeClass('event');
+
+  // Enregistrer la vente
+  async function create_sale(cartId, data) {
+    const response = await fetch(`/admin/pos/carts/${cartId}/sale`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams(data).toString(),
+    });
+
+    if (!response.ok) {
+      let message = "La vente n'a pas pu être enregistrée.";
+      try {
+        const error = await response.json();
+        if (error && error.message) message = error.message;
+      } catch (e) {
+        // réponse d'erreur non-JSON : on conserve le message générique
+      }
+      window._alert(message);
+      return;
+    }
+
+    window.location.href = '/admin/caisse';
+  }
 
   // Update cart
   function update_cart() {
