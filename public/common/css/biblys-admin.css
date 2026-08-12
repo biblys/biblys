@@ -156,6 +156,7 @@ table.checkable tbody tr {
 
 #checkout_add_results {
   position: absolute;
+  z-index: 100;
   background: rgba(255, 255, 255, 0.99);
   max-width: 768px;
   width: auto;
