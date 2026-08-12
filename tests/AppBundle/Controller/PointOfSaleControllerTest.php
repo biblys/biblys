@@ -21,6 +21,7 @@ namespace AppBundle\Controller;
 use Biblys\Service\BodyParamsService;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
+use Biblys\Service\FlashMessagesService;
 use Biblys\Service\Images\ImagesService;
 use Biblys\Service\QueryParamsService;
 use Biblys\Test\EntityFactory;
@@ -618,6 +619,107 @@ class PointOfSaleControllerTest extends TestCase
             $request,
             $currentUser,
             $cart->getId(),
+        );
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testCreateSaleActionCreatesOrderAndReturnsJson(): void
+    {
+        // given
+        $controller = $this->_getController();
+        $cart = ModelFactory::createCart();
+        $cart->setType("shop");
+        $cart->save();
+        $stock = ModelFactory::createStockItem(cart: $cart, sellingPrice: 1899);
+
+        $request = new Request(request: [
+            'cart_cash' => '1899',
+            'cart_topay' => '0',
+            'cart_togive' => '0',
+        ]);
+        $request->headers->set('Accept', 'application/json');
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authAdmin");
+
+        $flashMessagesService = Mockery::mock(FlashMessagesService::class);
+        $flashMessagesService->expects("add")->with("success", "La vente a été enregistrée.");
+
+        // when
+        $response = $controller->createSaleAction(
+            $request,
+            $currentUser,
+            $flashMessagesService,
+            $cart->getId(),
+        );
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $data = json_decode($response->getContent(), true);
+        $this->assertArrayHasKey('order_id', $data);
+        $stock->reload();
+        $this->assertEquals($data['order_id'], $stock->getOrderId());
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testCreateSaleActionRedirectsWhenNotAcceptingJson(): void
+    {
+        // given
+        $controller = $this->_getController();
+        $cart = ModelFactory::createCart();
+        $cart->setType("shop");
+        $cart->save();
+
+        $request = new Request(request: [
+            'cart_cash' => '0',
+            'cart_topay' => '0',
+            'cart_togive' => '0',
+        ]);
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authAdmin");
+
+        $flashMessagesService = Mockery::mock(FlashMessagesService::class);
+        $flashMessagesService->expects("add")->with("success", "La vente a été enregistrée.");
+
+        // when
+        $response = $controller->createSaleAction(
+            $request,
+            $currentUser,
+            $flashMessagesService,
+            $cart->getId(),
+        );
+
+        // then
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals("/admin/caisse", $response->headers->get("Location"));
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testCreateSaleActionReturns404WhenCartNotFound(): void
+    {
+        // given
+        $controller = $this->_getController();
+        $request = new Request();
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authAdmin");
+
+        // then
+        $this->expectException(\Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class);
+
+        // when
+        $controller->createSaleAction(
+            $request,
+            $currentUser,
+            Mockery::mock(FlashMessagesService::class),
+            99999,
         );
     }
 }

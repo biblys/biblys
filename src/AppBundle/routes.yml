@@ -421,6 +421,13 @@ point_of_sale_update_cart:
   requirements:
     cartId: \d+
 
+point_of_sale_create_sale:
+  path: /admin/pos/carts/{cartId}/sale
+  controller: AppBundle\Controller\PointOfSaleController::createSaleAction
+  methods: [POST]
+  requirements:
+    cartId: \d+
+
 # Orders
 
 order_index:
