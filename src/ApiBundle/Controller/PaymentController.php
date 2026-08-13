@@ -171,7 +171,7 @@ class PaymentController extends Controller
                 $payment = new Payment();
                 $payment->setOrder($order);
                 $payment->setMode(Payment::MODE_PAYPAL);
-                $payment->setAmount($paidAmount * 100);
+                $payment->setAmount(round($paidAmount * 100));
 
                 $addArticleToLibraryUsecase = new AddArticleToUserLibraryUsecase(
                     mailer: $mailer,
