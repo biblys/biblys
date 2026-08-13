@@ -69,15 +69,20 @@ Toutes les 44 classes Entity ont un modèle Propel sur la même table — aucune
 
 ### Bloquées par l'API de thèmes
 
-Ces classes sont utilisées dans des méthodes `@deprecated` de classes legacy qui font partie de l'**API publique consommée par les thèmes Biblys**. Le périmètre à auditer est double :
+Suivi dédié : **issue [#619](https://github.com/biblys/biblys/issues/619)**.
+
+Plusieurs méthodes `@deprecated` de classes legacy font partie de l'**API publique consommée par les thèmes Biblys**. Le périmètre à auditer est double :
 - les thèmes versionnés dans `../sites/` (dépôt séparé)
 - le thème actuellement chargé dans `app/` (copie de travail locale, non versionnée ici)
 
-Leur suppression ne peut intervenir qu'après audit complet de ces deux emplacements.
+Leur suppression ne peut intervenir qu'après audit complet de ces deux emplacements. La vraie contrainte de blocage est `ImagesService` : tant que les thèmes n'ont pas basculé dessus, aucune des méthodes image legacy ne peut disparaître.
 
 | Classe | Méthodes concernées | Statut |
 |---|---|---|
-| `Media` | `Article::getCover()`, `Post::getIllustration()`, `People::getPhoto()` et variantes | ⏸️ différé — compatibilité thèmes |
+| `Media` | Classe entière (usages transverses via `Article`/`Post`/`People`) | ⏸️ différé — compatibilité thèmes |
+| `Article` | `getCover()`, `hasCover()`, `getCoverTag()`, `getCoverUrl()`, `getCartButton()` | ⏸️ différé — compatibilité thèmes |
+| `Post` | `getIllustration()`, `hasIllustration()`, `getIllustrationUrl()`, `getIllustrationTag()` | ⏸️ différé — compatibilité thèmes |
+| `People` | `getPhoto()`, `hasPhoto()` | ⏸️ différé — compatibilité thèmes |
 
 ---
 
