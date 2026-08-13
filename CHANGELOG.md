@@ -1,5 +1,13 @@
 # Historique des modifications
 
+## 3.15.1 (13 août 2026)
+
+### Corrections
+
+- Corrigé un arrondi flottant lors de la capture d'un paiement PayPal qui
+  pouvait laisser un centime "restant à payer" sur des commandes pourtant
+  payées intégralement.
+
 ## 3.15.0 (12 août 2026)
 
 ### Conformité NF525

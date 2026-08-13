@@ -157,4 +157,86 @@ class PaymentControllerTest extends TestCase
         $this->assertEquals(2500, $payment->getAmount());
         $this->assertTrue($payment->isExecuted(), "the payment should have been marked as executed");
     }
+
+    /**
+     * Regression test: PayPal returns captured amounts as decimal strings (e.g. "19.99").
+     * Converting them to cents via a plain float multiplication (value * 100) is subject to
+     * floating-point representation error (19.99 * 100 = 1998.9999999999998), which the
+     * subsequent (int) cast in Payment::setAmount() truncates down to 1998 instead of 1999,
+     * leaving the order 1 cent short of fully paid despite PayPal having captured it in full.
+     *
+     * @throws PropelException
+     * @throws TransportExceptionInterface
+     * @throws Exception
+     */
+    public function testPaypalCaptureActionWithAmountProneToFloatingPointError(): void
+    {
+        // given
+        $order = ModelFactory::createOrder(amountToBePaid: 1999);
+
+        $config = Mockery::mock(Config::class);
+        $config->expects("isPayPalEnabled")->andReturn(true);
+
+        $paymentService = Mockery::mock(PaymentService::class);
+        $paymentService->expects("getPayableOrderBySlug")->andReturn($order);
+
+        $request = new Request([], [], [], [], [], [], json_encode(["paypalOrderId" => "PAYPAL_ORDER_123"]));
+
+        $captureResponseData = [
+            "status" => "COMPLETED",
+            "purchase_units" => [
+                [
+                    "payments" => [
+                        "captures" => [
+                            ["amount" => ["value" => "19.99"]],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $mockApiResponse = Mockery::mock(ApiResponse::class);
+        $mockApiResponse->allows("getBody")->andReturn(json_encode($captureResponseData));
+        $mockApiResponse->allows("getStatusCode")->andReturn(201);
+
+        $mockOrdersController = Mockery::mock(OrdersController::class);
+        $mockOrdersController->expects("captureOrder")
+            ->with(["id" => "PAYPAL_ORDER_123"])
+            ->andReturn($mockApiResponse);
+
+        $mockPaypalClient = Mockery::mock(PaypalServerSdkClient::class);
+        $mockPaypalClient->allows("getOrdersController")->andReturn($mockOrdersController);
+
+        $controller = Mockery::mock(PaymentController::class)->makePartial()->shouldAllowMockingProtectedMethods();
+        $controller->shouldAllowMockingProtectedMethods();
+        $controller->expects("_createPayPalClient")->andReturn($mockPaypalClient);
+
+        $mailer = Mockery::mock(Mailer::class);
+        $mailer->expects("send")->once();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate");
+        $templateService = Helpers::getTemplateService();
+        $loggerService = Mockery::mock(LoggerService::class);
+        $loggerService->shouldReceive("log");
+
+        // when
+        $controller->paypalCaptureAction(
+            config: $config,
+            paymentService: $paymentService,
+            request: $request,
+            logger: $loggerService,
+            mailer: $mailer,
+            currentSite: $currentSite,
+            urlGenerator: $urlGenerator,
+            templateService: $templateService,
+            slug: $order->getSlug(),
+        );
+
+        // then
+        $order->reload();
+        $payment = PaymentQuery::create()->findOneByOrderId($order->getId());
+        $this->assertEquals(1999, $payment->getAmount(), "payment amount should be 1999 cents, not 1998");
+        $this->assertTrue($order->isPaid(), "the order should have been marked as fully paid");
+    }
 }
