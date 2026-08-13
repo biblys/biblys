@@ -29,10 +29,12 @@ use Biblys\Service\Images\ImagesService;
 use Biblys\Service\QueryParamsService;
 use Biblys\Service\TemplateService;
 use CartManager;
-use CustomerManager;
 use Framework\Controller;
+use Model\Cart;
 use Model\CartQuery;
+use Model\CustomerQuery;
 use Model\UserQuery;
+use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -80,21 +82,21 @@ class PointOfSaleController extends Controller
 
         $cartId = $queryParams->getInteger("cart_id");
         if (!$cartId) {
-            $cartForCurrentSeller = $cm->get([
-                "cart_type" => "shop",
-                "cart_seller_id" => $currentUser->getUser()->getId(),
-                "cart_count" => 0,
-            ]);
+            $cartForCurrentSeller = CartQuery::create()
+                ->filterByType('shop')
+                ->filterBySellerId($currentUser->getUser()->getId())
+                ->filterByCount(0)
+                ->findOne();
 
             if ($cartForCurrentSeller) {
-                return new RedirectResponse("/admin/caisse?cart_id={$cartForCurrentSeller->get('id')}");
+                return new RedirectResponse("/admin/caisse?cart_id={$cartForCurrentSeller->getId()}");
             }
 
-            $newCart = $cm->create();
-            $newCart->set("cart_type", "shop");
-            $newCart->set("cart_seller_id", $currentUser->getUser()->getId());
-            $newCart = $cm->update($newCart);
-            return new RedirectResponse("/admin/caisse?cart_id={$newCart->get('id')}");
+            $newCart = new Cart();
+            $newCart->setType('shop');
+            $newCart->setSellerId($currentUser->getUser()->getId());
+            $newCart->save();
+            return new RedirectResponse("/admin/caisse?cart_id={$newCart->getId()}");
         }
 
         $cart = $cm->get(['cart_id' => $cartId]);
@@ -108,9 +110,9 @@ class PointOfSaleController extends Controller
         }
 
         $customer = null;
-        if ($cart->has('customer_id')) {
-            $customerManager = new CustomerManager();
-            $customer = $customerManager->get(['customer_id' => $cart->get('customer_id')]);
+        $customerId = $cart->get('customer_id');
+        if ($customerId) {
+            $customer = CustomerQuery::create()->findPk($customerId);
         }
 
         $cartContent = '';
@@ -124,25 +126,28 @@ class PointOfSaleController extends Controller
         $cm->updateFromStock($cart);
 
         $pointOfSaleCarts = [];
-        foreach ($cm->getAll() as $pointOfSaleCart) {
-            if ($pointOfSaleCart->get('cart_count') > 0 && $pointOfSaleCart->get('cart_type') === 'shop') {
-                $cartSeller = null;
-                if ($pointOfSaleCart->has('seller_user_id')) {
-                    $cartSeller = UserQuery::create()->findPk($pointOfSaleCart->get('seller_user_id'));
-                } elseif ($pointOfSaleCart->has('seller_id')) {
-                    $cartSeller = UserQuery::create()->findPk($pointOfSaleCart->get('seller_id'));
-                }
-                $pointOfSaleCarts[] = [
-                    'id' => $pointOfSaleCart->get('cart_id'),
-                    'title' => $pointOfSaleCart->get('cart_title'),
-                    'seller_email' => $cartSeller?->getEmail() ?? "Vendeur inconnu",
-                    'customer_name' => $pointOfSaleCart->has('customer')
-                        ? $pointOfSaleCart->get('customer')->get('first_name') . ' ' . $pointOfSaleCart->get('customer')->get('last_name')
-                        : null,
-                    'count' => $pointOfSaleCart->get('cart_count'),
-                    'amount' => $pointOfSaleCart->get('cart_amount'),
-                ];
+        $openShopCarts = CartQuery::create()
+            ->filterByType('shop')
+            ->filterByCount(0, Criteria::GREATER_THAN)
+            ->find();
+        foreach ($openShopCarts as $pointOfSaleCart) {
+            $cartSeller = null;
+            if ($pointOfSaleCart->getSellerUserId()) {
+                $cartSeller = UserQuery::create()->findPk($pointOfSaleCart->getSellerUserId());
+            } elseif ($pointOfSaleCart->getSellerId()) {
+                $cartSeller = UserQuery::create()->findPk($pointOfSaleCart->getSellerId());
             }
+            $customerForCart = $pointOfSaleCart->getCustomerId()
+                ? CustomerQuery::create()->findPk($pointOfSaleCart->getCustomerId())
+                : null;
+            $pointOfSaleCarts[] = [
+                'id' => $pointOfSaleCart->getId(),
+                'title' => $pointOfSaleCart->getTitle(),
+                'seller_email' => $cartSeller?->getEmail() ?? "Vendeur inconnu",
+                'customer_name' => $customerForCart?->getFullName(),
+                'count' => $pointOfSaleCart->getCount(),
+                'amount' => $pointOfSaleCart->getAmount(),
+            ];
         }
 
         return $templateService->renderResponse("AppBundle:PointOfSale:index.html.twig", [

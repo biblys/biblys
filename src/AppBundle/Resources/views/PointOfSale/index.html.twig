@@ -78,9 +78,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
               {% if customer %}
                 <input type="text" name="customer" id="customer"
                        placeholder="Rechercher un client..."
-                       value="{{ customer.get('customer_last_name') }}, {{ customer.get('customer_first_name') }} ({{ customer.get('customer_email') }})"
+                       value="{{ customer.getLastName() }}, {{ customer.getFirstName() }} ({{ customer.getEmail() }})"
                        readonly class="form-control pointer event">
-                <input type="hidden" name="customer_id" id="customer_id" value="{{ customer.get('customer_id') }}" required>
+                <input type="hidden" name="customer_id" id="customer_id" value="{{ customer.getId() }}" required>
               {% else %}
                 <input type="text" name="customer" id="customer" placeholder="Rechercher un client..." class="form-control event">
                 <input type="hidden" name="customer_id" id="customer_id" required>
