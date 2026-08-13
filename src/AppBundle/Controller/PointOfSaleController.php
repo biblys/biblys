@@ -345,4 +345,29 @@ class PointOfSaleController extends Controller
 
         return new RedirectResponse("/admin/caisse");
     }
+
+    /**
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
+    public function legacyRedirectAction(
+        Request         $request,
+        CurrentUser     $currentUser,
+        UrlGenerator    $urlGenerator,
+        TemplateService $templateService,
+    ): Response
+    {
+        $currentUser->authAdmin();
+
+        $newUrl = $urlGenerator->generate("point_of_sale_index");
+        $cartId = $request->query->get("cart_id");
+        if ($cartId) {
+            $newUrl .= "?cart_id=$cartId";
+        }
+
+        return $templateService->renderResponse("AppBundle:PointOfSale:moved.html.twig", [
+            "new_url" => $newUrl,
+        ], isPrivate: true);
+    }
 }
