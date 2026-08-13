@@ -334,37 +334,6 @@
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
   </table>
-  <table name="coupons" idMethod="native" phpName="Coupon">
-    <column name="coupon_id" phpName="Id" type="INTEGER" sqlType="int unsigned" primaryKey="true" autoIncrement="true" required="true"/>
-    <column name="site_id" phpName="SiteId" type="INTEGER" sqlType="int unsigned"/>
-    <column name="axys_account_id" phpName="AxysAccountId" type="INTEGER" sqlType="int unsigned"/>
-    <column name="user_id" phpName="UserId" type="INTEGER" sqlType="int unsigned"/>
-    <foreign-key foreignTable="users" skipSql="true">
-      <reference local="user_id" foreign="id"/>
-    </foreign-key>
-    <column name="coupon_code" phpName="Code" type="VARCHAR" size="6"/>
-    <column name="article_id" phpName="ArticleId" type="INTEGER" sqlType="int unsigned"/>
-    <column name="stock_id" phpName="StockId" type="INTEGER" sqlType="int unsigned"/>
-    <column name="coupon_amount" phpName="Amount" type="INTEGER" sqlType="int unsigned"/>
-    <column name="coupon_note" phpName="Note" type="VARCHAR" size="256"/>
-    <column name="coupon_used" phpName="Used" type="TIMESTAMP"/>
-    <column name="coupon_creator" phpName="Creator" type="INTEGER" sqlType="int unsigned"/>
-    <column name="coupon_insert" phpName="CreatedAt" type="TIMESTAMP"/>
-    <column name="coupon_update" phpName="UpdatedAt" type="TIMESTAMP"/>
-    <behavior name="timestampable">
-      <parameter name="create_column" value="coupon_insert" />
-      <parameter name="update_column" value="coupon_update" />
-    </behavior>
-    <unique name="coupon_code">
-      <unique-column name="coupon_code"/>
-    </unique>
-    <unique name="stock_id">
-      <unique-column name="stock_id"/>
-    </unique>
-    <vendor type="mysql">
-      <parameter name="Engine" value="MyISAM"/>
-    </vendor>
-  </table>
   <table name="cron_jobs" idMethod="native" phpName="CronJob">
     <column name="cron_job_id" phpName="Id" type="INTEGER" sqlType="int unsigned" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="site_id" phpName="SiteId" type="INTEGER"/>
