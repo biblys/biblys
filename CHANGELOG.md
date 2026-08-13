@@ -1,5 +1,13 @@
 # Historique des modifications
 
+## 3.16.0 (DEV)
+
+### Améliorations
+
+- La page de caisse a été allégée visuellement : les sections « Vendeur /
+  Client », « Panier en cours » et « Autres paniers » ne sont plus encadrées
+  par des cartes, seul le bloc « Encaissement » reste mis en avant.
+
 ## 3.15.2 (26 août 2026)
 
 ### Corrections
