@@ -83,16 +83,6 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUserQuery rightJoinWithCartRelatedBySellerUserId() Adds a RIGHT JOIN clause and with to the query using the CartRelatedBySellerUserId relation
  * @method     ChildUserQuery innerJoinWithCartRelatedBySellerUserId() Adds a INNER JOIN clause and with to the query using the CartRelatedBySellerUserId relation
  *
- * @method     ChildUserQuery leftJoinCoupon($relationAlias = null) Adds a LEFT JOIN clause to the query using the Coupon relation
- * @method     ChildUserQuery rightJoinCoupon($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Coupon relation
- * @method     ChildUserQuery innerJoinCoupon($relationAlias = null) Adds a INNER JOIN clause to the query using the Coupon relation
- *
- * @method     ChildUserQuery joinWithCoupon($joinType = Criteria::INNER_JOIN) Adds a join clause and with to the query using the Coupon relation
- *
- * @method     ChildUserQuery leftJoinWithCoupon() Adds a LEFT JOIN clause and with to the query using the Coupon relation
- * @method     ChildUserQuery rightJoinWithCoupon() Adds a RIGHT JOIN clause and with to the query using the Coupon relation
- * @method     ChildUserQuery innerJoinWithCoupon() Adds a INNER JOIN clause and with to the query using the Coupon relation
- *
  * @method     ChildUserQuery leftJoinCustomer($relationAlias = null) Adds a LEFT JOIN clause to the query using the Customer relation
  * @method     ChildUserQuery rightJoinCustomer($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Customer relation
  * @method     ChildUserQuery innerJoinCustomer($relationAlias = null) Adds a INNER JOIN clause to the query using the Customer relation
@@ -273,7 +263,7 @@ use Propel\Runtime\Exception\PropelException;
  * @method     ChildUserQuery rightJoinWithWishlist() Adds a RIGHT JOIN clause and with to the query using the Wishlist relation
  * @method     ChildUserQuery innerJoinWithWishlist() Adds a INNER JOIN clause and with to the query using the Wishlist relation
  *
- * @method     \Model\SiteQuery|\Model\AlertQuery|\Model\CartQuery|\Model\CartQuery|\Model\CouponQuery|\Model\CustomerQuery|\Model\DownloadQuery|\Model\FileQuery|\Model\LinkQuery|\Model\StockItemListQuery|\Model\OptionQuery|\Model\OrderQuery|\Model\PermissionQuery|\Model\PostQuery|\Model\RightQuery|\Model\RoleQuery|\Model\SessionQuery|\Model\StockQuery|\Model\SubscriptionQuery|\Model\AuthenticationMethodQuery|\Model\VoteQuery|\Model\WishQuery|\Model\WishlistQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
+ * @method     \Model\SiteQuery|\Model\AlertQuery|\Model\CartQuery|\Model\CartQuery|\Model\CustomerQuery|\Model\DownloadQuery|\Model\FileQuery|\Model\LinkQuery|\Model\StockItemListQuery|\Model\OptionQuery|\Model\OrderQuery|\Model\PermissionQuery|\Model\PostQuery|\Model\RightQuery|\Model\RoleQuery|\Model\SessionQuery|\Model\StockQuery|\Model\SubscriptionQuery|\Model\AuthenticationMethodQuery|\Model\VoteQuery|\Model\WishQuery|\Model\WishlistQuery endUse() Finalizes a secondary criteria and merges it with its primary Criteria
  *
  * @method     ChildUser|null findOne(?ConnectionInterface $con = null) Return the first ChildUser matching the query
  * @method     ChildUser findOneOrCreate(?ConnectionInterface $con = null) Return the first ChildUser matching the query, or a new ChildUser object populated from the query conditions when no match is found
@@ -1494,179 +1484,6 @@ abstract class UserQuery extends ModelCriteria
     {
         /** @var $q \Model\CartQuery */
         $q = $this->useInQuery('CartRelatedBySellerUserId', $modelAlias, $queryClass, 'NOT IN');
-        return $q;
-    }
-
-    /**
-     * Filter the query by a related \Model\Coupon object
-     *
-     * @param \Model\Coupon|ObjectCollection $coupon the related object to use as filter
-     * @param string|null $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-     *
-     * @return $this The current query, for fluid interface
-     */
-    public function filterByCoupon($coupon, ?string $comparison = null)
-    {
-        if ($coupon instanceof \Model\Coupon) {
-            $this
-                ->addUsingAlias(UserTableMap::COL_ID, $coupon->getUserId(), $comparison);
-
-            return $this;
-        } elseif ($coupon instanceof ObjectCollection) {
-            $this
-                ->useCouponQuery()
-                ->filterByPrimaryKeys($coupon->getPrimaryKeys())
-                ->endUse();
-
-            return $this;
-        } else {
-            throw new PropelException('filterByCoupon() only accepts arguments of type \Model\Coupon or Collection');
-        }
-    }
-
-    /**
-     * Adds a JOIN clause to the query using the Coupon relation
-     *
-     * @param string|null $relationAlias Optional alias for the relation
-     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return $this The current query, for fluid interface
-     */
-    public function joinCoupon(?string $relationAlias = null, ?string $joinType = Criteria::LEFT_JOIN)
-    {
-        $tableMap = $this->getTableMap();
-        $relationMap = $tableMap->getRelation('Coupon');
-
-        // create a ModelJoin object for this join
-        $join = new ModelJoin();
-        $join->setJoinType($joinType);
-        $join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-        if ($previousJoin = $this->getPreviousJoin()) {
-            $join->setPreviousJoin($previousJoin);
-        }
-
-        // add the ModelJoin to the current object
-        if ($relationAlias) {
-            $this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-            $this->addJoinObject($join, $relationAlias);
-        } else {
-            $this->addJoinObject($join, 'Coupon');
-        }
-
-        return $this;
-    }
-
-    /**
-     * Use the Coupon relation Coupon object
-     *
-     * @see useQuery()
-     *
-     * @param string $relationAlias optional alias for the relation,
-     *                                   to be used as main alias in the secondary query
-     * @param string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return \Model\CouponQuery A secondary query class using the current class as primary query
-     */
-    public function useCouponQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
-    {
-        return $this
-            ->joinCoupon($relationAlias, $joinType)
-            ->useQuery($relationAlias ? $relationAlias : 'Coupon', '\Model\CouponQuery');
-    }
-
-    /**
-     * Use the Coupon relation Coupon object
-     *
-     * @param callable(\Model\CouponQuery):\Model\CouponQuery $callable A function working on the related query
-     *
-     * @param string|null $relationAlias optional alias for the relation
-     *
-     * @param string|null $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-     *
-     * @return $this
-     */
-    public function withCouponQuery(
-        callable $callable,
-        string $relationAlias = null,
-        ?string $joinType = Criteria::LEFT_JOIN
-    ) {
-        $relatedQuery = $this->useCouponQuery(
-            $relationAlias,
-            $joinType
-        );
-        $callable($relatedQuery);
-        $relatedQuery->endUse();
-
-        return $this;
-    }
-
-    /**
-     * Use the relation to Coupon table for an EXISTS query.
-     *
-     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useExistsQuery()
-     *
-     * @param string|null $modelAlias sets an alias for the nested query
-     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
-     * @param string $typeOfExists Either ExistsQueryCriterion::TYPE_EXISTS or ExistsQueryCriterion::TYPE_NOT_EXISTS
-     *
-     * @return \Model\CouponQuery The inner query object of the EXISTS statement
-     */
-    public function useCouponExistsQuery($modelAlias = null, $queryClass = null, $typeOfExists = 'EXISTS')
-    {
-        /** @var $q \Model\CouponQuery */
-        $q = $this->useExistsQuery('Coupon', $modelAlias, $queryClass, $typeOfExists);
-        return $q;
-    }
-
-    /**
-     * Use the relation to Coupon table for a NOT EXISTS query.
-     *
-     * @see useCouponExistsQuery()
-     *
-     * @param string|null $modelAlias sets an alias for the nested query
-     * @param string|null $queryClass Allows to use a custom query class for the exists query, like ExtendedBookQuery::class
-     *
-     * @return \Model\CouponQuery The inner query object of the NOT EXISTS statement
-     */
-    public function useCouponNotExistsQuery($modelAlias = null, $queryClass = null)
-    {
-        /** @var $q \Model\CouponQuery */
-        $q = $this->useExistsQuery('Coupon', $modelAlias, $queryClass, 'NOT EXISTS');
-        return $q;
-    }
-
-    /**
-     * Use the relation to Coupon table for an IN query.
-     *
-     * @see \Propel\Runtime\ActiveQuery\ModelCriteria::useInQuery()
-     *
-     * @param string|null $modelAlias sets an alias for the nested query
-     * @param string|null $queryClass Allows to use a custom query class for the IN query, like ExtendedBookQuery::class
-     * @param string $typeOfIn Criteria::IN or Criteria::NOT_IN
-     *
-     * @return \Model\CouponQuery The inner query object of the IN statement
-     */
-    public function useInCouponQuery($modelAlias = null, $queryClass = null, $typeOfIn = 'IN')
-    {
-        /** @var $q \Model\CouponQuery */
-        $q = $this->useInQuery('Coupon', $modelAlias, $queryClass, $typeOfIn);
-        return $q;
-    }
-
-    /**
-     * Use the relation to Coupon table for a NOT IN query.
-     *
-     * @see useCouponInQuery()
-     *
-     * @param string|null $modelAlias sets an alias for the nested query
-     * @param string|null $queryClass Allows to use a custom query class for the NOT IN query, like ExtendedBookQuery::class
-     *
-     * @return \Model\CouponQuery The inner query object of the NOT IN statement
-     */
-    public function useNotInCouponQuery($modelAlias = null, $queryClass = null)
-    {
-        /** @var $q \Model\CouponQuery */
-        $q = $this->useInQuery('Coupon', $modelAlias, $queryClass, 'NOT IN');
         return $q;
     }
 
