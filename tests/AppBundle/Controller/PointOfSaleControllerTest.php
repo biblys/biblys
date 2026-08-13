@@ -722,4 +722,68 @@ class PointOfSaleControllerTest extends TestCase
             99999,
         );
     }
+
+    /**
+     * @throws PropelException
+     */
+    public function testLegacyRedirectActionDisplaysAddressChangedNoticeWithLinkToNewUrl(): void
+    {
+        // given
+        $controller = $this->_getController();
+        $request = new Request();
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authAdmin");
+
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->shouldReceive("generate")
+            ->with("point_of_sale_index")
+            ->andReturn("/admin/caisse");
+
+        // when
+        $response = $controller->legacyRedirectAction(
+            $request,
+            $currentUser,
+            $urlGenerator,
+            Helpers::getTemplateService(),
+        );
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertStringContainsString("a changé d'adresse", $response->getContent());
+        $this->assertStringContainsString('href="/admin/caisse"', $response->getContent());
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testLegacyRedirectActionPreservesCartIdQueryParamInLink(): void
+    {
+        // given
+        $controller = $this->_getController();
+        $cart = EntityFactory::createCart();
+        $request = new Request(query: ["cart_id" => $cart->get("id")]);
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authAdmin");
+
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->shouldReceive("generate")
+            ->with("point_of_sale_index")
+            ->andReturn("/admin/caisse");
+
+        // when
+        $response = $controller->legacyRedirectAction(
+            $request,
+            $currentUser,
+            $urlGenerator,
+            Helpers::getTemplateService(),
+        );
+
+        // then
+        $this->assertStringContainsString(
+            'href="/admin/caisse?cart_id=' . $cart->get("id") . '"',
+            $response->getContent()
+        );
+    }
 }

@@ -428,6 +428,11 @@ point_of_sale_create_sale:
   requirements:
     cartId: \d+
 
+point_of_sale_legacy_redirect:
+  path: /pages/adm_checkout
+  controller: AppBundle\Controller\PointOfSaleController::legacyRedirectAction
+  methods: [GET]
+
 # Orders
 
 order_index:
