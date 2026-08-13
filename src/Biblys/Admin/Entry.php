@@ -221,7 +221,7 @@ class Entry
         $entries[] = new Entry('États des stocks', ['category' => 'stock', 'url' => '/pages/adm_stock_status', 'icon' => 'bar-chart']);
 
         $entries[] = new Entry('Clients', ['category' => 'sales', 'url' => '/pages/adm_customers', 'icon' => 'address-card']);
-        $entries[] = new Entry('Caisse', ['category' => 'sales', 'url' => '/pages/adm_checkout', 'icon' => 'cash-register']);
+        $entries[] = new Entry('Caisse', ['category' => 'sales', 'path' => 'point_of_sale_index', 'icon' => 'cash-register']);
         $entries[] = new Entry('Ventes', ['category' => 'sales', 'url' => '/pages/adm_orders_shop', 'icon' => 'line-chart']);
         $entries[] = new Entry('Commandes', ['category' => 'sales', 'path' => 'order_index', 'icon' => 'box', 'taskCount' => $orders, 'subscription' => 'orders']);
         $entries[] = new Entry('Paniers', ['category' => 'sales', 'url' => '/pages/adm_carts', 'icon' => 'shopping-basket', 'subscription' => 'carts']);
