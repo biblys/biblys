@@ -14,3 +14,32 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+/* Point of sale (caisse) */
+
+.pos-section {
+  padding: 1.25rem 0;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.pos-section:first-of-type {
+  padding-top: 0;
+}
+
+.pos-section:last-of-type {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.pos-section-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: #666;
+  margin-bottom: 0.75rem;
+}
+
+.pos-legal-notice {
+  padding: 0.6rem 0.9rem;
+}
+
