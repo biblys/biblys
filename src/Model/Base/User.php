@@ -11,8 +11,6 @@ use Model\AuthenticationMethod as ChildAuthenticationMethod;
 use Model\AuthenticationMethodQuery as ChildAuthenticationMethodQuery;
 use Model\Cart as ChildCart;
 use Model\CartQuery as ChildCartQuery;
-use Model\Coupon as ChildCoupon;
-use Model\CouponQuery as ChildCouponQuery;
 use Model\Customer as ChildCustomer;
 use Model\CustomerQuery as ChildCustomerQuery;
 use Model\Download as ChildDownload;
@@ -54,7 +52,6 @@ use Model\WishlistQuery as ChildWishlistQuery;
 use Model\Map\AlertTableMap;
 use Model\Map\AuthenticationMethodTableMap;
 use Model\Map\CartTableMap;
-use Model\Map\CouponTableMap;
 use Model\Map\CustomerTableMap;
 use Model\Map\DownloadTableMap;
 use Model\Map\FileTableMap;
@@ -204,13 +201,6 @@ abstract class User implements ActiveRecordInterface
      */
     protected $collCartsRelatedBySellerUserId;
     protected $collCartsRelatedBySellerUserIdPartial;
-
-    /**
-     * @var        ObjectCollection|ChildCoupon[] Collection to store aggregation of ChildCoupon objects.
-     * @phpstan-var ObjectCollection&\Traversable<ChildCoupon> Collection to store aggregation of ChildCoupon objects.
-     */
-    protected $collCoupons;
-    protected $collCouponsPartial;
 
     /**
      * @var        ObjectCollection|ChildCustomer[] Collection to store aggregation of ChildCustomer objects.
@@ -366,13 +356,6 @@ abstract class User implements ActiveRecordInterface
      * @phpstan-var ObjectCollection&\Traversable<ChildCart>
      */
     protected $cartsRelatedBySellerUserIdScheduledForDeletion = null;
-
-    /**
-     * An array of objects scheduled for deletion.
-     * @var ObjectCollection|ChildCoupon[]
-     * @phpstan-var ObjectCollection&\Traversable<ChildCoupon>
-     */
-    protected $couponsScheduledForDeletion = null;
 
     /**
      * An array of objects scheduled for deletion.
@@ -1136,8 +1119,6 @@ abstract class User implements ActiveRecordInterface
 
             $this->collCartsRelatedBySellerUserId = null;
 
-            $this->collCoupons = null;
-
             $this->collCustomers = null;
 
             $this->collDownloads = null;
@@ -1361,24 +1342,6 @@ abstract class User implements ActiveRecordInterface
 
             if ($this->collCartsRelatedBySellerUserId !== null) {
                 foreach ($this->collCartsRelatedBySellerUserId as $referrerFK) {
-                    if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
-                        $affectedRows += $referrerFK->save($con);
-                    }
-                }
-            }
-
-            if ($this->couponsScheduledForDeletion !== null) {
-                if (!$this->couponsScheduledForDeletion->isEmpty()) {
-                    foreach ($this->couponsScheduledForDeletion as $coupon) {
-                        // need to save related object because we set the relation to null
-                        $coupon->save($con);
-                    }
-                    $this->couponsScheduledForDeletion = null;
-                }
-            }
-
-            if ($this->collCoupons !== null) {
-                foreach ($this->collCoupons as $referrerFK) {
                     if (!$referrerFK->isDeleted() && ($referrerFK->isNew() || $referrerFK->isModified())) {
                         $affectedRows += $referrerFK->save($con);
                     }
@@ -1995,21 +1958,6 @@ abstract class User implements ActiveRecordInterface
 
                 $result[$key] = $this->collCartsRelatedBySellerUserId->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
             }
-            if (null !== $this->collCoupons) {
-
-                switch ($keyType) {
-                    case TableMap::TYPE_CAMELNAME:
-                        $key = 'coupons';
-                        break;
-                    case TableMap::TYPE_FIELDNAME:
-                        $key = 'couponss';
-                        break;
-                    default:
-                        $key = 'Coupons';
-                }
-
-                $result[$key] = $this->collCoupons->toArray(null, false, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
-            }
             if (null !== $this->collCustomers) {
 
                 switch ($keyType) {
@@ -2566,12 +2514,6 @@ abstract class User implements ActiveRecordInterface
                 }
             }
 
-            foreach ($this->getCoupons() as $relObj) {
-                if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-                    $copyObj->addCoupon($relObj->copy($deepCopy));
-                }
-            }
-
             foreach ($this->getCustomers() as $relObj) {
                 if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
                     $copyObj->addCustomer($relObj->copy($deepCopy));
@@ -2782,10 +2724,6 @@ abstract class User implements ActiveRecordInterface
         }
         if ('CartRelatedBySellerUserId' === $relationName) {
             $this->initCartsRelatedBySellerUserId();
-            return;
-        }
-        if ('Coupon' === $relationName) {
-            $this->initCoupons();
             return;
         }
         if ('Customer' === $relationName) {
@@ -3655,245 +3593,6 @@ abstract class User implements ActiveRecordInterface
         $query->joinWith('Site', $joinBehavior);
 
         return $this->getCartsRelatedBySellerUserId($query, $con);
-    }
-
-    /**
-     * Clears out the collCoupons collection
-     *
-     * This does not modify the database; however, it will remove any associated objects, causing
-     * them to be refetched by subsequent calls to accessor method.
-     *
-     * @return $this
-     * @see addCoupons()
-     */
-    public function clearCoupons()
-    {
-        $this->collCoupons = null; // important to set this to NULL since that means it is uninitialized
-
-        return $this;
-    }
-
-    /**
-     * Reset is the collCoupons collection loaded partially.
-     *
-     * @return void
-     */
-    public function resetPartialCoupons($v = true): void
-    {
-        $this->collCouponsPartial = $v;
-    }
-
-    /**
-     * Initializes the collCoupons collection.
-     *
-     * By default this just sets the collCoupons collection to an empty array (like clearcollCoupons());
-     * however, you may wish to override this method in your stub class to provide setting appropriate
-     * to your application -- for example, setting the initial array to the values stored in database.
-     *
-     * @param bool $overrideExisting If set to true, the method call initializes
-     *                                        the collection even if it is not empty
-     *
-     * @return void
-     */
-    public function initCoupons(bool $overrideExisting = true): void
-    {
-        if (null !== $this->collCoupons && !$overrideExisting) {
-            return;
-        }
-
-        $collectionClassName = CouponTableMap::getTableMap()->getCollectionClassName();
-
-        $this->collCoupons = new $collectionClassName;
-        $this->collCoupons->setModel('\Model\Coupon');
-    }
-
-    /**
-     * Gets an array of ChildCoupon objects which contain a foreign key that references this object.
-     *
-     * If the $criteria is not null, it is used to always fetch the results from the database.
-     * Otherwise the results are fetched from the database the first time, then cached.
-     * Next time the same method is called without $criteria, the cached collection is returned.
-     * If this ChildUser is new, it will return
-     * an empty collection or the current collection; the criteria is ignored on a new object.
-     *
-     * @param Criteria $criteria optional Criteria object to narrow the query
-     * @param ConnectionInterface $con optional connection object
-     * @return ObjectCollection|ChildCoupon[] List of ChildCoupon objects
-     * @phpstan-return ObjectCollection&\Traversable<ChildCoupon> List of ChildCoupon objects
-     * @throws \Propel\Runtime\Exception\PropelException
-     */
-    public function getCoupons(?Criteria $criteria = null, ?ConnectionInterface $con = null)
-    {
-        $partial = $this->collCouponsPartial && !$this->isNew();
-        if (null === $this->collCoupons || null !== $criteria || $partial) {
-            if ($this->isNew()) {
-                // return empty collection
-                if (null === $this->collCoupons) {
-                    $this->initCoupons();
-                } else {
-                    $collectionClassName = CouponTableMap::getTableMap()->getCollectionClassName();
-
-                    $collCoupons = new $collectionClassName;
-                    $collCoupons->setModel('\Model\Coupon');
-
-                    return $collCoupons;
-                }
-            } else {
-                $collCoupons = ChildCouponQuery::create(null, $criteria)
-                    ->filterByUser($this)
-                    ->find($con);
-
-                if (null !== $criteria) {
-                    if (false !== $this->collCouponsPartial && count($collCoupons)) {
-                        $this->initCoupons(false);
-
-                        foreach ($collCoupons as $obj) {
-                            if (false == $this->collCoupons->contains($obj)) {
-                                $this->collCoupons->append($obj);
-                            }
-                        }
-
-                        $this->collCouponsPartial = true;
-                    }
-
-                    return $collCoupons;
-                }
-
-                if ($partial && $this->collCoupons) {
-                    foreach ($this->collCoupons as $obj) {
-                        if ($obj->isNew()) {
-                            $collCoupons[] = $obj;
-                        }
-                    }
-                }
-
-                $this->collCoupons = $collCoupons;
-                $this->collCouponsPartial = false;
-            }
-        }
-
-        return $this->collCoupons;
-    }
-
-    /**
-     * Sets a collection of ChildCoupon objects related by a one-to-many relationship
-     * to the current object.
-     * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
-     * and new objects from the given Propel collection.
-     *
-     * @param Collection $coupons A Propel collection.
-     * @param ConnectionInterface $con Optional connection object
-     * @return $this The current object (for fluent API support)
-     */
-    public function setCoupons(Collection $coupons, ?ConnectionInterface $con = null)
-    {
-        /** @var ChildCoupon[] $couponsToDelete */
-        $couponsToDelete = $this->getCoupons(new Criteria(), $con)->diff($coupons);
-
-
-        $this->couponsScheduledForDeletion = $couponsToDelete;
-
-        foreach ($couponsToDelete as $couponRemoved) {
-            $couponRemoved->setUser(null);
-        }
-
-        $this->collCoupons = null;
-        foreach ($coupons as $coupon) {
-            $this->addCoupon($coupon);
-        }
-
-        $this->collCoupons = $coupons;
-        $this->collCouponsPartial = false;
-
-        return $this;
-    }
-
-    /**
-     * Returns the number of related Coupon objects.
-     *
-     * @param Criteria $criteria
-     * @param bool $distinct
-     * @param ConnectionInterface $con
-     * @return int Count of related Coupon objects.
-     * @throws \Propel\Runtime\Exception\PropelException
-     */
-    public function countCoupons(?Criteria $criteria = null, bool $distinct = false, ?ConnectionInterface $con = null): int
-    {
-        $partial = $this->collCouponsPartial && !$this->isNew();
-        if (null === $this->collCoupons || null !== $criteria || $partial) {
-            if ($this->isNew() && null === $this->collCoupons) {
-                return 0;
-            }
-
-            if ($partial && !$criteria) {
-                return count($this->getCoupons());
-            }
-
-            $query = ChildCouponQuery::create(null, $criteria);
-            if ($distinct) {
-                $query->distinct();
-            }
-
-            return $query
-                ->filterByUser($this)
-                ->count($con);
-        }
-
-        return count($this->collCoupons);
-    }
-
-    /**
-     * Method called to associate a ChildCoupon object to this object
-     * through the ChildCoupon foreign key attribute.
-     *
-     * @param ChildCoupon $l ChildCoupon
-     * @return $this The current object (for fluent API support)
-     */
-    public function addCoupon(ChildCoupon $l)
-    {
-        if ($this->collCoupons === null) {
-            $this->initCoupons();
-            $this->collCouponsPartial = true;
-        }
-
-        if (!$this->collCoupons->contains($l)) {
-            $this->doAddCoupon($l);
-
-            if ($this->couponsScheduledForDeletion and $this->couponsScheduledForDeletion->contains($l)) {
-                $this->couponsScheduledForDeletion->remove($this->couponsScheduledForDeletion->search($l));
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param ChildCoupon $coupon The ChildCoupon object to add.
-     */
-    protected function doAddCoupon(ChildCoupon $coupon): void
-    {
-        $this->collCoupons[]= $coupon;
-        $coupon->setUser($this);
-    }
-
-    /**
-     * @param ChildCoupon $coupon The ChildCoupon object to remove.
-     * @return $this The current object (for fluent API support)
-     */
-    public function removeCoupon(ChildCoupon $coupon)
-    {
-        if ($this->getCoupons()->contains($coupon)) {
-            $pos = $this->collCoupons->search($coupon);
-            $this->collCoupons->remove($pos);
-            if (null === $this->couponsScheduledForDeletion) {
-                $this->couponsScheduledForDeletion = clone $this->collCoupons;
-                $this->couponsScheduledForDeletion->clear();
-            }
-            $this->couponsScheduledForDeletion[]= $coupon;
-            $coupon->setUser(null);
-        }
-
-        return $this;
     }
 
     /**
@@ -8981,11 +8680,6 @@ abstract class User implements ActiveRecordInterface
                     $o->clearAllReferences($deep);
                 }
             }
-            if ($this->collCoupons) {
-                foreach ($this->collCoupons as $o) {
-                    $o->clearAllReferences($deep);
-                }
-            }
             if ($this->collCustomers) {
                 foreach ($this->collCustomers as $o) {
                     $o->clearAllReferences($deep);
@@ -9081,7 +8775,6 @@ abstract class User implements ActiveRecordInterface
         $this->collAlerts = null;
         $this->collCartsRelatedByUserId = null;
         $this->collCartsRelatedBySellerUserId = null;
-        $this->collCoupons = null;
         $this->collCustomers = null;
         $this->collDownloads = null;
         $this->collFiles = null;
