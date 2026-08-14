@@ -543,6 +543,65 @@ class PaymentControllerTest extends TestCase
         // then
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertStringContainsString("PayPlug", $response->getContent());
+        $this->assertStringContainsString("payment_cb.svg", $response->getContent());
+        $this->assertStringContainsString("payment_visa.svg", $response->getContent());
+        $this->assertStringContainsString("payment_mastercard.svg", $response->getContent());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testSelectMethodActionWithPayPlugAndApplePay()
+    {
+        // given
+        $controller = new PaymentController();
+        $order = ModelFactory::createOrder();
+        $config = new Config(["payplug" => ["secret" => "abcd", "apple_pay" => true]]);
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getOption")->with("payment_iban")->andReturn(null);
+        $currentSite->shouldReceive("getOption")->with("payment_check")->andReturn(null);
+        $currentSite->shouldReceive("getOption")->with("name_for_check_payment")->andReturn(null);
+        $templateService = Helpers::getTemplateService();
+        $paymentService = Mockery::mock(PaymentService::class);
+        $paymentService->expects("getPayableOrderBySlug")->andReturn($order);
+
+        // when
+        $response = $controller->selectMethodAction($paymentService, $config, $currentSite, $templateService, $order->getSlug());
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertStringContainsString("payment_cb.svg", $response->getContent());
+        $this->assertStringContainsString("payment_visa.svg", $response->getContent());
+        $this->assertStringContainsString("payment_mastercard.svg", $response->getContent());
+        $this->assertStringContainsString("Apple Pay", $response->getContent());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testSelectMethodActionWithPayPlugWithoutApplePay()
+    {
+        // given
+        $controller = new PaymentController();
+        $order = ModelFactory::createOrder();
+        $config = new Config(["payplug" => ["secret" => "abcd"]]);
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getOption")->with("payment_iban")->andReturn(null);
+        $currentSite->shouldReceive("getOption")->with("payment_check")->andReturn(null);
+        $currentSite->shouldReceive("getOption")->with("name_for_check_payment")->andReturn(null);
+        $templateService = Helpers::getTemplateService();
+        $paymentService = Mockery::mock(PaymentService::class);
+        $paymentService->expects("getPayableOrderBySlug")->andReturn($order);
+
+        // when
+        $response = $controller->selectMethodAction($paymentService, $config, $currentSite, $templateService, $order->getSlug());
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertStringContainsString("payment_cb.svg", $response->getContent());
+        $this->assertStringContainsString("payment_visa.svg", $response->getContent());
+        $this->assertStringContainsString("payment_mastercard.svg", $response->getContent());
+        $this->assertStringNotContainsString("Apple Pay", $response->getContent());
     }
 
     /**
