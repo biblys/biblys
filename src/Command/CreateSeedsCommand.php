@@ -129,7 +129,8 @@ class CreateSeedsCommand extends Command
 
         // Order
         $order = ModelFactory::createOrder(
-            
+            amount: 999,
+            amountToBePaid: 999,
         );
 
         // Stock Item
