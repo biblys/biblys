@@ -301,7 +301,6 @@ class ModelFactory
      * @throws PropelException
      */
     public static function createOrder(
-        ?Site           $site = null,
         ?User           $user = null,
         ?Customer       $customer = null,
         ?ShippingOption $shippingOption = null,
@@ -324,7 +323,7 @@ class ModelFactory
         DateTime        $cancelDate = null,
     ): Order
     {
-        $customer = $customer ?? ModelFactory::createCustomer($site, $user);
+        $customer = $customer ?? ModelFactory::createCustomer(user: $user);
         $country = $country ?? CountryQuery::create()->findOneByCode("FR");
 
         $order = new Order();
