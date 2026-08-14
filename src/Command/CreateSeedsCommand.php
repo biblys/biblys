@@ -18,6 +18,8 @@
 
 namespace Command;
 
+use Biblys\Database\Connection;
+use Biblys\Service\Config;
 use Biblys\Test\ModelFactory;
 use Model\Publisher;
 use Model\Right;
@@ -25,6 +27,7 @@ use Model\ShippingOption;
 use Model\Site;
 use Model\User;
 use Propel\Runtime\Exception\PropelException;
+use StockManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -51,6 +54,7 @@ class CreateSeedsCommand extends Command
         $site->setTitle("Éditions Paronymie");
         $site->setDomain("paronymie.fr");
         $site->setContact("contact@paronymie.fr");
+        $site->setTva("fr");
         $site->save();
         $output->writeln(["Inserted site: Éditions Paronymie"]);
 
@@ -134,11 +138,20 @@ class CreateSeedsCommand extends Command
         );
 
         // Stock Item
-        ModelFactory::createStockItem(
+        $orderedStockItem = ModelFactory::createStockItem(
             article: $article,
             order: $order,
             sellingPrice: 999,
         );
+
+        // Compute and persist VAT on the sold stock item, mirroring what happens on a real sale
+        require_once __DIR__ . "/../../inc/autoload-entity.php";
+        if (!isset($GLOBALS["_SQL"])) {
+            Connection::init(Config::load());
+        }
+        $stockManager = new StockManager();
+        $stock = $stockManager->calculateTax($stockManager->getById($orderedStockItem->getId()));
+        $stockManager->update($stock);
 
         $output->writeln(["Seeds generated!"]);
         return 0;
