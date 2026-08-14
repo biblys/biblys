@@ -99,6 +99,19 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
             <p>Payez par carte bancaire via le serveur sécurisé de notre partenaire PayPlug.</p>
 
+            <p class="mb-2 d-flex align-items-center" style="gap: 8px;">
+              <img src="{{ asset('/assets/icons/payment_cb.svg') }}" alt="Carte Bancaire" height="32">
+              <img src="{{ asset('/assets/icons/payment_visa.svg') }}" alt="Visa" height="32">
+              <img src="{{ asset('/assets/icons/payment_mastercard.svg') }}" alt="Mastercard" height="32">
+              {% if payplugApplePayIsAvailable %}
+                <span class="d-flex align-items-center justify-content-center"
+                      style="height: 32px; width: 51px; border: 1px solid #e0e0e0; border-radius: 4px; background: #ffffff;"
+                      title="Apple Pay">
+                  <i class="fa-brands fa-apple-pay" style="font-size: 28px;"></i>
+                </span>
+              {% endif %}
+            </p>
+
             {% if order.amountTobepaid < 50 %}
               <p class="alert alert-warning">
                 <span class="fa-solid fa-triangle-exclamation"></span>&nbsp;
