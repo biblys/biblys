@@ -7,6 +7,9 @@
 - La page de caisse a été allégée visuellement : les sections « Vendeur /
   Client », « Panier en cours » et « Autres paniers » ne sont plus encadrées
   par des cartes, seul le bloc « Encaissement » reste mis en avant.
+- La section PayPlug de la page de paiement affiche désormais les logos des
+  moyens de paiement acceptés (CB, Visa, Mastercard), ainsi que le logo
+  Apple Pay lorsque ce moyen de paiement est activé sur le compte PayPlug.
 
 ## 3.15.0 (12 août 2026)
 
