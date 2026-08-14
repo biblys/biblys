@@ -341,6 +341,7 @@ class PaymentController extends Controller
 
             $stripeIsAvailable = !!$config->get("stripe");
             $payPlugIsAvailable = !!$config->get("payplug");
+            $payplugApplePayIsAvailable = !!$config->get("payplug.apple_pay");
             $paypalIsAvailable = $config->isPayPalEnabled();
             $paypalOnlyIsAvailable = $paypalIsAvailable && !$payPlugIsAvailable && !$stripeIsAvailable;
 
@@ -349,6 +350,7 @@ class PaymentController extends Controller
                 "stripeIsAvailable" => $stripeIsAvailable,
                 "stripePublicKey" => $config->get("stripe.public_key"),
                 "payplugIsAvailable" => $payPlugIsAvailable,
+                "payplugApplePayIsAvailable" => $payplugApplePayIsAvailable,
                 "paypalIsAvailable" => $paypalIsAvailable,
                 "paypalOnlyIsAvailable" => $paypalOnlyIsAvailable,
                 "paypalClientId" => $config->get("paypal.client_id"),

@@ -80,6 +80,7 @@ cache:
 
 #payplug:
 #  secret: sk_test_abcd1234
+#  apple_pay: true # Set only once Apple Pay eligibility is confirmed with PayPlug support
 
 #stripe:
 #  public_key: pk_test_abcd1234
