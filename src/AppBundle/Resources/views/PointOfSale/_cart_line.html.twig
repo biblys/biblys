@@ -1,0 +1,45 @@
+{#
+Copyright (C) 2026 Clément Latzarus
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published
+by the Free Software Foundation, version 3.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#}
+
+{% set articleCoverUrl = stockItem.article|imageUrl(null, 100) %}
+{% set stockItemPhotoUrl = stockItem|imageUrl(null, 100) %}
+
+<tr id="stock_{{ stockItem.id }}">
+  <td class="va-middle right">
+    <a href="/pages/adm_stock?id={{ stockItem.id }}">{{ stockItem.id }}</a>
+  </td>
+  <td class="va-middle center">
+    {% if articleCoverUrl %}
+      <img src="{{ articleCoverUrl }}" height="55" alt="{{ stockItem.article.title }}">
+    {% elseif stockItemPhotoUrl %}
+      <img src="{{ stockItemPhotoUrl }}" height="55" alt="{{ stockItem.article.title }}">
+    {% endif %}
+  </td>
+  <td class="va-middle">
+    <a href="{{ path('article_show', { slug: stockItem.article.url }) }}">{{ stockItem.article.title }}</a><br>
+    de {{ stockItem.article.authors|default('')|authors }}<br>
+    Ed. {{ stockItem.article.publisher.name }}
+  </td>
+  <td class="va-middle right stock_selling_price" data-price="{{ stockItem.sellingPrice ?? 0 }}">
+    {{ stockItem.condition }}
+    {{ (stockItem.sellingPrice ?? 0)|currency(true)|raw }}
+  </td>
+  <td class="center va-middle">
+    <button title="Retirer du panier" data-remove_from_cart="{{ stockItem.id }}" class="btn btn-warning btn-sm event">
+      <i class="fa fa-close"></i>
+    </button>
+  </td>
+</tr>

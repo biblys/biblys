@@ -33,6 +33,7 @@ use Framework\Controller;
 use Model\Cart;
 use Model\CartQuery;
 use Model\CustomerQuery;
+use Model\StockQuery;
 use Model\UserQuery;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Exception\PropelException;
@@ -64,7 +65,6 @@ class PointOfSaleController extends Controller
         Request              $request,
         CurrentUser          $currentUser,
         CurrentSite          $currentSite,
-        ImagesService        $imagesService,
         TemplateService      $templateService,
         UrlGenerator         $urlGenerator,
         QueryParamsService   $queryParams,
@@ -115,13 +115,11 @@ class PointOfSaleController extends Controller
             $customer = CustomerQuery::create()->findPk($customerId);
         }
 
-        $cartContent = '';
-        $cartCount = 0;
+        $cartStockItems = StockQuery::create()->filterByCartId($cartId)->find();
+        $cartStockItemCount = count($cartStockItems);
         $cartTotal = 0;
-        foreach ($cm->getStock($cart) as $stockEntity) {
-            $cartContent .= $cart->getLine($imagesService, $stockEntity);
-            $cartCount++;
-            $cartTotal += $stockEntity->get('selling_price');
+        foreach ($cartStockItems as $stockItem) {
+            $cartTotal += $stockItem->getSellingPrice() ?? 0;
         }
         $cm->updateFromStock($cart);
 
@@ -153,8 +151,8 @@ class PointOfSaleController extends Controller
         return $templateService->renderResponse("AppBundle:PointOfSale:index.html.twig", [
             'is_tva_enabled' => $isTvaEnabled,
             'cart' => $cart,
-            'cart_content' => $cartContent,
-            'cart_count' => $cartCount,
+            'cart_stock_items' => $cartStockItems,
+            'cart_count' => $cartStockItemCount,
             'cart_total' => $cartTotal,
             'seller' => $seller,
             'customer' => $customer,
