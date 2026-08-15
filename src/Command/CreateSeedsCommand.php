@@ -172,17 +172,20 @@ class CreateSeedsCommand extends Command
             $output->writeln(["Inserted article with stock item: {$catalogArticle["title"]}"]);
         }
 
-        // Order
+        // Order, shipped with the seeded shipping option so the invoice shows a shipping line
         $order = ModelFactory::createOrder(
+            shippingOption: $shippingFee,
             amount: 999,
-            amountToBePaid: 999,
+            amountToBePaid: 1299,
+            shippingCost: 300,
         );
 
-        // Stock Item
+        // Stock Item, weighed so the invoice shows a total weight
         $orderedStockItem = ModelFactory::createStockItem(
             article: $article,
             order: $order,
             sellingPrice: 999,
+            weight: 450,
         );
 
         // Compute and persist VAT on the sold stock item, mirroring what happens on a real sale
