@@ -20,6 +20,7 @@ namespace Command;
 
 use Biblys\Database\Connection;
 use Biblys\Service\Config;
+use Biblys\Service\Slug\SlugService;
 use Biblys\Test\ModelFactory;
 use Model\Publisher;
 use Model\Right;
@@ -35,6 +36,17 @@ use Symfony\Component\Console\Output\OutputInterface;
 class CreateSeedsCommand extends Command
 {
     protected static $defaultName = 'db:seed';
+
+    public const CATALOG_ARTICLES = [
+        ["title" => "Chaussons d'ours", "firstName" => "Laetitia", "lastName" => "Mani", "ean" => "9781000000016", "price" => 1200],
+        ["title" => "Sous-sol", "firstName" => "Matt", "lastName" => "Yassenar", "ean" => "9781000000023", "price" => 1550],
+        ["title" => "Papeete", "firstName" => "Lili", "lastName" => "Calvaire", "ean" => "9781000000030", "price" => 900],
+        ["title" => "Au-revoir Mao", "firstName" => "Perle", "lastName" => "Maître", "ean" => "9781000000047", "price" => 1800],
+        ["title" => "Le Serpent sur la butte aux pommes", "firstName" => "Gérard", "lastName" => "Ferrori", "ean" => "9781000000054", "price" => 2200],
+        ["title" => "Le lard français pendant la guerre", "firstName" => "Alexei", "lastName" => "Gémit", "ean" => "9781000000061", "price" => 1450],
+        ["title" => "La Tarte et le terroir", "firstName" => "Michelou", "lastName" => "Elbecq", "ean" => "9781000000078", "price" => 1990],
+        ["title" => "Troie, dame bruissante", "firstName" => "Mariette", "lastName" => "D'Ail", "ean" => "9781000000085", "price" => 1650],
+    ];
 
     protected function configure(): void
     {
@@ -130,6 +142,35 @@ class CreateSeedsCommand extends Command
             sellingPrice: 999,
         );
         $output->writeln(["Inserted stock item for L'Ordure du jeu"]);
+
+        // Catalog articles, each with its author and one new stock item
+        $slugService = new SlugService();
+        foreach (self::CATALOG_ARTICLES as $catalogArticle) {
+            $author = ModelFactory::createContributor(
+                firstName: $catalogArticle["firstName"],
+                lastName: $catalogArticle["lastName"],
+            );
+
+            $authorSlug = $slugService->slugify($author->getFullName());
+            $titleSlug = $slugService->slugify($catalogArticle["title"]);
+
+            $catalogArticleModel = ModelFactory::createArticle(
+                title: $catalogArticle["title"],
+                authors: [$author],
+                ean: $catalogArticle["ean"],
+                url: "$authorSlug/$titleSlug",
+                price: $catalogArticle["price"],
+                publisher: $publisher,
+                collection: $collection,
+            );
+
+            ModelFactory::createStockItem(
+                article: $catalogArticleModel,
+                sellingPrice: $catalogArticle["price"],
+            );
+
+            $output->writeln(["Inserted article with stock item: {$catalogArticle["title"]}"]);
+        }
 
         // Order
         $order = ModelFactory::createOrder(
