@@ -107,6 +107,29 @@ class CreateSeedsCommandTest extends TestCase
     }
 
     /**
+     * The seeded order carries a shipping cost and a weighed stock item so that
+     * the invoice page shows both a shipping line and a total weight.
+     *
+     * @throws PropelException
+     */
+    public function testExecuteSeedsAnOrderWithShippingCostAndWeight(): void
+    {
+        // given
+        $commandTester = new CommandTester(new CreateSeedsCommand());
+
+        // when
+        $commandTester->execute([]);
+
+        // then
+        $order = OrderQuery::create()->findOne();
+        $this->assertEquals(300, $order->getShippingCost());
+        $this->assertNotNull($order->getShippingMode(), "Le mode d'expédition doit être renseigné pour la ligne de port");
+
+        $orderedItem = StockQuery::create()->filterByOrderId($order->getId())->findOne();
+        $this->assertEquals(450, $orderedItem->getWeight());
+    }
+
+    /**
      * @throws PropelException
      */
     public function testExecuteSeedsCatalogArticlesWithAuthorAndNewStockItem(): void
