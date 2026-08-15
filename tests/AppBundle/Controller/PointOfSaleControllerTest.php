@@ -22,7 +22,6 @@ use Biblys\Service\BodyParamsService;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\FlashMessagesService;
-use Biblys\Service\Images\ImagesService;
 use Biblys\Service\QueryParamsService;
 use Biblys\Test\EntityFactory;
 use Biblys\Test\Helpers;
@@ -220,14 +219,11 @@ class PointOfSaleControllerTest extends TestCase
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->expects("authAdmin");
 
-        $imagesService = Mockery::mock(ImagesService::class);
-        $imagesService->shouldReceive("getImageUrlFor")->andReturn(null);
-
         // when
         $response = $controller->addItemAction(
             $request,
             $currentUser,
-            $imagesService,
+            Helpers::getTemplateService(),
             new BodyParamsService($request),
             $cart->getId(),
         );
@@ -239,6 +235,48 @@ class PointOfSaleControllerTest extends TestCase
         $this->assertStringContainsString("stock_" . $stock->getId(), $data['line']);
         $stock->reload();
         $this->assertEquals($cart->getId(), $stock->getCartId());
+    }
+
+    /**
+     * Un exemplaire sans prix de vente doit rendre data-price="0" et non un
+     * attribut vide : le JS de la caisse applique parseInt sur cet attribut
+     * pour calculer le total du panier, et un attribut vide produirait NaN.
+     *
+     * @throws PropelException
+     */
+    public function testAddItemActionReturnsLineWithZeroDataPriceForFreeStockItem(): void
+    {
+        // given
+        $controller = $this->_getController();
+        $cart = ModelFactory::createCart();
+        $cart->setType("shop");
+        $cart->save();
+        $stock = ModelFactory::createStockItem();
+        $stock->setSellingPrice(null);
+        $stock->save();
+
+        $request = new Request(request: ['stock_id' => $stock->getId()]);
+        $request->headers->set('Accept', 'application/json');
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authAdmin");
+
+        // when
+        $response = $controller->addItemAction(
+            $request,
+            $currentUser,
+            Helpers::getTemplateService(),
+            new BodyParamsService($request),
+            $cart->getId(),
+        );
+
+        // then
+        $data = json_decode($response->getContent(), true);
+        $this->assertStringContainsString(
+            'data-price="0"',
+            $data['line'],
+            "Un exemplaire gratuit doit avoir data-price=\"0\" et non un attribut vide, sinon le total calculé côté JS devient NaN"
+        );
     }
 
     /**
@@ -262,7 +300,7 @@ class PointOfSaleControllerTest extends TestCase
         $response = $controller->addItemAction(
             $request,
             $currentUser,
-            Mockery::mock(ImagesService::class),
+            Helpers::getTemplateService(),
             new BodyParamsService($request),
             $cart->getId(),
         );
@@ -295,7 +333,7 @@ class PointOfSaleControllerTest extends TestCase
         $controller->addItemAction(
             $request,
             $currentUser,
-            Mockery::mock(ImagesService::class),
+            Helpers::getTemplateService(),
             new BodyParamsService($request),
             99999,
         );
@@ -328,7 +366,7 @@ class PointOfSaleControllerTest extends TestCase
         $controller->addItemAction(
             $request,
             $currentUser,
-            Mockery::mock(ImagesService::class),
+            Helpers::getTemplateService(),
             new BodyParamsService($request),
             $secondCart->getId(),
         );
