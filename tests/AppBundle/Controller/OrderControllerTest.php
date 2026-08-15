@@ -513,6 +513,126 @@ class OrderControllerTest extends TestCase
         $this->assertStringContainsString("État", $content, "La colonne État doit être affichée quand un article n'est pas Neuf");
     }
 
+    public function testInvoiceActionShowsArticleCountAndTotalWeight(): void
+    {
+        // given
+        $controller = new OrderController();
+        $request = new Request();
+        $shippingOption = ModelFactory::createShippingOption(type: "normal");
+        $order = ModelFactory::createOrder(
+            shippingOption: $shippingOption,
+            slug: "invoice-summary1",
+            amount: 3000,
+            shippingCost: 500,
+        );
+        $article = ModelFactory::createArticle(title: "Le Livre Test");
+        ModelFactory::createStockItem(article: $article, order: $order, sellingPrice: 2000, weight: 300);
+        ModelFactory::createStockItem(article: $article, order: $order, sellingPrice: 1000, weight: 150);
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("isAuthenticated")->andReturn(false);
+        $currentUser->shouldReceive("isAdmin")->andReturn(false);
+        $currentSite = $this->_mockCurrentSiteForInvoice();
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $controller->invoiceAction($request, $currentUser, $currentSite, $templateService, "invoice-summary1");
+        $content = $response->getContent();
+
+        // then
+        $this->assertStringContainsString("2 articles", $content);
+        $this->assertStringContainsString(
+            "normal · 0,45 kg",
+            $content,
+            "La ligne de port doit afficher le mode d'expédition et le poids total (300 g + 150 g) en kilogrammes, séparés par un point médian"
+        );
+    }
+
+    public function testInvoiceActionShowsArticleCountInSingular(): void
+    {
+        // given
+        $controller = new OrderController();
+        $request = new Request();
+        $order = ModelFactory::createOrder(slug: "invoice-summary2", amount: 2000, shippingCost: 500);
+        $article = ModelFactory::createArticle(title: "Le Livre Test");
+        ModelFactory::createStockItem(article: $article, order: $order, sellingPrice: 2000, weight: 300);
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("isAuthenticated")->andReturn(false);
+        $currentUser->shouldReceive("isAdmin")->andReturn(false);
+        $currentSite = $this->_mockCurrentSiteForInvoice();
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $controller->invoiceAction($request, $currentUser, $currentSite, $templateService, "invoice-summary2");
+        $content = $response->getContent();
+
+        // then
+        $this->assertStringContainsString("1 article", $content);
+        $this->assertStringNotContainsString("1 articles", $content);
+    }
+
+    public function testInvoiceActionHidesWeightWhenUnknown(): void
+    {
+        // given
+        $controller = new OrderController();
+        $request = new Request();
+        $order = ModelFactory::createOrder(slug: "invoice-summary3", amount: 2000, shippingCost: 500);
+        $article = ModelFactory::createArticle(title: "Le Livre Test");
+        ModelFactory::createStockItem(article: $article, order: $order, sellingPrice: 2000);
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("isAuthenticated")->andReturn(false);
+        $currentUser->shouldReceive("isAdmin")->andReturn(false);
+        $currentSite = $this->_mockCurrentSiteForInvoice();
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $controller->invoiceAction($request, $currentUser, $currentSite, $templateService, "invoice-summary3");
+        $content = $response->getContent();
+
+        // then
+        $this->assertStringContainsString("1 article", $content);
+        $this->assertDoesNotMatchRegularExpression(
+            '/[\d,]+ kg\b/',
+            $content,
+            "Aucun poids ne doit être affiché quand il est inconnu"
+        );
+    }
+
+    /**
+     * Le poids est affiché sur la ligne de port, qui n'existe que si des frais
+     * de port sont facturés. Une commande au port offert n'affiche donc aucun
+     * poids, même quand celui-ci est connu.
+     */
+    public function testInvoiceActionHidesWeightWhenShippingIsFree(): void
+    {
+        // given
+        $controller = new OrderController();
+        $request = new Request();
+        $order = ModelFactory::createOrder(slug: "invoice-summary4", amount: 2000, shippingCost: 0);
+        $article = ModelFactory::createArticle(title: "Le Livre Test");
+        ModelFactory::createStockItem(article: $article, order: $order, sellingPrice: 2000, weight: 300);
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("isAuthenticated")->andReturn(false);
+        $currentUser->shouldReceive("isAdmin")->andReturn(false);
+        $currentSite = $this->_mockCurrentSiteForInvoice();
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $controller->invoiceAction($request, $currentUser, $currentSite, $templateService, "invoice-summary4");
+        $content = $response->getContent();
+
+        // then
+        $this->assertStringContainsString("1 article", $content, "Le nombre d'articles reste affiché dans l'en-tête du tableau");
+        $this->assertDoesNotMatchRegularExpression(
+            '/[\d,]+ kg\b/',
+            $content,
+            "Sans ligne de port, aucun poids n'est affiché même s'il est connu"
+        );
+    }
+
     public function testInvoiceActionHidesShippingLineWhenFree(): void
     {
         // given

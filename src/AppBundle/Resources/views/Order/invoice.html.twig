@@ -72,8 +72,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
             padding: 10pt 20pt;
         }
 
-        .invoice-document .text-right { 
-            text-align: right; 
+        .invoice-document .text-right {
+            text-align: right;
         }
 
         .invoice-document .text-center { 
@@ -115,7 +115,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         <table class="table article-list mt-4">
             <thead>
                 <tr>
-                    <th>Article</th>
+                    <th>{{ article_count }} {{ "article"|pluralize(article_count) }}</th>
                     {% if show_condition %}<th>État</th>{% endif %}
                     {% if total_vat %}
                         <th class="text-right">Prix HT</th>
@@ -150,9 +150,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                 {% if order.shippingCost > 0 %}
                     <tr class="p-4">
                         <td>
+                            {% set shippingWeight = total_weight ? (total_weight / 1000)|number_format(2, ',', ' ') ~ ' kg' : null %}
+                            {% set shippingDetails = [order.shippingMode, shippingWeight]|filter(detail => detail)|join(' · ') %}
                             <p class="article-title py-1 m-0">
                                 Port
-                                <small class="text-muted">({{ order.shippingMode }})</small>
+                                {% if shippingDetails %}<small class="text-muted">({{ shippingDetails }})</small>{% endif %}
                             </p>
                         </td>
                         {% if show_condition %}<td></td>{% endif %}
