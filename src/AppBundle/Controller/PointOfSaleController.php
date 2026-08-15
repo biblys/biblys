@@ -25,7 +25,6 @@ use Biblys\Service\BodyParamsService;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\FlashMessagesService;
-use Biblys\Service\Images\ImagesService;
 use Biblys\Service\QueryParamsService;
 use Biblys\Service\TemplateService;
 use CartManager;
@@ -166,16 +165,14 @@ class PointOfSaleController extends Controller
     public function addItemAction(
         Request           $request,
         CurrentUser       $currentUser,
-        ImagesService     $imagesService,
+        TemplateService   $templateService,
         BodyParamsService $bodyParams,
         int               $cartId,
     ): Response
     {
         $currentUser->authAdmin();
 
-        $cm = new CartManager();
-        $cart = $cm->getById($cartId);
-        if (!$cart) {
+        if (!CartQuery::create()->filterById($cartId)->exists()) {
             throw new NotFoundHttpException("Panier $cartId introuvable");
         }
 
@@ -190,12 +187,14 @@ class PointOfSaleController extends Controller
         }
 
         if (in_array("application/json", $request->getAcceptableContentTypes())) {
-            $line = "";
-            foreach ($cm->getStock($cart) as $stockItem) {
-                if ($stockItem->get("id") == $stockItemId) {
-                    $line = $cart->getLine($imagesService, $stockItem);
-                }
-            }
+            $stockItem = StockQuery::create()
+                ->filterByCartId($cartId)
+                ->filterById($stockItemId)
+                ->findOne();
+            $line = $stockItem
+                ? $templateService->render("AppBundle:PointOfSale:_cart_line.html.twig", ["stockItem" => $stockItem])
+                : "";
+
             return new JsonResponse([
                 "success" => "L'exemplaire n° $stockItemId a été ajouté au panier.",
                 "line" => $line,
