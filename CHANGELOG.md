@@ -23,7 +23,7 @@
 - Le tableau de répartition TVA et le bloc "Total TTC" ont été remplacés par une
   liste unifiée en bas de facture (Sous-total HT, TVA par taux, Total TTC).
 
-## 3.15.1 (13 août 2026)
+## 3.15.1 (19 août 2026)
 
 ### Corrections
 
