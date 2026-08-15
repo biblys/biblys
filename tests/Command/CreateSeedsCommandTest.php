@@ -18,6 +18,7 @@
 
 namespace Command;
 
+use Biblys\Service\Slug\SlugService;
 use Model\ArticleQuery;
 use Model\BookCollectionQuery;
 use Model\CustomerQuery;
@@ -52,13 +53,25 @@ class CreateSeedsCommandTest extends TestCase
         OrderQuery::create()->deleteAll();
         CustomerQuery::create()->deleteAll();
 
-        $seededArticle = ArticleQuery::create()->findOneByTitle(self::SEEDED_ARTICLE_TITLE);
-        if ($seededArticle !== null) {
-            RoleQuery::create()->filterByArticle($seededArticle)->delete();
-            $seededArticle->delete();
+        $seededTitles = array_merge(
+            [self::SEEDED_ARTICLE_TITLE],
+            array_column(CreateSeedsCommand::CATALOG_ARTICLES, "title"),
+        );
+        foreach ($seededTitles as $seededTitle) {
+            $seededArticle = ArticleQuery::create()->findOneByTitle($seededTitle);
+            if ($seededArticle !== null) {
+                RoleQuery::create()->filterByArticle($seededArticle)->delete();
+                $seededArticle->delete();
+            }
         }
 
         PeopleQuery::create()->filterByUrl("aymeric-buvard")->delete();
+        foreach (CreateSeedsCommand::CATALOG_ARTICLES as $catalogArticle) {
+            PeopleQuery::create()
+                ->filterByFirstName($catalogArticle["firstName"])
+                ->filterByLastName($catalogArticle["lastName"])
+                ->delete();
+        }
         BookCollectionQuery::create()->filterByName("Lis tes ratures")->delete();
         PublisherQuery::create()->filterByName("Les Éditions Paronymie")->delete();
     }
@@ -79,16 +92,73 @@ class CreateSeedsCommandTest extends TestCase
         $this->assertStringContainsString("Seeds generated!", $commandTester->getDisplay());
 
         $stockItems = StockQuery::create()->orderById()->find();
-        $this->assertCount(2, $stockItems);
+        $expectedCount = 2 + count(CreateSeedsCommand::CATALOG_ARTICLES);
+        $this->assertCount($expectedCount, $stockItems);
 
         $availableItem = $stockItems[0];
         $this->assertEquals(self::SEEDED_ARTICLE_TITLE, $availableItem->getArticle()->getTitle());
         $this->assertEquals(999, $availableItem->getSellingPrice());
         $this->assertNull($availableItem->getOrderId());
 
-        $orderedItem = $stockItems[1];
+        $orderedItem = $stockItems[$expectedCount - 1];
         $this->assertEquals(self::SEEDED_ARTICLE_TITLE, $orderedItem->getArticle()->getTitle());
         $this->assertEquals(999, $orderedItem->getSellingPrice());
         $this->assertEquals(OrderQuery::create()->findOne()->getId(), $orderedItem->getOrderId());
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testExecuteSeedsCatalogArticlesWithAuthorAndNewStockItem(): void
+    {
+        // given
+        $commandTester = new CommandTester(new CreateSeedsCommand());
+
+        // when
+        $commandTester->execute([]);
+
+        // then
+        foreach (CreateSeedsCommand::CATALOG_ARTICLES as $catalogArticle) {
+            $article = ArticleQuery::create()->findOneByTitle($catalogArticle["title"]);
+            $this->assertNotNull($article, "Article {$catalogArticle["title"]} should have been seeded");
+            $this->assertEquals($catalogArticle["ean"], $article->getEan());
+            $this->assertEquals(
+                "{$catalogArticle["firstName"]} {$catalogArticle["lastName"]}",
+                $article->getAuthors()
+            );
+
+            $stockItems = StockQuery::create()->filterByArticle($article)->find();
+            $this->assertCount(1, $stockItems, "Article {$catalogArticle["title"]} should have one stock item");
+            $this->assertEquals("Neuf", $stockItems[0]->getCondition());
+            $this->assertEquals($catalogArticle["price"], $stockItems[0]->getSellingPrice());
+        }
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testExecuteSeedsCatalogArticlesWithDistinctEansAndSlugs(): void
+    {
+        // given
+        $commandTester = new CommandTester(new CreateSeedsCommand());
+
+        // when
+        $commandTester->execute([]);
+
+        // then
+        $titles = array_column(CreateSeedsCommand::CATALOG_ARTICLES, "title");
+        $articles = ArticleQuery::create()->filterByTitle($titles)->find();
+
+        $eans = array_map(fn($article) => $article->getEan(), $articles->getData());
+        $this->assertCount(count($titles), array_unique($eans), "Seeded EANs must be distinct");
+
+        $urls = array_map(fn($article) => $article->getUrl(), $articles->getData());
+        $this->assertCount(count($titles), array_unique($urls), "Seeded article slugs must be distinct");
+
+        $slugService = new SlugService();
+        foreach ($urls as $url) {
+            $slugService->validateArticleSlug($url);
+        }
+        $this->addToAssertionCount(count($urls));
     }
 }
