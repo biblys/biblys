@@ -284,9 +284,11 @@ class OrderController extends Controller
         $lines = [];
         $totalHt = 0;
         $totalVat = 0;
+        $totalWeight = 0;
         $vatBreakdown = [];
         foreach ($stocks as $stock) {
             $article = $stock->getArticle();
+            $totalWeight += (int) $stock->getWeight();
             $priceHt = (int) $stock->getSellingPriceHt();
             $priceVat = (int) $stock->getSellingPriceTva();
             $vatRate = $stock->getTvaRate();
@@ -355,6 +357,8 @@ class OrderController extends Controller
             "page_title" => $pageTitle,
             "order" => $order,
             "lines" => $lines,
+            "article_count" => count($lines),
+            "total_weight" => $totalWeight > 0 ? $totalWeight : null,
             "total_ht" => $totalHt,
             "total_vat" => $totalVat,
             "vat_breakdown" => $vatBreakdown,

@@ -4,6 +4,8 @@
 
 ### Corrections
 
+- La facture d'une commande indique à nouveau le nombre d'articles et, lorsqu'il
+  est connu, le poids total de la commande, en kilogrammes.
 - Corrigé un arrondi flottant lors de la capture d'un paiement PayPal qui
   pouvait laisser un centime "restant à payer" sur des commandes pourtant
   payées intégralement.
