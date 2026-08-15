@@ -73,7 +73,6 @@ class PointOfSaleControllerTest extends TestCase
             $request,
             $currentUser,
             $this->_getCurrentSiteMock(tva: "fr"),
-            Mockery::mock(ImagesService::class),
             Helpers::getTemplateService(),
             Mockery::mock(UrlGenerator::class),
             new QueryParamsService($request),
@@ -105,7 +104,6 @@ class PointOfSaleControllerTest extends TestCase
             $request,
             $currentUser,
             $this->_getCurrentSiteMock(),
-            Mockery::mock(ImagesService::class),
             Helpers::getTemplateService(),
             Mockery::mock(UrlGenerator::class),
             new QueryParamsService($request),
@@ -134,7 +132,6 @@ class PointOfSaleControllerTest extends TestCase
             $request,
             $currentUser,
             $this->_getCurrentSiteMock(),
-            Mockery::mock(ImagesService::class),
             Helpers::getTemplateService(),
             Mockery::mock(UrlGenerator::class),
             new QueryParamsService($request),
@@ -143,6 +140,40 @@ class PointOfSaleControllerTest extends TestCase
         // then
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertStringContainsString("Caisse", $response->getContent());
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testIndexActionRendersCartLineForStockItemInCart(): void
+    {
+        // given
+        $controller = $this->_getController();
+        $cart = EntityFactory::createCart();
+        $article = ModelFactory::createArticle(title: "Le Horla", url: "maupassant/le-horla");
+        $stockItem = ModelFactory::createStockItem(article: $article, sellingPrice: 1899);
+        $stockItem->setCartId($cart->get("id"));
+        $stockItem->save();
+        $request = new Request(query: ['cart_id' => $cart->get('id')]);
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authAdmin");
+
+        // when
+        $response = $controller->indexAction(
+            $request,
+            $currentUser,
+            $this->_getCurrentSiteMock(),
+            Helpers::getTemplateService(),
+            Mockery::mock(UrlGenerator::class),
+            new QueryParamsService($request),
+        );
+
+        // then
+        $content = $response->getContent();
+        $this->assertStringContainsString("stock_{$stockItem->getId()}", $content);
+        $this->assertStringContainsString("Le Horla", $content);
+        $this->assertStringContainsString('data-price="1899"', $content);
     }
 
     /**
@@ -165,7 +196,6 @@ class PointOfSaleControllerTest extends TestCase
             $request,
             $currentUser,
             $this->_getCurrentSiteMock(),
-            Mockery::mock(ImagesService::class),
             Helpers::getTemplateService(),
             Mockery::mock(UrlGenerator::class),
             new QueryParamsService($request),
