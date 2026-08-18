@@ -84,10 +84,7 @@ class PostCategoryController extends Controller
         return $this->render('AppBundle:PostCategory:show.html.twig', [
             'category' => $category,
             'posts' => $posts,
-            'current_page' => $pagination->getCurrent(),
-            'prev_page' => $pagination->getPrevious(),
-            'next_page' => $pagination->getNext(),
-            'total_pages' => $pagination->getTotal()
+            'pages' => $pagination,
         ]);
     }
 
