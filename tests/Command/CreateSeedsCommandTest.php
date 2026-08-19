@@ -23,6 +23,7 @@ use Model\ArticleQuery;
 use Model\BookCollectionQuery;
 use Model\CustomerQuery;
 use Model\OrderQuery;
+use Model\PaymentQuery;
 use Model\PeopleQuery;
 use Model\PublisherQuery;
 use Model\RoleQuery;
@@ -37,6 +38,8 @@ require_once __DIR__ . "/../setUp.php";
 class CreateSeedsCommandTest extends TestCase
 {
     private const SEEDED_ARTICLE_TITLE = "L'Ordure du jeu";
+    private const SEEDED_ORDERED_CATALOG_TITLE = "Au-revoir Mao";
+    private const SEEDED_GOODIES_TITLE = "Tote bag Paronymie";
 
     /**
      * The command is not idempotent: Publisher, BookCollection and People
@@ -49,12 +52,13 @@ class CreateSeedsCommandTest extends TestCase
      */
     protected function setUp(): void
     {
+        PaymentQuery::create()->deleteAll();
         StockQuery::create()->deleteAll();
         OrderQuery::create()->deleteAll();
         CustomerQuery::create()->deleteAll();
 
         $seededTitles = array_merge(
-            [self::SEEDED_ARTICLE_TITLE],
+            [self::SEEDED_ARTICLE_TITLE, self::SEEDED_GOODIES_TITLE],
             array_column(CreateSeedsCommand::CATALOG_ARTICLES, "title"),
         );
         foreach ($seededTitles as $seededTitle) {
@@ -92,7 +96,7 @@ class CreateSeedsCommandTest extends TestCase
         $this->assertStringContainsString("Seeds generated!", $commandTester->getDisplay());
 
         $stockItems = StockQuery::create()->orderById()->find();
-        $expectedCount = 2 + count(CreateSeedsCommand::CATALOG_ARTICLES);
+        $expectedCount = 3 + count(CreateSeedsCommand::CATALOG_ARTICLES);
         $this->assertCount($expectedCount, $stockItems);
 
         $availableItem = $stockItems[0];
@@ -100,10 +104,17 @@ class CreateSeedsCommandTest extends TestCase
         $this->assertEquals(999, $availableItem->getSellingPrice());
         $this->assertNull($availableItem->getOrderId());
 
-        $orderedItem = $stockItems[$expectedCount - 1];
-        $this->assertEquals(self::SEEDED_ARTICLE_TITLE, $orderedItem->getArticle()->getTitle());
-        $this->assertEquals(999, $orderedItem->getSellingPrice());
-        $this->assertEquals(OrderQuery::create()->findOne()->getId(), $orderedItem->getOrderId());
+        $orderId = OrderQuery::create()->findOne()->getId();
+
+        $orderedItem = $stockItems[$expectedCount - 2];
+        $this->assertEquals(self::SEEDED_ORDERED_CATALOG_TITLE, $orderedItem->getArticle()->getTitle());
+        $this->assertEquals(1800, $orderedItem->getSellingPrice());
+        $this->assertEquals($orderId, $orderedItem->getOrderId());
+
+        $orderedGoodiesItem = $stockItems[$expectedCount - 1];
+        $this->assertEquals(self::SEEDED_GOODIES_TITLE, $orderedGoodiesItem->getArticle()->getTitle());
+        $this->assertEquals(500, $orderedGoodiesItem->getSellingPrice());
+        $this->assertEquals($orderId, $orderedGoodiesItem->getOrderId());
     }
 
     /**
@@ -130,6 +141,33 @@ class CreateSeedsCommandTest extends TestCase
     }
 
     /**
+     * The seeded order is fully paid so that the invoice page shows the
+     * "Règlement effectué le… par…" notice.
+     *
+     * @throws PropelException
+     */
+    public function testExecuteSeedsAPaidOrder(): void
+    {
+        // given
+        $commandTester = new CommandTester(new CreateSeedsCommand());
+
+        // when
+        $commandTester->execute([]);
+
+        // then
+        $order = OrderQuery::create()->findOne();
+        $this->assertNotNull($order->getPaymentDate(), "La commande des seeds doit être marquée comme payée");
+        $this->assertEquals("stripe", $order->getPaymentMode());
+        $this->assertEquals(0, $order->getAmountTobepaid());
+
+        $payment = PaymentQuery::create()->filterByOrderId($order->getId())->findOne();
+        $this->assertNotNull($payment, "Un paiement doit être rattaché à la commande des seeds");
+        $this->assertEquals(1800 + 500 + 300, $payment->getAmount());
+        $this->assertEquals("stripe", $payment->getMode());
+        $this->assertNotNull($payment->getExecuted());
+    }
+
+    /**
      * @throws PropelException
      */
     public function testExecuteSeedsCatalogArticlesWithAuthorAndNewStockItem(): void
@@ -150,8 +188,8 @@ class CreateSeedsCommandTest extends TestCase
                 $article->getAuthors()
             );
 
-            $stockItems = StockQuery::create()->filterByArticle($article)->find();
-            $this->assertCount(1, $stockItems, "Article {$catalogArticle["title"]} should have one stock item");
+            $stockItems = StockQuery::create()->filterByArticle($article)->filterByOrderId(null)->find();
+            $this->assertCount(1, $stockItems, "Article {$catalogArticle["title"]} should have one unordered stock item");
             $this->assertEquals("Neuf", $stockItems[0]->getCondition());
             $this->assertEquals($catalogArticle["price"], $stockItems[0]->getSellingPrice());
         }
