@@ -120,7 +120,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                 <tr>
                     <th>Article</th>
                     {% if show_condition %}<th>État</th>{% endif %}
-                    {% if has_vat %}
+                    {% if total_vat %}
                         <th class="text-right">Taux</th>
                         <th class="text-right">Prix HT</th>
                     {% endif %}
@@ -142,7 +142,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                             </p>
                         </td>
                         {% if show_condition %}<td class="text-center align">{{ line.condition }}</td>{% endif %}
-                        {% if has_vat %}
+                        {% if total_vat %}
                             <td class="text-right align">{{ line.vatRate is not null ? (line.vatRate|replace({'.': ','}) ~ ' %') : '—' }}</td>
                             <td class="text-right align">{{ line.vatRate is not null ? line.priceHt|currency(true)|raw : '—' }}</td>
                         {% endif %}
@@ -159,7 +159,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                             </p>
                         </td>
                         {% if show_condition %}<td></td>{% endif %}
-                        {% if has_vat %}
+                        {% if total_vat %}
                             <td class="text-right align">
                                 {{ shipping_vat is not null and shipping_vat.rate is not null ? (shipping_vat.rate|replace({'.': ','}) ~ ' %') : (shipping_vat is not null ? 'Taux inconnu' : '—') }}{% if shipping_vat is not null and shipping_vat.recalculated %}*{% endif %}
                             </td>
