@@ -18,10 +18,14 @@
 
 namespace Command;
 
+use Biblys\Data\ArticleType;
 use Biblys\Database\Connection;
 use Biblys\Service\Config;
+use Biblys\Service\CurrentSite;
 use Biblys\Service\Slug\SlugService;
 use Biblys\Test\ModelFactory;
+use DateTime;
+use Model\Payment;
 use Model\Publisher;
 use Model\Right;
 use Model\ShippingOption;
@@ -67,8 +71,13 @@ class CreateSeedsCommand extends Command
         $site->setDomain("paronymie.fr");
         $site->setContact("contact@paronymie.fr");
         $site->setTva("fr");
+        $site->setAddress("12 rue des Paronymes|75011 Paris");
         $site->save();
         $output->writeln(["Inserted site: Éditions Paronymie"]);
+
+        $currentSite = new CurrentSite($site);
+        $currentSite->setOption("siren", "123 456 789");
+        $output->writeln(["Inserted site option: siren"]);
 
         // Admin
         $admin = new User();
@@ -145,6 +154,7 @@ class CreateSeedsCommand extends Command
 
         // Catalog articles, each with its author and one new stock item
         $slugService = new SlugService();
+        $orderedCatalogArticle = null;
         foreach (self::CATALOG_ARTICLES as $catalogArticle) {
             $author = ModelFactory::createContributor(
                 firstName: $catalogArticle["firstName"],
@@ -169,33 +179,67 @@ class CreateSeedsCommand extends Command
                 sellingPrice: $catalogArticle["price"],
             );
 
+            if ($catalogArticle["title"] === "Au-revoir Mao") {
+                $orderedCatalogArticle = $catalogArticleModel;
+            }
+
             $output->writeln(["Inserted article with stock item: {$catalogArticle["title"]}"]);
         }
+
+        // Goodies article
+        $goodiesArticle = ModelFactory::createArticle(
+            title: "Tote bag Paronymie",
+            typeId: ArticleType::GOODIES,
+            url: "paronymie/tote-bag-paronymie",
+            price: 500,
+            publisher: $publisher,
+            collection: $collection,
+        );
+        $output->writeln(["Inserted article: Tote bag Paronymie"]);
 
         // Order, shipped with the seeded shipping option so the invoice shows a shipping line
         $order = ModelFactory::createOrder(
             shippingOption: $shippingFee,
-            amount: 999,
-            amountToBePaid: 1299,
+            amount: 1800 + 500,
+            amountToBePaid: 1800 + 500 + 300,
             shippingCost: 300,
         );
 
-        // Stock Item, weighed so the invoice shows a total weight
+        // Stock items, main item weighed so the invoice shows a total weight
         $orderedStockItem = ModelFactory::createStockItem(
-            article: $article,
+            article: $orderedCatalogArticle,
             order: $order,
-            sellingPrice: 999,
+            sellingPrice: 1800,
             weight: 450,
         );
+        $orderedGoodiesStockItem = ModelFactory::createStockItem(
+            article: $goodiesArticle,
+            order: $order,
+            sellingPrice: 500,
+        );
 
-        // Compute and persist VAT on the sold stock item, mirroring what happens on a real sale
+        // Compute and persist VAT on the sold stock items, mirroring what happens on a real sale
         require_once __DIR__ . "/../../inc/autoload-entity.php";
         if (!isset($GLOBALS["_SQL"])) {
             Connection::init(Config::load());
         }
         $stockManager = new StockManager();
-        $stock = $stockManager->calculateTax($stockManager->getById($orderedStockItem->getId()));
-        $stockManager->update($stock);
+        foreach ([$orderedStockItem, $orderedGoodiesStockItem] as $orderedItem) {
+            $stock = $stockManager->calculateTax($stockManager->getById($orderedItem->getId()));
+            $stockManager->update($stock);
+        }
+
+        // Payment, mirroring AddPaymentToOrderAndExecuteUsecase + MarkOrderAsPaidUsecase
+        ModelFactory::createPayment(
+            order: $order,
+            amount: 1800 + 500 + 300,
+            mode: Payment::MODE_STRIPE,
+        );
+        $order->setPaymentMode(Payment::MODE_STRIPE);
+        $order->setPaymentDate(new DateTime());
+        $order->setAmountTobepaid(0);
+        $order->save();
+        $output->writeln(["Inserted payment for order"]);
 
         $output->writeln(["Seeds generated!"]);
         return 0;
