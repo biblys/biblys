@@ -194,11 +194,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                             <td class="text-right">{{ group.vat|currency(true)|raw }}</td>
                         </tr>
                     {% endfor %}
-                    <tr>
-                        <td colspan="{{ vatBreakdownColspan }}" class="text-right">Total</td>
-                        <td class="text-right">{{ total_ht|currency(true)|raw }}</td>
-                        <td class="text-right">{{ total_vat|currency(true)|raw }}</td>
-                    </tr>
                 </tbody>
             </table>
         {% endif %}
