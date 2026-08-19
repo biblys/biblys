@@ -400,6 +400,11 @@ class OrderControllerTest extends TestCase
         $this->assertStringNotContainsString("OverallMenu", $content, "La facture doit utiliser un layout minimal, sans le chrome du site");
         $this->assertStringNotContainsString("Ref.", $content, "La colonne Ref. doit avoir été supprimée");
         $this->assertStringContainsString("Port", $content, "La ligne de port doit être affichée quand des frais existent (500 c)");
+        $this->assertMatchesRegularExpression(
+            "/\d{2}\/\d{2}\/\d{4}/",
+            $content,
+            "La date de la commande doit être affichée sur la facture"
+        );
     }
 
     public function testInvoiceActionDisplaysSirenWhenSiteOptionIsSet(): void
