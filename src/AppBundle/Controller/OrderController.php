@@ -282,7 +282,6 @@ class OrderController extends Controller
         $stocks = StockQuery::create()->filterByOrderId($order->getId())->find();
 
         $lines = [];
-        $totalHt = 0;
         $totalVat = 0;
         $vatBreakdown = [];
         foreach ($stocks as $stock) {
@@ -290,7 +289,6 @@ class OrderController extends Controller
             $priceHt = (int) $stock->getSellingPriceHt();
             $priceVat = (int) $stock->getSellingPriceTva();
             $vatRate = $stock->getTvaRate();
-            $totalHt += $priceHt;
             $totalVat += $priceVat;
 
             $breakdownKey = $vatRate !== null ? (string) $vatRate : "unknown";
@@ -326,7 +324,6 @@ class OrderController extends Controller
             $htByRate = array_map(fn($group) => $group["ht"], $vatBreakdown);
             $shippingParts = ShippingVatAllocationService::allocate($htByRate, (int) $order->getShippingCost());
             $vatBreakdown = ShippingVatAllocationService::mergeIntoBreakdown($vatBreakdown, $shippingParts);
-            $totalHt += array_sum(array_column($shippingParts, "ht"));
             $totalVat += array_sum(array_column($shippingParts, "vat"));
         }
 
@@ -362,7 +359,6 @@ class OrderController extends Controller
             "page_title" => $pageTitle,
             "order" => $order,
             "lines" => $lines,
-            "total_ht" => $totalHt,
             "total_vat" => $totalVat,
             "vat_breakdown" => $vatBreakdown,
             "shipping_vat" => $shippingVat,
