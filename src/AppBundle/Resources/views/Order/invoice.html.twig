@@ -95,6 +95,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
             <div>
                 <h3>{{ site_title }}</h3>
                 <p>{{ site_address|replace({'|': '<br>'})|raw }}</p>
+                {% if siren %}<p>SIREN : {{ siren }}</p>{% endif %}
             </div>
             <div>
                 <h3>{{ order.title }} {{ order.firstname }} {{ order.lastname }}</h3>

@@ -369,6 +369,7 @@ class OrderController extends Controller
             "has_vat" => (bool) $currentSite->getSite()->getTva(),
             "payment" => $payment,
             "invoice_notice" => $currentSite->getOption("invoice_notice"),
+            "siren" => $currentSite->getOption("siren"),
             "site_title" => $currentSite->getTitle(),
             "site_address" => $currentSite->getSite()->getAddress(),
         ], isPrivate: true);
