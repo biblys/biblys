@@ -12,6 +12,17 @@
   Apple Pay lorsque ce moyen de paiement est activé sur le compte PayPlug.
 - La lisibilité de la page "Mon compte" a été améliorée.
 
+### Améliorations des factures
+
+- Le SIREN apparaît désormais dans l'en-tête de la facture. Il peut être défini
+  via l'option de site siren.
+- La date de la commande est désormais affichée sous le numéro de facture.
+- La colonne "État" est désormais masquée si tous les articles d'une commande
+  sont tous "neuf", en dérivant l'affichage des données réelles de la commande.
+- La colonne "TVA" (montant) du détail par article est désormais masquée.
+- Le tableau de répartition TVA et le bloc "Total TTC" ont été remplacés par une
+  liste unifiée en bas de facture (Sous-total HT, TVA par taux, Total TTC).
+
 ## 3.15.0 (12 août 2026)
 
 ### Conformité NF525
@@ -24,7 +35,8 @@
 ### Améliorations
 
 - La page de facture d'une commande a été refondue : elle s'affiche désormais
-  dans une présentation épurée dédiée à l'impression (sans le menu ni l'habillage
+  dans une présentation épurée dédiée à l'impression (sans le menu ni
+  l'habillage
   du site), plus lisible, avec un bouton de retour.
 - La facture affiche désormais le détail de la TVA : taux, prix HT et TVA pour
   chaque article, ainsi qu'un tableau de synthèse ventilant base HT, montant de
@@ -58,7 +70,8 @@
 ### Corrections
 
 - La page d'édition d'un article provoquait une erreur fatale lorsque le type
-  de l'article était introuvable (`type_id` invalide ou orphelin). C'est corrigé.
+  de l'article était introuvable (`type_id` invalide ou orphelin). C'est
+  corrigé.
 - Dans la caisse, choisir "=> Créer un nouveau client" dans les résultats de
   recherche du champ Client ouvrait une popup vide. Ce lien ouvre désormais
   la page de création d'un nouveau client dans un nouvel onglet.
@@ -86,8 +99,10 @@
 - Les pages de liste (collections, éditeurs, etc.) renvoyaient une erreur
   lorsqu'un paramètre de tri vide était présent dans l'URL (généralement via
   des robots). C'est corrigé.
-- La TVA n'était plus calculée lors de l'enregistrement d'une commande. C'est corrigé,
-  et la commande `orders:recalculate-tax` permet de recalculer la TVA des commandes
+- La TVA n'était plus calculée lors de l'enregistrement d'une commande. C'est
+  corrigé,
+  et la commande `orders:recalculate-tax` permet de recalculer la TVA des
+  commandes
   passées concernées.
 
 ### Sécurité
@@ -101,38 +116,51 @@
 ### Confirmité NF525
 
 - Les paiements effectués lors d'une vente en caisse sont désormais enregistrés.
-- Il est désormais possible de marquer un paiement comme remboursé depuis la page
-  de gestion des paiements. Un paiement négatif est créé en base pour la commande,
+- Il est désormais possible de marquer un paiement comme remboursé depuis la
+  page
+  de gestion des paiements. Un paiement négatif est créé en base pour la
+  commande,
   lié au paiement d'origine.
 - Une commande est automatiquement marquée comme non payée si la somme de ses
-  paiements exécutés devient inférieure à son total (ex. : après un remboursement).
-- L'annulation d'une commande est désormais bloquée si des paiements non remboursés
+  paiements exécutés devient inférieure à son total (ex. : après un
+  remboursement).
+- L'annulation d'une commande est désormais bloquée si des paiements non
+  remboursés
   existent pour cette commande. Un message indique le montant payé et invite à
   effectuer un remboursement préalable.
 
 ### Amélorations
 
-- Lors de la connexion avec Axys, si le compte utilisateur existe déjà sur le site,
-  le compte Axys sera lié au compte utilisateur existant. Sinon, un nouveau compte
+- Lors de la connexion avec Axys, si le compte utilisateur existe déjà sur le
+  site,
+  le compte Axys sera lié au compte utilisateur existant. Sinon, un nouveau
+  compte
   sera créé.
 
 ### Corrections
 
-- Lors du paiement par chèque d'une commande à retirer en magasin, le bloc chèque
-  affiche désormais un message indiquant que le chèque sera remis au retrait, au lieu
-  de rester sans indication (l'adresse d'expédition n'est plus attendue dans ce cas).
+- Lors du paiement par chèque d'une commande à retirer en magasin, le bloc
+  chèque
+  affiche désormais un message indiquant que le chèque sera remis au retrait, au
+  lieu
+  de rester sans indication (l'adresse d'expédition n'est plus attendue dans ce
+  cas).
 
 ### Maintenance
 
-- Plusieurs classes Entity legacy sans usage ont été supprimées (`Price`, `Redirection`,
-  `Signing`, `Subscription`, `Alert`, `Download`) au profit des modèles Propel équivalents.
-- L'adapter jQuery de CKEditor a été mis à jour vers la version CKEditor 4 LTS (2025),
+- Plusieurs classes Entity legacy sans usage ont été supprimées (`Price`,
+  `Redirection`,
+  `Signing`, `Subscription`, `Alert`, `Download`) au profit des modèles Propel
+  équivalents.
+- L'adapter jQuery de CKEditor a été mis à jour vers la version CKEditor 4 LTS (
+  2025),
   en préparation de la migration vers jQuery 4.
-- jQuery a été mis à jour de la version 1.12.4 (2016) vers la version 3.7.1 (LTS).
+- jQuery a été mis à jour de la version 1.12.4 (2016) vers la version 3.7.1 (
+  LTS).
 
 ## 3.13.3 (1er juillet 2026)
 
-- Les commandes contenant uniquement un abonnement n'étaient plus marquées 
+- Les commandes contenant uniquement un abonnement n'étaient plus marquées
   comme expédiée automatiquement. C'est corrigé.
 - Le fichier d'export pour Mondial Relay indiquait toujours la France comme
   pays du point relais de livraison, même pour une commande expédiée vers un
@@ -142,7 +170,8 @@
 
 ### Corrections
 
-- Une injection SQL dans la page d'administration des fournisseurs a été corrigée.
+- Une injection SQL dans la page d'administration des fournisseurs a été
+  corrigée.
 
 ## 3.13.1 (16 juin 2026)
 
@@ -176,7 +205,8 @@
 - Une erreur pouvait survenir sur la page de validation de commandes si une
   mailing list Brevo était configurée. C'est corrigé.
 - La page Clients affichait une erreur. C'est corrigé.
-- Les fichiers téléchargeables associés à un article pouvaient ne pas s'afficher.
+- Les fichiers téléchargeables associés à un article pouvaient ne pas
+  s'afficher.
   C'est corrigé.
 
 ## 3.12.1 (9 avril 2026)
