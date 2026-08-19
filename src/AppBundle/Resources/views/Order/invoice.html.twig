@@ -180,7 +180,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                         <th colspan="{{ vatBreakdownColspan }}" class="text-right">Taux</th>
                         <th class="text-right">Base HT</th>
                         <th class="text-right">TVA</th>
-                        <th class="text-right">Total TTC</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -191,14 +190,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                             </td>
                             <td class="text-right">{{ group.ht|currency(true)|raw }}</td>
                             <td class="text-right">{{ group.vat|currency(true)|raw }}</td>
-                            <td class="text-right">{{ group.ttc|currency(true)|raw }}</td>
                         </tr>
                     {% endfor %}
                     <tr>
                         <td colspan="{{ vatBreakdownColspan }}" class="text-right">Total</td>
                         <td class="text-right">{{ total_ht|currency(true)|raw }}</td>
                         <td class="text-right">{{ total_vat|currency(true)|raw }}</td>
-                        <td class="text-right">{{ (total_ht + total_vat)|currency(true)|raw }}</td>
                     </tr>
                 </tbody>
             </table>
