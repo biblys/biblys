@@ -337,6 +337,7 @@ class OrderControllerTest extends TestCase
         $currentSite->shouldReceive("getSite")->andReturn($site);
         $currentSite->shouldReceive("getTitle")->andReturn("Ma librairie");
         $currentSite->shouldReceive("getOption")->with("invoice_notice")->andReturn(null);
+        $currentSite->shouldReceive("getOption")->with("siren")->andReturn(null);
         return $currentSite;
     }
 
@@ -399,6 +400,62 @@ class OrderControllerTest extends TestCase
         $this->assertStringNotContainsString("OverallMenu", $content, "La facture doit utiliser un layout minimal, sans le chrome du site");
         $this->assertStringNotContainsString("Ref.", $content, "La colonne Ref. doit avoir été supprimée");
         $this->assertStringContainsString("Port", $content, "La ligne de port doit être affichée quand des frais existent (500 c)");
+    }
+
+    public function testInvoiceActionDisplaysSirenWhenSiteOptionIsSet(): void
+    {
+        // given
+        $controller = new OrderController();
+        $request = new Request();
+        $order = ModelFactory::createOrder(slug: "invoice-siren", amount: 2000, shippingCost: 0);
+        $article = ModelFactory::createArticle(title: "Le Livre Test");
+        ModelFactory::createStockItem(article: $article, order: $order, sellingPrice: 2000);
+
+        $site = Mockery::mock(Site::class);
+        $site->shouldReceive("getTva")->andReturn(1);
+        $site->shouldReceive("getAddress")->andReturn("1 rue du Livre|33000 Bordeaux");
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getSite")->andReturn($site);
+        $currentSite->shouldReceive("getTitle")->andReturn("Ma librairie");
+        $currentSite->shouldReceive("getOption")->with("invoice_notice")->andReturn(null);
+        $currentSite->shouldReceive("getOption")->with("siren")->andReturn("123 456 789");
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("isAuthenticated")->andReturn(false);
+        $currentUser->shouldReceive("isAdmin")->andReturn(false);
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $controller->invoiceAction($request, $currentUser, $currentSite, $templateService, "invoice-siren");
+        $content = $response->getContent();
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertStringContainsString("SIREN : 123 456 789", $content);
+    }
+
+    public function testInvoiceActionHidesSirenWhenSiteOptionIsNotSet(): void
+    {
+        // given
+        $controller = new OrderController();
+        $request = new Request();
+        $order = ModelFactory::createOrder(slug: "invoice-no-siren", amount: 2000, shippingCost: 0);
+        $article = ModelFactory::createArticle(title: "Le Livre Test");
+        ModelFactory::createStockItem(article: $article, order: $order, sellingPrice: 2000);
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("isAuthenticated")->andReturn(false);
+        $currentUser->shouldReceive("isAdmin")->andReturn(false);
+        $currentSite = $this->_mockCurrentSiteForInvoice();
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $controller->invoiceAction($request, $currentUser, $currentSite, $templateService, "invoice-no-siren");
+        $content = $response->getContent();
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertStringNotContainsString("SIREN", $content);
     }
 
     public function testInvoiceActionHidesConditionColumnWhenAllArticlesAreNew(): void
@@ -645,6 +702,7 @@ class OrderControllerTest extends TestCase
         $currentSite->shouldReceive("getSite")->andReturn($site);
         $currentSite->shouldReceive("getTitle")->andReturn("Ma librairie");
         $currentSite->shouldReceive("getOption")->with("invoice_notice")->andReturn(null);
+        $currentSite->shouldReceive("getOption")->with("siren")->andReturn(null);
 
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("isAuthenticated")->andReturn(false);
