@@ -786,6 +786,39 @@ class OrderControllerTest extends TestCase
         );
     }
 
+    public function testInvoiceActionHidesVatColumnsWhenOrderHasNoVatEvenOnVatLiableSite(): void
+    {
+        // given : site assujetti à la TVA (getTva() = 1), mais commande sans aucune TVA
+        // (ex. articles à taux 0) — les colonnes doivent se baser sur la commande, pas sur
+        // le site, tandis que la mention 293B (statut fiscal du vendeur) ne doit pas apparaître
+        $controller = new OrderController();
+        $request = new Request();
+        $order = ModelFactory::createOrder(slug: "invoice-0-vat", amount: 2000, shippingCost: 0);
+        $article = ModelFactory::createArticle(title: "Le Livre Test");
+        $stock = ModelFactory::createStockItem(article: $article, order: $order, sellingPrice: 2000);
+        $stock->setSellingPriceHt(2000)->setSellingPriceTva(0)->setTvaRate(null)->save();
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("isAuthenticated")->andReturn(false);
+        $currentUser->shouldReceive("isAdmin")->andReturn(false);
+        $currentSite = $this->_mockCurrentSiteForInvoice();
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $controller->invoiceAction($request, $currentUser, $currentSite, $templateService, "invoice-0-vat");
+        $content = $response->getContent();
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertStringNotContainsString('<th class="text-right">Taux</th>', $content, "Les colonnes TVA doivent être masquées car la commande n'a aucune TVA");
+        $this->assertStringNotContainsString('<th class="text-right">Prix HT</th>', $content);
+        $this->assertStringNotContainsString(
+            "TVA non applicable en application de l'article 293 B du CGI.",
+            $content,
+            "Le site est assujetti à la TVA : la mention 293B ne doit pas apparaître malgré une commande sans TVA"
+        );
+    }
+
     public function testInvoiceActionRendersPaidOrderWithoutPaymentMode(): void
     {
         // given : commande réglée (date de paiement) mais sans mode de paiement
