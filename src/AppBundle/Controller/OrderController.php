@@ -329,6 +329,8 @@ class OrderController extends Controller
             $totalVat += array_sum(array_column($shippingParts, "vat"));
         }
 
+        $totalHt = array_sum(array_column($vatBreakdown, "ht"));
+
         uasort($vatBreakdown, function ($a, $b) {
             if ($a["rate"] === null) {
                 return 1;
@@ -363,6 +365,7 @@ class OrderController extends Controller
             "lines" => $lines,
             "article_count" => count($lines),
             "total_weight" => $totalWeight > 0 ? $totalWeight : null,
+            "total_ht" => $totalHt,
             "total_vat" => $totalVat,
             "vat_breakdown" => $vatBreakdown,
             "shipping_vat" => $shippingVat,
