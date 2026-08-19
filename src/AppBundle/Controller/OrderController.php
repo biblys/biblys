@@ -317,7 +317,6 @@ class OrderController extends Controller
                 "condition" => $stock->getCondition(),
                 "price" => (int) $stock->getSellingPrice(),
                 "priceHt" => $priceHt,
-                "priceVat" => $priceVat,
                 "vatRate" => $vatRate,
             ];
         }
