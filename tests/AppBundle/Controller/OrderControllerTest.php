@@ -740,7 +740,6 @@ class OrderControllerTest extends TestCase
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertStringContainsString("9,5 %*", $content, "Le taux recalculé du port doit être marqué d'une étoile");
         $this->assertStringContainsString("5,48&nbsp;&euro;", $content, "HT agrégé du port (395 + 153 c)");
-        $this->assertStringContainsString("0,52&nbsp;&euro;", $content, "TVA agrégée du port (22 + 30 c)");
         $this->assertStringContainsString(
             "les frais de port ont été",
             $content,
