@@ -50,29 +50,26 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
             font-weight: normal;
         }
 
-        .invoice-document .total {
-          background: rgba(0, 0, 0, 0.03);
-          display: flex;
-          font-size: 20pt;
-          justify-content: space-between;
-          padding: 10pt 20pt;
-        }
-
-        .invoice-document .vat-breakdown {
+        .invoice-document .totals {
             margin-left: auto;
             margin-right: 0;
+            margin-top: 20pt;
             width: auto;
         }
 
-        .invoice-document .vat-breakdown th,
-        .invoice-document .vat-breakdown td {
-            background: rgba(0, 0, 0, 0.03);
-            border-color: rgba(0, 0, 0, 0.08);
-            padding: 8pt 12pt;
+        .invoice-document .totals-row {
+            display: flex;
+            gap: 40pt;
+            justify-content: space-between;
+            padding: 4pt 20pt;
         }
 
-        .invoice-document .vat-breakdown th {
+        .invoice-document .totals-row-final {
+            background: rgba(0, 0, 0, 0.03);
+            font-size: 20pt;
             font-weight: bold;
+            margin-top: 8pt;
+            padding: 10pt 20pt;
         }
 
         .invoice-document .text-right { 
@@ -90,8 +87,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 {% endblock %}
 
 {% block main %}
-    {% set vatBreakdownColspan = 3 %}
-
     <a href="javascript:history.back()" class="btn btn-secondary d-print-none mb-3">← Retour</a>
 
     <div class="invoice-document">
@@ -173,37 +168,23 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
             </tbody>
         </table>
 
-        {% if total_vat %}
-            <table class="table vat-breakdown mt-4">
-                <thead>
-                    <tr>
-                        <th colspan="{{ vatBreakdownColspan }}" class="text-right">Taux</th>
-                        <th class="text-right">Base HT</th>
-                        <th class="text-right">TVA</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for group in vat_breakdown %}
-                        <tr>
-                            <td colspan="{{ vatBreakdownColspan }}" class="text-right">
-                                {{ group.rate is not null ? (group.rate|replace({'.': ','}) ~ ' %') : 'Taux inconnu' }}
-                            </td>
-                            <td class="text-right">{{ group.ht|currency(true)|raw }}</td>
-                            <td class="text-right">{{ group.vat|currency(true)|raw }}</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        {% endif %}
-
-
-        <div class="total">
-          <div class="">
-              Total TTC
-          </div>
-          <div>
-            {{ (order.amount + order.shippingCost)|currency(true)|raw }}
-          </div>
+        <div class="totals">
+            {% if total_vat %}
+                <div class="totals-row">
+                    <div>Sous-total HT</div>
+                    <div>{{ total_ht|currency(true)|raw }}</div>
+                </div>
+                {% for group in vat_breakdown %}
+                    <div class="totals-row">
+                        <div>TVA {{ group.rate is not null ? (group.rate|replace({'.': ','}) ~ '%') : 'Taux inconnu' }} de {{ group.ht|currency(true)|raw }}</div>
+                        <div>{{ group.vat|currency(true)|raw }}</div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <div class="totals-row totals-row-final">
+                <div>Total TTC</div>
+                <div>{{ (order.amount + order.shippingCost)|currency(true)|raw }}</div>
+            </div>
         </div>
 
         <footer class="mt-4">
