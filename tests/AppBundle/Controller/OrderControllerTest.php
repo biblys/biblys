@@ -327,10 +327,10 @@ class OrderControllerTest extends TestCase
         $this->assertNotNull($updatedOrder->getCancelDate());
     }
 
-    private function _mockCurrentSiteForInvoice(): CurrentSite
+    private function _mockCurrentSiteForInvoice(bool $isShop = false): CurrentSite
     {
         $site = Mockery::mock(Site::class);
-        $site->shouldReceive("getShop")->andReturn(false);
+        $site->shouldReceive("getShop")->andReturn($isShop);
         $site->shouldReceive("getTva")->andReturn(1);
         $site->shouldReceive("getAddress")->andReturn("1 rue du Livre|33000 Bordeaux");
 
@@ -520,6 +520,56 @@ class OrderControllerTest extends TestCase
             $content,
             "Sans ligne de port, aucun poids n'est affiché même s'il est connu"
         );
+    }
+
+    public function testInvoiceActionHidesConditionColumnWhenAllArticlesAreNew(): void
+    {
+        // given
+        $controller = new OrderController();
+        $request = new Request();
+        $order = ModelFactory::createOrder(slug: "invoice-all-new", amount: 2000, shippingCost: 0);
+        $article = ModelFactory::createArticle(title: "Le Livre Test");
+        ModelFactory::createStockItem(article: $article, order: $order, sellingPrice: 2000);
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("isAuthenticated")->andReturn(false);
+        $currentUser->shouldReceive("isAdmin")->andReturn(false);
+        $currentSite = $this->_mockCurrentSiteForInvoice(isShop: true);
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $controller->invoiceAction($request, $currentUser, $currentSite, $templateService, "invoice-all-new");
+        $content = $response->getContent();
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertStringNotContainsString("État", $content, "La colonne État doit être masquée quand tous les articles sont Neuf");
+    }
+
+    public function testInvoiceActionShowsConditionColumnWhenAnArticleIsNotNew(): void
+    {
+        // given
+        $controller = new OrderController();
+        $request = new Request();
+        $order = ModelFactory::createOrder(slug: "invoice-mixed-1", amount: 2000, shippingCost: 0);
+        $article = ModelFactory::createArticle(title: "Le Livre Test");
+        $stock = ModelFactory::createStockItem(article: $article, order: $order, sellingPrice: 2000);
+        $stock->setCondition("Occasion");
+        $stock->save();
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("isAuthenticated")->andReturn(false);
+        $currentUser->shouldReceive("isAdmin")->andReturn(false);
+        $currentSite = $this->_mockCurrentSiteForInvoice(isShop: true);
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $controller->invoiceAction($request, $currentUser, $currentSite, $templateService, "invoice-mixed-1");
+        $content = $response->getContent();
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertStringContainsString("État", $content, "La colonne État doit être affichée quand un article n'est pas Neuf");
     }
 
     public function testInvoiceActionHidesShippingLineWhenFree(): void
