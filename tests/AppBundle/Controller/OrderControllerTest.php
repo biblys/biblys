@@ -327,10 +327,9 @@ class OrderControllerTest extends TestCase
         $this->assertNotNull($updatedOrder->getCancelDate());
     }
 
-    private function _mockCurrentSiteForInvoice(bool $isShop = false): CurrentSite
+    private function _mockCurrentSiteForInvoice(): CurrentSite
     {
         $site = Mockery::mock(Site::class);
-        $site->shouldReceive("getShop")->andReturn($isShop);
         $site->shouldReceive("getTva")->andReturn(1);
         $site->shouldReceive("getAddress")->andReturn("1 rue du Livre|33000 Bordeaux");
 
@@ -414,7 +413,7 @@ class OrderControllerTest extends TestCase
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("isAuthenticated")->andReturn(false);
         $currentUser->shouldReceive("isAdmin")->andReturn(false);
-        $currentSite = $this->_mockCurrentSiteForInvoice(isShop: true);
+        $currentSite = $this->_mockCurrentSiteForInvoice();
         $templateService = Helpers::getTemplateService();
 
         // when
@@ -440,7 +439,7 @@ class OrderControllerTest extends TestCase
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("isAuthenticated")->andReturn(false);
         $currentUser->shouldReceive("isAdmin")->andReturn(false);
-        $currentSite = $this->_mockCurrentSiteForInvoice(isShop: true);
+        $currentSite = $this->_mockCurrentSiteForInvoice();
         $templateService = Helpers::getTemplateService();
 
         // when
