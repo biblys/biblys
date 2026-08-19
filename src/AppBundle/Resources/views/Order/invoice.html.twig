@@ -121,8 +121,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                     <th>{{ article_count }} {{ "article"|pluralize(article_count) }}</th>
                     {% if show_condition %}<th>État</th>{% endif %}
                     {% if total_vat %}
-                        <th class="text-right">Taux</th>
                         <th class="text-right">Prix HT</th>
+                        <th class="text-right">Taux</th>
                     {% endif %}
                     <th class="text-right">Prix TTC</th>
                 </tr>
@@ -143,8 +143,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                         </td>
                         {% if show_condition %}<td class="text-center align">{{ line.condition }}</td>{% endif %}
                         {% if total_vat %}
-                            <td class="text-right align">{{ line.vatRate is not null ? (line.vatRate|replace({'.': ','}) ~ ' %') : '—' }}</td>
                             <td class="text-right align">{{ line.vatRate is not null ? line.priceHt|currency(true)|raw : '—' }}</td>
+                            <td class="text-right align">{{ line.vatRate is not null ? (line.vatRate|replace({'.': ','}) ~ ' %') : '—' }}</td>
                         {% endif %}
                         <td class="text-right align">{{ line.price|currency(true)|raw }}</td>
                     </tr>
@@ -162,10 +162,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                         </td>
                         {% if show_condition %}<td></td>{% endif %}
                         {% if total_vat %}
+                            <td class="text-right align">{{ shipping_vat is not null ? shipping_vat.ht|currency(true)|raw : '—' }}</td>
                             <td class="text-right align">
                                 {{ shipping_vat is not null and shipping_vat.rate is not null ? (shipping_vat.rate|replace({'.': ','}) ~ ' %') : (shipping_vat is not null ? 'Taux inconnu' : '—') }}{% if shipping_vat is not null and shipping_vat.recalculated %}*{% endif %}
                             </td>
-                            <td class="text-right align">{{ shipping_vat is not null ? shipping_vat.ht|currency(true)|raw : '—' }}</td>
                         {% endif %}
                         <td class="text-right align">
                             {{ order.shippingCost|currency(true)|raw }}
