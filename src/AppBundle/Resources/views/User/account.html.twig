@@ -21,77 +21,74 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 {% endblock %}
 
 {% block main %}
-  <h1>Mon compte {{ app.currentSite.site.title }}</h1>
+  <h1>Mon compte</h1>
+  <p class="text-muted mb-4">Connecté avec {{ user_email }}</p>
 
-  <h2>{{ user_email }}</h2>
+  <section class="mb-5">
+    <h2 class="h6 text-uppercase text-muted mb-2">Adresse e-mail</h2>
+    <form action="{{ path('user_request_email_update') }}" method="post" style="max-width: 28rem;">
+      <div class="input-group">
+        <input type="email" class="form-control" id="new_email" name="new_email"
+               value="{{ user_email }}" aria-label="Adresse e-mail">
+        <div class="input-group-append">
+          <button type="submit" class="btn btn-primary">Modifier</button>
+        </div>
+      </div>
+    </form>
+  </section>
 
-  <form class="form-inline" action="{{ path('user_request_email_update') }}" method="post">
-    <div class="form-group">
-      <label for="new_email">Adresse e-mail :</label>
-      <input type="email" class="form-control ml-1 mr-1" id="new_email" name="new_email" value="{{ user_email }}">
-    </div>
-    <button type="submit" class="btn btn-primary">Modifier</button>
-  </form>
-
-  <h2>Menu</h2>
-  <ul>
-    {% if app.currentSite.hasOptionEnabled("wishlist") %}
-      <li>
-        <a href="/pages/log_mywishes">
-          <span class="fa fa-heart"></span>
+  <nav aria-label="Menu du compte" style="max-width: 28rem;">
+    <div class="list-group list-group-flush">
+      {% if app.currentSite.hasOptionEnabled("wishlist") %}
+        <a href="/pages/log_mywishes" class="list-group-item list-group-item-action d-flex align-items-center py-3">
+          <span class="fa fa-heart text-muted mr-3" style="width: 1.25rem;"></span>
           Mes envies
+          <i class="fa-solid fa-chevron-right ml-auto text-muted small"></i>
         </a>
-      </li>
-    {% endif %}
+      {% endif %}
 
-    {% if app.currentSite.hasOptionEnabled("alerts") %}
-      <li>
-        <a href="/pages/log_myalerts">
-          <span class="fa fa-bell"></span>
+      {% if app.currentSite.hasOptionEnabled("alerts") %}
+        <a href="/pages/log_myalerts" class="list-group-item list-group-item-action d-flex align-items-center py-3">
+          <span class="fa fa-bell text-muted mr-3" style="width: 1.25rem;"></span>
           Mes alertes
+          <i class="fa-solid fa-chevron-right ml-auto text-muted small"></i>
         </a>
-      </li>
-    {% endif %}
+      {% endif %}
 
-    <li>
-      <a href="{{ path("user_orders") }}">
-        <span class="fa-solid fa-box"></span>
+      <a href="{{ path("user_orders") }}" class="list-group-item list-group-item-action d-flex align-items-center py-3">
+        <span class="fa-solid fa-box text-muted mr-3" style="width: 1.25rem;"></span>
         Mes commandes
+        <i class="fa-solid fa-chevron-right ml-auto text-muted small"></i>
       </a>
-    </li>
 
-    {% if app.currentSite.hasOptionEnabled("show_elibrary") %}
-      <li>
-        <a href="{{ path('user_library') }}">
-          <span class="fa fa-book"></span>
+      {% if app.currentSite.hasOptionEnabled("show_elibrary") %}
+        <a href="{{ path('user_library') }}" class="list-group-item list-group-item-action d-flex align-items-center py-3">
+          <span class="fa fa-book text-muted mr-3" style="width: 1.25rem;"></span>
           Ma bibliothèque
+          <i class="fa-solid fa-chevron-right ml-auto text-muted small"></i>
         </a>
-      </li>
-    {% endif %}
+      {% endif %}
 
-    {% if app.currentUser.hasPublisherRight %}
-      <li>
-        <a href="/pages/log_dashboard">
-          <span class="fa fa-home"></span>
+      {% if app.currentUser.hasPublisherRight %}
+        <a href="/pages/log_dashboard" class="list-group-item list-group-item-action d-flex align-items-center py-3">
+          <span class="fa fa-home text-muted mr-3" style="width: 1.25rem;"></span>
           Gérer ma maison d'édition
+          <i class="fa-solid fa-chevron-right ml-auto text-muted small"></i>
         </a>
-      </li>
-    {% endif %}
+      {% endif %}
 
-    {% if has_axys_method %}
-      <li>
-        <a href="https://axys.me" rel="nofollow">
-          <span class="fa fa-key"></span>
+      {% if has_axys_method %}
+        <a href="https://axys.me" rel="nofollow" class="list-group-item list-group-item-action d-flex align-items-center py-3">
+          <span class="fa fa-key text-muted mr-3" style="width: 1.25rem;"></span>
           Mon compte Axys
+          <i class="fa-solid fa-chevron-right ml-auto text-muted small"></i>
         </a>
-      </li>
-    {% endif %}
+      {% endif %}
 
-    <li>
-      <a href="{{ path("user_logout") }}">
-        <span class="fa fa-sign-out"></span>
+      <a href="{{ path("user_logout") }}" class="list-group-item list-group-item-action d-flex align-items-center py-3 text-danger">
+        <span class="fa fa-sign-out mr-3" style="width: 1.25rem;"></span>
         Déconnexion
       </a>
-    </li>
-  </ul>
+    </div>
+  </nav>
 {% endblock %}

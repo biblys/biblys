@@ -10,6 +10,7 @@
 - La section PayPlug de la page de paiement affiche désormais les logos des
   moyens de paiement acceptés (CB, Visa, Mastercard), ainsi que le logo
   Apple Pay lorsque ce moyen de paiement est activé sur le compte PayPlug.
+- La lisibilité de la page "Mon compte" a été améliorée.
 
 ## 3.15.0 (12 août 2026)
 
