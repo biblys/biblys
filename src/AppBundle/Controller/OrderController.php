@@ -343,6 +343,14 @@ class OrderController extends Controller
 
         $shippingVat = ShippingVatAllocationService::summarizeForDisplay($shippingParts, $vatBreakdown);
 
+        $hasNonNewCondition = false;
+        foreach ($lines as $line) {
+            if ($line["condition"] !== "Neuf") {
+                $hasNonNewCondition = true;
+                break;
+            }
+        }
+
         $payment = null;
         if ($order->getPaymentDate()) {
             $payment = [
@@ -360,6 +368,7 @@ class OrderController extends Controller
             "vat_breakdown" => $vatBreakdown,
             "shipping_vat" => $shippingVat,
             "is_shop" => (bool) $currentSite->getSite()->getShop(),
+            "show_condition" => $hasNonNewCondition,
             "has_vat" => (bool) $currentSite->getSite()->getTva(),
             "payment" => $payment,
             "invoice_notice" => $currentSite->getOption("invoice_notice"),
