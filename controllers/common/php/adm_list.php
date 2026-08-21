@@ -152,10 +152,10 @@ return function (
             /** @noinspection JSVoidFunctionReturnValueUsed */
             $articles_in_list .= '
                 <tr id="link_' . $a['link_id'] . '">
-                    <td class="right">
+                    <td class="right align-middle">
                         ' . $copy->getAvailabilityDot() . '
                     </td>
-                    <td><a href="/a/' . $a['article_url'] . '">' . $a['article_title'] . '</a></td>
+                    <td class="align-middle"><a href="/a/' . $a['article_url'] . '">' . $a['article_title'] . '</a></td>
                     <td>' . $a['article_collection'] . '</td>
                     <td data-price=' . $a['stock_selling_price'] . ' data-stock_id=' . $a['stock_id'] . ' data-article_id=' . $a['article_id'] . ' data-article_title="' . $a['article_title'] . '" class="right pointer changePriceInList e">' . price($a['stock_selling_price'], 'EUR') . '</td>
                     <td class="text-right">' . $a['count'] . '</td>
