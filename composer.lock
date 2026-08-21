@@ -3447,16 +3447,16 @@
         },
         {
             "name": "propel/propel",
-            "version": "2.0.0",
+            "version": "2.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/propelorm/Propel2.git",
-                "reference": "38fcf4cb553025a6b711033ba37bcf15d950fafc"
+                "reference": "92d27b41f5d510a04d0fe052a7add502ac95bbc9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/propelorm/Propel2/zipball/38fcf4cb553025a6b711033ba37bcf15d950fafc",
-                "reference": "38fcf4cb553025a6b711033ba37bcf15d950fafc",
+                "url": "https://api.github.com/repos/propelorm/Propel2/zipball/92d27b41f5d510a04d0fe052a7add502ac95bbc9",
+                "reference": "92d27b41f5d510a04d0fe052a7add502ac95bbc9",
                 "shasum": ""
             },
             "require": {
@@ -3519,9 +3519,9 @@
             ],
             "support": {
                 "issues": "https://github.com/propelorm/Propel2/issues",
-                "source": "https://github.com/propelorm/Propel2/tree/2.0.0"
+                "source": "https://github.com/propelorm/Propel2/tree/2.0.1"
             },
-            "time": "2026-06-23T13:37:50+00:00"
+            "time": "2026-08-21T10:01:20+00:00"
         },
         {
             "name": "psr/cache",
