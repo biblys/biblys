@@ -3157,16 +3157,16 @@
         },
         {
             "name": "paypal/paypal-server-sdk",
-            "version": "2.3.0",
+            "version": "2.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/paypal/PayPal-PHP-Server-SDK.git",
-                "reference": "c54fefd059802b4fde7182d708b4d2dc99f9d2e5"
+                "reference": "b6be767b759ac3e3ad1d32dde7143a0927f5892b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paypal/PayPal-PHP-Server-SDK/zipball/c54fefd059802b4fde7182d708b4d2dc99f9d2e5",
-                "reference": "c54fefd059802b4fde7182d708b4d2dc99f9d2e5",
+                "url": "https://api.github.com/repos/paypal/PayPal-PHP-Server-SDK/zipball/b6be767b759ac3e3ad1d32dde7143a0927f5892b",
+                "reference": "b6be767b759ac3e3ad1d32dde7143a0927f5892b",
                 "shasum": ""
             },
             "require": {
@@ -3194,10 +3194,9 @@
             "description": "PayPal's SDK for interacting with the REST APIs",
             "homepage": "https://github.com/paypal/PayPal-PHP-Server-SDK",
             "support": {
-                "issues": "https://github.com/paypal/PayPal-PHP-Server-SDK/issues",
-                "source": "https://github.com/paypal/PayPal-PHP-Server-SDK/tree/2.3.0"
+                "source": "https://github.com/paypal/PayPal-PHP-Server-SDK/tree/2.4.0"
             },
-            "time": "2026-06-05T21:28:21+00:00"
+            "time": "2026-08-21T15:05:45+00:00"
         },
         {
             "name": "payplug/payplug-php",
