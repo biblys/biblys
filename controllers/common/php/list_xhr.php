@@ -79,7 +79,7 @@ return function (Request $request, CurrentUser $currentUser, ImagesService $imag
         while ($a = $articles->fetch(PDO::FETCH_ASSOC)) {
             $article = ArticleQuery::create()->findPk($a["article_id"]);
             if ($imagesService->imageExistsFor($article)) {
-                $a["article_cover"] = '<img src="' . $imagesService->getImageUrlFor($article, height: 60) . '" />';
+                $a["article_cover"] = '<img src="' . $imagesService->getImageUrlFor($article, height: 60) . '" height="60" />';
             } else {
                 $a["article_cover"] = null;
             }
