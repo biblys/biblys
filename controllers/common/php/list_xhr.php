@@ -75,6 +75,7 @@ return function (Request $request, CurrentUser $currentUser, ImagesService $imag
         // EXEMPLAIRES
         $num = 0;
         $multiple = null;
+        $sm = new StockManager();
         $articles = EntityManager::prepareAndExecute($req, $params);
         while ($a = $articles->fetch(PDO::FETCH_ASSOC)) {
             $article = ArticleQuery::create()->findPk($a["article_id"]);
@@ -84,32 +85,29 @@ return function (Request $request, CurrentUser $currentUser, ImagesService $imag
                 $a["article_cover"] = null;
             }
 
-            if (!empty($a["stock_cart_date"])) {
-                $a["led"] = "square_gray";
-                $a["led_title"] = "En panier";
-            } else {
-                $a["led"] = "square_green";
-                $a["led_title"] = "En stock";
-            }
-
             // If the item is already in a list, skip it
             $listed = $lm->get(["list_id" => $listId, "stock_id" => $a["stock_id"]]);
             if ($listed) {
                 continue;
             }
 
+            /** @var Stock $stock */
+            $stock = $sm->getById($a["stock_id"]);
+
             $content .= '
-                <li class="choose clearL" onClick="addToList(\'' . $a["stock_id"] . '\',\'' . addslashes($a["article_title"]) . '\')">
-                    ' . $a["article_cover"] . '
-                    <img src="/common/img/' . $a["led"] . '.png" width="8" height="8" title="' . $a["led_title"] . '" alt="' . $a["led_title"] . '" /> 
-                      <strong>' . $a["article_title"] . '</strong>
-                      <br />
-                    ' . $a["article_authors"] . '<br />
-                    ' . $a["article_collection"] . ' ' . numero($a["article_number"]) . '<br />
-                    ' . price($a["stock_selling_price"], 'EUR') . ' (' . $a["stock_condition"] . ')<br />
-                    Ref. ' . $a["stock_id"] . '<br />
-                    Empl. : ' . $a["stock_stockage"] . '<br />
-                    <div class="clearL"></div>
+                <li class="choose" onClick="addToList(\'' . $a["stock_id"] . '\',\'' . addslashes($a["article_title"]) . '\')">
+                    <div class="autocomplete-cover">' . $a["article_cover"] . '</div>
+                    <div class="autocomplete-info">
+                        <div class="autocomplete-title">
+                            ' . $stock->getAvailabilityDot() . '
+                            <strong>' . $a["article_title"] . '</strong>
+                        </div>
+                        ' . $a["article_authors"] . '<br />
+                        ' . $a["article_collection"] . ' ' . numero($a["article_number"]) . '<br />
+                        ' . price($a["stock_selling_price"], 'EUR') . ' (' . $a["stock_condition"] . ')<br />
+                        Ref. ' . $a["stock_id"] . '<br />
+                        Empl. : ' . $a["stock_stockage"] . '<br />
+                    </div>
                 </li>
             ';
             $num++;
@@ -139,30 +137,12 @@ return function (Request $request, CurrentUser $currentUser, ImagesService $imag
                     ["list_id" => $listId, "stock_id" => $stockId]
                 );
 
-                if (!empty($stock->get("return_date"))) {
-                    $led = "square_orange";
-                    $ledTitle = "Retourné";
-                } elseif (!empty($stock->get("selling_date"))) {
-                    $led = "square_blue";
-                    $ledTitle = "Vendu";
-                } elseif (!empty($stock->get("lost_date"))) {
-                    $led = "square_purple";
-                    $ledTitle = "Perdu";
-                } elseif (!empty($stock->get("cart_date"))) {
-                    $led = "square_gray";
-                    $ledTitle = "En panier";
-                } else {
-                    $led = "square_green";
-                    $ledTitle = "En stock";
-                }
-
                 $article = $stock->getArticle();
 
                 $content .= '
                     <tr id="link_' . $link->get("id") . '">
                         <td>
-                            <img src="/common/img/' . $led . '.png" width="8" height="8"
-                                title="' . $ledTitle . '" alt="' . $ledTitle . '">
+                            ' . $stock->getAvailabilityDot() . '
                         </td>
                         <td>
                             <a href="/' . $article->get("url") . '">

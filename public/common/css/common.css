@@ -597,18 +597,26 @@ progress {
   padding: 0;
   margin: 0;
   background: white;
-  background: rgba(255, 255, 255, 0.9);
   border: 1px solid black;
   list-style-type: none;
   margin-left: 157px;
+  max-width: 500px;
   position: absolute;
 }
 
 .autocompleteResults li {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
   font-family: sans-serif;
   padding: 5px 10px;
   cursor: pointer;
   color: black;
+  border-bottom: 1px solid #ddd;
+}
+
+.autocompleteResults li:last-child {
+  border-bottom: none;
 }
 
 .autocompleteResults li:hover {
@@ -616,9 +624,21 @@ progress {
   color: white;
 }
 
-.autocompleteResults li img {
-  float: left;
-  margin-right: 15px;
+.autocompleteResults .autocomplete-cover img {
+  display: block;
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+}
+
+.autocompleteResults .autocomplete-info {
+  min-width: 0;
+}
+
+.autocompleteResults .autocomplete-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 /* Not full screen overlay fix */
@@ -1428,8 +1448,9 @@ table.unfold tbody {
 .availability-dot {
   align-items: center;
   background: black;
-  border-radius: 50%;
+  border-radius: 4px;
   display: flex;
+  font-size: 12px;
   font-weight: bold;
   justify-content: center;
   color: white;
