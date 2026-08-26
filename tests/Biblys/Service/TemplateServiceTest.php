@@ -18,6 +18,7 @@
 
 namespace Biblys\Service;
 
+use Biblys\Test\EntityFactory;
 use Biblys\Test\Helpers;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
@@ -154,5 +155,73 @@ class TemplateServiceTest extends TestCase
         $this->assertInstanceOf(Response::class, $response);
         $this->assertEquals("no-store, private", $response->headers->get("Cache-Control"));
         $this->assertEquals("Hello <b>World</b>!", $response->getContent());
+    }
+
+    /** articles filter */
+
+    /**
+     * @throws PropelException
+     * @throws \Exception
+     */
+    public function testArticlesFilterResolvesIdsToArticles()
+    {
+        // given
+        EntityFactory::createSite();
+        $article = EntityFactory::createArticle(title: "Les Ombres de Septembre");
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $templateService->renderResponseFromString(
+            "{% for article in ids|articles %}{{ article.title }}{% endfor %}",
+            ["ids" => (string) $article->get("id")]
+        );
+
+        // then
+        $this->assertStringContainsString("Les Ombres de Septembre", $response->getContent());
+    }
+
+    /**
+     * @throws PropelException
+     * @throws \Exception
+     */
+    public function testArticlesFilterResolvesSeveralCommaSeparatedIds()
+    {
+        // given
+        EntityFactory::createSite();
+        $first = EntityFactory::createArticle(title: "Le Premier Tome");
+        $second = EntityFactory::createArticle(title: "Le Second Tome");
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $templateService->renderResponseFromString(
+            "{% for article in ids|articles %}{{ article.title }};{% endfor %}",
+            ["ids" => $first->get("id").",".$second->get("id")]
+        );
+
+        // then
+        $this->assertEquals(
+            "Le Premier Tome;Le Second Tome;",
+            $response->getContent()
+        );
+    }
+
+    /**
+     * @throws PropelException
+     * @throws \Exception
+     */
+    public function testArticlesFilterReturnsEmptyArrayForNull()
+    {
+        // given
+        EntityFactory::createSite();
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $templateService->renderResponseFromString(
+            "{% for article in ids|articles %}{{ article.title }}{% endfor %}empty",
+            ["ids" => null]
+        );
+
+        // then
+        $this->assertEquals("empty", $response->getContent());
     }
 }

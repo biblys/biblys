@@ -161,6 +161,49 @@ class MainControllerTest extends TestCase
     }
 
     /**
+     * @throws PropelException
+     * @throws Exception|\PHPUnit\Framework\MockObject\Exception
+     */
+    public function testHomeWithPostsAndNoBooksConfigured()
+    {
+        // given
+        $controller = new MainController();
+        $request = new Request();
+        $site = EntityFactory::createSite();
+        $site->setOpt("home", "posts");
+        $config = new Config();
+        $config->set("site", $site->get("site_id"));
+        $config->set("environment", "test");
+        $mailer = Mockery::mock(Mailer::class);
+        $session = new Session();
+        $currentSite = CurrentSite::buildFromConfig($config);
+        $urlGenerator = $this->createMock(UrlGenerator::class);
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
+        $metaTagsService = $this->createMock(MetaTagsService::class);
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $controller->homeAction(
+            request: $request,
+            session: $session,
+            mailer: $mailer,
+            config: $config,
+            currentSite: $currentSite,
+            currentUser: $currentUser,
+            urlGenerator: $urlGenerator,
+            templateService: $templateService,
+            metaTagsService: $metaTagsService,
+        );
+
+        // then
+        $this->assertEquals(
+            200,
+            $response->getStatusCode(),
+            "it should return HTTP 200 even without any book configured"
+        );
+    }
+
+    /**
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
