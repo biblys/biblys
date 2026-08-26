@@ -26,6 +26,7 @@ use Cart;
 use Exception;
 use Framework\TemplateLoader;
 use Model\Article;
+use Model\ArticleQuery;
 use Model\Event;
 use Model\People;
 use Model\Post;
@@ -332,6 +333,23 @@ class TemplateService
 
         $filters[] = new TwigFilter('currency', function ($amount, $cents = false) {
             return currency($amount, $cents);
+        });
+
+        // resolve a comma-separated list of article ids into an array of articles
+        $filters[] = new TwigFilter('articles', function (?string $ids) {
+            if (!$ids) {
+                return [];
+            }
+
+            $articles = [];
+            foreach (explode(',', $ids) as $id) {
+                $article = ArticleQuery::create()->findPk((int) trim($id));
+                if ($article) {
+                    $articles[] = $article;
+                }
+            }
+
+            return $articles;
         });
 
         $filters[] = new TwigFilter('date', function ($date, $format = 'd/m/Y') {
