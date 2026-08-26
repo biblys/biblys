@@ -23,6 +23,15 @@
 - Le tableau de répartition TVA et le bloc "Total TTC" ont été remplacés par une
   liste unifiée en bas de facture (Sous-total HT, TVA par taux, Total TTC).
 
+## 3.15.2 (26 août 2026)
+
+### Corrections
+
+- La vignette de couverture affichée dans le résultat d'ajout d'un exemplaire
+  à une liste n'est plus surdimensionnée.
+- La liste de résultats d'ajout d'un exemplaire à une liste est plus lisible :
+  fond opaque, vignettes de taille homogène, séparation entre les résultats.
+
 ## 3.15.1 (19 août 2026)
 
 ### Corrections
