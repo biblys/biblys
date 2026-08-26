@@ -11,6 +11,9 @@
   moyens de paiement acceptés (CB, Visa, Mastercard), ainsi que le logo
   Apple Pay lorsque ce moyen de paiement est activé sur le compte PayPlug.
 - La lisibilité de la page "Mon compte" a été améliorée.
+- Un nouveau filtre Twig `articles` permet à un thème de résoudre, directement
+  dans un template, une liste d'identifiants d'articles séparés par des
+  virgules en objets Article.
 
 ### Améliorations des factures
 
