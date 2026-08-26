@@ -52,7 +52,8 @@ Les versions suivent le [Semantic Versioning](https://semver.org/) (`MAJOR.MINOR
 3. Mettre à jour le numéro de version si nécessaire.
 4. Ouvrir une Pull Request vers `main`. Pour une release mineure, le titre suit le format `Mise à jour de <mois> <année> (X.Y.Z)`, où `<mois> <année>` est le mois courant en français suivi de l'année (ex. : `Mise à jour de juillet 2026 (3.14.0)`).
 5. Fusionner la Pull Request par **rebase** (« Rebase and merge ») : le dépôt n'autorise que cette méthode, il n'y a donc pas de commit de fusion. Taguer sur `main` le commit de version `X.Y.Z` obtenu après le rebase.
-6. Fusionner `main` dans `dev` et ajouter une nouvelle section `## <prochaine-version> (DEV)` en haut de `CHANGELOG.md`.
+6. Créer la Release sur GitHub pour ce tag, avec pour notes la section correspondante de `CHANGELOG.md`.
+7. Fusionner `main` dans `dev` et ajouter une nouvelle section `## <prochaine-version> (DEV)` en haut de `CHANGELOG.md`.
 
 ### Corriger la production (hotfix)
 
@@ -60,7 +61,8 @@ Les versions suivent le [Semantic Versioning](https://semver.org/) (`MAJOR.MINOR
 2. Corriger le problème et ajouter une section `## X.Y.Z (date)` dans `CHANGELOG.md`.
 3. Ouvrir une Pull Request vers `main`. Pour une release patch, le titre suit le format `Correctif X.Y.Z`, où `X.Y.Z` est le numéro de version (ex. : `Correctif 3.14.1`).
 4. Fusionner la Pull Request par **rebase** (« Rebase and merge ») : le dépôt n'autorise que cette méthode, il n'y a donc pas de commit de fusion. Taguer sur `main` le commit de version `X.Y.Z` obtenu après le rebase.
-5. Fusionner `main` dans `dev`.
+5. Créer la Release sur GitHub pour ce tag, avec pour notes la section correspondante de `CHANGELOG.md`.
+6. Fusionner `main` dans `dev`.
 
 ## CHANGELOG.md
 
