@@ -475,6 +475,14 @@ class CartManager extends EntityManager
             }
         }
 
+        // Intangible articles have no real inventory to keep: delete the stock
+        // item entirely instead of leaving an unclaimed, stale-priced row behind.
+        $article = $stock->get('article');
+        if ($article && !$article->getType()->isPhysical()) {
+            $sm->delete($stock);
+            return true;
+        }
+
         // Remove stock from cart
         $stock->set('cart_id', null);
         $stock->set('stock_cart_date', null);

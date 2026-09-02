@@ -598,4 +598,47 @@ class CartTest extends PHPUnit\Framework\TestCase
         $wish->reload();
         $this->assertNull($wish->getBought(), "wish_bought doit être remis à null.");
     }
+
+    /**
+     * @throws Exception
+     */
+    public function testRemoveStockDeletesIntangibleStockItem(): void
+    {
+        // given
+        $ebook = EntityFactory::createArticle(["type_id" => ArticleType::EBOOK]);
+        $stock = EntityFactory::createStock(["article_id" => $ebook->get("id")]);
+        $cm = new CartManager();
+
+        // when
+        $cm->removeStock($stock);
+
+        // then
+        $sm = new StockManager();
+        $this->assertFalse(
+            $sm->getById($stock->get("id")),
+            "l'exemplaire intangible devrait être supprimé, pas seulement détaché"
+        );
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testRemoveStockKeepsPhysicalStockItem(): void
+    {
+        // given
+        $physicalArticle = EntityFactory::createArticle(["type_id" => ArticleType::BOOK]);
+        $stock = EntityFactory::createStock(["article_id" => $physicalArticle->get("id")]);
+        $cm = new CartManager();
+
+        // when
+        $cm->removeStock($stock);
+
+        // then
+        $sm = new StockManager();
+        $this->assertInstanceOf(
+            Stock::class,
+            $sm->getById($stock->get("id")),
+            "l'exemplaire physique doit rester en stock, juste détaché du panier"
+        );
+    }
 }

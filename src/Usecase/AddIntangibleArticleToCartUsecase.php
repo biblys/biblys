@@ -24,8 +24,6 @@ use Model\Article;
 use Model\Cart;
 use Model\CrowfundingReward;
 use Model\Stock;
-use Model\StockQuery;
-use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Exception\PropelException;
 
 class AddIntangibleArticleToCartUsecase
@@ -52,19 +50,9 @@ class AddIntangibleArticleToCartUsecase
             throw new BusinessRuleException("L'article {$article->getTitle()} n'a pas pu être ajouté au panier car il est {$exception->getMessage()}.");
         }
 
-        $stockItem = StockQuery::create()
-            ->filterByArticle($article)
-            ->filterBySellingDate(null, Criteria::ISNULL)
-            ->filterByLostDate(null, Criteria::ISNULL)
-            ->filterByCartDate(null, Criteria::ISNULL)
-            ->filterByReturnDate(null, Criteria::ISNULL)
-            ->findOne();
-
-        if ($stockItem === null) {
-            $stockItem = new Stock();
-            $stockItem->setArticle($article);
-            $stockItem->setSellingPrice($article->getPrice());
-        }
+        $stockItem = new Stock();
+        $stockItem->setArticle($article);
+        $stockItem->setSellingPrice($article->getPrice());
 
         if ($reward) {
             $stockItem->setCampaignId($reward->getCampaignId());
