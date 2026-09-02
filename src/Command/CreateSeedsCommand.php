@@ -267,6 +267,7 @@ class CreateSeedsCommand extends Command
             shippingOption: $pickupShippingOption,
             amount: 900,
             amountToBePaid: 900,
+            slug: "order-to-pay",
             firstName: "Sacha",
             lastName: "Hutte",
             email: "sacha.hutte@paronymie.fr",
