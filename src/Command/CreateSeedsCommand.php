@@ -79,6 +79,9 @@ class CreateSeedsCommand extends Command
         $currentSite->setOption("siren", "123 456 789");
         $output->writeln(["Inserted site option: siren"]);
 
+        $currentSite->setOption("payment_cash", "1");
+        $output->writeln(["Inserted site option: payment_cash"]);
+
         // Admin
         $admin = new User();
         $admin->setEmail("admin@paronymie.fr");
@@ -155,6 +158,7 @@ class CreateSeedsCommand extends Command
         // Catalog articles, each with its author and one new stock item
         $slugService = new SlugService();
         $orderedCatalogArticle = null;
+        $catalogArticleModels = [];
         foreach (self::CATALOG_ARTICLES as $catalogArticle) {
             $author = ModelFactory::createContributor(
                 firstName: $catalogArticle["firstName"],
@@ -178,6 +182,8 @@ class CreateSeedsCommand extends Command
                 article: $catalogArticleModel,
                 sellingPrice: $catalogArticle["price"],
             );
+
+            $catalogArticleModels[$catalogArticle["title"]] = $catalogArticleModel;
 
             if ($catalogArticle["title"] === "Au-revoir Mao") {
                 $orderedCatalogArticle = $catalogArticleModel;
@@ -240,6 +246,41 @@ class CreateSeedsCommand extends Command
         $order->setAmountTobepaid(0);
         $order->save();
         $output->writeln(["Inserted payment for order"]);
+
+        // Order to be paid, picked up in-store so the cash payment option can be tested
+        $pickupShippingOption = new ShippingOption();
+        $pickupShippingOption->setMode("Retrait en magasin");
+        $pickupShippingOption->setType("magasin");
+        $pickupShippingOption->setShippingZoneId(1);
+        $pickupShippingOption->setFee(0);
+        $pickupShippingOption->save();
+        $output->writeln(["Inserted shipping option: Retrait en magasin"]);
+
+        $pickupCustomer = ModelFactory::createCustomer(
+            firstName: "Sacha",
+            lastName: "Hutte",
+            email: "sacha.hutte@paronymie.fr",
+        );
+
+        $orderToBePaid = ModelFactory::createOrder(
+            customer: $pickupCustomer,
+            shippingOption: $pickupShippingOption,
+            amount: 900,
+            amountToBePaid: 900,
+            slug: "order-to-pay",
+            firstName: "Sacha",
+            lastName: "Hutte",
+            email: "sacha.hutte@paronymie.fr",
+        );
+        $orderToBePaid->setConfirmationDate(new DateTime());
+        $orderToBePaid->save();
+
+        ModelFactory::createStockItem(
+            article: $catalogArticleModels["Papeete"],
+            order: $orderToBePaid,
+            sellingPrice: 900,
+        );
+        $output->writeln(["Inserted order to be paid: {$orderToBePaid->getSlug()}"]);
 
         $output->writeln(["Seeds generated!"]);
         return 0;

@@ -358,6 +358,7 @@ class PaymentController extends Controller
                 "paymentIban" => $currentSite->getOption("payment_iban"),
                 "checkIsAvailable" => !!$currentSite->getOption("payment_check"),
                 "nameForCheckPayment" => $currentSite->getOption("name_for_check_payment"),
+                "cashIsAvailable" => !!$currentSite->getOption("payment_cash") && $orderWillBeCollected,
                 "orderWillBeShipped" => $orderWillBeShipped,
                 "orderWillBeCollected" => $orderWillBeCollected,
             ], isPrivate: true);

@@ -40,6 +40,7 @@ class CreateSeedsCommandTest extends TestCase
     private const SEEDED_ARTICLE_TITLE = "L'Ordure du jeu";
     private const SEEDED_ORDERED_CATALOG_TITLE = "Au-revoir Mao";
     private const SEEDED_GOODIES_TITLE = "Tote bag Paronymie";
+    private const SEEDED_TO_BE_PAID_CATALOG_TITLE = "Papeete";
 
     /**
      * The command is not idempotent: Publisher, BookCollection and People
@@ -96,7 +97,7 @@ class CreateSeedsCommandTest extends TestCase
         $this->assertStringContainsString("Seeds generated!", $commandTester->getDisplay());
 
         $stockItems = StockQuery::create()->orderById()->find();
-        $expectedCount = 3 + count(CreateSeedsCommand::CATALOG_ARTICLES);
+        $expectedCount = 4 + count(CreateSeedsCommand::CATALOG_ARTICLES);
         $this->assertCount($expectedCount, $stockItems);
 
         $availableItem = $stockItems[0];
@@ -104,17 +105,22 @@ class CreateSeedsCommandTest extends TestCase
         $this->assertEquals(999, $availableItem->getSellingPrice());
         $this->assertNull($availableItem->getOrderId());
 
-        $orderId = OrderQuery::create()->findOne()->getId();
+        $orderId = OrderQuery::create()->filterByShippingCost(300)->findOne()->getId();
 
-        $orderedItem = $stockItems[$expectedCount - 2];
+        $orderedItem = $stockItems[$expectedCount - 3];
         $this->assertEquals(self::SEEDED_ORDERED_CATALOG_TITLE, $orderedItem->getArticle()->getTitle());
         $this->assertEquals(1800, $orderedItem->getSellingPrice());
         $this->assertEquals($orderId, $orderedItem->getOrderId());
 
-        $orderedGoodiesItem = $stockItems[$expectedCount - 1];
+        $orderedGoodiesItem = $stockItems[$expectedCount - 2];
         $this->assertEquals(self::SEEDED_GOODIES_TITLE, $orderedGoodiesItem->getArticle()->getTitle());
         $this->assertEquals(500, $orderedGoodiesItem->getSellingPrice());
         $this->assertEquals($orderId, $orderedGoodiesItem->getOrderId());
+
+        $orderToBePaidItem = $stockItems[$expectedCount - 1];
+        $this->assertEquals(self::SEEDED_TO_BE_PAID_CATALOG_TITLE, $orderToBePaidItem->getArticle()->getTitle());
+        $this->assertEquals(900, $orderToBePaidItem->getSellingPrice());
+        $this->assertNotEquals($orderId, $orderToBePaidItem->getOrderId());
     }
 
     /**
@@ -132,7 +138,7 @@ class CreateSeedsCommandTest extends TestCase
         $commandTester->execute([]);
 
         // then
-        $order = OrderQuery::create()->findOne();
+        $order = OrderQuery::create()->filterByShippingCost(300)->findOne();
         $this->assertEquals(300, $order->getShippingCost());
         $this->assertNotNull($order->getShippingMode(), "Le mode d'expédition doit être renseigné pour la ligne de port");
 
@@ -155,7 +161,7 @@ class CreateSeedsCommandTest extends TestCase
         $commandTester->execute([]);
 
         // then
-        $order = OrderQuery::create()->findOne();
+        $order = OrderQuery::create()->filterByShippingCost(300)->findOne();
         $this->assertNotNull($order->getPaymentDate(), "La commande des seeds doit être marquée comme payée");
         $this->assertEquals("stripe", $order->getPaymentMode());
         $this->assertEquals(0, $order->getAmountTobepaid());

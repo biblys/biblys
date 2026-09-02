@@ -2,6 +2,12 @@
 
 ## 3.17.0 (DEV)
 
+### Améliorations
+
+- Un nouveau moyen de paiement en espèces peut être activé via l'option de
+  site `payment_cash`. Il n'est proposé que pour les commandes retirées en
+  magasin.
+
 ## 3.16.0 (2 septembre 2026)
 
 ### Améliorations

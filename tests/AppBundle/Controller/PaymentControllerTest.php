@@ -462,6 +462,7 @@ class PaymentControllerTest extends TestCase
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getOption")->with("payment_iban")->andReturn(null);
         $currentSite->shouldReceive("getOption")->with("payment_check")->andReturn(null);
+        $currentSite->shouldReceive("getOption")->with("payment_cash")->andReturn(null);
         $currentSite->shouldReceive("getOption")->with("name_for_check_payment")->andReturn(null);
         $templateService = Helpers::getTemplateService();
         $paymentService = Mockery::mock(PaymentService::class);
@@ -507,6 +508,7 @@ class PaymentControllerTest extends TestCase
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getOption")->with("payment_iban")->andReturn(null);
         $currentSite->shouldReceive("getOption")->with("payment_check")->andReturn(null);
+        $currentSite->shouldReceive("getOption")->with("payment_cash")->andReturn(null);
         $currentSite->shouldReceive("getOption")->with("name_for_check_payment")->andReturn(null);
         $templateService = Helpers::getTemplateService();
         $paymentService = Mockery::mock(PaymentService::class);
@@ -532,6 +534,7 @@ class PaymentControllerTest extends TestCase
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getOption")->with("payment_iban")->andReturn(null);
         $currentSite->shouldReceive("getOption")->with("payment_check")->andReturn(null);
+        $currentSite->shouldReceive("getOption")->with("payment_cash")->andReturn(null);
         $currentSite->shouldReceive("getOption")->with("name_for_check_payment")->andReturn(null);
         $templateService = Helpers::getTemplateService();
         $paymentService = Mockery::mock(PaymentService::class);
@@ -560,6 +563,7 @@ class PaymentControllerTest extends TestCase
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getOption")->with("payment_iban")->andReturn(null);
         $currentSite->shouldReceive("getOption")->with("payment_check")->andReturn(null);
+        $currentSite->shouldReceive("getOption")->with("payment_cash")->andReturn(null);
         $currentSite->shouldReceive("getOption")->with("name_for_check_payment")->andReturn(null);
         $templateService = Helpers::getTemplateService();
         $paymentService = Mockery::mock(PaymentService::class);
@@ -588,6 +592,7 @@ class PaymentControllerTest extends TestCase
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getOption")->with("payment_iban")->andReturn(null);
         $currentSite->shouldReceive("getOption")->with("payment_check")->andReturn(null);
+        $currentSite->shouldReceive("getOption")->with("payment_cash")->andReturn(null);
         $currentSite->shouldReceive("getOption")->with("name_for_check_payment")->andReturn(null);
         $templateService = Helpers::getTemplateService();
         $paymentService = Mockery::mock(PaymentService::class);
@@ -620,6 +625,7 @@ class PaymentControllerTest extends TestCase
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getOption")->with("payment_iban")->andReturn(null);
         $currentSite->shouldReceive("getOption")->with("payment_check")->andReturn(null);
+        $currentSite->shouldReceive("getOption")->with("payment_cash")->andReturn(null);
         $currentSite->shouldReceive("getOption")->with("name_for_check_payment")->andReturn(null);
         $templateService = Helpers::getTemplateService();
         $paymentService = Mockery::mock(PaymentService::class);
@@ -648,6 +654,7 @@ class PaymentControllerTest extends TestCase
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getOption")->with("payment_iban")->andReturn(null);
         $currentSite->shouldReceive("getOption")->with("payment_check")->andReturn(null);
+        $currentSite->shouldReceive("getOption")->with("payment_cash")->andReturn(null);
         $currentSite->shouldReceive("getOption")->with("name_for_check_payment")->andReturn(null);
         $templateService = Helpers::getTemplateService();
         $paymentService = Mockery::mock(PaymentService::class);
@@ -676,6 +683,7 @@ class PaymentControllerTest extends TestCase
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getOption")->with("payment_iban")->andReturn("PAYMENT_IBAN");
         $currentSite->shouldReceive("getOption")->with("payment_check")->andReturn(null);
+        $currentSite->shouldReceive("getOption")->with("payment_cash")->andReturn(null);
         $currentSite->shouldReceive("getOption")->with("name_for_check_payment")->andReturn(null);
         $templateService = Helpers::getTemplateService();
         $paymentService = Mockery::mock(PaymentService::class);
@@ -706,6 +714,7 @@ class PaymentControllerTest extends TestCase
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getOption")->with("payment_iban")->andReturn(null);
         $currentSite->shouldReceive("getOption")->with("payment_check")->andReturn(1);
+        $currentSite->shouldReceive("getOption")->with("payment_cash")->andReturn(null);
         $currentSite->shouldReceive("getOption")->with("name_for_check_payment")->andReturn("L’ordre");
         $templateService = Helpers::getTemplateService();
         $paymentService = Mockery::mock(PaymentService::class);
@@ -742,6 +751,7 @@ class PaymentControllerTest extends TestCase
         $currentSite = Mockery::mock(CurrentSite::class);
         $currentSite->shouldReceive("getOption")->with("payment_iban")->andReturn(null);
         $currentSite->shouldReceive("getOption")->with("payment_check")->andReturn(1);
+        $currentSite->shouldReceive("getOption")->with("payment_cash")->andReturn(null);
         $currentSite->shouldReceive("getOption")->with("name_for_check_payment")->andReturn("L’ordre");
         $templateService = Helpers::getTemplateService();
         $paymentService = Mockery::mock(PaymentService::class);
@@ -758,6 +768,72 @@ class PaymentControllerTest extends TestCase
             $response->getContent()
         );
         $this->assertStringNotContainsString("Envoyez votre chèque", $response->getContent());
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws PropelException
+     * @throws LoaderError
+     * @throws Exception
+     */
+    public function testSelectMethodActionWithCashAndInStorePickup()
+    {
+        // given
+        $controller = new PaymentController();
+        $shippingOption = ModelFactory::createShippingOption(type: "magasin");
+        $order = ModelFactory::createOrder(shippingOption: $shippingOption);
+        $config = new Config();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getOption")->with("payment_iban")->andReturn(null);
+        $currentSite->shouldReceive("getOption")->with("payment_check")->andReturn(null);
+        $currentSite->shouldReceive("getOption")->with("name_for_check_payment")->andReturn(null);
+        $currentSite->shouldReceive("getOption")->with("payment_cash")->andReturn(1);
+        $templateService = Helpers::getTemplateService();
+        $paymentService = Mockery::mock(PaymentService::class);
+        $paymentService->expects("getPayableOrderBySlug")->andReturn($order);
+
+        // when
+        $response = $controller->selectMethodAction($paymentService, $config, $currentSite, $templateService, $order->getSlug());
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertStringContainsString("Espèces", $response->getContent());
+        $this->assertStringContainsString(
+            "Réglez en espèces lors du retrait de votre commande en magasin.",
+            $response->getContent()
+        );
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws PropelException
+     * @throws LoaderError
+     * @throws Exception
+     */
+    public function testSelectMethodActionWithCashOptionEnabledButOrderShipped()
+    {
+        // given
+        $controller = new PaymentController();
+        $order = ModelFactory::createOrder();
+        $config = new Config();
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getOption")->with("payment_iban")->andReturn(null);
+        $currentSite->shouldReceive("getOption")->with("payment_check")->andReturn(null);
+        $currentSite->shouldReceive("getOption")->with("name_for_check_payment")->andReturn(null);
+        $currentSite->shouldReceive("getOption")->with("payment_cash")->andReturn(1);
+        $templateService = Helpers::getTemplateService();
+        $paymentService = Mockery::mock(PaymentService::class);
+        $paymentService->expects("getPayableOrderBySlug")->andReturn($order);
+
+        // when
+        $response = $controller->selectMethodAction($paymentService, $config, $currentSite, $templateService, $order->getSlug());
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $paymentMethodsSection = $this->extractPaymentMethodsSection($response->getContent());
+        $this->assertStringNotContainsString("Espèces", $paymentMethodsSection);
     }
 
     /** createPayplugPaymentAction */
