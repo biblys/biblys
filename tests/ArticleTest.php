@@ -1027,5 +1027,15 @@ class ArticleTest extends PHPUnit\Framework\TestCase
             $results[0]->get("id"),
             "returns all articles with available stock"
         );
+        $this->assertEquals(
+            $articleWithStock->getTypeId(),
+            $results[0]->getModel()->getTypeId(),
+            "loads the article's type id, needed to render its cart button"
+        );
+        $this->assertEquals(
+            $articleWithStock->getPrice(),
+            $results[0]->getModel()->getPrice(),
+            "loads the article's price, needed to render its cart button"
+        );
     }
 }
