@@ -21,9 +21,12 @@ use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentUser;
 use Entity\Exception\CartException;
+use Model\ArticleQuery;
+use Model\CartQuery;
 use Model\WishQuery;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
+use Usecase\AddIntangibleArticleToCartUsecase;
 
 class Cart extends Entity
 {
@@ -428,7 +431,15 @@ class CartManager extends EntityManager
         $articles = json_decode($reward->get('articles'));
         foreach ($articles as $article_id) {
             if ($article = $am->get(array('article_id' => $article_id))) {
-                $this->addArticle($cart, $article, $reward);
+                if ($article->getType()->isPhysical()) {
+                    $this->addArticle($cart, $article, $reward);
+                } else {
+                    $usecase = new AddIntangibleArticleToCartUsecase();
+                    $usecase->execute(
+                        ArticleQuery::create()->findPk($article_id),
+                        CartQuery::create()->findPk($cart->get('id'))
+                    );
+                }
             } else {
                 trigger_error('Article ' . $article_id . ' inconnu.');
             }
