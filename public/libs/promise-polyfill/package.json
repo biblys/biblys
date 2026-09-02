@@ -44,7 +44,7 @@
     "karma-chrome-launcher": "^3.0.0",
     "karma-mocha": "^2.0.0",
     "lint-staged": "^17.0.0",
-    "mocha": "^11.0.0",
+    "mocha": "^12.0.0",
     "npm-run-all2": "^9.0.0",
     "prettier": "^3.0.0",
     "promises-aplus-tests": "*",
