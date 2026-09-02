@@ -516,11 +516,12 @@ class MainController extends Controller
             $body = $response->getBody();
             $biblysBlogPosts = json_decode($body, true);
             if ($biblysBlogPosts) {
-                if ($cloudNewsReadAt) {
-                    $biblysBlogPosts = array_filter($biblysBlogPosts, function ($news) use ($cloudNewsReadAt) {
-                        return $news['date'] > $cloudNewsReadAt;
-                    });
-                }
+                $thirtyDaysAgo = (new DateTime())->modify("-30 days")->format("Y-m-d");
+                $biblysBlogPosts = array_filter($biblysBlogPosts, function ($news) use ($cloudNewsReadAt, $thirtyDaysAgo) {
+                    $isUnread = !$cloudNewsReadAt || $news['date'] > $cloudNewsReadAt;
+                    $isRecent = $news['date'] > $thirtyDaysAgo;
+                    return $isUnread && $isRecent;
+                });
             }
             return $biblysBlogPosts;
         } catch(GuzzleException) {
