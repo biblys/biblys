@@ -1,6 +1,8 @@
 # Historique des modifications
 
-## 3.16.0 (DEV)
+## 3.17.0 (DEV)
+
+## 3.16.0 (2 septembre 2026)
 
 ### Améliorations
 

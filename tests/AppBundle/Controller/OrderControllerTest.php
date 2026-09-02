@@ -407,112 +407,6 @@ class OrderControllerTest extends TestCase
         );
     }
 
-    public function testInvoiceActionDisplaysSirenWhenSiteOptionIsSet(): void
-    {
-        // given
-        $controller = new OrderController();
-        $request = new Request();
-        $order = ModelFactory::createOrder(slug: "invoice-siren", amount: 2000, shippingCost: 0);
-        $article = ModelFactory::createArticle(title: "Le Livre Test");
-        ModelFactory::createStockItem(article: $article, order: $order, sellingPrice: 2000);
-
-        $site = Mockery::mock(Site::class);
-        $site->shouldReceive("getTva")->andReturn(1);
-        $site->shouldReceive("getAddress")->andReturn("1 rue du Livre|33000 Bordeaux");
-        $currentSite = Mockery::mock(CurrentSite::class);
-        $currentSite->shouldReceive("getSite")->andReturn($site);
-        $currentSite->shouldReceive("getTitle")->andReturn("Ma librairie");
-        $currentSite->shouldReceive("getOption")->with("invoice_notice")->andReturn(null);
-        $currentSite->shouldReceive("getOption")->with("siren")->andReturn("123 456 789");
-
-        $currentUser = Mockery::mock(CurrentUser::class);
-        $currentUser->shouldReceive("isAuthenticated")->andReturn(false);
-        $currentUser->shouldReceive("isAdmin")->andReturn(false);
-        $templateService = Helpers::getTemplateService();
-
-        // when
-        $response = $controller->invoiceAction($request, $currentUser, $currentSite, $templateService, "invoice-siren");
-        $content = $response->getContent();
-
-        // then
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertStringContainsString("SIREN : 123 456 789", $content);
-    }
-
-    public function testInvoiceActionHidesSirenWhenSiteOptionIsNotSet(): void
-    {
-        // given
-        $controller = new OrderController();
-        $request = new Request();
-        $order = ModelFactory::createOrder(slug: "invoice-no-siren", amount: 2000, shippingCost: 0);
-        $article = ModelFactory::createArticle(title: "Le Livre Test");
-        ModelFactory::createStockItem(article: $article, order: $order, sellingPrice: 2000);
-
-        $currentUser = Mockery::mock(CurrentUser::class);
-        $currentUser->shouldReceive("isAuthenticated")->andReturn(false);
-        $currentUser->shouldReceive("isAdmin")->andReturn(false);
-        $currentSite = $this->_mockCurrentSiteForInvoice();
-        $templateService = Helpers::getTemplateService();
-
-        // when
-        $response = $controller->invoiceAction($request, $currentUser, $currentSite, $templateService, "invoice-no-siren");
-        $content = $response->getContent();
-
-        // then
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertStringNotContainsString("SIREN", $content);
-    }
-
-    public function testInvoiceActionHidesConditionColumnWhenAllArticlesAreNew(): void
-    {
-        // given
-        $controller = new OrderController();
-        $request = new Request();
-        $order = ModelFactory::createOrder(slug: "invoice-all-new", amount: 2000, shippingCost: 0);
-        $article = ModelFactory::createArticle(title: "Le Livre Test");
-        ModelFactory::createStockItem(article: $article, order: $order, sellingPrice: 2000);
-
-        $currentUser = Mockery::mock(CurrentUser::class);
-        $currentUser->shouldReceive("isAuthenticated")->andReturn(false);
-        $currentUser->shouldReceive("isAdmin")->andReturn(false);
-        $currentSite = $this->_mockCurrentSiteForInvoice();
-        $templateService = Helpers::getTemplateService();
-
-        // when
-        $response = $controller->invoiceAction($request, $currentUser, $currentSite, $templateService, "invoice-all-new");
-        $content = $response->getContent();
-
-        // then
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertStringNotContainsString("État", $content, "La colonne État doit être masquée quand tous les articles sont Neuf");
-    }
-
-    public function testInvoiceActionShowsConditionColumnWhenAnArticleIsNotNew(): void
-    {
-        // given
-        $controller = new OrderController();
-        $request = new Request();
-        $order = ModelFactory::createOrder(slug: "invoice-mixed-1", amount: 2000, shippingCost: 0);
-        $article = ModelFactory::createArticle(title: "Le Livre Test");
-        $stock = ModelFactory::createStockItem(article: $article, order: $order, sellingPrice: 2000);
-        $stock->setCondition("Occasion");
-        $stock->save();
-
-        $currentUser = Mockery::mock(CurrentUser::class);
-        $currentUser->shouldReceive("isAuthenticated")->andReturn(false);
-        $currentUser->shouldReceive("isAdmin")->andReturn(false);
-        $currentSite = $this->_mockCurrentSiteForInvoice();
-        $templateService = Helpers::getTemplateService();
-
-        // when
-        $response = $controller->invoiceAction($request, $currentUser, $currentSite, $templateService, "invoice-mixed-1");
-        $content = $response->getContent();
-
-        // then
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertStringContainsString("État", $content, "La colonne État doit être affichée quand un article n'est pas Neuf");
-    }
-
     public function testInvoiceActionShowsArticleCountAndTotalWeight(): void
     {
         // given
@@ -631,6 +525,112 @@ class OrderControllerTest extends TestCase
             $content,
             "Sans ligne de port, aucun poids n'est affiché même s'il est connu"
         );
+    }
+
+    public function testInvoiceActionDisplaysSirenWhenSiteOptionIsSet(): void
+    {
+        // given
+        $controller = new OrderController();
+        $request = new Request();
+        $order = ModelFactory::createOrder(slug: "invoice-siren", amount: 2000, shippingCost: 0);
+        $article = ModelFactory::createArticle(title: "Le Livre Test");
+        ModelFactory::createStockItem(article: $article, order: $order, sellingPrice: 2000);
+
+        $site = Mockery::mock(Site::class);
+        $site->shouldReceive("getTva")->andReturn(1);
+        $site->shouldReceive("getAddress")->andReturn("1 rue du Livre|33000 Bordeaux");
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getSite")->andReturn($site);
+        $currentSite->shouldReceive("getTitle")->andReturn("Ma librairie");
+        $currentSite->shouldReceive("getOption")->with("invoice_notice")->andReturn(null);
+        $currentSite->shouldReceive("getOption")->with("siren")->andReturn("123 456 789");
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("isAuthenticated")->andReturn(false);
+        $currentUser->shouldReceive("isAdmin")->andReturn(false);
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $controller->invoiceAction($request, $currentUser, $currentSite, $templateService, "invoice-siren");
+        $content = $response->getContent();
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertStringContainsString("SIREN : 123 456 789", $content);
+    }
+
+    public function testInvoiceActionHidesSirenWhenSiteOptionIsNotSet(): void
+    {
+        // given
+        $controller = new OrderController();
+        $request = new Request();
+        $order = ModelFactory::createOrder(slug: "invoice-no-siren", amount: 2000, shippingCost: 0);
+        $article = ModelFactory::createArticle(title: "Le Livre Test");
+        ModelFactory::createStockItem(article: $article, order: $order, sellingPrice: 2000);
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("isAuthenticated")->andReturn(false);
+        $currentUser->shouldReceive("isAdmin")->andReturn(false);
+        $currentSite = $this->_mockCurrentSiteForInvoice();
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $controller->invoiceAction($request, $currentUser, $currentSite, $templateService, "invoice-no-siren");
+        $content = $response->getContent();
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertStringNotContainsString("SIREN", $content);
+    }
+
+    public function testInvoiceActionHidesConditionColumnWhenAllArticlesAreNew(): void
+    {
+        // given
+        $controller = new OrderController();
+        $request = new Request();
+        $order = ModelFactory::createOrder(slug: "invoice-all-new", amount: 2000, shippingCost: 0);
+        $article = ModelFactory::createArticle(title: "Le Livre Test");
+        ModelFactory::createStockItem(article: $article, order: $order, sellingPrice: 2000);
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("isAuthenticated")->andReturn(false);
+        $currentUser->shouldReceive("isAdmin")->andReturn(false);
+        $currentSite = $this->_mockCurrentSiteForInvoice();
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $controller->invoiceAction($request, $currentUser, $currentSite, $templateService, "invoice-all-new");
+        $content = $response->getContent();
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertStringNotContainsString("État", $content, "La colonne État doit être masquée quand tous les articles sont Neuf");
+    }
+
+    public function testInvoiceActionShowsConditionColumnWhenAnArticleIsNotNew(): void
+    {
+        // given
+        $controller = new OrderController();
+        $request = new Request();
+        $order = ModelFactory::createOrder(slug: "invoice-mixed-1", amount: 2000, shippingCost: 0);
+        $article = ModelFactory::createArticle(title: "Le Livre Test");
+        $stock = ModelFactory::createStockItem(article: $article, order: $order, sellingPrice: 2000);
+        $stock->setCondition("Occasion");
+        $stock->save();
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("isAuthenticated")->andReturn(false);
+        $currentUser->shouldReceive("isAdmin")->andReturn(false);
+        $currentSite = $this->_mockCurrentSiteForInvoice();
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $controller->invoiceAction($request, $currentUser, $currentSite, $templateService, "invoice-mixed-1");
+        $content = $response->getContent();
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertStringContainsString("État", $content, "La colonne État doit être affichée quand un article n'est pas Neuf");
     }
 
     public function testInvoiceActionHidesShippingLineWhenFree(): void
