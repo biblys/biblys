@@ -21,6 +21,7 @@
  * @backupStaticAttributes disabled
  */
 
+use Biblys\Data\ArticleType;
 use Biblys\Exception\CannotAddStockItemToCartException;
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Test\EntityFactory;
@@ -519,6 +520,36 @@ class CartTest extends PHPUnit\Framework\TestCase
         $this->assertTrue(
             $cart->containsReward($reward),
             "it should return true if reward is in cart"
+        );
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testAddCFRewardWithMixOfPhysicalAndIntangibleArticles()
+    {
+        // given
+        $GLOBALS["LEGACY_CURRENT_SITE"] = EntityFactory::createSite();
+        $physicalArticle = EntityFactory::createArticle(["type_id" => ArticleType::BOOK]);
+        EntityFactory::createStock(["article_id" => $physicalArticle->get("id")]);
+        $ebook = EntityFactory::createArticle(["type_id" => ArticleType::EBOOK]);
+        $reward = EntityFactory::createCrowdfundingReward(["limited" => 0]);
+        $reward->set("reward_articles", "[{$physicalArticle->get('id')},{$ebook->get('id')}]");
+        $cart = EntityFactory::createCart();
+        $cm = new CartManager();
+
+        // when
+        $cm->addCFReward($cart, $reward);
+
+        // then
+        $this->assertTrue(
+            $cart->containsArticle($physicalArticle),
+            "it should add the physical article to the cart"
+        );
+        $this->assertTrue(
+            $cart->containsArticle($ebook),
+            "it should add the intangible article to the cart"
         );
     }
 
