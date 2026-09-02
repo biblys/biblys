@@ -1,5 +1,13 @@
 # Historique des modifications
 
+## 3.16.2 (2 septembre 2026)
+
+### Corrections
+
+- L'ajout au panier d'une contrepartie de campagne de financement participatif
+  combinant un article physique et un article numérique ne provoque plus
+  d'erreur.
+
 ## 3.16.1 (2 septembre 2026)
 
 ### Corrections
