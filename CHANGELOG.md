@@ -1,5 +1,14 @@
 # Historique des modifications
 
+## 3.16.1 (2 septembre 2026)
+
+### Corrections
+
+- La recherche d'articles avec le filtre "Articles en stock uniquement" ne
+  provoque plus d'erreur.
+- Le bouton "Copier l'URL" du gestionnaire de médias copie l'URL dans le
+  presse-papiers.
+
 ## 3.16.0 (2 septembre 2026)
 
 ### Améliorations
