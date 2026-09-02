@@ -256,11 +256,24 @@ class CreateSeedsCommand extends Command
         $pickupShippingOption->save();
         $output->writeln(["Inserted shipping option: Retrait en magasin"]);
 
+        $pickupCustomer = ModelFactory::createCustomer(
+            firstName: "Sacha",
+            lastName: "Hutte",
+            email: "sacha.hutte@paronymie.fr",
+        );
+
         $orderToBePaid = ModelFactory::createOrder(
+            customer: $pickupCustomer,
             shippingOption: $pickupShippingOption,
             amount: 900,
             amountToBePaid: 900,
+            firstName: "Sacha",
+            lastName: "Hutte",
+            email: "sacha.hutte@paronymie.fr",
         );
+        $orderToBePaid->setConfirmationDate(new DateTime());
+        $orderToBePaid->save();
+
         ModelFactory::createStockItem(
             article: $catalogArticleModels["Papeete"],
             order: $orderToBePaid,
