@@ -273,6 +273,29 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         </div>
       </div>
     {% endif %}
+
+    {% if cashIsAvailable %}
+      <div class="card payment-option">
+        <div class="card-header">
+          <h5 class="radio mb-0">
+            <a href="#collapse-cash" data-toggle="collapse" data-target="#collapse-cash" aria-expanded="false"
+               aria-controls="collapse-cash">
+              <i class="fa-solid fa-money-bill-wave"></i>&nbsp;
+              Espèces
+            </a>
+          </h5>
+        </div>
+
+        <div id="collapse-cash" class="collapse" aria-labelledby="headingTwo" data-parent="#payment-methods-accordion">
+          <div class="card-body">
+            <p class="alert alert-warning mb-0">
+              <i class="fa-solid fa-clock"></i>&nbsp;
+              Réglez en espèces lors du retrait de votre commande en magasin.
+            </p>
+          </div>
+        </div>
+      </div>
+    {% endif %}
   </div>
 
   {% if stripeIsAvailable %}
