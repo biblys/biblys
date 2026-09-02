@@ -236,7 +236,7 @@ function _displayMediaFile(string $getDir, CurrentSite $currentSite, string $fil
 
 <form class="my-4">
   <div class="input-group">
-    <input class="form-control search- mt-0" value="$mediaUrl" readonly>
+    <input id="media-url" class="form-control search- mt-0" value="$mediaUrl" readonly>
     <div class="input-group-append">
       <button id="copy-button" type="button" class="btn btn-info" title="Copier l’URL">
         <span class="fa-solid fa-copy"></span>
@@ -252,6 +252,20 @@ function _displayMediaFile(string $getDir, CurrentSite $currentSite, string $fil
         insertImageButton.addEventListener('click', function() {
             window.opener.CKEDITOR.tools.callFunction('$CKEditorFuncNum', '$mediaUrl');
             window.close();
+        });
+    }
+
+    const copyButton = document.getElementById('copy-button');
+    const mediaUrlInput = document.getElementById('media-url');
+    if (copyButton && mediaUrlInput) {
+        copyButton.addEventListener('click', function() {
+            navigator.clipboard.writeText(mediaUrlInput.value).then(function() {
+                const icon = copyButton.querySelector('span');
+                icon.classList.replace('fa-copy', 'fa-check');
+                setTimeout(function() {
+                    icon.classList.replace('fa-check', 'fa-copy');
+                }, 2000);
+            });
         });
     }
 </script>
