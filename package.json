@@ -1,4 +1,7 @@
 {
+  "resolutions": {
+    "uuid": "^11.1.1"
+  },
   "devDependencies": {
     "@babel/core": "^8.0.0",
     "@babel/preset-env": "^8.0.0",
