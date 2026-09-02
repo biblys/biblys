@@ -23,6 +23,7 @@ use Biblys\Service\CurrentUser;
 use Entity\Exception\CartException;
 use Model\ArticleQuery;
 use Model\CartQuery;
+use Model\CrowfundingRewardQuery;
 use Model\WishQuery;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
@@ -437,7 +438,8 @@ class CartManager extends EntityManager
                     $usecase = new AddIntangibleArticleToCartUsecase();
                     $usecase->execute(
                         ArticleQuery::create()->findPk($article_id),
-                        CartQuery::create()->findPk($cart->get('id'))
+                        CartQuery::create()->findPk($cart->get('id')),
+                        CrowfundingRewardQuery::create()->findPk($reward->get('id'))
                     );
                 }
             } else {
