@@ -1343,7 +1343,7 @@ class ArticleManager extends EntityManager
         $searchCriteria = implode(" AND ", $queryWithParams["query"]);
         $stockCriteria = " AND `stock_selling_date` IS NULL AND `stock_return_date` IS NULL AND `stock_lost_date` IS NULL";
 
-        $options["fields"] = "`articles`.`article_id`, `article_url`, `article_title`, `article_authors`, `publisher_id`, `collection_id`, `cycle_id`, `article_tome`";
+        $options["fields"] = "`articles`.`article_id`, `article_url`, `article_title`, `article_authors`, `publisher_id`, `collection_id`, `cycle_id`, `article_tome`, `type_id`, `article_price`";
         $options["join"] = [["table" => "stock", "key" => "article_id"]];
         $options["group-by"] = "article_id";
 
