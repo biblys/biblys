@@ -7,6 +7,8 @@
 - L'ajout au panier d'une contrepartie de campagne de financement participatif
   combinant un article physique et un article numérique ne provoque plus
   d'erreur.
+- Un article numérique ajouté au panier via une contrepartie de campagne de
+  financement participatif est désormais associé à cette contrepartie.
 
 ## 3.16.1 (2 septembre 2026)
 

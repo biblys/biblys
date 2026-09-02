@@ -186,6 +186,28 @@ class AddIntangibleArticleToCartUsecaseTest extends TestCase
      * @throws BusinessRuleException
      * @throws PropelException
      */
+    public function testUsecaseTagsStockItemWithRewardWhenProvided()
+    {
+        // given
+        $usecase = new AddIntangibleArticleToCartUsecase();
+
+        $article = ModelFactory::createArticle(price: 1000, typeId: ArticleType::EBOOK);
+        $cart = ModelFactory::createCart();
+        $reward = ModelFactory::createCrowdfundingReward();
+
+        // when
+        $usecase->execute($article, $cart, $reward);
+
+        // then
+        $itemInCart = StockQuery::create()->filterByCart($cart)->findOne();
+        $this->assertEquals($reward->getId(), $itemInCart->getRewardId());
+        $this->assertEquals($reward->getCampaignId(), $itemInCart->getCampaignId());
+    }
+
+    /**
+     * @throws BusinessRuleException
+     * @throws PropelException
+     */
     public function testUsecaseIgnoresSoldItem()
     {
         // given

@@ -551,6 +551,10 @@ class CartTest extends PHPUnit\Framework\TestCase
             $cart->containsArticle($ebook),
             "it should add the intangible article to the cart"
         );
+        $this->assertTrue(
+            $cart->containsReward($reward),
+            "it should tag the intangible article's stock item with the reward"
+        );
     }
 
     /**
