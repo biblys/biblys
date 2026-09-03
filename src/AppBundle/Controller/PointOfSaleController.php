@@ -139,7 +139,7 @@ class PointOfSaleController extends Controller
                 : null;
             $pointOfSaleCarts[] = [
                 'id' => $pointOfSaleCart->getId(),
-                'title' => $pointOfSaleCart->getTitle(),
+                'title' => $pointOfSaleCart->getTitle() ?: 'Panier n° ' . $pointOfSaleCart->getId(),
                 'seller_email' => $cartSeller?->getEmail() ?? "Vendeur inconnu",
                 'customer_name' => $customerForCart?->getFullName(),
                 'count' => $pointOfSaleCart->getCount(),
