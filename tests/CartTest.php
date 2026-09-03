@@ -21,6 +21,7 @@
  * @backupStaticAttributes disabled
  */
 
+use Biblys\Data\ArticleType;
 use Biblys\Exception\CannotAddStockItemToCartException;
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Test\EntityFactory;
@@ -523,6 +524,40 @@ class CartTest extends PHPUnit\Framework\TestCase
     }
 
     /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testAddCFRewardWithMixOfPhysicalAndIntangibleArticles()
+    {
+        // given
+        $GLOBALS["LEGACY_CURRENT_SITE"] = EntityFactory::createSite();
+        $physicalArticle = EntityFactory::createArticle(["type_id" => ArticleType::BOOK]);
+        EntityFactory::createStock(["article_id" => $physicalArticle->get("id")]);
+        $ebook = EntityFactory::createArticle(["type_id" => ArticleType::EBOOK]);
+        $reward = EntityFactory::createCrowdfundingReward(["limited" => 0]);
+        $reward->set("reward_articles", "[{$physicalArticle->get('id')},{$ebook->get('id')}]");
+        $cart = EntityFactory::createCart();
+        $cm = new CartManager();
+
+        // when
+        $cm->addCFReward($cart, $reward);
+
+        // then
+        $this->assertTrue(
+            $cart->containsArticle($physicalArticle),
+            "it should add the physical article to the cart"
+        );
+        $this->assertTrue(
+            $cart->containsArticle($ebook),
+            "it should add the intangible article to the cart"
+        );
+        $this->assertTrue(
+            $cart->containsReward($reward),
+            "it should tag the intangible article's stock item with the reward"
+        );
+    }
+
+    /**
      * Test delete a cart
      * @throws Exception
      */
@@ -562,5 +597,48 @@ class CartTest extends PHPUnit\Framework\TestCase
         // then
         $wish->reload();
         $this->assertNull($wish->getBought(), "wish_bought doit être remis à null.");
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testRemoveStockDeletesIntangibleStockItem(): void
+    {
+        // given
+        $ebook = EntityFactory::createArticle(["type_id" => ArticleType::EBOOK]);
+        $stock = EntityFactory::createStock(["article_id" => $ebook->get("id")]);
+        $cm = new CartManager();
+
+        // when
+        $cm->removeStock($stock);
+
+        // then
+        $sm = new StockManager();
+        $this->assertFalse(
+            $sm->getById($stock->get("id")),
+            "l'exemplaire intangible devrait être supprimé, pas seulement détaché"
+        );
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testRemoveStockKeepsPhysicalStockItem(): void
+    {
+        // given
+        $physicalArticle = EntityFactory::createArticle(["type_id" => ArticleType::BOOK]);
+        $stock = EntityFactory::createStock(["article_id" => $physicalArticle->get("id")]);
+        $cm = new CartManager();
+
+        // when
+        $cm->removeStock($stock);
+
+        // then
+        $sm = new StockManager();
+        $this->assertInstanceOf(
+            Stock::class,
+            $sm->getById($stock->get("id")),
+            "l'exemplaire physique doit rester en stock, juste détaché du panier"
+        );
     }
 }

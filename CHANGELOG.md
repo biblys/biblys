@@ -1,5 +1,19 @@
 # Historique des modifications
 
+## 3.16.2 (2 septembre 2026)
+
+### Corrections
+
+- L'ajout au panier d'une contrepartie de campagne de financement participatif
+  combinant un article physique et un article numérique ne provoque plus
+  d'erreur.
+- Un article numérique ajouté au panier via une contrepartie de campagne de
+  financement participatif est désormais associé à cette contrepartie.
+- Un article numérique ou un article de service (mécénat, abonnement...) n'est
+  plus facturé au prix d'un ancien exemplaire abandonné dans un panier ; un
+  nouvel exemplaire au prix courant de l'article est désormais créé à chaque
+  ajout au panier, et supprimé lors du retrait du panier.
+
 ## 3.16.1 (2 septembre 2026)
 
 ### Corrections
