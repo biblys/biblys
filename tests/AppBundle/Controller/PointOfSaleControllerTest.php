@@ -27,6 +27,7 @@ use Biblys\Test\EntityFactory;
 use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
 use Mockery;
+use Model\Cart;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
@@ -173,6 +174,44 @@ class PointOfSaleControllerTest extends TestCase
         $this->assertStringContainsString("stock_{$stockItem->getId()}", $content);
         $this->assertStringContainsString("Le Horla", $content);
         $this->assertStringContainsString('data-price="1899"', $content);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testIndexActionRendersFallbackTitleForOtherCartWithoutTitle(): void
+    {
+        // given
+        $controller = $this->_getController();
+        $cart = EntityFactory::createCart();
+        $request = new Request(query: ['cart_id' => $cart->get('id')]);
+
+        $article = ModelFactory::createArticle(title: "Le Horla", url: "maupassant/le-horla");
+        $stockItem = ModelFactory::createStockItem(article: $article, sellingPrice: 1899);
+        $otherCart = new Cart();
+        $otherCart->setType('shop');
+        $otherCart->setCount(1);
+        $otherCart->setAmount(1899);
+        $otherCart->save();
+        $stockItem->setCartId($otherCart->getId());
+        $stockItem->save();
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authAdmin");
+
+        // when
+        $response = $controller->indexAction(
+            $request,
+            $currentUser,
+            $this->_getCurrentSiteMock(),
+            Helpers::getTemplateService(),
+            Mockery::mock(UrlGenerator::class),
+            new QueryParamsService($request),
+        );
+
+        // then
+        $content = $response->getContent();
+        $this->assertStringContainsString("Panier n° {$otherCart->getId()}", $content);
     }
 
     /**
