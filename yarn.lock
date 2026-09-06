@@ -4766,9 +4766,9 @@ webpack-merge@^6.0.1:
     wildcard "^2.0.1"
 
 webpack-notifier@^1.15.0:
-  version "1.15.0"
-  resolved "https://registry.yarnpkg.com/webpack-notifier/-/webpack-notifier-1.15.0.tgz#72644a1a4ec96b3528704d28f79da5e70048e8ee"
-  integrity sha512-N2V8UMgRB5komdXQRavBsRpw0hPhJq2/SWNOGuhrXpIgRhcMexzkGQysUyGStHLV5hkUlgpRiF7IUXoBqyMmzQ==
+  version "1.16.0"
+  resolved "https://registry.yarnpkg.com/webpack-notifier/-/webpack-notifier-1.16.0.tgz#de19f729e47be224a83bd1c580b0500483f696f0"
+  integrity sha512-0JcpUdUcr79fEoxh3GEVhM5+Z05guHFLOFBsXJ7lsYjSrgeUp566C/njxPVyg9MnG1xskiE229AvpWbQz76Jrg==
   dependencies:
     node-notifier "^9.0.0"
     strip-ansi "^6.0.0"
