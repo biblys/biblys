@@ -376,6 +376,10 @@ class CartHelpersTest extends TestCase
             '<button class="btn btn-outline-secondary" disabled>Ajouter au panier</button>',
             $notice
         );
+        $this->assertStringContainsString(
+            "Seuls les articles nécessitant une expédition comptent dans ce montant",
+            $notice
+        );
     }
 
     /**
