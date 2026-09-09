@@ -168,6 +168,145 @@ class SpecialOfferControllerTest extends TestCase
         $this->assertStringContainsString("Livre spécial", $response->getContent());
     }
 
+    /* NEW ACTION */
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testNewActionReturns200(): void
+    {
+        // given
+        $specialOfferController = new SpecialOfferController();
+
+        $site = ModelFactory::createSite();
+        $publisher = ModelFactory::createPublisher();
+        $collection = ModelFactory::createCollection(publisher: $publisher, name: "Collection spéciale");
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->andReturn();
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $specialOfferController->newAction(
+            $currentUser,
+            $templateService,
+        );
+
+        // then
+        $this->assertStringContainsString("Créer une offre spéciale", $response->getContent());
+        $this->assertStringContainsString("Collection spéciale", $response->getContent());
+    }
+
+    /* CREATE ACTION */
+
+    /**
+     * @throws PropelException
+     */
+    public function testCreateActionCreatesOffer(): void
+    {
+        // given
+        $specialOfferController = new SpecialOfferController();
+
+        $site = ModelFactory::createSite();
+        $publisher = ModelFactory::createPublisher();
+        $collection = ModelFactory::createCollection(publisher: $publisher);
+        $article = ModelFactory::createArticle(publisher: $publisher, collection: $collection);
+
+        $request = new Request();
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->andReturn();
+        $flashBag = Mockery::mock(FlashBag::class);
+        $flashBag->shouldReceive("add")
+            ->with("success", "Offre spéciale « Nouvelle offre » créée avec succès")
+            ->andReturn();
+        $session = Mockery::mock(Session::class);
+        $session->shouldReceive("getFlashBag")
+            ->andReturn($flashBag);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->shouldReceive("generate")
+            ->with("special_offer_edit", Mockery::on(fn($params) => isset($params["id"])))
+            ->andReturn("/special_offer_edit");
+
+        // when
+        $request->request->set("name", "Nouvelle offre");
+        $request->request->set("description", "Description de la nouvelle offre");
+        $request->request->set("start_date", "2021-01-01");
+        $request->request->set("end_date", "2021-01-31");
+        $request->request->set("target_quantity_enabled", "1");
+        $request->request->set("target_quantity", "3");
+        $request->request->set("target_collection_id", (string)$collection->getId());
+        $request->request->set("free_article_id", (string)$article->getId());
+        $response = $specialOfferController->createAction(
+            $request,
+            $currentUser,
+            $session,
+            $urlGenerator,
+        );
+
+        // then
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals("/special_offer_edit", $response->getTargetUrl());
+
+        $offer = SpecialOfferQuery::create()->findOneByName("Nouvelle offre");
+        $this->assertNotNull($offer);
+        $this->assertEquals("Description de la nouvelle offre", $offer->getDescription());
+        $this->assertEquals("2021-01-01", $offer->getStartDate()->format("Y-m-d"));
+        $this->assertEquals("2021-01-31", $offer->getEndDate()->format("Y-m-d"));
+        $this->assertEquals($collection->getId(), $offer->getTargetCollectionId());
+        $this->assertEquals($article->getId(), $offer->getFreeArticleId());
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testCreateActionRejectsWhenNoConditionIsEnabled(): void
+    {
+        // given
+        $specialOfferController = new SpecialOfferController();
+
+        $site = ModelFactory::createSite();
+        $article = ModelFactory::createArticle();
+
+        $request = new Request();
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->andReturn();
+        $flashBag = Mockery::mock(FlashBag::class);
+        $flashBag->shouldReceive("add")
+            ->with("error", "Vous devez activer au moins une condition (montant ou quantité).")
+            ->andReturn();
+        $session = Mockery::mock(Session::class);
+        $session->shouldReceive("getFlashBag")
+            ->andReturn($flashBag);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->shouldReceive("generate")
+            ->with("special_offer_new")
+            ->andReturn("/special_offer_new");
+
+        // when
+        $request->request->set("name", "Nouvelle offre");
+        $request->request->set("description", "Description de la nouvelle offre");
+        $request->request->set("start_date", "2021-01-01");
+        $request->request->set("end_date", "2021-01-31");
+        $request->request->set("free_article_id", (string)$article->getId());
+        $response = $specialOfferController->createAction(
+            $request,
+            $currentUser,
+            $session,
+            $urlGenerator,
+        );
+
+        // then
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals("/special_offer_new", $response->getTargetUrl());
+        $this->assertNull(SpecialOfferQuery::create()->findOneByName("Nouvelle offre"));
+    }
+
     /* UPDATE ACTION */
 
     /**
