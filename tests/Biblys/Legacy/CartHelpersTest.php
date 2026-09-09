@@ -20,7 +20,7 @@ namespace Biblys\Legacy;
 
 use Biblys\Service\CurrentSite;
 use Biblys\Service\Images\ImagesService;
-use Biblys\Service\TemplateService;
+use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
 use DateTime;
 use Mockery;
@@ -54,8 +54,7 @@ class CartHelpersTest extends TestCase
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $imageServices = Mockery::mock(ImagesService::class);
         $imageServices->expects("imageExistsFor")->andReturn(true);
-        $templateService = Mockery::mock(TemplateService::class);
-        $templateService->expects("render");
+        $templateService = Helpers::getTemplateService();
 
         // when
         $notice = CartHelpers::getSpecialOffersNotice(
@@ -89,8 +88,7 @@ class CartHelpersTest extends TestCase
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $imageServices = Mockery::mock(ImagesService::class);
         $imageServices->expects("imageExistsFor")->andReturn(true);
-        $templateService = Mockery::mock(TemplateService::class);
-        $templateService->expects("render");
+        $templateService = Helpers::getTemplateService();
 
         // when
         $notice = CartHelpers::getSpecialOffersNotice(
@@ -124,8 +122,7 @@ class CartHelpersTest extends TestCase
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $imageServices = Mockery::mock(ImagesService::class);
         $imageServices->expects("imageExistsFor")->andReturn(true);
-        $templateService = Mockery::mock(TemplateService::class);
-        $templateService->expects("render");
+        $templateService = Helpers::getTemplateService();
 
         // when
         $notice = CartHelpers::getSpecialOffersNotice(
@@ -163,8 +160,7 @@ class CartHelpersTest extends TestCase
         $imageServices = Mockery::mock(ImagesService::class);
         $imageServices->expects("imageExistsFor")->andReturn(true);
         $imageServices->expects("imageExistsFor")->andReturn(true);
-        $templateService = Mockery::mock(TemplateService::class);
-        $templateService->expects("render");
+        $templateService = Helpers::getTemplateService();
 
         // when
         $notice = CartHelpers::getSpecialOffersNotice(
@@ -217,8 +213,7 @@ class CartHelpersTest extends TestCase
         $urlGenerator->shouldReceive("generate");
         $imageServices = Mockery::mock(ImagesService::class);
         $imageServices->expects("imageExistsFor")->andReturn(true);
-        $templateService = Mockery::mock(TemplateService::class);
-        $templateService->expects("render");
+        $templateService = Helpers::getTemplateService();
 
         // when
         $notice = CartHelpers::getSpecialOffersNotice(
@@ -264,8 +259,7 @@ class CartHelpersTest extends TestCase
             ->andReturn("/cart_url");
         $imageServices = Mockery::mock(ImagesService::class);
         $imageServices->expects("imageExistsFor")->andReturn(true);
-        $templateService = Mockery::mock(TemplateService::class);
-        $templateService->expects("render");
+        $templateService = Helpers::getTemplateService();
 
         // when
         $notice = CartHelpers::getSpecialOffersNotice(
@@ -318,8 +312,7 @@ class CartHelpersTest extends TestCase
             ->andReturn("/cart_url");
         $imageServices = Mockery::mock(ImagesService::class);
         $imageServices->expects("imageExistsFor")->andReturn(true);
-        $templateService = Mockery::mock(TemplateService::class);
-        $templateService->expects("render");
+        $templateService = Helpers::getTemplateService();
 
         // when
         $notice = CartHelpers::getSpecialOffersNotice(
@@ -355,8 +348,7 @@ class CartHelpersTest extends TestCase
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $imageServices = Mockery::mock(ImagesService::class);
         $imageServices->expects("imageExistsFor")->andReturn(true);
-        $templateService = Mockery::mock(TemplateService::class);
-        $templateService->expects("render");
+        $templateService = Helpers::getTemplateService();
 
         // when
         $notice = CartHelpers::getSpecialOffersNotice(
@@ -405,8 +397,7 @@ class CartHelpersTest extends TestCase
             ->andReturn("/cart_url");
         $imageServices = Mockery::mock(ImagesService::class);
         $imageServices->expects("imageExistsFor")->andReturn(true);
-        $templateService = Mockery::mock(TemplateService::class);
-        $templateService->expects("render");
+        $templateService = Helpers::getTemplateService();
 
         // when
         $notice = CartHelpers::getSpecialOffersNotice(
@@ -446,8 +437,7 @@ class CartHelpersTest extends TestCase
         $urlGenerator->shouldReceive("generate");
         $imageServices = Mockery::mock(ImagesService::class);
         $imageServices->expects("imageExistsFor")->andReturn(true);
-        $templateService = Mockery::mock(TemplateService::class);
-        $templateService->expects("render");
+        $templateService = Helpers::getTemplateService();
 
         // when
         $notice = CartHelpers::getSpecialOffersNotice(
