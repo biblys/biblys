@@ -118,12 +118,27 @@ class SpecialOfferController extends Controller
             throw new NotFoundHttpException("Special offer not found");
         }
 
+        $targetAmountEnabled = (bool) $request->request->get("target_amount_enabled");
+        $targetQuantityEnabled = (bool) $request->request->get("target_quantity_enabled");
+
+        if (!$targetAmountEnabled && !$targetQuantityEnabled) {
+            $session->getFlashBag()->add(
+                "error",
+                "Vous devez activer au moins une condition (montant ou quantité)."
+            );
+            $editUrl = $urlGenerator->generate("special_offer_edit", ["id" => $offer->getId()]);
+            return new RedirectResponse($editUrl);
+        }
+
         $offer->setName($request->request->get("name"));
         $offer->setDescription($request->request->get("description"));
         $offer->setStartDate($request->request->get("start_date"));
         $offer->setEndDate($request->request->get("end_date"));
-        $offer->setTargetQuantity($request->request->get("target_quantity"));
-        $offer->setTargetCollectionId($request->request->get("target_collection_id"));
+        $offer->setTargetAmount(
+            $targetAmountEnabled ? (int) round(((float) $request->request->get("target_amount")) * 100) : null
+        );
+        $offer->setTargetQuantity($targetQuantityEnabled ? (int) $request->request->get("target_quantity") : null);
+        $offer->setTargetCollectionId($targetQuantityEnabled ? (int) $request->request->get("target_collection_id") : null);
         $offer->setFreeArticleId($request->request->get("free_article_id"));
         $offer->save();
 

@@ -234,6 +234,7 @@ class SpecialOfferControllerTest extends TestCase
         $request->request->set("description", "Description de la nouvelle offre");
         $request->request->set("start_date", "2021-01-01");
         $request->request->set("end_date", "2021-01-31");
+        $request->request->set("target_quantity_enabled", "1");
         $request->request->set("target_quantity", "3");
         $request->request->set("target_collection_id", "999");
         $request->request->set("free_article_id", "9999");
@@ -255,7 +256,116 @@ class SpecialOfferControllerTest extends TestCase
         $this->assertEquals("Description de la nouvelle offre", $offer->getDescription());
         $this->assertEquals("2021-01-01", $offer->getStartDate()->format("Y-m-d"));
         $this->assertEquals("2021-01-31", $offer->getEndDate()->format("Y-m-d"));
+        $this->assertEquals(3, $offer->getTargetQuantity());
         $this->assertEquals(999, $offer->getTargetCollectionId());
+        $this->assertNull($offer->getTargetAmount());
         $this->assertEquals(9999, $offer->getFreeArticleId());
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testUpdateActionUpdatesOfferWithAmountConditionOnly(): void
+    {
+        // given
+        $specialOfferController = new SpecialOfferController();
+
+        $site = ModelFactory::createSite();
+        $offer = ModelFactory::createSpecialOffer(
+            name: "Super offre", targetCollection: null, targetQuantity: null, targetAmount: 1000,
+        );
+
+        $request = new Request();
+        $currentSite = Mockery::mock(CurrentSite::class);
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->andReturn();
+        $flashBag = Mockery::mock(FlashBag::class);
+        $flashBag->shouldReceive("add")
+            ->with("success", "Offre spéciale « Nouvelle offre » mise à jour avec succès")
+            ->andReturn();
+        $session = Mockery::mock(Session::class);
+        $session->shouldReceive("getFlashBag")
+            ->andReturn($flashBag);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->shouldReceive("generate")
+            ->with("special_offer_edit", ["id" => $offer->getId()])
+            ->andReturn("/special_offer_edit");
+
+        // when
+        $request->request->set("name", "Nouvelle offre");
+        $request->request->set("description", "Description de la nouvelle offre");
+        $request->request->set("start_date", "2021-01-01");
+        $request->request->set("end_date", "2021-01-31");
+        $request->request->set("target_amount_enabled", "1");
+        $request->request->set("target_amount", "30");
+        $request->request->set("free_article_id", "9999");
+        $response = $specialOfferController->updateAction(
+            $request,
+            $currentSite,
+            $currentUser,
+            $session,
+            $urlGenerator,
+            id: $offer->getId()
+        );
+
+        // then
+        $this->assertEquals(302, $response->getStatusCode());
+
+        $offer->reload();
+        $this->assertEquals(3000, $offer->getTargetAmount());
+        $this->assertNull($offer->getTargetQuantity());
+        $this->assertNull($offer->getTargetCollectionId());
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testUpdateActionRejectsWhenNoConditionIsEnabled(): void
+    {
+        // given
+        $specialOfferController = new SpecialOfferController();
+
+        $site = ModelFactory::createSite();
+        $offer = ModelFactory::createSpecialOffer(name: "Super offre");
+
+        $request = new Request();
+        $currentSite = Mockery::mock(CurrentSite::class);
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->andReturn();
+        $flashBag = Mockery::mock(FlashBag::class);
+        $flashBag->shouldReceive("add")
+            ->with("error", "Vous devez activer au moins une condition (montant ou quantité).")
+            ->andReturn();
+        $session = Mockery::mock(Session::class);
+        $session->shouldReceive("getFlashBag")
+            ->andReturn($flashBag);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->shouldReceive("generate")
+            ->with("special_offer_edit", ["id" => $offer->getId()])
+            ->andReturn("/special_offer_edit");
+
+        // when
+        $request->request->set("name", "Nouvelle offre");
+        $request->request->set("description", "Description de la nouvelle offre");
+        $request->request->set("start_date", "2021-01-01");
+        $request->request->set("end_date", "2021-01-31");
+        $request->request->set("free_article_id", "9999");
+        $response = $specialOfferController->updateAction(
+            $request,
+            $currentSite,
+            $currentUser,
+            $session,
+            $urlGenerator,
+            id: $offer->getId()
+        );
+
+        // then
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals("/special_offer_edit", $response->getTargetUrl());
+
+        $offer->reload();
+        $this->assertEquals("Super offre", $offer->getName(), "offer must not be updated");
     }
 }

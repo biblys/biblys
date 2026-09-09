@@ -84,4 +84,18 @@ class Cart extends BaseCart
     {
         return $this->getPhysicalArticleCount();
     }
+
+    /**
+     * @throws PropelException
+     */
+    public function getSubtotal(): int
+    {
+        $stocks = StockQuery::create()
+            ->filterByCart($this)
+            ->find();
+
+        return array_reduce($stocks->getArrayCopy(), function (int $total, Stock $stock) {
+            return $total + $stock->getSellingPrice();
+        }, 0);
+    }
 }

@@ -100,16 +100,23 @@ abstract class SpecialOffer implements ActiveRecordInterface
     /**
      * The value for the target_collection_id field.
      *
-     * @var        int
+     * @var        int|null
      */
     protected $target_collection_id;
 
     /**
      * The value for the target_quantity field.
      *
-     * @var        int
+     * @var        int|null
      */
     protected $target_quantity;
+
+    /**
+     * The value for the target_amount field.
+     *
+     * @var        int|null
+     */
+    protected $target_amount;
 
     /**
      * The value for the free_article_id field.
@@ -438,7 +445,7 @@ abstract class SpecialOffer implements ActiveRecordInterface
     /**
      * Get the [target_collection_id] column value.
      *
-     * @return int
+     * @return int|null
      */
     public function getTargetCollectionId()
     {
@@ -448,11 +455,21 @@ abstract class SpecialOffer implements ActiveRecordInterface
     /**
      * Get the [target_quantity] column value.
      *
-     * @return int
+     * @return int|null
      */
     public function getTargetQuantity()
     {
         return $this->target_quantity;
+    }
+
+    /**
+     * Get the [target_amount] column value.
+     *
+     * @return int|null
+     */
+    public function getTargetAmount()
+    {
+        return $this->target_amount;
     }
 
     /**
@@ -640,7 +657,7 @@ abstract class SpecialOffer implements ActiveRecordInterface
     /**
      * Set the value of [target_collection_id] column.
      *
-     * @param int $v New value
+     * @param int|null $v New value
      * @return $this The current object (for fluent API support)
      */
     public function setTargetCollectionId($v)
@@ -664,7 +681,7 @@ abstract class SpecialOffer implements ActiveRecordInterface
     /**
      * Set the value of [target_quantity] column.
      *
-     * @param int $v New value
+     * @param int|null $v New value
      * @return $this The current object (for fluent API support)
      */
     public function setTargetQuantity($v)
@@ -676,6 +693,26 @@ abstract class SpecialOffer implements ActiveRecordInterface
         if ($this->target_quantity !== $v) {
             $this->target_quantity = $v;
             $this->modifiedColumns[SpecialOfferTableMap::COL_TARGET_QUANTITY] = true;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set the value of [target_amount] column.
+     *
+     * @param int|null $v New value
+     * @return $this The current object (for fluent API support)
+     */
+    public function setTargetAmount($v)
+    {
+        if ($v !== null) {
+            $v = (int) $v;
+        }
+
+        if ($this->target_amount !== $v) {
+            $this->target_amount = $v;
+            $this->modifiedColumns[SpecialOfferTableMap::COL_TARGET_AMOUNT] = true;
         }
 
         return $this;
@@ -839,28 +876,31 @@ abstract class SpecialOffer implements ActiveRecordInterface
             $col = $row[TableMap::TYPE_NUM == $indexType ? 5 + $startcol : SpecialOfferTableMap::translateFieldName('TargetQuantity', TableMap::TYPE_PHPNAME, $indexType)];
             $this->target_quantity = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : SpecialOfferTableMap::translateFieldName('FreeArticleId', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 6 + $startcol : SpecialOfferTableMap::translateFieldName('TargetAmount', TableMap::TYPE_PHPNAME, $indexType)];
+            $this->target_amount = (null !== $col) ? (int) $col : null;
+
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : SpecialOfferTableMap::translateFieldName('FreeArticleId', TableMap::TYPE_PHPNAME, $indexType)];
             $this->free_article_id = (null !== $col) ? (int) $col : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 7 + $startcol : SpecialOfferTableMap::translateFieldName('StartDate', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : SpecialOfferTableMap::translateFieldName('StartDate', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->start_date = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 8 + $startcol : SpecialOfferTableMap::translateFieldName('EndDate', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : SpecialOfferTableMap::translateFieldName('EndDate', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->end_date = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 9 + $startcol : SpecialOfferTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : SpecialOfferTableMap::translateFieldName('CreatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
             $this->created_at = (null !== $col) ? PropelDateTime::newInstance($col, null, 'DateTime') : null;
 
-            $col = $row[TableMap::TYPE_NUM == $indexType ? 10 + $startcol : SpecialOfferTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
+            $col = $row[TableMap::TYPE_NUM == $indexType ? 11 + $startcol : SpecialOfferTableMap::translateFieldName('UpdatedAt', TableMap::TYPE_PHPNAME, $indexType)];
             if ($col === '0000-00-00 00:00:00') {
                 $col = null;
             }
@@ -873,7 +913,7 @@ abstract class SpecialOffer implements ActiveRecordInterface
                 $this->ensureConsistency();
             }
 
-            return $startcol + 11; // 11 = SpecialOfferTableMap::NUM_HYDRATE_COLUMNS.
+            return $startcol + 12; // 12 = SpecialOfferTableMap::NUM_HYDRATE_COLUMNS.
 
         } catch (Exception $e) {
             throw new PropelException(sprintf('Error populating %s object', '\\Model\\SpecialOffer'), 0, $e);
@@ -1144,6 +1184,9 @@ abstract class SpecialOffer implements ActiveRecordInterface
         if ($this->isColumnModified(SpecialOfferTableMap::COL_TARGET_QUANTITY)) {
             $modifiedColumns[':p' . $index++]  = 'target_quantity';
         }
+        if ($this->isColumnModified(SpecialOfferTableMap::COL_TARGET_AMOUNT)) {
+            $modifiedColumns[':p' . $index++]  = 'target_amount';
+        }
         if ($this->isColumnModified(SpecialOfferTableMap::COL_FREE_ARTICLE_ID)) {
             $modifiedColumns[':p' . $index++]  = 'free_article_id';
         }
@@ -1192,6 +1235,10 @@ abstract class SpecialOffer implements ActiveRecordInterface
                         break;
                     case 'target_quantity':
                         $stmt->bindValue($identifier, $this->target_quantity, PDO::PARAM_INT);
+
+                        break;
+                    case 'target_amount':
+                        $stmt->bindValue($identifier, $this->target_amount, PDO::PARAM_INT);
 
                         break;
                     case 'free_article_id':
@@ -1295,18 +1342,21 @@ abstract class SpecialOffer implements ActiveRecordInterface
                 return $this->getTargetQuantity();
 
             case 6:
-                return $this->getFreeArticleId();
+                return $this->getTargetAmount();
 
             case 7:
-                return $this->getStartDate();
+                return $this->getFreeArticleId();
 
             case 8:
-                return $this->getEndDate();
+                return $this->getStartDate();
 
             case 9:
-                return $this->getCreatedAt();
+                return $this->getEndDate();
 
             case 10:
+                return $this->getCreatedAt();
+
+            case 11:
                 return $this->getUpdatedAt();
 
             default:
@@ -1343,16 +1393,13 @@ abstract class SpecialOffer implements ActiveRecordInterface
             $keys[3] => $this->getDescription(),
             $keys[4] => $this->getTargetCollectionId(),
             $keys[5] => $this->getTargetQuantity(),
-            $keys[6] => $this->getFreeArticleId(),
-            $keys[7] => $this->getStartDate(),
-            $keys[8] => $this->getEndDate(),
-            $keys[9] => $this->getCreatedAt(),
-            $keys[10] => $this->getUpdatedAt(),
+            $keys[6] => $this->getTargetAmount(),
+            $keys[7] => $this->getFreeArticleId(),
+            $keys[8] => $this->getStartDate(),
+            $keys[9] => $this->getEndDate(),
+            $keys[10] => $this->getCreatedAt(),
+            $keys[11] => $this->getUpdatedAt(),
         ];
-        if ($result[$keys[7]] instanceof \DateTimeInterface) {
-            $result[$keys[7]] = $result[$keys[7]]->format('Y-m-d H:i:s.u');
-        }
-
         if ($result[$keys[8]] instanceof \DateTimeInterface) {
             $result[$keys[8]] = $result[$keys[8]]->format('Y-m-d H:i:s.u');
         }
@@ -1363,6 +1410,10 @@ abstract class SpecialOffer implements ActiveRecordInterface
 
         if ($result[$keys[10]] instanceof \DateTimeInterface) {
             $result[$keys[10]] = $result[$keys[10]]->format('Y-m-d H:i:s.u');
+        }
+
+        if ($result[$keys[11]] instanceof \DateTimeInterface) {
+            $result[$keys[11]] = $result[$keys[11]]->format('Y-m-d H:i:s.u');
         }
 
         $virtualColumns = $this->virtualColumns;
@@ -1471,18 +1522,21 @@ abstract class SpecialOffer implements ActiveRecordInterface
                 $this->setTargetQuantity($value);
                 break;
             case 6:
-                $this->setFreeArticleId($value);
+                $this->setTargetAmount($value);
                 break;
             case 7:
-                $this->setStartDate($value);
+                $this->setFreeArticleId($value);
                 break;
             case 8:
-                $this->setEndDate($value);
+                $this->setStartDate($value);
                 break;
             case 9:
-                $this->setCreatedAt($value);
+                $this->setEndDate($value);
                 break;
             case 10:
+                $this->setCreatedAt($value);
+                break;
+            case 11:
                 $this->setUpdatedAt($value);
                 break;
         } // switch()
@@ -1530,19 +1584,22 @@ abstract class SpecialOffer implements ActiveRecordInterface
             $this->setTargetQuantity($arr[$keys[5]]);
         }
         if (array_key_exists($keys[6], $arr)) {
-            $this->setFreeArticleId($arr[$keys[6]]);
+            $this->setTargetAmount($arr[$keys[6]]);
         }
         if (array_key_exists($keys[7], $arr)) {
-            $this->setStartDate($arr[$keys[7]]);
+            $this->setFreeArticleId($arr[$keys[7]]);
         }
         if (array_key_exists($keys[8], $arr)) {
-            $this->setEndDate($arr[$keys[8]]);
+            $this->setStartDate($arr[$keys[8]]);
         }
         if (array_key_exists($keys[9], $arr)) {
-            $this->setCreatedAt($arr[$keys[9]]);
+            $this->setEndDate($arr[$keys[9]]);
         }
         if (array_key_exists($keys[10], $arr)) {
-            $this->setUpdatedAt($arr[$keys[10]]);
+            $this->setCreatedAt($arr[$keys[10]]);
+        }
+        if (array_key_exists($keys[11], $arr)) {
+            $this->setUpdatedAt($arr[$keys[11]]);
         }
 
         return $this;
@@ -1604,6 +1661,9 @@ abstract class SpecialOffer implements ActiveRecordInterface
         }
         if ($this->isColumnModified(SpecialOfferTableMap::COL_TARGET_QUANTITY)) {
             $criteria->add(SpecialOfferTableMap::COL_TARGET_QUANTITY, $this->target_quantity);
+        }
+        if ($this->isColumnModified(SpecialOfferTableMap::COL_TARGET_AMOUNT)) {
+            $criteria->add(SpecialOfferTableMap::COL_TARGET_AMOUNT, $this->target_amount);
         }
         if ($this->isColumnModified(SpecialOfferTableMap::COL_FREE_ARTICLE_ID)) {
             $criteria->add(SpecialOfferTableMap::COL_FREE_ARTICLE_ID, $this->free_article_id);
@@ -1713,6 +1773,7 @@ abstract class SpecialOffer implements ActiveRecordInterface
         $copyObj->setDescription($this->getDescription());
         $copyObj->setTargetCollectionId($this->getTargetCollectionId());
         $copyObj->setTargetQuantity($this->getTargetQuantity());
+        $copyObj->setTargetAmount($this->getTargetAmount());
         $copyObj->setFreeArticleId($this->getFreeArticleId());
         $copyObj->setStartDate($this->getStartDate());
         $copyObj->setEndDate($this->getEndDate());
@@ -1923,6 +1984,7 @@ abstract class SpecialOffer implements ActiveRecordInterface
         $this->description = null;
         $this->target_collection_id = null;
         $this->target_quantity = null;
+        $this->target_amount = null;
         $this->free_article_id = null;
         $this->start_date = null;
         $this->end_date = null;

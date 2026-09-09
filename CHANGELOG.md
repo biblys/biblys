@@ -7,6 +7,9 @@
 - Un nouveau moyen de paiement en espèces peut être activé via l'option de
   site `payment_cash`. Il n'est proposé que pour les commandes retirées en
   magasin.
+- Une offre spéciale peut désormais exiger un montant minimum de panier (hors
+  frais de port), en plus ou à la place de la condition de quantité minimum
+  dans une collection.
 
 ## 3.16.2 (9 septembre 2026)
 

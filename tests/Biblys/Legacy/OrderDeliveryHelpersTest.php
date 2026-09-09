@@ -1017,6 +1017,162 @@ class OrderDeliveryHelpersTest extends TestCase
      * @throws PropelException
      * @throws Exception
      */
+    public function testValidateCartContentWhenSpecialOfferAmountConditionIsNotMet()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $currentSite = new CurrentSite($site);
+        $cart = ModelFactory::createCart();
+
+        $freeArticle = ModelFactory::createArticle(
+            title: "Cékado",
+            availabilityDilicom: Article::AVAILABILITY_PRIVATELY_PRINTED,
+        );
+        ModelFactory::createStockItem(article: $freeArticle, cart: $cart);
+
+        ModelFactory::createSpecialOffer(
+            name: "Cado",
+            targetCollection: null,
+            targetQuantity: null,
+            targetAmount: 3000,
+            freeArticle: $freeArticle,
+        );
+
+        $article1 = ModelFactory::createArticle();
+        ModelFactory::createStockItem(article: $article1, cart: $cart, sellingPrice: 1000);
+
+        // when
+        $exception = Helpers::runAndCatchException(function() use($currentSite, $cart) {
+            OrderDeliveryHelpers::validateCartContent($currentSite, $cart);
+        });
+
+        // then
+        $this->assertInstanceOf(CartException::class, $exception);
+        $this->assertEquals(
+            "Votre panier ne remplit pas les conditions pour bénéficier de l'offre spéciale Cado.",
+            $exception->getMessage()
+        );
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testValidateCartContentWhenSpecialOfferAmountConditionIsMet()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $currentSite = new CurrentSite($site);
+        $cart = ModelFactory::createCart();
+
+        $freeArticle = ModelFactory::createArticle(
+            title: "Cékado",
+            availabilityDilicom: Article::AVAILABILITY_PRIVATELY_PRINTED,
+        );
+        ModelFactory::createStockItem(article: $freeArticle, cart: $cart);
+
+        ModelFactory::createSpecialOffer(
+            name: "Cado",
+            targetCollection: null,
+            targetQuantity: null,
+            targetAmount: 3000,
+            freeArticle: $freeArticle,
+        );
+
+        $article1 = ModelFactory::createArticle();
+        ModelFactory::createStockItem(article: $article1, cart: $cart, sellingPrice: 3000);
+
+        // when
+        OrderDeliveryHelpers::validateCartContent($currentSite, $cart);
+
+        // then
+        $this->expectNotToPerformAssertions();
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testValidateCartContentWhenSpecialOfferHasBothConditionsAndOnlyAmountIsMet()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $currentSite = new CurrentSite($site);
+        $cart = ModelFactory::createCart();
+
+        $targetCollection = ModelFactory::createCollection(name: "Collection cible");
+        $freeArticle = ModelFactory::createArticle(
+            title: "Cékado",
+            collection: $targetCollection,
+            availabilityDilicom: Article::AVAILABILITY_PRIVATELY_PRINTED,
+        );
+        ModelFactory::createStockItem(article: $freeArticle, cart: $cart);
+
+        ModelFactory::createSpecialOffer(
+            name: "Cado",
+            targetCollection: $targetCollection,
+            targetQuantity: 2,
+            targetAmount: 1000,
+            freeArticle: $freeArticle,
+        );
+
+        $article1 = ModelFactory::createArticle(collection: $targetCollection);
+        ModelFactory::createStockItem(article: $article1, cart: $cart, sellingPrice: 1000);
+
+        // when
+        $exception = Helpers::runAndCatchException(function() use($currentSite, $cart) {
+            OrderDeliveryHelpers::validateCartContent($currentSite, $cart);
+        });
+
+        // then
+        $this->assertInstanceOf(CartException::class, $exception);
+        $this->assertEquals(
+            "Votre panier ne remplit pas les conditions pour bénéficier de l'offre spéciale Cado.",
+            $exception->getMessage()
+        );
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testValidateCartContentWhenSpecialOfferHasBothConditionsAndBothAreMet()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $currentSite = new CurrentSite($site);
+        $cart = ModelFactory::createCart();
+
+        $targetCollection = ModelFactory::createCollection(name: "Collection cible");
+        $freeArticle = ModelFactory::createArticle(
+            title: "Cékado",
+            collection: $targetCollection,
+            availabilityDilicom: Article::AVAILABILITY_PRIVATELY_PRINTED,
+        );
+        ModelFactory::createStockItem(article: $freeArticle, cart: $cart);
+
+        ModelFactory::createSpecialOffer(
+            name: "Cado",
+            targetCollection: $targetCollection,
+            targetQuantity: 1,
+            targetAmount: 1000,
+            freeArticle: $freeArticle,
+        );
+
+        $article1 = ModelFactory::createArticle(collection: $targetCollection);
+        ModelFactory::createStockItem(article: $article1, cart: $cart, sellingPrice: 1000);
+
+        // when
+        OrderDeliveryHelpers::validateCartContent($currentSite, $cart);
+
+        // then
+        $this->expectNotToPerformAssertions();
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
     public function testValidateCartContentWhenCartIsOk()
     {
         // given

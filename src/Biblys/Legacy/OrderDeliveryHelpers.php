@@ -459,8 +459,23 @@ class OrderDeliveryHelpers
         SpecialOffer $specialOffer
     ): bool
     {
+        $targetAmount = $specialOffer->getTargetAmount();
+        $amountConditionIsMet = $targetAmount === null || $cart->getSubtotal() >= $targetAmount;
+
+        $targetQuantity = $specialOffer->getTargetQuantity();
+        $quantityConditionIsMet = $targetQuantity === null
+            || self::_countCartItemsInCollection($cart, $specialOffer) >= $targetQuantity;
+
+        return $amountConditionIsMet && $quantityConditionIsMet;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    private static function _countCartItemsInCollection(Cart $cart, SpecialOffer $specialOffer): int
+    {
         $cartItems = $cart->getStocks()->getArrayCopy();
-        $itemsInTargetCollectionCount = array_reduce($cartItems, function ($total, $copy) use ($specialOffer) {
+        return array_reduce($cartItems, function ($total, $copy) use ($specialOffer) {
             /** @var Article $article */
             $article = $copy->getArticle();
 
@@ -474,7 +489,5 @@ class OrderDeliveryHelpers
 
             return $total;
         }, 0);
-
-        return $itemsInTargetCollectionCount >= $specialOffer->getTargetQuantity();
     }
 }

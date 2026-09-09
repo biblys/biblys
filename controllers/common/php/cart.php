@@ -376,7 +376,8 @@ return function (
             $urlGenerator,
             $imagesService,
             $templateService,
-            $cart
+            $cart,
+            $Total
         );
 
         // Pre-order books

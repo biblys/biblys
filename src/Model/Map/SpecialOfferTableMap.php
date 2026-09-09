@@ -63,7 +63,7 @@ class SpecialOfferTableMap extends TableMap
     /**
      * The total number of columns
      */
-    public const NUM_COLUMNS = 11;
+    public const NUM_COLUMNS = 12;
 
     /**
      * The number of lazy-loaded columns
@@ -73,7 +73,7 @@ class SpecialOfferTableMap extends TableMap
     /**
      * The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS)
      */
-    public const NUM_HYDRATE_COLUMNS = 11;
+    public const NUM_HYDRATE_COLUMNS = 12;
 
     /**
      * the column name for the id field
@@ -104,6 +104,11 @@ class SpecialOfferTableMap extends TableMap
      * the column name for the target_quantity field
      */
     public const COL_TARGET_QUANTITY = 'special_offers.target_quantity';
+
+    /**
+     * the column name for the target_amount field
+     */
+    public const COL_TARGET_AMOUNT = 'special_offers.target_amount';
 
     /**
      * the column name for the free_article_id field
@@ -144,11 +149,11 @@ class SpecialOfferTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldNames = [
-        self::TYPE_PHPNAME       => ['Id', 'SiteId', 'Name', 'Description', 'TargetCollectionId', 'TargetQuantity', 'FreeArticleId', 'StartDate', 'EndDate', 'CreatedAt', 'UpdatedAt', ],
-        self::TYPE_CAMELNAME     => ['id', 'siteId', 'name', 'description', 'targetCollectionId', 'targetQuantity', 'freeArticleId', 'startDate', 'endDate', 'createdAt', 'updatedAt', ],
-        self::TYPE_COLNAME       => [SpecialOfferTableMap::COL_ID, SpecialOfferTableMap::COL_SITE_ID, SpecialOfferTableMap::COL_NAME, SpecialOfferTableMap::COL_DESCRIPTION, SpecialOfferTableMap::COL_TARGET_COLLECTION_ID, SpecialOfferTableMap::COL_TARGET_QUANTITY, SpecialOfferTableMap::COL_FREE_ARTICLE_ID, SpecialOfferTableMap::COL_START_DATE, SpecialOfferTableMap::COL_END_DATE, SpecialOfferTableMap::COL_CREATED_AT, SpecialOfferTableMap::COL_UPDATED_AT, ],
-        self::TYPE_FIELDNAME     => ['id', 'site_id', 'name', 'description', 'target_collection_id', 'target_quantity', 'free_article_id', 'start_date', 'end_date', 'created_at', 'updated_at', ],
-        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, ]
+        self::TYPE_PHPNAME       => ['Id', 'SiteId', 'Name', 'Description', 'TargetCollectionId', 'TargetQuantity', 'TargetAmount', 'FreeArticleId', 'StartDate', 'EndDate', 'CreatedAt', 'UpdatedAt', ],
+        self::TYPE_CAMELNAME     => ['id', 'siteId', 'name', 'description', 'targetCollectionId', 'targetQuantity', 'targetAmount', 'freeArticleId', 'startDate', 'endDate', 'createdAt', 'updatedAt', ],
+        self::TYPE_COLNAME       => [SpecialOfferTableMap::COL_ID, SpecialOfferTableMap::COL_SITE_ID, SpecialOfferTableMap::COL_NAME, SpecialOfferTableMap::COL_DESCRIPTION, SpecialOfferTableMap::COL_TARGET_COLLECTION_ID, SpecialOfferTableMap::COL_TARGET_QUANTITY, SpecialOfferTableMap::COL_TARGET_AMOUNT, SpecialOfferTableMap::COL_FREE_ARTICLE_ID, SpecialOfferTableMap::COL_START_DATE, SpecialOfferTableMap::COL_END_DATE, SpecialOfferTableMap::COL_CREATED_AT, SpecialOfferTableMap::COL_UPDATED_AT, ],
+        self::TYPE_FIELDNAME     => ['id', 'site_id', 'name', 'description', 'target_collection_id', 'target_quantity', 'target_amount', 'free_article_id', 'start_date', 'end_date', 'created_at', 'updated_at', ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, ]
     ];
 
     /**
@@ -160,11 +165,11 @@ class SpecialOfferTableMap extends TableMap
      * @var array<string, mixed>
      */
     protected static $fieldKeys = [
-        self::TYPE_PHPNAME       => ['Id' => 0, 'SiteId' => 1, 'Name' => 2, 'Description' => 3, 'TargetCollectionId' => 4, 'TargetQuantity' => 5, 'FreeArticleId' => 6, 'StartDate' => 7, 'EndDate' => 8, 'CreatedAt' => 9, 'UpdatedAt' => 10, ],
-        self::TYPE_CAMELNAME     => ['id' => 0, 'siteId' => 1, 'name' => 2, 'description' => 3, 'targetCollectionId' => 4, 'targetQuantity' => 5, 'freeArticleId' => 6, 'startDate' => 7, 'endDate' => 8, 'createdAt' => 9, 'updatedAt' => 10, ],
-        self::TYPE_COLNAME       => [SpecialOfferTableMap::COL_ID => 0, SpecialOfferTableMap::COL_SITE_ID => 1, SpecialOfferTableMap::COL_NAME => 2, SpecialOfferTableMap::COL_DESCRIPTION => 3, SpecialOfferTableMap::COL_TARGET_COLLECTION_ID => 4, SpecialOfferTableMap::COL_TARGET_QUANTITY => 5, SpecialOfferTableMap::COL_FREE_ARTICLE_ID => 6, SpecialOfferTableMap::COL_START_DATE => 7, SpecialOfferTableMap::COL_END_DATE => 8, SpecialOfferTableMap::COL_CREATED_AT => 9, SpecialOfferTableMap::COL_UPDATED_AT => 10, ],
-        self::TYPE_FIELDNAME     => ['id' => 0, 'site_id' => 1, 'name' => 2, 'description' => 3, 'target_collection_id' => 4, 'target_quantity' => 5, 'free_article_id' => 6, 'start_date' => 7, 'end_date' => 8, 'created_at' => 9, 'updated_at' => 10, ],
-        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, ]
+        self::TYPE_PHPNAME       => ['Id' => 0, 'SiteId' => 1, 'Name' => 2, 'Description' => 3, 'TargetCollectionId' => 4, 'TargetQuantity' => 5, 'TargetAmount' => 6, 'FreeArticleId' => 7, 'StartDate' => 8, 'EndDate' => 9, 'CreatedAt' => 10, 'UpdatedAt' => 11, ],
+        self::TYPE_CAMELNAME     => ['id' => 0, 'siteId' => 1, 'name' => 2, 'description' => 3, 'targetCollectionId' => 4, 'targetQuantity' => 5, 'targetAmount' => 6, 'freeArticleId' => 7, 'startDate' => 8, 'endDate' => 9, 'createdAt' => 10, 'updatedAt' => 11, ],
+        self::TYPE_COLNAME       => [SpecialOfferTableMap::COL_ID => 0, SpecialOfferTableMap::COL_SITE_ID => 1, SpecialOfferTableMap::COL_NAME => 2, SpecialOfferTableMap::COL_DESCRIPTION => 3, SpecialOfferTableMap::COL_TARGET_COLLECTION_ID => 4, SpecialOfferTableMap::COL_TARGET_QUANTITY => 5, SpecialOfferTableMap::COL_TARGET_AMOUNT => 6, SpecialOfferTableMap::COL_FREE_ARTICLE_ID => 7, SpecialOfferTableMap::COL_START_DATE => 8, SpecialOfferTableMap::COL_END_DATE => 9, SpecialOfferTableMap::COL_CREATED_AT => 10, SpecialOfferTableMap::COL_UPDATED_AT => 11, ],
+        self::TYPE_FIELDNAME     => ['id' => 0, 'site_id' => 1, 'name' => 2, 'description' => 3, 'target_collection_id' => 4, 'target_quantity' => 5, 'target_amount' => 6, 'free_article_id' => 7, 'start_date' => 8, 'end_date' => 9, 'created_at' => 10, 'updated_at' => 11, ],
+        self::TYPE_NUM           => [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, ]
     ];
 
     /**
@@ -218,6 +223,14 @@ class SpecialOfferTableMap extends TableMap
         'COL_TARGET_QUANTITY' => 'TARGET_QUANTITY',
         'target_quantity' => 'TARGET_QUANTITY',
         'special_offers.target_quantity' => 'TARGET_QUANTITY',
+        'TargetAmount' => 'TARGET_AMOUNT',
+        'SpecialOffer.TargetAmount' => 'TARGET_AMOUNT',
+        'targetAmount' => 'TARGET_AMOUNT',
+        'specialOffer.targetAmount' => 'TARGET_AMOUNT',
+        'SpecialOfferTableMap::COL_TARGET_AMOUNT' => 'TARGET_AMOUNT',
+        'COL_TARGET_AMOUNT' => 'TARGET_AMOUNT',
+        'target_amount' => 'TARGET_AMOUNT',
+        'special_offers.target_amount' => 'TARGET_AMOUNT',
         'FreeArticleId' => 'FREE_ARTICLE_ID',
         'SpecialOffer.FreeArticleId' => 'FREE_ARTICLE_ID',
         'freeArticleId' => 'FREE_ARTICLE_ID',
@@ -281,8 +294,9 @@ class SpecialOfferTableMap extends TableMap
         $this->addForeignKey('site_id', 'SiteId', 'INTEGER', 'sites', 'site_id', false, null, null);
         $this->addColumn('name', 'Name', 'VARCHAR', true, 128, null);
         $this->addColumn('description', 'Description', 'LONGVARCHAR', false, null, null);
-        $this->addForeignKey('target_collection_id', 'TargetCollectionId', 'INTEGER', 'collections', 'collection_id', true, null, null);
-        $this->addColumn('target_quantity', 'TargetQuantity', 'INTEGER', true, null, null);
+        $this->addForeignKey('target_collection_id', 'TargetCollectionId', 'INTEGER', 'collections', 'collection_id', false, null, null);
+        $this->addColumn('target_quantity', 'TargetQuantity', 'INTEGER', false, null, null);
+        $this->addColumn('target_amount', 'TargetAmount', 'INTEGER', false, null, null);
         $this->addForeignKey('free_article_id', 'FreeArticleId', 'INTEGER', 'articles', 'article_id', true, null, null);
         $this->addColumn('start_date', 'StartDate', 'TIMESTAMP', true, null, null);
         $this->addColumn('end_date', 'EndDate', 'TIMESTAMP', true, null, null);
@@ -481,6 +495,7 @@ class SpecialOfferTableMap extends TableMap
             $criteria->addSelectColumn(SpecialOfferTableMap::COL_DESCRIPTION);
             $criteria->addSelectColumn(SpecialOfferTableMap::COL_TARGET_COLLECTION_ID);
             $criteria->addSelectColumn(SpecialOfferTableMap::COL_TARGET_QUANTITY);
+            $criteria->addSelectColumn(SpecialOfferTableMap::COL_TARGET_AMOUNT);
             $criteria->addSelectColumn(SpecialOfferTableMap::COL_FREE_ARTICLE_ID);
             $criteria->addSelectColumn(SpecialOfferTableMap::COL_START_DATE);
             $criteria->addSelectColumn(SpecialOfferTableMap::COL_END_DATE);
@@ -493,6 +508,7 @@ class SpecialOfferTableMap extends TableMap
             $criteria->addSelectColumn($alias . '.description');
             $criteria->addSelectColumn($alias . '.target_collection_id');
             $criteria->addSelectColumn($alias . '.target_quantity');
+            $criteria->addSelectColumn($alias . '.target_amount');
             $criteria->addSelectColumn($alias . '.free_article_id');
             $criteria->addSelectColumn($alias . '.start_date');
             $criteria->addSelectColumn($alias . '.end_date');
@@ -522,6 +538,7 @@ class SpecialOfferTableMap extends TableMap
             $criteria->removeSelectColumn(SpecialOfferTableMap::COL_DESCRIPTION);
             $criteria->removeSelectColumn(SpecialOfferTableMap::COL_TARGET_COLLECTION_ID);
             $criteria->removeSelectColumn(SpecialOfferTableMap::COL_TARGET_QUANTITY);
+            $criteria->removeSelectColumn(SpecialOfferTableMap::COL_TARGET_AMOUNT);
             $criteria->removeSelectColumn(SpecialOfferTableMap::COL_FREE_ARTICLE_ID);
             $criteria->removeSelectColumn(SpecialOfferTableMap::COL_START_DATE);
             $criteria->removeSelectColumn(SpecialOfferTableMap::COL_END_DATE);
@@ -534,6 +551,7 @@ class SpecialOfferTableMap extends TableMap
             $criteria->removeSelectColumn($alias . '.description');
             $criteria->removeSelectColumn($alias . '.target_collection_id');
             $criteria->removeSelectColumn($alias . '.target_quantity');
+            $criteria->removeSelectColumn($alias . '.target_amount');
             $criteria->removeSelectColumn($alias . '.free_article_id');
             $criteria->removeSelectColumn($alias . '.start_date');
             $criteria->removeSelectColumn($alias . '.end_date');

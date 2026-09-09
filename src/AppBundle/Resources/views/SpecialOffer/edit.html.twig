@@ -54,29 +54,56 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                value="{{ offer.endDate|date('Y-m-d') }}" required>
       </div>
 
-      <div class="form-group row">
-        <label for="target_quantity" class="col-md-3 col-form-label text-md-right">pour</label>
-        <input type="number" class="form-control col-md-7" id="target_quantity" name="target_quantity"
-               value="{{ offer.targetQuantity }}" required>
-        <span class="col-md-2 col-form-label">
-          articles achetés
-        </span>
+      <p class="font-weight-bold mb-2">Si :</p>
+
+      <div class="card mb-3">
+        <div class="card-body">
+          <div class="form-check d-flex align-items-center flex-wrap">
+            <input type="checkbox" class="form-check-input" id="target_amount_enabled" name="target_amount_enabled" value="1"
+                   onchange="document.getElementById('target_amount').disabled = !this.checked"
+                   {% if offer.targetAmount is not null %}checked{% endif %}>
+            <label class="form-check-label d-flex align-items-center flex-wrap mb-0" for="target_amount_enabled">
+              <span class="mr-2">le montant du panier est au minimum de</span>
+              <input type="number" step="0.01" class="form-control d-inline-block mr-2" style="width: 6em"
+                     id="target_amount" name="target_amount"
+                     value="{{ offer.targetAmount is not null ? offer.targetAmount / 100 : '' }}"
+                     {% if offer.targetAmount is null %}disabled{% endif %}>
+              <span>&euro;</span>
+            </label>
+          </div>
+        </div>
       </div>
 
-      <div class="form-group row">
-        <label for="target_collection_id" class="col-md-3 col-form-label text-md-right">dans la collection</label>
-        <select id="target_collection_id" class="form-control col-md-7" name="target_collection_id" required>
-          {% for collection in collections %}
-            <option value="{{ collection.id }}" {% if collection.id == offer.targetCollectionId %}selected{% endif %}>
-              {{ collection.name }}
-            </option>
-          {% endfor %}
-        </select>
+      <div class="card mb-3">
+        <div class="card-body">
+          <div class="form-check d-flex align-items-center flex-wrap">
+            <input type="checkbox" class="form-check-input" id="target_quantity_enabled" name="target_quantity_enabled" value="1"
+                   onchange="document.getElementById('target_quantity').disabled = document.getElementById('target_collection_id').disabled = !this.checked"
+                   {% if offer.targetQuantity is not null %}checked{% endif %}>
+            <label class="form-check-label d-flex align-items-center flex-wrap mb-0" for="target_quantity_enabled">
+              <span class="mr-2">le panier contient au moins</span>
+              <input type="number" class="form-control d-inline-block mr-2" style="width: 5em"
+                     id="target_quantity" name="target_quantity" value="{{ offer.targetQuantity }}"
+                     {% if offer.targetQuantity is null %}disabled{% endif %}>
+              <span class="mr-2">article{{ offer.targetQuantity != 1 ? 's' }} de la collection</span>
+              <select id="target_collection_id" class="form-control d-inline-block" style="width: auto"
+                      name="target_collection_id" {% if offer.targetQuantity is null %}disabled{% endif %}>
+                {% for collection in collections %}
+                  <option value="{{ collection.id }}" {% if collection.id == offer.targetCollectionId %}selected{% endif %}>
+                    {{ collection.name }}
+                  </option>
+                {% endfor %}
+              </select>
+            </label>
+          </div>
+        </div>
       </div>
 
-      <div class="form-group row">
-        <label for="free_article_id" class="col-md-3 col-form-label text-md-right">l'article</label>
-        <div class="col-md-7 p-0">
+      <p class="font-weight-bold mb-2">Alors :</p>
+
+      <div class="d-flex align-items-center flex-wrap">
+        <span class="mr-2">l'article</span>
+        <div class="mr-2" style="min-width: 280px; max-width: 400px">
           {% include "AppBundle:Utils:_entity-search-field.html.twig" with {
             query_url: "/pages/adm_article_search",
             label: "Choisir un article…",
@@ -87,9 +114,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
             autoload: true,
           } %}
         </div>
-        <span class="col-md-2 col-form-label">
-          est offert
-        </span>
+        <span>peut être ajouté au panier</span>
       </div>
     </fieldset>
 
