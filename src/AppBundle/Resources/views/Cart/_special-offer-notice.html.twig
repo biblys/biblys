@@ -1,0 +1,48 @@
+{#
+Copyright (C) 2026 Clément Latzarus
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published
+by the Free Software Foundation, version 3.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#}
+
+<div class="SpecialOfferNotice">
+    <h2 class="SpecialOfferNotice-title">{{ specialOffer.name }}</h2>
+    <div class="SpecialOfferNotice-cover">
+        {{ cover|raw }}
+    </div>
+    <div class="SpecialOfferNotice-infos">
+        <p>
+            <a href="/{{ freeArticleEntity.url }}">{{ freeArticleEntity.title }}</a><br />
+            de {{ freeArticleAuthors|raw }}<br />
+            coll. {{ freeArticleEntity.collection.name }} {{ freeArticleNumero|raw }}<br />
+        </p>
+        <p>
+            <strong>Offert si :</strong>
+            <ul class="SpecialOfferNotice-conditions list-unstyled mb-2">
+                {% for item in conditionItems %}
+                    <li class="{{ item.met ? 'text-success' : 'text-info' }}">
+                        <span class="fa {{ item.met ? 'fa-check-circle' : 'fa-plus-circle' }}"></span> {{ item.label|raw }}
+                    </li>
+                {% endfor %}
+            </ul>
+            {{ amountConditionNote|raw }}
+            <small>{{ statusLine|raw }}</small>
+        </p>
+        {% if cartButtonUrl %}
+            <form method="post" action="{{ cartButtonUrl }}">
+                <button type="submit" class="btn btn-success">Ajouter au panier</button>
+            </form>
+        {% elseif not alreadyInCart %}
+            <button class="btn btn-outline-secondary" disabled>Ajouter au panier</button>
+        {% endif %}
+    </div>
+</div>

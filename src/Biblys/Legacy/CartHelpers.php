@@ -291,32 +291,20 @@ class CartHelpers
         $am = new ArticleManager();
         $freeArticleEntity = $am->getById($freeArticle->getId());
 
-        $conditionsHtml = "";
-        foreach ($conditionItems as $conditionItem) {
-            $icon = $conditionItem["met"] ? "fa-check-circle" : "fa-plus-circle";
-            $class = $conditionItem["met"] ? "text-success" : "text-info";
-            $conditionsHtml .= '<li class="' . $class . '"><span class="fa ' . $icon . '"></span> ' .
-                $conditionItem["label"] . '</li>';
-        }
+        $freeArticleIsInCart = StockQuery::create()
+            ->filterByCart($cart)->findOneByArticleId($freeArticle->getId());
 
-        $statusLine = '';
-        $cartButton = '<button class="btn btn-outline-secondary" disabled>Ajouter au panier</button>';
-
-        if ($evaluation->isMet()) {
+        if ($freeArticleIsInCart) {
+            $statusLine = '<span class="text-success"><span class="fa fa-check-circle"></span> Vous bénéficiez de l’offre.</span>';
+            $cartButtonUrl = null;
+        } elseif ($evaluation->isMet()) {
             $statusLine = '<span class="text-success"><span class="fa fa-check-circle"></span> Vous pouvez bénéficier de l’offre.</span>';
             $cartButtonUrl = $urlGenerator->generate(
                 "cart_add_article", ["articleId" => $freeArticle->getId()]
             );
-            $cartButton = '<form method="post" action="' . $cartButtonUrl . '">';
-            $cartButton .= '<button type="submit" class="btn btn-success">Ajouter au panier</button>';
-            $cartButton .= '</form>';
-        }
-
-        $freeArticleIsInCart = StockQuery::create()
-            ->filterByCart($cart)->findOneByArticleId($freeArticle->getId());
-        if ($freeArticleIsInCart) {
-            $cartButton = "";
-            $statusLine = '<span class="text-success"><span class="fa fa-check-circle"></span> Vous bénéficiez de l’offre.</span>';
+        } else {
+            $statusLine = '';
+            $cartButtonUrl = null;
         }
 
         $cover = null;
@@ -330,28 +318,17 @@ class CartHelpers
             );
         }
 
-        return '
-            <div class="SpecialOfferNotice">
-                <h2 class="SpecialOfferNotice-title">' . $specialOffer->getName() . '</h2>
-                <div class="SpecialOfferNotice-cover">
-                    ' . $cover . '
-                </div>
-                <div class="SpecialOfferNotice-infos">
-                    <p>
-
-                        <a href="/' . $freeArticleEntity->get('url') . '">' . $freeArticleEntity->get('title') . '</a><br />
-                        de ' . authors($freeArticleEntity->get('authors')) . '<br />
-                        coll. ' . $freeArticleEntity->get('collection')->get('name') . ' ' . numero($freeArticleEntity->get('number')) . '<br />
-                    </p>
-                    <p>
-                        <strong>Offert si :</strong>
-                        <ul class="SpecialOfferNotice-conditions list-unstyled mb-2">' . $conditionsHtml . '</ul>
-                        ' . $amountConditionNote . '
-                        <small>' . $statusLine . '</small>
-                    </p>
-                    ' . $cartButton . '
-                </div>
-            </div>
-        ';
+        return $templateService->render("AppBundle:Cart:_special-offer-notice.html.twig", [
+            "specialOffer" => $specialOffer,
+            "freeArticleEntity" => $freeArticleEntity,
+            "freeArticleAuthors" => authors($freeArticleEntity->get('authors')),
+            "freeArticleNumero" => numero($freeArticleEntity->get('number')),
+            "conditionItems" => $conditionItems,
+            "amountConditionNote" => $amountConditionNote,
+            "cover" => $cover,
+            "statusLine" => $statusLine,
+            "cartButtonUrl" => $cartButtonUrl,
+            "alreadyInCart" => (bool) $freeArticleIsInCart,
+        ]);
     }
 }
