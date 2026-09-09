@@ -34,7 +34,7 @@ final class SpecialOfferEvaluator
         $amount = null;
         $targetAmount = $specialOffer->getTargetAmount();
         if ($targetAmount !== null) {
-            $current = $cart->getSubtotal();
+            $current = $cart->getTangibleSubtotal();
             $amount = new SpecialOfferConditionEvaluation(
                 isMet: $current >= $targetAmount,
                 target: $targetAmount,

@@ -18,6 +18,7 @@
 
 namespace Biblys\Service\SpecialOffers;
 
+use Biblys\Data\ArticleType;
 use Biblys\Test\ModelFactory;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
@@ -85,6 +86,28 @@ class SpecialOfferEvaluatorTest extends TestCase
         // then
         $this->assertTrue($evaluation->amount->isMet);
         $this->assertTrue($evaluation->isMet());
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testEvaluateAmountConditionIgnoresIntangibleArticles()
+    {
+        // given
+        $specialOffer = ModelFactory::createSpecialOffer(
+            targetCollection: null, targetQuantity: null, targetAmount: 3000,
+        );
+        $cart = ModelFactory::createCart();
+        ModelFactory::createStockItem(cart: $cart, sellingPrice: 1000);
+        $downloadableArticle = ModelFactory::createArticle(typeId: ArticleType::EBOOK);
+        ModelFactory::createStockItem(article: $downloadableArticle, cart: $cart, sellingPrice: 5000);
+
+        // when
+        $evaluation = SpecialOfferEvaluator::evaluate($specialOffer, $cart);
+
+        // then
+        $this->assertEquals(1000, $evaluation->amount->current);
+        $this->assertFalse($evaluation->amount->isMet);
     }
 
     /**
