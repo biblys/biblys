@@ -21,6 +21,7 @@ namespace Biblys\Legacy;
 use ArticleManager;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\Images\ImagesService;
+use Biblys\Service\SpecialOffers\SpecialOfferEvaluator;
 use Biblys\Service\TemplateService;
 use DateTime;
 use Exception;
@@ -33,7 +34,6 @@ use Model\SpecialOffer;
 use Model\SpecialOfferQuery;
 use Model\Stock;
 use Model\StockQuery;
-use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
@@ -182,7 +182,7 @@ class CartHelpers
         UrlGenerator    $urlGenerator,
         ImagesService   $imagesService,
         TemplateService $templateService,
-        Cart            $cart
+        Cart            $cart,
     ): string
     {
         $specialOffers = SpecialOfferQuery::create()
@@ -217,11 +217,9 @@ class CartHelpers
         Cart            $cart,
     ): string
     {
-        $targetQuantity = $specialOffer->getTargetQuantity();
         $freeArticle = $specialOffer->getFreeArticle();
-        $targetCollection = $specialOffer->getTargetCollection();
 
-        if (!$targetCollection || !$freeArticle) {
+        if (!$freeArticle) {
             return "";
         }
 
@@ -233,37 +231,72 @@ class CartHelpers
             return "";
         }
 
-        $am = new ArticleManager();
+        $evaluation = SpecialOfferEvaluator::evaluate($specialOffer, $cart);
+        $conditionItems = [];
 
-        $copies = StockQuery::create()
-            ->filterByCart($cart)
-            ->filterByArticle($freeArticle, Criteria::NOT_EQUAL)
-            ->find();
+        if ($evaluation->quantity !== null) {
+            $targetCollection = $specialOffer->getTargetCollection();
+            $collectionUrl = $urlGenerator->generate(
+                "collection_show", ["slug" => $targetCollection->getUrl()]
+            );
+            $collectionLink = '<a href="' . $collectionUrl . '">' . $targetCollection->getName() . '</a>';
+            $target = $evaluation->quantity->target;
 
-        // Count copies in offer's collection
-        $copiesInCollection = array_reduce($copies->getArrayCopy(), function ($total, $copy) use ($targetCollection) {
-            /** @var Article $article */
-            $article = $copy->getArticle();
-
-            if ($article->getCollectionId() === $targetCollection->getId()) {
-                $total++;
+            if ($evaluation->quantity->isMet) {
+                $conditionItems[] = [
+                    "met" => true,
+                    "label" => $target . ' titre' . s($target) . ' de la collection ' .
+                        $collectionLink . ' acheté' . s($target),
+                ];
+            } else {
+                $missingItems = $target - $evaluation->quantity->current;
+                $conditionItems[] = [
+                    "met" => false,
+                    "label" => 'Ajoutez encore ' . $missingItems . ' titre' . s($missingItems) .
+                        ' de la collection ' . $collectionLink,
+                ];
             }
+        }
 
-            return $total;
-        }, 0);
+        if ($evaluation->amount !== null) {
+            $target = $evaluation->amount->target;
 
-        $missingItems = $targetQuantity - $copiesInCollection;
+            if ($evaluation->amount->isMet) {
+                $conditionItems[] = [
+                    "met" => true,
+                    "label" => currency($target / 100) . ' d’achat atteints',
+                ];
+            } else {
+                $missingAmount = $target - $evaluation->amount->current;
+                $conditionItems[] = [
+                    "met" => false,
+                    "label" => 'Ajoutez encore ' . currency($missingAmount / 100) .
+                        ' à votre panier <small>(minimum ' . currency($target / 100) . ')</small>',
+                ];
+            }
+        }
+
+        if (!$conditionItems) {
+            return "";
+        }
 
         /** @var \Article $freeArticleEntity */
+        $am = new ArticleManager();
         $freeArticleEntity = $am->getById($freeArticle->getId());
-        $sentence = '<span class="text-info"><span class="fa fa-plus-circle"></span> Ajoutez encore ' .
-            $missingItems . ' titre' . s($missingItems) . ' 
-            à votre panier pour en profiter.</span>';
+
+        $conditionsHtml = "";
+        foreach ($conditionItems as $conditionItem) {
+            $icon = $conditionItem["met"] ? "fa-check-circle" : "fa-plus-circle";
+            $class = $conditionItem["met"] ? "text-success" : "text-info";
+            $conditionsHtml .= '<li class="' . $class . '"><span class="fa ' . $icon . '"></span> ' .
+                $conditionItem["label"] . '</li>';
+        }
+
+        $statusLine = '';
         $cartButton = '<button class="btn btn-outline-secondary" disabled>Ajouter au panier</button>';
 
-
-        if ($missingItems <= 0) {
-            $sentence = '<span class="text-success"><span class="fa fa-check-circle"></span> Vous pouvez bénéficier de l’offre.</span>';
+        if ($evaluation->isMet()) {
+            $statusLine = '<span class="text-success"><span class="fa fa-check-circle"></span> Vous pouvez bénéficier de l’offre.</span>';
             $cartButtonUrl = $urlGenerator->generate(
                 "cart_add_article", ["articleId" => $freeArticle->getId()]
             );
@@ -276,7 +309,7 @@ class CartHelpers
             ->filterByCart($cart)->findOneByArticleId($freeArticle->getId());
         if ($freeArticleIsInCart) {
             $cartButton = "";
-            $sentence = '<span class="text-success"><span class="fa fa-check-circle"></span> Vous bénéficiez de l’offre.</span>';
+            $statusLine = '<span class="text-success"><span class="fa fa-check-circle"></span> Vous bénéficiez de l’offre.</span>';
         }
 
         $cover = null;
@@ -290,10 +323,6 @@ class CartHelpers
             );
         }
 
-        $collectionUrl = $urlGenerator->generate(
-            "collection_show", ["slug" => $targetCollection->getUrl()]
-        );
-
         return '
             <div class="SpecialOfferNotice">
                 <h2 class="SpecialOfferNotice-title">' . $specialOffer->getName() . '</h2>
@@ -302,18 +331,15 @@ class CartHelpers
                 </div>
                 <div class="SpecialOfferNotice-infos">
                     <p>
-                    
+
                         <a href="/' . $freeArticleEntity->get('url') . '">' . $freeArticleEntity->get('title') . '</a><br />
                         de ' . authors($freeArticleEntity->get('authors')) . '<br />
                         coll. ' . $freeArticleEntity->get('collection')->get('name') . ' ' . numero($freeArticleEntity->get('number')) . '<br />
                     </p>
                     <p>
-                        <strong>
-                            Offert pour ' . $targetQuantity . ' titre'.s($targetQuantity).' de la collection 
-                            <a href="' . $collectionUrl . '">' . $targetCollection->getName() . '</a> 
-                            acheté'.s($targetQuantity).'&nbsp;!<br />
-                            <small>' . $sentence . '</small>
-                        </strong>
+                        <strong>Offert si :</strong>
+                        <ul class="SpecialOfferNotice-conditions list-unstyled mb-2">' . $conditionsHtml . '</ul>
+                        <small>' . $statusLine . '</small>
                     </p>
                     ' . $cartButton . '
                 </div>

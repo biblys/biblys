@@ -25,6 +25,7 @@ use Biblys\Exception\OrderDetailsValidationException;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Mailer;
+use Biblys\Service\SpecialOffers\SpecialOfferEvaluator;
 use CountryManager;
 use Egulias\EmailValidator\EmailValidator;
 use Egulias\EmailValidator\Validation\DNSCheckValidation;
@@ -37,7 +38,6 @@ use Model\Cart;
 use Model\Order;
 use Model\OrderQuery;
 use Model\Page;
-use Model\SpecialOffer;
 use Model\SpecialOfferQuery;
 use Model\Stock;
 use Model\StockQuery;
@@ -443,38 +443,11 @@ class OrderDeliveryHelpers
                 throw new CartException("Un panier ne peut pas contenir plusieurs articles offerts");
             }
 
-            if (!self::_cartMeetsSpecialOfferConditions($cart, $specialOfferForArticle)) {
+            if (!SpecialOfferEvaluator::evaluate($specialOfferForArticle, $cart)->isMet()) {
                 throw new CartException(
                     "Votre panier ne remplit pas les conditions pour bénéficier de l'offre spéciale {$specialOfferForArticle->getName()}."
                 );
             }
         }
-    }
-
-    /**
-     * @throws PropelException
-     */
-    private static function _cartMeetsSpecialOfferConditions(
-        Cart         $cart,
-        SpecialOffer $specialOffer
-    ): bool
-    {
-        $cartItems = $cart->getStocks()->getArrayCopy();
-        $itemsInTargetCollectionCount = array_reduce($cartItems, function ($total, $copy) use ($specialOffer) {
-            /** @var Article $article */
-            $article = $copy->getArticle();
-
-            if ($article === $specialOffer->getFreeArticle()) {
-                return $total;
-            }
-
-            if ($article->getCollectionId() === $specialOffer->getTargetCollectionId()) {
-                $total++;
-            }
-
-            return $total;
-        }, 0);
-
-        return $itemsInTargetCollectionCount >= $specialOffer->getTargetQuantity();
     }
 }

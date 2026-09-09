@@ -902,7 +902,8 @@ class ModelFactory
         string          $name = "Offre spéciale",
         ?BookCollection $targetCollection = null,
         ?Article        $freeArticle = null,
-        int             $targetQuantity = 2,
+        ?int            $targetQuantity = 2,
+        ?int            $targetAmount = null,
         DateTime        $startDate = new DateTime("- 1 day"),
         DateTime        $endDate = new DateTime("+ 1 day"),
     ): SpecialOffer
@@ -910,8 +911,11 @@ class ModelFactory
         $specialOffer = new SpecialOffer();
         $specialOffer->setName($name);
         $specialOffer->setFreeArticle($freeArticle ?? ModelFactory::createArticle());
-        $specialOffer->setTargetCollection($targetCollection ?? self::createCollection());
-        $specialOffer->setTargetQuantity($targetQuantity);
+        if ($targetCollection !== null || $targetQuantity !== null) {
+            $specialOffer->setTargetCollection($targetCollection ?? self::createCollection());
+            $specialOffer->setTargetQuantity($targetQuantity ?? 2);
+        }
+        $specialOffer->setTargetAmount($targetAmount);
         $specialOffer->setStartDate($startDate);
         $specialOffer->setEndDate($endDate);
         $specialOffer->save();

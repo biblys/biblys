@@ -54,4 +54,24 @@ class SpecialOfferQueryTest extends TestCase
         $this->assertNotContains($offerStartingTomorrow, $activeOffers, "ignores future offers");
         $this->assertNotContains($offerEndedYesterday, $activeOffers, "ignores past offers");
     }
+
+    /**
+     * @throws PropelException
+     */
+    public function testTargetAmountIsPersistedAndReloaded()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $offer = ModelFactory::createSpecialOffer(
+            targetCollection: null, targetQuantity: null, targetAmount: 3000,
+        );
+
+        // when
+        $reloadedOffer = SpecialOfferQuery::create()->findPk($offer->getId());
+
+        // then
+        $this->assertEquals(3000, $reloadedOffer->getTargetAmount());
+        $this->assertNull($reloadedOffer->getTargetCollectionId());
+        $this->assertNull($reloadedOffer->getTargetQuantity());
+    }
 }

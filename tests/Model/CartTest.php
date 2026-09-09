@@ -136,4 +136,36 @@ class CartTest extends TestCase
         // then
         $this->assertTrue($contains);
     }
+
+    /**
+     * @throws PropelException
+     */
+    public function testGetSubtotalSumsSellingPricesOfStocksInCart()
+    {
+        // given
+        $cart = ModelFactory::createCart();
+        ModelFactory::createStockItem(cart: $cart, sellingPrice: 1000);
+        ModelFactory::createStockItem(cart: $cart, sellingPrice: 500);
+
+        // when
+        $subtotal = $cart->getSubtotal();
+
+        // then
+        $this->assertEquals(1500, $subtotal);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testGetSubtotalReturnsZeroForEmptyCart()
+    {
+        // given
+        $cart = ModelFactory::createCart();
+
+        // when
+        $subtotal = $cart->getSubtotal();
+
+        // then
+        $this->assertEquals(0, $subtotal);
+    }
 }

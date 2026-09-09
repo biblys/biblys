@@ -177,9 +177,9 @@ class CartHelpersTest extends TestCase
 
         // then
         $this->assertStringContainsString("Cékado", $notice);
-        $this->assertStringContainsString("Offert pour 2 titres de la", $notice);
         $this->assertStringContainsString("Collection cible", $notice);
-        $this->assertStringContainsString("Ajoutez encore 2 titres", $notice);
+        $this->assertStringContainsString('<li class="text-info">', $notice);
+        $this->assertStringContainsString("Ajoutez encore 2 titres de la collection", $notice);
         $this->assertStringContainsString(
             '<button class="btn btn-outline-secondary" disabled>Ajouter au panier</button>',
             $notice
@@ -278,8 +278,10 @@ class CartHelpersTest extends TestCase
 
         // then
         $this->assertStringContainsString("Cékado", $notice);
-        $this->assertStringContainsString("Offert pour 2 titres de la", $notice);
         $this->assertStringContainsString("Collection cible", $notice);
+        $this->assertStringContainsString('<li class="text-success">', $notice);
+        $this->assertStringContainsString("2 titres de la collection", $notice);
+        $this->assertStringContainsString("achetés", $notice);
         $this->assertStringContainsString("Vous pouvez bénéficier de l’offre.", $notice);
         $this->assertStringContainsString('<form method="post" action="/cart_url">', $notice);
         $this->assertStringContainsString(
@@ -331,5 +333,135 @@ class CartHelpersTest extends TestCase
         // then
         $this->assertStringNotContainsString('Ajouter au panier', $notice);
         $this->assertStringContainsString('Vous bénéficiez de l’offre', $notice);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testGetSpecialOfferNoticeForAmountConditionWhenNotMet()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $freeArticle = ModelFactory::createArticle(title: "Cékado");
+        ModelFactory::createSpecialOffer(
+            targetCollection: null, targetQuantity: null, targetAmount: 3000,
+            freeArticle: $freeArticle,
+        );
+
+        $cart = ModelFactory::createCart();
+        ModelFactory::createStockItem(cart: $cart, sellingPrice: 1000);
+
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $imageServices = Mockery::mock(ImagesService::class);
+        $imageServices->expects("imageExistsFor")->andReturn(true);
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService->expects("render");
+
+        // when
+        $notice = CartHelpers::getSpecialOffersNotice(
+            $currentSite,
+            $urlGenerator,
+            $imageServices,
+            $templateService,
+            $cart,
+        );
+
+        // then
+        $this->assertStringContainsString("Cékado", $notice);
+        $this->assertStringContainsString('<li class="text-info">', $notice);
+        $this->assertStringContainsString("Ajoutez encore 20,00&nbsp;&euro; à votre panier", $notice);
+        $this->assertStringContainsString("minimum 30,00&nbsp;&euro;", $notice);
+        $this->assertStringContainsString(
+            '<button class="btn btn-outline-secondary" disabled>Ajouter au panier</button>',
+            $notice
+        );
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testGetSpecialOfferNoticeForAmountConditionWhenMet()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $freeArticle = ModelFactory::createArticle(title: "Cékado");
+        ModelFactory::createSpecialOffer(
+            targetCollection: null, targetQuantity: null, targetAmount: 3000,
+            freeArticle: $freeArticle,
+        );
+
+        $cart = ModelFactory::createCart();
+        ModelFactory::createStockItem(cart: $cart, sellingPrice: 3000);
+
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->shouldReceive("generate")
+            ->with("cart_add_article", ["articleId" => $freeArticle->getId()])
+            ->andReturn("/cart_url");
+        $imageServices = Mockery::mock(ImagesService::class);
+        $imageServices->expects("imageExistsFor")->andReturn(true);
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService->expects("render");
+
+        // when
+        $notice = CartHelpers::getSpecialOffersNotice(
+            $currentSite,
+            $urlGenerator,
+            $imageServices,
+            $templateService,
+            $cart,
+        );
+
+        // then
+        $this->assertStringContainsString('<li class="text-success">', $notice);
+        $this->assertStringContainsString("30,00&nbsp;&euro; d’achat atteints", $notice);
+        $this->assertStringContainsString("Vous pouvez bénéficier de l’offre.", $notice);
+        $this->assertStringContainsString('<form method="post" action="/cart_url">', $notice);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testGetSpecialOfferNoticeForBothConditionsWhenOnlyAmountIsMet()
+    {
+        // given
+        $site = ModelFactory::createSite();
+        $targetCollection = ModelFactory::createCollection(name: "Collection cible");
+        $freeArticle = ModelFactory::createArticle(title: "Cékado", collection: $targetCollection);
+        ModelFactory::createSpecialOffer(
+            targetCollection: $targetCollection, targetQuantity: 2, targetAmount: 1000,
+            freeArticle: $freeArticle,
+        );
+
+        $cart = ModelFactory::createCart();
+        ModelFactory::createStockItem(cart: $cart, sellingPrice: 1000);
+
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->shouldReceive("generate");
+        $imageServices = Mockery::mock(ImagesService::class);
+        $imageServices->expects("imageExistsFor")->andReturn(true);
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService->expects("render");
+
+        // when
+        $notice = CartHelpers::getSpecialOffersNotice(
+            $currentSite,
+            $urlGenerator,
+            $imageServices,
+            $templateService,
+            $cart,
+        );
+
+        // then
+        $this->assertStringContainsString('<li class="text-success">', $notice, "amount condition is met");
+        $this->assertStringContainsString("10,00&nbsp;&euro; d’achat atteints", $notice);
+        $this->assertStringContainsString('<li class="text-info">', $notice, "quantity condition is not met");
+        $this->assertStringContainsString("Ajoutez encore 2 titres de la collection", $notice);
+        $this->assertStringContainsString(
+            '<button class="btn btn-outline-secondary" disabled>Ajouter au panier</button>',
+            $notice
+        );
     }
 }

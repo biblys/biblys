@@ -1386,11 +1386,12 @@
     </foreign-key>
     <column name="name" required="true" type="VARCHAR" size="128"/>
     <column name="description" type="LONGVARCHAR" />
-    <column name="target_collection_id" required="true" type="INTEGER"/>
+    <column name="target_collection_id" type="INTEGER"/>
     <foreign-key foreignTable="collections" phpName="TargetCollection" skipSql="true">
       <reference local="target_collection_id" foreign="collection_id"/>
     </foreign-key>
-    <column name="target_quantity" required="true" type="INTEGER"/>
+    <column name="target_quantity" type="INTEGER"/>
+    <column name="target_amount" type="INTEGER" sqlType="int unsigned"/>
     <column name="free_article_id" required="true" type="INTEGER"/>
     <foreign-key foreignTable="articles" phpName="FreeArticle" skipSql="true">
       <reference local="free_article_id" foreign="article_id"/>

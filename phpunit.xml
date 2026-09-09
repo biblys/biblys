@@ -1,0 +1,15 @@
+<phpunit bootstrap="tests/setUp.php"
+         displayDetailsOnTestsThatTriggerDeprecations="true"
+         failOnDeprecation="false"
+         failOnWarning="false">
+    <source>
+        <include>
+            <directory>src</directory>
+        </include>
+    </source>
+    <testsuites>
+        <testsuite name="default">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>
