@@ -808,6 +808,15 @@ special_offer_index:
   path: /offres-speciales/
   controller: AppBundle\Controller\SpecialOfferController::indexAction
 
+special_offer_new:
+  path: /admin/special-offers/new
+  controller: AppBundle\Controller\SpecialOfferController::newAction
+
+special_offer_create:
+  methods: POST
+  path: /admin/special-offers
+  controller: AppBundle\Controller\SpecialOfferController::createAction
+
 special_offer_edit:
   path: /admin/special-offers/{id}/edit
   controller: AppBundle\Controller\SpecialOfferController::editAction

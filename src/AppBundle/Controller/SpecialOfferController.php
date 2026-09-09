@@ -26,6 +26,7 @@ use Framework\Controller;
 use Model\Article;
 use Model\ArticleQuery;
 use Model\BookCollectionQuery;
+use Model\SpecialOffer;
 use Model\SpecialOfferQuery;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -61,6 +62,66 @@ class SpecialOfferController extends Controller
         return $templateService->renderResponse('AppBundle:SpecialOffer:index.html.twig', [
             'offers' => $offers->getArrayCopy(),
         ], isPrivate: true);
+    }
+
+    /**
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws Exception
+     */
+    public function newAction(
+        CurrentUser $currentUser,
+        TemplateService $templateService,
+    ): Response
+    {
+        $currentUser->authAdmin();
+
+        $collections = BookCollectionQuery::create()
+            ->orderByName()
+            ->find();
+
+        return $templateService->renderResponse(
+            "AppBundle:SpecialOffer:new.html.twig", [
+                "offer" => new SpecialOffer(),
+                "collections" => $collections->getArrayCopy(),
+        ], isPrivate: true);
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function createAction(
+        Request $request,
+        CurrentUser $currentUser,
+        Session $session,
+        UrlGenerator $urlGenerator,
+    ): RedirectResponse
+    {
+        $currentUser->authAdmin();
+
+        $offer = new SpecialOffer();
+
+        $fieldsWereApplied = $this->applyOfferFieldsFromRequest($offer, $request);
+        if (!$fieldsWereApplied) {
+            $session->getFlashBag()->add(
+                "error",
+                "Vous devez activer au moins une condition (montant ou quantité)."
+            );
+            $newUrl = $urlGenerator->generate("special_offer_new");
+            return new RedirectResponse($newUrl);
+        }
+
+        $offer->save();
+
+        $session->getFlashBag()->add(
+            "success",
+            "Offre spéciale « {$offer->getName()} » créée avec succès"
+        );
+        $editUrl = $urlGenerator->generate("special_offer_edit", ["id" => $offer->getId()]);
+        return new RedirectResponse($editUrl);
     }
 
     /**
@@ -118,16 +179,33 @@ class SpecialOfferController extends Controller
             throw new NotFoundHttpException("Special offer not found");
         }
 
-        $targetAmountEnabled = (bool) $request->request->get("target_amount_enabled");
-        $targetQuantityEnabled = (bool) $request->request->get("target_quantity_enabled");
-
-        if (!$targetAmountEnabled && !$targetQuantityEnabled) {
+        $fieldsWereApplied = $this->applyOfferFieldsFromRequest($offer, $request);
+        if (!$fieldsWereApplied) {
             $session->getFlashBag()->add(
                 "error",
                 "Vous devez activer au moins une condition (montant ou quantité)."
             );
             $editUrl = $urlGenerator->generate("special_offer_edit", ["id" => $offer->getId()]);
             return new RedirectResponse($editUrl);
+        }
+
+        $offer->save();
+
+        $session->getFlashBag()->add(
+            "success",
+            "Offre spéciale « {$offer->getName()} » mise à jour avec succès"
+        );
+        $indexUrl = $urlGenerator->generate("special_offer_edit", ["id" => $offer->getId()]);
+        return new RedirectResponse($indexUrl);
+    }
+
+    private function applyOfferFieldsFromRequest(SpecialOffer $offer, Request $request): bool
+    {
+        $targetAmountEnabled = (bool) $request->request->get("target_amount_enabled");
+        $targetQuantityEnabled = (bool) $request->request->get("target_quantity_enabled");
+
+        if (!$targetAmountEnabled && !$targetQuantityEnabled) {
+            return false;
         }
 
         $offer->setName($request->request->get("name"));
@@ -140,13 +218,7 @@ class SpecialOfferController extends Controller
         $offer->setTargetQuantity($targetQuantityEnabled ? (int) $request->request->get("target_quantity") : null);
         $offer->setTargetCollectionId($targetQuantityEnabled ? (int) $request->request->get("target_collection_id") : null);
         $offer->setFreeArticleId($request->request->get("free_article_id"));
-        $offer->save();
 
-        $session->getFlashBag()->add(
-            "success",
-            "Offre spéciale « {$offer->getName()} » mise à jour avec succès"
-        );
-        $indexUrl = $urlGenerator->generate("special_offer_edit", ["id" => $offer->getId()]);
-        return new RedirectResponse($indexUrl);
+        return true;
     }
 }

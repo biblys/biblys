@@ -17,47 +17,17 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 {% extends "layout:admin.html.twig" %}
 
 {% block title %}
-  Offres spéciales
+  Créer une offre spéciale
 {% endblock %}
 
 {% block main %}
-  <h1>
+  <a href="{{ path('special_offer_index') }}">
     <span class="fa-solid fa-certificate"></span>
     Offres spéciales
-  </h1>
-
-  <a href="{{ path('special_offer_new') }}" class="btn btn-primary">
-    <i class="fa-solid fa-plus-square"></i> Créer
   </a>
 
-  <table class="table mt-4">
-    <thead>
-    <tr>
-      <th>Offre</th>
-      <th>Début</th>
-      <th>Fin</th>
-      <th></th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for offer in offers %}
-      <tr>
-        <td>
-          <a href="{{ path('special_offer_edit', { id: offer.id }) }}">
-            {{ offer.name }}
-          </a>
-        </td>
-        <td>{{ offer.startDate|date('d/m/Y') }}</td>
-        <td>{{ offer.endDate|date('d/m/Y') }}</td>
-      </tr>
-    {% else %}
-      <tr>
-        <td colspan="4">
-          Aucune offre spéciale
-        </td>
-      </tr>
-    {% endfor %}
-    </tbody>
-  </table>
+  <h1>Créer une offre spéciale</h1>
+
+  {% include "AppBundle:SpecialOffer:_form.html.twig" %}
 
 {% endblock %}
