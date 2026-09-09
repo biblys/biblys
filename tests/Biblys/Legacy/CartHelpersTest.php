@@ -64,7 +64,6 @@ class CartHelpersTest extends TestCase
             $imageServices,
             $templateService,
             ModelFactory::createCart(),
-            0,
         );
 
         // then
@@ -100,7 +99,6 @@ class CartHelpersTest extends TestCase
             $imageServices,
             $templateService,
             ModelFactory::createCart(),
-            0,
         );
 
         // then
@@ -136,7 +134,6 @@ class CartHelpersTest extends TestCase
             $imageServices,
             $templateService,
             ModelFactory::createCart(),
-            0,
         );
 
         // then
@@ -176,7 +173,6 @@ class CartHelpersTest extends TestCase
             $imageServices,
             $templateService,
             $cart,
-            0,
         );
 
         // then
@@ -231,7 +227,6 @@ class CartHelpersTest extends TestCase
             $imageServices,
             $templateService,
             $cart,
-            0,
         );
 
         // then
@@ -279,7 +274,6 @@ class CartHelpersTest extends TestCase
             $imageServices,
             $templateService,
             $cart,
-            0,
         );
 
         // then
@@ -334,7 +328,6 @@ class CartHelpersTest extends TestCase
             $imageServices,
             $templateService,
             $cart,
-            0,
         );
 
         // then
@@ -356,6 +349,7 @@ class CartHelpersTest extends TestCase
         );
 
         $cart = ModelFactory::createCart();
+        ModelFactory::createStockItem(cart: $cart, sellingPrice: 1000);
 
         $currentSite = Mockery::mock(CurrentSite::class);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
@@ -371,7 +365,6 @@ class CartHelpersTest extends TestCase
             $imageServices,
             $templateService,
             $cart,
-            1000,
         );
 
         // then
@@ -399,6 +392,7 @@ class CartHelpersTest extends TestCase
         );
 
         $cart = ModelFactory::createCart();
+        ModelFactory::createStockItem(cart: $cart, sellingPrice: 3000);
 
         $currentSite = Mockery::mock(CurrentSite::class);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
@@ -417,7 +411,6 @@ class CartHelpersTest extends TestCase
             $imageServices,
             $templateService,
             $cart,
-            3000,
         );
 
         // then
@@ -442,6 +435,7 @@ class CartHelpersTest extends TestCase
         );
 
         $cart = ModelFactory::createCart();
+        ModelFactory::createStockItem(cart: $cart, sellingPrice: 1000);
 
         $currentSite = Mockery::mock(CurrentSite::class);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
@@ -458,7 +452,6 @@ class CartHelpersTest extends TestCase
             $imageServices,
             $templateService,
             $cart,
-            1000,
         );
 
         // then

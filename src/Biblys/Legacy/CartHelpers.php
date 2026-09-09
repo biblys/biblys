@@ -21,6 +21,7 @@ namespace Biblys\Legacy;
 use ArticleManager;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\Images\ImagesService;
+use Biblys\Service\SpecialOffers\SpecialOfferEvaluator;
 use Biblys\Service\TemplateService;
 use DateTime;
 use Exception;
@@ -33,7 +34,6 @@ use Model\SpecialOffer;
 use Model\SpecialOfferQuery;
 use Model\Stock;
 use Model\StockQuery;
-use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
@@ -183,7 +183,6 @@ class CartHelpers
         ImagesService   $imagesService,
         TemplateService $templateService,
         Cart            $cart,
-        int             $cartTotal,
     ): string
     {
         $specialOffers = SpecialOfferQuery::create()
@@ -201,7 +200,6 @@ class CartHelpers
                 $imagesService,
                 $templateService,
                 $cart,
-                $cartTotal,
             );
         }
 
@@ -217,7 +215,6 @@ class CartHelpers
         ImagesService   $imagesService,
         TemplateService $templateService,
         Cart            $cart,
-        int             $cartTotal,
     ): string
     {
         $freeArticle = $specialOffer->getFreeArticle();
@@ -234,45 +231,25 @@ class CartHelpers
             return "";
         }
 
-        $conditionsAreMet = true;
+        $evaluation = SpecialOfferEvaluator::evaluate($specialOffer, $cart);
         $conditionItems = [];
 
-        $targetQuantity = $specialOffer->getTargetQuantity();
-        $targetCollection = $specialOffer->getTargetCollection();
-        if ($targetQuantity !== null && $targetCollection !== null) {
-            $copies = StockQuery::create()
-                ->filterByCart($cart)
-                ->filterByArticle($freeArticle, Criteria::NOT_EQUAL)
-                ->find();
-
-            // Count copies in offer's collection
-            $copiesInCollection = array_reduce($copies->getArrayCopy(), function ($total, $copy) use ($targetCollection) {
-                /** @var Article $article */
-                $article = $copy->getArticle();
-
-                if ($article->getCollectionId() === $targetCollection->getId()) {
-                    $total++;
-                }
-
-                return $total;
-            }, 0);
-
-            $missingItems = $targetQuantity - $copiesInCollection;
-            $quantityConditionIsMet = $missingItems <= 0;
-
+        if ($evaluation->quantity !== null) {
+            $targetCollection = $specialOffer->getTargetCollection();
             $collectionUrl = $urlGenerator->generate(
                 "collection_show", ["slug" => $targetCollection->getUrl()]
             );
             $collectionLink = '<a href="' . $collectionUrl . '">' . $targetCollection->getName() . '</a>';
+            $target = $evaluation->quantity->target;
 
-            if ($quantityConditionIsMet) {
+            if ($evaluation->quantity->isMet) {
                 $conditionItems[] = [
                     "met" => true,
-                    "label" => $targetQuantity . ' titre' . s($targetQuantity) . ' de la collection ' .
-                        $collectionLink . ' acheté' . s($targetQuantity),
+                    "label" => $target . ' titre' . s($target) . ' de la collection ' .
+                        $collectionLink . ' acheté' . s($target),
                 ];
             } else {
-                $conditionsAreMet = false;
+                $missingItems = $target - $evaluation->quantity->current;
                 $conditionItems[] = [
                     "met" => false,
                     "label" => 'Ajoutez encore ' . $missingItems . ' titre' . s($missingItems) .
@@ -281,22 +258,20 @@ class CartHelpers
             }
         }
 
-        $targetAmount = $specialOffer->getTargetAmount();
-        if ($targetAmount !== null) {
-            $missingAmount = $targetAmount - $cartTotal;
-            $amountConditionIsMet = $missingAmount <= 0;
+        if ($evaluation->amount !== null) {
+            $target = $evaluation->amount->target;
 
-            if ($amountConditionIsMet) {
+            if ($evaluation->amount->isMet) {
                 $conditionItems[] = [
                     "met" => true,
-                    "label" => currency($targetAmount / 100) . ' d’achat atteints',
+                    "label" => currency($target / 100) . ' d’achat atteints',
                 ];
             } else {
-                $conditionsAreMet = false;
+                $missingAmount = $target - $evaluation->amount->current;
                 $conditionItems[] = [
                     "met" => false,
                     "label" => 'Ajoutez encore ' . currency($missingAmount / 100) .
-                        ' à votre panier <small>(minimum ' . currency($targetAmount / 100) . ')</small>',
+                        ' à votre panier <small>(minimum ' . currency($target / 100) . ')</small>',
                 ];
             }
         }
@@ -320,7 +295,7 @@ class CartHelpers
         $statusLine = '';
         $cartButton = '<button class="btn btn-outline-secondary" disabled>Ajouter au panier</button>';
 
-        if ($conditionsAreMet) {
+        if ($evaluation->isMet()) {
             $statusLine = '<span class="text-success"><span class="fa fa-check-circle"></span> Vous pouvez bénéficier de l’offre.</span>';
             $cartButtonUrl = $urlGenerator->generate(
                 "cart_add_article", ["articleId" => $freeArticle->getId()]

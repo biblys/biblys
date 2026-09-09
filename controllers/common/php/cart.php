@@ -377,7 +377,6 @@ return function (
             $imagesService,
             $templateService,
             $cart,
-            $Total
         );
 
         // Pre-order books
