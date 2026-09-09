@@ -280,6 +280,13 @@ class CartHelpers
             return "";
         }
 
+        $amountConditionNote = "";
+        if ($evaluation->amount !== null) {
+            $amountConditionNote = '<p class="SpecialOfferNotice-note"><small>' .
+                'Seuls les articles nécessitant une expédition comptent dans ce montant.' .
+                '</small></p>';
+        }
+
         /** @var \Article $freeArticleEntity */
         $am = new ArticleManager();
         $freeArticleEntity = $am->getById($freeArticle->getId());
@@ -339,6 +346,7 @@ class CartHelpers
                     <p>
                         <strong>Offert si :</strong>
                         <ul class="SpecialOfferNotice-conditions list-unstyled mb-2">' . $conditionsHtml . '</ul>
+                        ' . $amountConditionNote . '
                         <small>' . $statusLine . '</small>
                     </p>
                     ' . $cartButton . '
