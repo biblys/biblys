@@ -10,6 +10,8 @@
 - Une offre spéciale peut désormais exiger un montant minimum de panier (hors
   frais de port), en plus ou à la place de la condition de quantité minimum
   dans une collection.
+- Une nouvelle offre spéciale peut désormais être créée directement depuis
+  l'interface d'administration.
 
 ## 3.16.2 (9 septembre 2026)
 
