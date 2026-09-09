@@ -13,6 +13,8 @@
   plus facturé au prix d'un ancien exemplaire abandonné dans un panier ; un
   nouvel exemplaire au prix courant de l'article est désormais créé à chaque
   ajout au panier, et supprimé lors du retrait du panier.
+- Dans la liste "Autres paniers" de la page de caisse, un panier sans titre
+  affiche désormais "Panier n° {id}" au lieu d'un lien vide.
 
 ## 3.16.1 (2 septembre 2026)
 
