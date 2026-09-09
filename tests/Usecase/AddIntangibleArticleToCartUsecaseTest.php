@@ -135,21 +135,24 @@ class AddIntangibleArticleToCartUsecaseTest extends TestCase
      * @throws BusinessRuleException
      * @throws PropelException
      */
-    public function testUsecaseAddsExistingStockItemToCart()
+    public function testUsecaseCreatesANewStockItemEvenIfAnUnclaimedOneAlreadyExists()
     {
         // given
         $usecase = new AddIntangibleArticleToCartUsecase();
 
-        $article = ModelFactory::createArticle(typeId: ArticleType::EBOOK);
-        $item = ModelFactory::createStockItem(article: $article, user: null, cart: null, order: null, sellingPrice: 1000);
+        $article = ModelFactory::createArticle(price: 1000, typeId: ArticleType::EBOOK);
+        $staleItem = ModelFactory::createStockItem(article: $article, user: null, cart: null, order: null, sellingPrice: 48000);
         $cart = ModelFactory::createCart();
 
         // when
         $usecase->execute($article, $cart);
 
         // then
-        $this->assertEquals($item->getCart(), $cart);
-        $this->assertNotNull($item->getCartDate());
+        $staleItem->reload();
+        $this->assertNull(
+            $staleItem->getCart(),
+            "the stale stock item should not be reused, whatever its price"
+        );
         $this->assertEquals(1, $cart->getCount());
         $this->assertEquals(1000, $cart->getAmount());
     }
@@ -180,6 +183,28 @@ class AddIntangibleArticleToCartUsecaseTest extends TestCase
         $this->assertNotNull($itemInCart);
         $this->assertEquals(1, $cart->getCount());
         $this->assertEquals(1000, $cart->getAmount());
+    }
+
+    /**
+     * @throws BusinessRuleException
+     * @throws PropelException
+     */
+    public function testUsecaseTagsStockItemWithRewardWhenProvided()
+    {
+        // given
+        $usecase = new AddIntangibleArticleToCartUsecase();
+
+        $article = ModelFactory::createArticle(price: 1000, typeId: ArticleType::EBOOK);
+        $cart = ModelFactory::createCart();
+        $reward = ModelFactory::createCrowdfundingReward();
+
+        // when
+        $usecase->execute($article, $cart, $reward);
+
+        // then
+        $itemInCart = StockQuery::create()->filterByCart($cart)->findOne();
+        $this->assertEquals($reward->getId(), $itemInCart->getRewardId());
+        $this->assertEquals($reward->getCampaignId(), $itemInCart->getCampaignId());
     }
 
     /**
