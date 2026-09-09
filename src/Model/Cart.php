@@ -98,4 +98,25 @@ class Cart extends BaseCart
             return $total + $stock->getSellingPrice();
         }, 0);
     }
+
+    /**
+     * @throws PropelException
+     */
+    public function getTangibleSubtotal(): int
+    {
+        $physicalTypes = ArticleType::getAllPhysicalTypes();
+        $physicalTypeIds = array_map(function ($type) {
+            return $type->getId();
+        }, $physicalTypes);
+        $stocks = StockQuery::create()
+            ->filterByCart($this)
+            ->useArticleQuery()
+            ->filterByTypeId($physicalTypeIds)
+            ->endUse()
+            ->find();
+
+        return array_reduce($stocks->getArrayCopy(), function (int $total, Stock $stock) {
+            return $total + $stock->getSellingPrice();
+        }, 0);
+    }
 }

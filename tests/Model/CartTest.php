@@ -168,4 +168,40 @@ class CartTest extends TestCase
         // then
         $this->assertEquals(0, $subtotal);
     }
+
+    /**
+     * @throws PropelException
+     */
+    public function testGetTangibleSubtotalSumsSellingPricesOfPhysicalStocksOnly()
+    {
+        // given
+        $cart = ModelFactory::createCart();
+        $physicalArticle = ModelFactory::createArticle();
+        ModelFactory::createStockItem(article: $physicalArticle, user: null, cart: $cart, sellingPrice: 1000);
+        $downloadableArticle = ModelFactory::createArticle(typeId: ArticleType::EBOOK);
+        ModelFactory::createStockItem(article: $downloadableArticle, user: null, cart: $cart, sellingPrice: 500);
+
+        // when
+        $subtotal = $cart->getTangibleSubtotal();
+
+        // then
+        $this->assertEquals(1000, $subtotal);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testGetTangibleSubtotalReturnsZeroForCartWithoutPhysicalArticles()
+    {
+        // given
+        $cart = ModelFactory::createCart();
+        $downloadableArticle = ModelFactory::createArticle(typeId: ArticleType::EBOOK);
+        ModelFactory::createStockItem(article: $downloadableArticle, user: null, cart: $cart, sellingPrice: 500);
+
+        // when
+        $subtotal = $cart->getTangibleSubtotal();
+
+        // then
+        $this->assertEquals(0, $subtotal);
+    }
 }
