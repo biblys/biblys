@@ -41,7 +41,7 @@ class MetaTagsService
     public function setDescription(string $description): void
     {
         $this->writer->append(Opengraph::OG_DESCRIPTION, $description);
-        $this->writer->append("description", $description);
+        MetaTagsService::$tags[] = "<meta name=\"description\" content=\"$description\" />";
     }
 
     public function setImage(string $url): void
