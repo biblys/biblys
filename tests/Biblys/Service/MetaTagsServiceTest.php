@@ -19,7 +19,6 @@
 namespace Biblys\Service;
 
 use Biblys\Test\ModelFactory;
-use Mockery;
 use Opengraph\Writer;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
@@ -83,16 +82,21 @@ class MetaTagsServiceTest extends TestCase
         $site = ModelFactory::createSite(domain: "example.org");
         $currentSite = new CurrentSite($site);
 
-        $writer = Mockery::mock(Writer::class);
-        $writer->shouldReceive("append")->with("og:description", "This is a description");
-        $writer->shouldReceive("append")->with("description", "This is a description");
+        $writer = $this->createMock(Writer::class);
+        $writer->expects($this->once())
+            ->method("append")
+            ->with($this->equalTo("og:description"), $this->equalTo("This is a description"));
+        $writer->method("render")->willReturn("");
         $metaTagsService = new MetaTagsService($writer, $currentSite);
 
         // when
         $metaTagsService->setDescription("This is a description");
 
         // then
-        $this->assertTrue(true);
+        $this->assertStringContainsString(
+            '<meta name="description" content="This is a description" />',
+            $metaTagsService->dump()
+        );
     }
 
     /**

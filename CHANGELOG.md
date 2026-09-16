@@ -13,6 +13,15 @@
 - Une nouvelle offre spéciale peut désormais être créée directement depuis
   l'interface d'administration.
 
+## 3.16.3 (11 septembre 2026)
+
+### Corrections
+
+- La meta description générée dynamiquement par page (article, billet de
+  blog, campagne...) est désormais rendue avec la syntaxe HTML attendue par
+  les moteurs de recherche (`<meta name="description">` au lieu de
+  `<meta property="description">`), qui l'ignoraient jusqu'ici.
+
 ## 3.16.2 (9 septembre 2026)
 
 ### Corrections
