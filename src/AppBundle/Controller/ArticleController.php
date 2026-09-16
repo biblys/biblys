@@ -36,6 +36,7 @@ use Biblys\Service\MailingList\MailingListService;
 use Biblys\Service\MetaTagsService;
 use Biblys\Service\Pagination;
 use Biblys\Service\QueryParamsService;
+use Biblys\Service\Seo\ArticleStructuredDataBuilder;
 use Biblys\Service\Slug\SlugService;
 use Biblys\Service\TemplateService;
 use Biblys\Service\Watermarking\WatermarkingService;
@@ -118,6 +119,15 @@ class ArticleController extends Controller
         // Meta tags
         $metaTags->setTitle($articleModel->getTitle());
         $metaTags->setUrl($urlGenerator->generate("article_show", ["slug" => $articleModel->getUrl()]));
+
+        $structuredDataBuilder = new ArticleStructuredDataBuilder();
+        $structuredDataImageUrl = $imagesService->imageExistsFor($articleModel)
+            ? $imagesService->getImageUrlFor($articleModel)
+            : null;
+        $structuredData = $structuredDataBuilder->build($article, $structuredDataImageUrl, $currentSiteService);
+        if ($structuredData !== []) {
+            $metaTags->setStructuredData($structuredData);
+        }
 
         $summary = $article->get('summary') ?: "";
         $opengraphTags = [
