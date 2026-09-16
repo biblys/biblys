@@ -20,6 +20,8 @@ namespace Biblys\Service\Seo;
 
 use Article;
 use Biblys\Data\ArticleType;
+use Biblys\Isbn\Isbn;
+use Biblys\Isbn\IsbnParsingException;
 use Biblys\Service\CurrentSite;
 
 class ArticleStructuredDataBuilder
@@ -59,6 +61,32 @@ class ArticleStructuredDataBuilder
                 "@type" => "Brand",
                 "name" => $publisher->get("name"),
             ];
+        }
+
+        if ($isBook) {
+            $authors = $article->get("authors");
+            if ($authors) {
+                $data["author"] = $authors;
+            }
+
+            if ($article->has("ean")) {
+                try {
+                    $data["isbn"] = Isbn::convertToIsbn13($article->get("ean"));
+                } catch (IsbnParsingException) {
+                    // EAN is not a valid ISBN, omit the field
+                }
+            }
+
+            if ($type->getId() === ArticleType::EBOOK) {
+                $data["bookFormat"] = "https://schema.org/EBook";
+            } elseif ($type->getId() === ArticleType::EAUDIOBOOK) {
+                $data["bookFormat"] = "https://schema.org/AudiobookFormat";
+            }
+        } else {
+            $ean = $article->get("ean");
+            if ($ean && preg_match('/^\d{13}$/', $ean)) {
+                $data["gtin13"] = $ean;
+            }
         }
 
         return $data;

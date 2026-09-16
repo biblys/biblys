@@ -73,4 +73,95 @@ class ArticleStructuredDataBuilderTest extends TestCase
         // then
         $this->assertEquals([], $data);
     }
+
+    /**
+     * @throws PropelException
+     */
+    public function testBuildAddsBookFieldsForABook()
+    {
+        // given
+        $contributor = ModelFactory::createContributor(firstName: "Jean", lastName: "Dupont");
+        $propelArticle = ModelFactory::createArticle(
+            title: "Citoyens de demain",
+            authors: [$contributor],
+            ean: "9782070368228",
+            typeId: ArticleType::BOOK,
+        );
+        $article = (new ArticleManager())->getById($propelArticle->getId());
+        $currentSite = $this->createMock(CurrentSite::class);
+        $builder = new ArticleStructuredDataBuilder();
+
+        // when
+        $data = $builder->build($article, null, $currentSite);
+
+        // then
+        $this->assertEquals(["Product", "Book"], $data["@type"]);
+        $this->assertEquals("Jean Dupont", $data["author"]);
+        $this->assertEquals("978-2-07-036822-8", $data["isbn"]);
+        $this->assertArrayNotHasKey("bookFormat", $data);
+        $this->assertArrayNotHasKey("gtin13", $data);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testBuildSetsBookFormatForEbookAndAudiobook()
+    {
+        // given
+        $ebook = (new ArticleManager())->getById(
+            ModelFactory::createArticle(typeId: ArticleType::EBOOK, ean: "9782070368228")->getId()
+        );
+        $audiobook = (new ArticleManager())->getById(
+            ModelFactory::createArticle(typeId: ArticleType::EAUDIOBOOK, ean: "9782070368228")->getId()
+        );
+        $currentSite = $this->createMock(CurrentSite::class);
+        $builder = new ArticleStructuredDataBuilder();
+
+        // when
+        $ebookData = $builder->build($ebook, null, $currentSite);
+        $audiobookData = $builder->build($audiobook, null, $currentSite);
+
+        // then
+        $this->assertEquals("https://schema.org/EBook", $ebookData["bookFormat"]);
+        $this->assertEquals("https://schema.org/AudiobookFormat", $audiobookData["bookFormat"]);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testBuildUsesGtin13ForNonBookTypes()
+    {
+        // given
+        $propelArticle = ModelFactory::createArticle(typeId: ArticleType::CD, ean: "3700123456789");
+        $article = (new ArticleManager())->getById($propelArticle->getId());
+        $currentSite = $this->createMock(CurrentSite::class);
+        $builder = new ArticleStructuredDataBuilder();
+
+        // when
+        $data = $builder->build($article, null, $currentSite);
+
+        // then
+        $this->assertEquals("Product", $data["@type"]);
+        $this->assertEquals("3700123456789", $data["gtin13"]);
+        $this->assertArrayNotHasKey("isbn", $data);
+        $this->assertArrayNotHasKey("author", $data);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testBuildOmitsGtin13WhenEanIsNotThirteenDigits()
+    {
+        // given
+        $propelArticle = ModelFactory::createArticle(typeId: ArticleType::GOODIES, ean: "ABC123");
+        $article = (new ArticleManager())->getById($propelArticle->getId());
+        $currentSite = $this->createMock(CurrentSite::class);
+        $builder = new ArticleStructuredDataBuilder();
+
+        // when
+        $data = $builder->build($article, null, $currentSite);
+
+        // then
+        $this->assertArrayNotHasKey("gtin13", $data);
+    }
 }
