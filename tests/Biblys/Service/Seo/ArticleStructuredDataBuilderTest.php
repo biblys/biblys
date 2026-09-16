@@ -18,12 +18,13 @@
 
 namespace Biblys\Service\Seo;
 
-use ArticleManager;
 use Biblys\Data\ArticleType;
 use Biblys\Service\CurrentSite;
 use Biblys\Test\ModelFactory;
+use DateTime;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
+use Repository\StockRepository;
 
 require_once __DIR__ . "/../../../setUp.php";
 
@@ -32,29 +33,18 @@ class ArticleStructuredDataBuilderTest extends TestCase
     /**
      * @throws PropelException
      */
-    public function setUp(): void
-    {
-        // ArticleManager::getById() resolves the legacy global site (config "site" id),
-        // which must exist in the database before any legacy Article is fetched.
-        ModelFactory::createSite();
-    }
-
-    /**
-     * @throws PropelException
-     */
     public function testBuildReturnsProductFieldsForABook()
     {
         // given
         $publisher = ModelFactory::createPublisher(name: "Éditions Paronymie");
-        $propelArticle = ModelFactory::createArticle(
+        $article = ModelFactory::createArticle(
             title: "Citoyens de demain",
             typeId: ArticleType::BOOK,
             publisher: $publisher,
             summary: "<p>Un roman <strong>essentiel</strong>.</p>",
         );
-        $article = (new ArticleManager())->getById($propelArticle->getId());
         $currentSite = $this->createMock(CurrentSite::class);
-        $builder = new ArticleStructuredDataBuilder();
+        $builder = new ArticleStructuredDataBuilder(new StockRepository());
 
         // when
         $data = $builder->build($article, "/images/cover.jpg", $currentSite);
@@ -72,10 +62,9 @@ class ArticleStructuredDataBuilderTest extends TestCase
     public function testBuildReturnsEmptyArrayForSubscription()
     {
         // given
-        $propelArticle = ModelFactory::createArticle(typeId: ArticleType::SUBSCRIPTION);
-        $article = (new ArticleManager())->getById($propelArticle->getId());
+        $article = ModelFactory::createArticle(typeId: ArticleType::SUBSCRIPTION);
         $currentSite = $this->createMock(CurrentSite::class);
-        $builder = new ArticleStructuredDataBuilder();
+        $builder = new ArticleStructuredDataBuilder(new StockRepository());
 
         // when
         $data = $builder->build($article, null, $currentSite);
@@ -91,15 +80,14 @@ class ArticleStructuredDataBuilderTest extends TestCase
     {
         // given
         $contributor = ModelFactory::createContributor(firstName: "Jean", lastName: "Dupont");
-        $propelArticle = ModelFactory::createArticle(
+        $article = ModelFactory::createArticle(
             title: "Citoyens de demain",
             authors: [$contributor],
             ean: "9782070368228",
             typeId: ArticleType::BOOK,
         );
-        $article = (new ArticleManager())->getById($propelArticle->getId());
         $currentSite = $this->createMock(CurrentSite::class);
-        $builder = new ArticleStructuredDataBuilder();
+        $builder = new ArticleStructuredDataBuilder(new StockRepository());
 
         // when
         $data = $builder->build($article, null, $currentSite);
@@ -118,14 +106,10 @@ class ArticleStructuredDataBuilderTest extends TestCase
     public function testBuildSetsBookFormatForEbookAndAudiobook()
     {
         // given
-        $ebook = (new ArticleManager())->getById(
-            ModelFactory::createArticle(typeId: ArticleType::EBOOK, ean: "9782070368228")->getId()
-        );
-        $audiobook = (new ArticleManager())->getById(
-            ModelFactory::createArticle(typeId: ArticleType::EAUDIOBOOK, ean: "9782070368228")->getId()
-        );
+        $ebook = ModelFactory::createArticle(typeId: ArticleType::EBOOK, ean: "9782070368228");
+        $audiobook = ModelFactory::createArticle(typeId: ArticleType::EAUDIOBOOK, ean: "9782070368228");
         $currentSite = $this->createMock(CurrentSite::class);
-        $builder = new ArticleStructuredDataBuilder();
+        $builder = new ArticleStructuredDataBuilder(new StockRepository());
 
         // when
         $ebookData = $builder->build($ebook, null, $currentSite);
@@ -142,10 +126,9 @@ class ArticleStructuredDataBuilderTest extends TestCase
     public function testBuildUsesGtin13ForNonBookTypes()
     {
         // given
-        $propelArticle = ModelFactory::createArticle(typeId: ArticleType::CD, ean: "3700123456789");
-        $article = (new ArticleManager())->getById($propelArticle->getId());
+        $article = ModelFactory::createArticle(typeId: ArticleType::CD, ean: "3700123456789");
         $currentSite = $this->createMock(CurrentSite::class);
-        $builder = new ArticleStructuredDataBuilder();
+        $builder = new ArticleStructuredDataBuilder(new StockRepository());
 
         // when
         $data = $builder->build($article, null, $currentSite);
@@ -163,10 +146,9 @@ class ArticleStructuredDataBuilderTest extends TestCase
     public function testBuildOmitsGtin13WhenEanIsNotThirteenDigits()
     {
         // given
-        $propelArticle = ModelFactory::createArticle(typeId: ArticleType::GOODIES, ean: "ABC123");
-        $article = (new ArticleManager())->getById($propelArticle->getId());
+        $article = ModelFactory::createArticle(typeId: ArticleType::GOODIES, ean: "ABC123");
         $currentSite = $this->createMock(CurrentSite::class);
-        $builder = new ArticleStructuredDataBuilder();
+        $builder = new ArticleStructuredDataBuilder(new StockRepository());
 
         // when
         $data = $builder->build($article, null, $currentSite);
@@ -181,14 +163,13 @@ class ArticleStructuredDataBuilderTest extends TestCase
     public function testBuildAddsSimpleOfferForDownloadableArticle()
     {
         // given
-        $propelArticle = ModelFactory::createArticle(
+        $article = ModelFactory::createArticle(
             typeId: ArticleType::EBOOK,
             price: 1290,
             availabilityDilicom: 1,
         );
-        $article = (new ArticleManager())->getById($propelArticle->getId());
         $currentSite = $this->createMock(CurrentSite::class);
-        $builder = new ArticleStructuredDataBuilder();
+        $builder = new ArticleStructuredDataBuilder(new StockRepository());
 
         // when
         $data = $builder->build($article, null, $currentSite);
@@ -212,15 +193,14 @@ class ArticleStructuredDataBuilderTest extends TestCase
         string  $expectedAvailability,
     ) {
         // given
-        $propelArticle = ModelFactory::createArticle(
+        $article = ModelFactory::createArticle(
             typeId: ArticleType::EBOOK,
             availabilityDilicom: $availabilityDilicom,
             isPreorderable: $isPreorderable,
-            publicationDate: $publicationDate ? new \DateTime($publicationDate) : null,
+            publicationDate: $publicationDate ? new DateTime($publicationDate) : null,
         );
-        $article = (new ArticleManager())->getById($propelArticle->getId());
         $currentSite = $this->createMock(CurrentSite::class);
-        $builder = new ArticleStructuredDataBuilder();
+        $builder = new ArticleStructuredDataBuilder(new StockRepository());
 
         // when
         $data = $builder->build($article, null, $currentSite);
@@ -247,11 +227,10 @@ class ArticleStructuredDataBuilderTest extends TestCase
     public function testBuildMapsFcfaCurrencyOptionToXof()
     {
         // given
-        $propelArticle = ModelFactory::createArticle(typeId: ArticleType::EBOOK, price: 1000);
-        $article = (new ArticleManager())->getById($propelArticle->getId());
+        $article = ModelFactory::createArticle(typeId: ArticleType::EBOOK, price: 1000);
         $currentSite = $this->createMock(CurrentSite::class);
         $currentSite->method("getOption")->with("currency")->willReturn("FCFA");
-        $builder = new ArticleStructuredDataBuilder();
+        $builder = new ArticleStructuredDataBuilder(new StockRepository());
 
         // when
         $data = $builder->build($article, null, $currentSite);
@@ -266,15 +245,14 @@ class ArticleStructuredDataBuilderTest extends TestCase
     public function testBuildAddsSimpleOfferForPhysicalArticleOnVirtualStockSite()
     {
         // given
-        $propelArticle = ModelFactory::createArticle(
+        $article = ModelFactory::createArticle(
             typeId: ArticleType::BOOK,
             price: 1990,
             availabilityDilicom: 1,
         );
-        $article = (new ArticleManager())->getById($propelArticle->getId());
         $currentSite = $this->createMock(CurrentSite::class);
         $currentSite->method("hasOptionEnabled")->with("virtual_stock")->willReturn(true);
-        $builder = new ArticleStructuredDataBuilder();
+        $builder = new ArticleStructuredDataBuilder(new StockRepository());
 
         // when
         $data = $builder->build($article, null, $currentSite);
@@ -292,11 +270,10 @@ class ArticleStructuredDataBuilderTest extends TestCase
     public function testBuildOmitsOffersWhenNoStockOnRealStockSite()
     {
         // given
-        $propelArticle = ModelFactory::createArticle(typeId: ArticleType::BOOK, availabilityDilicom: 1);
-        $article = (new ArticleManager())->getById($propelArticle->getId());
+        $article = ModelFactory::createArticle(typeId: ArticleType::BOOK, availabilityDilicom: 1);
         $currentSite = $this->createMock(CurrentSite::class);
         $currentSite->method("hasOptionEnabled")->willReturn(false);
-        $builder = new ArticleStructuredDataBuilder();
+        $builder = new ArticleStructuredDataBuilder(new StockRepository());
 
         // when
         $data = $builder->build($article, null, $currentSite);
@@ -311,12 +288,11 @@ class ArticleStructuredDataBuilderTest extends TestCase
     public function testBuildAddsSimpleOfferForOneAvailableCopy()
     {
         // given
-        $propelArticle = ModelFactory::createArticle(typeId: ArticleType::BOOK);
-        ModelFactory::createStockItem(article: $propelArticle, sellingPrice: 1500, condition: "Neuf");
-        $article = (new ArticleManager())->getById($propelArticle->getId());
+        $article = ModelFactory::createArticle(typeId: ArticleType::BOOK);
+        ModelFactory::createStockItem(article: $article, sellingPrice: 1500, condition: "Neuf");
         $currentSite = $this->createMock(CurrentSite::class);
         $currentSite->method("hasOptionEnabled")->willReturn(false);
-        $builder = new ArticleStructuredDataBuilder();
+        $builder = new ArticleStructuredDataBuilder(new StockRepository());
 
         // when
         $data = $builder->build($article, null, $currentSite);
@@ -333,13 +309,12 @@ class ArticleStructuredDataBuilderTest extends TestCase
     public function testBuildAddsAggregateOfferForMultipleAvailableCopies()
     {
         // given
-        $propelArticle = ModelFactory::createArticle(typeId: ArticleType::BOOK);
-        ModelFactory::createStockItem(article: $propelArticle, sellingPrice: 1500, condition: "Neuf");
-        ModelFactory::createStockItem(article: $propelArticle, sellingPrice: 900, condition: "Bon état");
-        $article = (new ArticleManager())->getById($propelArticle->getId());
+        $article = ModelFactory::createArticle(typeId: ArticleType::BOOK);
+        ModelFactory::createStockItem(article: $article, sellingPrice: 1500, condition: "Neuf");
+        ModelFactory::createStockItem(article: $article, sellingPrice: 900, condition: "Bon état");
         $currentSite = $this->createMock(CurrentSite::class);
         $currentSite->method("hasOptionEnabled")->willReturn(false);
-        $builder = new ArticleStructuredDataBuilder();
+        $builder = new ArticleStructuredDataBuilder(new StockRepository());
 
         // when
         $data = $builder->build($article, null, $currentSite);
@@ -357,14 +332,13 @@ class ArticleStructuredDataBuilderTest extends TestCase
     public function testBuildAddsSimpleOfferWhenAllAvailableCopiesShareSamePriceAndCondition()
     {
         // given
-        $propelArticle = ModelFactory::createArticle(typeId: ArticleType::BOOK);
-        ModelFactory::createStockItem(article: $propelArticle, sellingPrice: 600, condition: "Neuf");
-        ModelFactory::createStockItem(article: $propelArticle, sellingPrice: 600, condition: "Neuf");
-        ModelFactory::createStockItem(article: $propelArticle, sellingPrice: 600, condition: "Neuf");
-        $article = (new ArticleManager())->getById($propelArticle->getId());
+        $article = ModelFactory::createArticle(typeId: ArticleType::BOOK);
+        ModelFactory::createStockItem(article: $article, sellingPrice: 600, condition: "Neuf");
+        ModelFactory::createStockItem(article: $article, sellingPrice: 600, condition: "Neuf");
+        ModelFactory::createStockItem(article: $article, sellingPrice: 600, condition: "Neuf");
         $currentSite = $this->createMock(CurrentSite::class);
         $currentSite->method("hasOptionEnabled")->willReturn(false);
-        $builder = new ArticleStructuredDataBuilder();
+        $builder = new ArticleStructuredDataBuilder(new StockRepository());
 
         // when
         $data = $builder->build($article, null, $currentSite);

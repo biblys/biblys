@@ -18,11 +18,12 @@
 
 namespace Biblys\Service\Seo;
 
-use Article;
 use Biblys\Data\ArticleType;
-use Biblys\Isbn\Isbn;
 use Biblys\Isbn\IsbnParsingException;
 use Biblys\Service\CurrentSite;
+use Model\Article;
+use Propel\Runtime\Exception\PropelException;
+use Repository\StockRepository;
 
 class ArticleStructuredDataBuilder
 {
@@ -33,10 +34,20 @@ class ArticleStructuredDataBuilder
 
     private const BOOK_TAXES = ["BOOK", "EBOOK", "EAUDIOBOOK"];
 
+    private StockRepository $stockRepository;
+
+    public function __construct(StockRepository $stockRepository)
+    {
+        $this->stockRepository = $stockRepository;
+    }
+
+    /**
+     * @throws PropelException
+     */
     public function build(Article $article, ?string $imageUrl, CurrentSite $currentSite): array
     {
         $type = $article->getType();
-        if (!$type || in_array($type->getId(), self::EXCLUDED_TYPE_IDS, true)) {
+        if (in_array($type->getId(), self::EXCLUDED_TYPE_IDS, true)) {
             return [];
         }
 
@@ -45,33 +56,34 @@ class ArticleStructuredDataBuilder
         $data = [
             "@context" => "https://schema.org",
             "@type" => $isBook ? ["Product", "Book"] : "Product",
-            "name" => $article->get("title"),
+            "name" => $article->getTitle(),
         ];
 
         if ($imageUrl) {
             $data["image"] = $this->_ensureUrlIsAbsolute($imageUrl, $currentSite);
         }
 
-        $summary = $article->get("summary") ?: "";
+        $summary = $article->getSummary() ?: "";
         $data["description"] = truncate(strip_tags($summary), 500, "...", true);
 
-        $publisher = $article->get("publisher");
+        $publisher = $article->getPublisher();
         if ($publisher) {
             $data["brand"] = [
                 "@type" => "Brand",
-                "name" => $publisher->get("name"),
+                "name" => $publisher->getName(),
             ];
         }
 
         if ($isBook) {
-            $authors = $article->get("authors");
+            $authors = $article->getAuthors();
             if ($authors) {
                 $data["author"] = $authors;
             }
 
-            if ($article->has("ean")) {
+            $ean = $article->getEan();
+            if ($ean) {
                 try {
-                    $data["isbn"] = Isbn::convertToIsbn13($article->get("ean"));
+                    $data["isbn"] = $article->getIsbn();
                 } catch (IsbnParsingException) {
                     // EAN is not a valid ISBN, omit the field
                 }
@@ -83,7 +95,7 @@ class ArticleStructuredDataBuilder
                 $data["bookFormat"] = "https://schema.org/AudiobookFormat";
             }
         } else {
-            $ean = $article->get("ean");
+            $ean = $article->getEan();
             if ($ean && preg_match('/^\d{13}$/', $ean)) {
                 $data["gtin13"] = $ean;
             }
@@ -97,11 +109,14 @@ class ArticleStructuredDataBuilder
         return $data;
     }
 
+    /**
+     * @throws PropelException
+     */
     private function _buildOffers(Article $article, ArticleType $type, CurrentSite $currentSite): ?array
     {
         if ($type->isDownloadable()) {
             return $this->_buildSimpleOffer(
-                price: $article->get("price") / 100,
+                price: $article->getPrice() / 100,
                 availability: $this->_mapAvailability($article),
                 currency: $this->_getCurrency($currentSite),
             );
@@ -109,35 +124,35 @@ class ArticleStructuredDataBuilder
 
         if ($currentSite->hasOptionEnabled("virtual_stock")) {
             return $this->_buildSimpleOffer(
-                price: $article->get("price") / 100,
+                price: $article->getPrice() / 100,
                 availability: $this->_mapAvailability($article),
                 currency: $this->_getCurrency($currentSite),
             );
         }
 
-        $items = $article->getAvailableItems("all");
+        $items = $this->stockRepository->getAvailableItemsFor($article, $currentSite);
         if (count($items) === 0) {
             return null;
         }
 
         $distinctOffers = array_unique(array_map(
-            fn($item) => $item->get("selling_price") . "-" . $item->get("condition"),
+            fn($item) => $item->getSellingPrice() . "-" . $item->getCondition(),
             $items,
         ));
 
         if (count($items) === 1 || count($distinctOffers) === 1) {
             $item = $items[0];
             return $this->_buildSimpleOffer(
-                price: $item->get("selling_price") / 100,
+                price: $item->getSellingPrice() / 100,
                 availability: "https://schema.org/InStock",
                 currency: $this->_getCurrency($currentSite),
-                condition: $item->get("condition") === "Neuf"
+                condition: $item->getCondition() === "Neuf"
                     ? "https://schema.org/NewCondition"
                     : "https://schema.org/UsedCondition",
             );
         }
 
-        $prices = array_map(fn($item) => $item->get("selling_price") / 100, $items);
+        $prices = array_map(fn($item) => $item->getSellingPrice() / 100, $items);
 
         return [
             "@type" => "AggregateOffer",
@@ -167,11 +182,11 @@ class ArticleStructuredDataBuilder
 
     private function _mapAvailability(Article $article): string
     {
-        if ($article->isSoldOut()) {
+        if ($article->isOutOfPrint()) {
             return "https://schema.org/OutOfStock";
         }
 
-        if ($article->isSoonUnavailable()) {
+        if ($article->isSoonOutOfPrint()) {
             return "https://schema.org/LimitedAvailability";
         }
 
@@ -179,7 +194,7 @@ class ArticleStructuredDataBuilder
             return "https://schema.org/BackOrder";
         }
 
-        if (!$article->isPublished() && $article->isPreorderable()) {
+        if (!$article->isPublished() && $article->isPreorder()) {
             return "https://schema.org/PreOrder";
         }
 
