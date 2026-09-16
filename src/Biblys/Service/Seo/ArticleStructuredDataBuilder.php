@@ -107,6 +107,14 @@ class ArticleStructuredDataBuilder
             );
         }
 
+        if ($currentSite->hasOptionEnabled("virtual_stock")) {
+            return $this->_buildSimpleOffer(
+                price: $article->get("price") / 100,
+                availability: $this->_mapAvailability($article),
+                currency: $this->_getCurrency($currentSite),
+            );
+        }
+
         return null;
     }
 

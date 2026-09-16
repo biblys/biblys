@@ -259,4 +259,30 @@ class ArticleStructuredDataBuilderTest extends TestCase
         // then
         $this->assertEquals("XOF", $data["offers"]["priceCurrency"]);
     }
+
+    /**
+     * @throws PropelException
+     */
+    public function testBuildAddsSimpleOfferForPhysicalArticleOnVirtualStockSite()
+    {
+        // given
+        $propelArticle = ModelFactory::createArticle(
+            typeId: ArticleType::BOOK,
+            price: 1990,
+            availabilityDilicom: 1,
+        );
+        $article = (new ArticleManager())->getById($propelArticle->getId());
+        $currentSite = $this->createMock(CurrentSite::class);
+        $currentSite->method("hasOptionEnabled")->with("virtual_stock")->willReturn(true);
+        $builder = new ArticleStructuredDataBuilder();
+
+        // when
+        $data = $builder->build($article, null, $currentSite);
+
+        // then
+        $this->assertEquals("Offer", $data["offers"]["@type"]);
+        $this->assertEquals("19.90", $data["offers"]["price"]);
+        $this->assertEquals("https://schema.org/InStock", $data["offers"]["availability"]);
+        $this->assertEquals("https://schema.org/NewCondition", $data["offers"]["itemCondition"]);
+    }
 }
