@@ -36,6 +36,7 @@ use Biblys\Service\MailingList\MailingListService;
 use Biblys\Service\MetaTagsService;
 use Biblys\Service\Pagination;
 use Biblys\Service\QueryParamsService;
+use Biblys\Service\Seo\ArticleStructuredDataBuilder;
 use Biblys\Service\Slug\SlugService;
 use Biblys\Service\TemplateService;
 use Biblys\Service\Watermarking\WatermarkingService;
@@ -53,6 +54,7 @@ use Model\Tag;
 use Model\TagQuery;
 use Propel\Runtime\Exception\PropelException;
 use Psr\Http\Client\ClientExceptionInterface;
+use Repository\StockRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -118,6 +120,15 @@ class ArticleController extends Controller
         // Meta tags
         $metaTags->setTitle($articleModel->getTitle());
         $metaTags->setUrl($urlGenerator->generate("article_show", ["slug" => $articleModel->getUrl()]));
+
+        $structuredDataBuilder = new ArticleStructuredDataBuilder(new StockRepository());
+        $structuredDataImageUrl = $imagesService->imageExistsFor($articleModel)
+            ? $imagesService->getImageUrlFor($articleModel)
+            : null;
+        $structuredData = $structuredDataBuilder->build($articleModel, $structuredDataImageUrl, $currentSiteService);
+        if ($structuredData !== []) {
+            $metaTags->setStructuredData($structuredData);
+        }
 
         $summary = $article->get('summary') ?: "";
         $opengraphTags = [

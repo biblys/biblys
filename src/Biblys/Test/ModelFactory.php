@@ -459,6 +459,8 @@ class ModelFactory
         ?Cart     $cart = null,
         ?Order    $order = null,
         int       $sellingPrice = 0,
+        string    $condition = "Neuf",
+        ?string   $stockage = null,
         ?DateTime $sellingDate = null,
         ?DateTime $returnDate = null,
         ?DateTime $lostDate = null,
@@ -473,7 +475,8 @@ class ModelFactory
         $stock->setArticle($article ?? self::createArticle());
         $stock->setUser($user);
         $stock->setCart($cart);
-        $stock->setCondition("Neuf");
+        $stock->setCondition($condition);
+        $stock->setStockage($stockage);
         $stock->setOrderId($order?->getId());
         $stock->setSellingPrice($sellingPrice);
         $stock->setSellingDate($sellingDate);

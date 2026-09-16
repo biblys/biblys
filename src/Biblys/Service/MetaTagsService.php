@@ -62,6 +62,17 @@ class MetaTagsService
         $this->writer->append("robots", "noindex");
     }
 
+    public function setStructuredData(array $data): void
+    {
+        // JSON_HEX_TAG escapes < and > so a "</script>" in $data (e.g. an article
+        // description) can't break out of the script tag below.
+        $json = json_encode(
+            $data,
+            JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG
+        );
+        MetaTagsService::$tags[] = '<script type="application/ld+json">' . $json . '</script>';
+    }
+
     public function dump(): string
     {
         return $this->writer->render() . join("\n", MetaTagsService::$tags);

@@ -165,6 +165,56 @@ class ArticleControllerTest extends TestCase
         );
     }
 
+    /**
+     * @throws ClientExceptionInterface
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
+    public function testShowSetsStructuredData()
+    {
+        // given
+        $article = ModelFactory::createArticle(title: "Citoyens de demain", typeId: ArticleType::BOOK);
+        $request = new Request();
+        $config = $this->createMock(Config::class);
+        $currentSiteService = $this->createMock(CurrentSite::class);
+        $urlGenerator = $this->createMock(UrlGenerator::class);
+        $loggerService = $this->createMock(LoggerService::class);
+        $metaTagsService = $this->createMock(MetaTagsService::class);
+        $metaTagsService->expects($this->once())
+            ->method("setStructuredData")
+            ->with($this->callback(function (array $data) {
+                return ($data["@type"] ?? null) === ["Product", "Book"]
+                    && ($data["name"] ?? null) === "Citoyens de demain";
+            }));
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService
+            ->shouldReceive("renderResponse")
+            ->andReturn(new Response("Citoyens de demain"));
+        $imagesService = Mockery::mock(ImagesService::class);
+        $imagesService->shouldReceive("imageExistsFor")->andReturn(false);
+
+        $controller = new ArticleController();
+
+        // when
+        $controller->showAction(
+            request: $request,
+            config: $config,
+            currentSiteService: $currentSiteService,
+            urlGenerator: $urlGenerator,
+            loggerService: $loggerService,
+            metaTags: $metaTagsService,
+            templateService: $templateService,
+            imagesService: $imagesService,
+            slug: $article->getSlug(),
+        );
+
+        // then: assertion is in the mock expectation above
+        $this->assertTrue(true);
+    }
+
     /** updatePublisherStock */
 
     /**

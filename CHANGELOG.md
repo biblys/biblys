@@ -12,6 +12,10 @@
   dans une collection.
 - Une nouvelle offre spéciale peut désormais être créée directement depuis
   l'interface d'administration.
+- Les fiches article exposent désormais des données structurées JSON-LD
+  (Schema.org, type `Product`, enrichi en `Book` pour les livres) dans leur
+  `<head>`, incluant prix, disponibilité, état (neuf/occasion) et identifiant
+  produit (ISBN ou GTIN).
 
 ## 3.16.3 (11 septembre 2026)
 
