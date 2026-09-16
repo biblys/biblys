@@ -20,6 +20,7 @@ namespace Repository;
 
 use Biblys\Service\CurrentSite;
 use Model\Article;
+use Model\Stock;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Exception\PropelException;
 use Model\StockQuery;
@@ -44,5 +45,37 @@ class StockRepository
         }
 
         return $query->find()->getArrayCopy();
+    }
+
+    /**
+     * @return \Model\Stock[]
+     * @throws PropelException
+     */
+    public function getAvailableUsedItemsFor(Article $article, CurrentSite $currentSite): array
+    {
+        $item = $article->getItem();
+
+        $articleQuery = StockQuery::create()
+            ->filterBySellingDate(null, Criteria::ISNULL)
+            ->filterByReturnDate(null, Criteria::ISNULL)
+            ->filterByLostDate(null, Criteria::ISNULL)
+            ->filterByCondition(Stock::CONDITION_NEW, Criteria::NOT_EQUAL)
+            ->filterBySellingPrice(null, Criteria::ISNOTNULL)
+            ->useArticleQuery()
+                ->filterById($article->getId());
+
+        if ($item) {
+            $articleQuery = $articleQuery->_or()->filterByItem($item);
+        }
+
+        $stockQuery = $articleQuery->endUse()
+            ->orderBy("SellingPrice", Criteria::ASC);
+
+        $activeStock = $currentSite->getOption("active_stock");
+        if ($activeStock) {
+            $stockQuery->filterByStockage(explode(",", $activeStock));
+        }
+
+        return $stockQuery->find()->getArrayCopy();
     }
 }
