@@ -171,4 +171,30 @@ class MetaTagsServiceTest extends TestCase
         $this->assertStringContainsString("tags", $result);
         $this->assertStringContainsString('<link rel="canonical" href="https://example.org/pages/about" />', $result);
     }
+
+    /**
+     * @throws Exception
+     * @throws PropelException
+     */
+    public function testSetStructuredData()
+    {
+        // given
+        $site = ModelFactory::createSite(domain: "example.org");
+        $currentSite = new CurrentSite($site);
+        $writer = $this->createMock(Writer::class);
+        $metaTagsService = new MetaTagsService($writer, $currentSite);
+
+        // when
+        $metaTagsService->setStructuredData([
+            "@context" => "https://schema.org",
+            "@type" => "Product",
+            "name" => "Citoyens de demain",
+        ]);
+
+        // then
+        $dump = $metaTagsService->dump();
+        $this->assertStringContainsString('<script type="application/ld+json">', $dump);
+        $this->assertStringContainsString('"name":"Citoyens de demain"', $dump);
+        $this->assertStringContainsString('</script>', $dump);
+    }
 }
