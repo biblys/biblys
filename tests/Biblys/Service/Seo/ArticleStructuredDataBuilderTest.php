@@ -285,4 +285,94 @@ class ArticleStructuredDataBuilderTest extends TestCase
         $this->assertEquals("https://schema.org/InStock", $data["offers"]["availability"]);
         $this->assertEquals("https://schema.org/NewCondition", $data["offers"]["itemCondition"]);
     }
+
+    /**
+     * @throws PropelException
+     */
+    public function testBuildOmitsOffersWhenNoStockOnRealStockSite()
+    {
+        // given
+        $propelArticle = ModelFactory::createArticle(typeId: ArticleType::BOOK, availabilityDilicom: 1);
+        $article = (new ArticleManager())->getById($propelArticle->getId());
+        $currentSite = $this->createMock(CurrentSite::class);
+        $currentSite->method("hasOptionEnabled")->willReturn(false);
+        $builder = new ArticleStructuredDataBuilder();
+
+        // when
+        $data = $builder->build($article, null, $currentSite);
+
+        // then
+        $this->assertArrayNotHasKey("offers", $data);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testBuildAddsSimpleOfferForOneAvailableCopy()
+    {
+        // given
+        $propelArticle = ModelFactory::createArticle(typeId: ArticleType::BOOK);
+        ModelFactory::createStockItem(article: $propelArticle, sellingPrice: 1500, condition: "Neuf");
+        $article = (new ArticleManager())->getById($propelArticle->getId());
+        $currentSite = $this->createMock(CurrentSite::class);
+        $currentSite->method("hasOptionEnabled")->willReturn(false);
+        $builder = new ArticleStructuredDataBuilder();
+
+        // when
+        $data = $builder->build($article, null, $currentSite);
+
+        // then
+        $this->assertEquals("Offer", $data["offers"]["@type"]);
+        $this->assertEquals("15.00", $data["offers"]["price"]);
+        $this->assertEquals("https://schema.org/NewCondition", $data["offers"]["itemCondition"]);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testBuildAddsAggregateOfferForMultipleAvailableCopies()
+    {
+        // given
+        $propelArticle = ModelFactory::createArticle(typeId: ArticleType::BOOK);
+        ModelFactory::createStockItem(article: $propelArticle, sellingPrice: 1500, condition: "Neuf");
+        ModelFactory::createStockItem(article: $propelArticle, sellingPrice: 900, condition: "Bon état");
+        $article = (new ArticleManager())->getById($propelArticle->getId());
+        $currentSite = $this->createMock(CurrentSite::class);
+        $currentSite->method("hasOptionEnabled")->willReturn(false);
+        $builder = new ArticleStructuredDataBuilder();
+
+        // when
+        $data = $builder->build($article, null, $currentSite);
+
+        // then
+        $this->assertEquals("AggregateOffer", $data["offers"]["@type"]);
+        $this->assertEquals("9.00", $data["offers"]["lowPrice"]);
+        $this->assertEquals("15.00", $data["offers"]["highPrice"]);
+        $this->assertEquals(2, $data["offers"]["offerCount"]);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testBuildAddsSimpleOfferWhenAllAvailableCopiesShareSamePriceAndCondition()
+    {
+        // given
+        $propelArticle = ModelFactory::createArticle(typeId: ArticleType::BOOK);
+        ModelFactory::createStockItem(article: $propelArticle, sellingPrice: 600, condition: "Neuf");
+        ModelFactory::createStockItem(article: $propelArticle, sellingPrice: 600, condition: "Neuf");
+        ModelFactory::createStockItem(article: $propelArticle, sellingPrice: 600, condition: "Neuf");
+        $article = (new ArticleManager())->getById($propelArticle->getId());
+        $currentSite = $this->createMock(CurrentSite::class);
+        $currentSite->method("hasOptionEnabled")->willReturn(false);
+        $builder = new ArticleStructuredDataBuilder();
+
+        // when
+        $data = $builder->build($article, null, $currentSite);
+
+        // then
+        $this->assertEquals("Offer", $data["offers"]["@type"]);
+        $this->assertEquals("6.00", $data["offers"]["price"]);
+        $this->assertEquals("https://schema.org/NewCondition", $data["offers"]["itemCondition"]);
+        $this->assertArrayNotHasKey("offerCount", $data["offers"]);
+    }
 }

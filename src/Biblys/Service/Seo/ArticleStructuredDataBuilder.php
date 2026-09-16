@@ -115,7 +115,38 @@ class ArticleStructuredDataBuilder
             );
         }
 
-        return null;
+        $items = $article->getAvailableItems("all");
+        if (count($items) === 0) {
+            return null;
+        }
+
+        $distinctOffers = array_unique(array_map(
+            fn($item) => $item->get("selling_price") . "-" . $item->get("condition"),
+            $items,
+        ));
+
+        if (count($items) === 1 || count($distinctOffers) === 1) {
+            $item = $items[0];
+            return $this->_buildSimpleOffer(
+                price: $item->get("selling_price") / 100,
+                availability: "https://schema.org/InStock",
+                currency: $this->_getCurrency($currentSite),
+                condition: $item->get("condition") === "Neuf"
+                    ? "https://schema.org/NewCondition"
+                    : "https://schema.org/UsedCondition",
+            );
+        }
+
+        $prices = array_map(fn($item) => $item->get("selling_price") / 100, $items);
+
+        return [
+            "@type" => "AggregateOffer",
+            "priceCurrency" => $this->_getCurrency($currentSite),
+            "lowPrice" => number_format(min($prices), 2, ".", ""),
+            "highPrice" => number_format(max($prices), 2, ".", ""),
+            "offerCount" => count($items),
+            "availability" => "https://schema.org/InStock",
+        ];
     }
 
     private function _buildSimpleOffer(
