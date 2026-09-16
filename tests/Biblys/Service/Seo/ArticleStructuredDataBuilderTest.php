@@ -32,6 +32,16 @@ class ArticleStructuredDataBuilderTest extends TestCase
     /**
      * @throws PropelException
      */
+    public function setUp(): void
+    {
+        // ArticleManager::getById() resolves the legacy global site (config "site" id),
+        // which must exist in the database before any legacy Article is fetched.
+        ModelFactory::createSite();
+    }
+
+    /**
+     * @throws PropelException
+     */
     public function testBuildReturnsProductFieldsForABook()
     {
         // given
@@ -163,5 +173,90 @@ class ArticleStructuredDataBuilderTest extends TestCase
 
         // then
         $this->assertArrayNotHasKey("gtin13", $data);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testBuildAddsSimpleOfferForDownloadableArticle()
+    {
+        // given
+        $propelArticle = ModelFactory::createArticle(
+            typeId: ArticleType::EBOOK,
+            price: 1290,
+            availabilityDilicom: 1,
+        );
+        $article = (new ArticleManager())->getById($propelArticle->getId());
+        $currentSite = $this->createMock(CurrentSite::class);
+        $builder = new ArticleStructuredDataBuilder();
+
+        // when
+        $data = $builder->build($article, null, $currentSite);
+
+        // then
+        $this->assertEquals("Offer", $data["offers"]["@type"]);
+        $this->assertEquals("12.90", $data["offers"]["price"]);
+        $this->assertEquals("EUR", $data["offers"]["priceCurrency"]);
+        $this->assertEquals("https://schema.org/InStock", $data["offers"]["availability"]);
+        $this->assertEquals("https://schema.org/NewCondition", $data["offers"]["itemCondition"]);
+    }
+
+    /**
+     * @dataProvider availabilityDilicomProvider
+     * @throws PropelException
+     */
+    public function testBuildMapsAvailabilityDilicomToSchemaAvailability(
+        int     $availabilityDilicom,
+        bool    $isPreorderable,
+        ?string $publicationDate,
+        string  $expectedAvailability,
+    ) {
+        // given
+        $propelArticle = ModelFactory::createArticle(
+            typeId: ArticleType::EBOOK,
+            availabilityDilicom: $availabilityDilicom,
+            isPreorderable: $isPreorderable,
+            publicationDate: $publicationDate ? new \DateTime($publicationDate) : null,
+        );
+        $article = (new ArticleManager())->getById($propelArticle->getId());
+        $currentSite = $this->createMock(CurrentSite::class);
+        $builder = new ArticleStructuredDataBuilder();
+
+        // when
+        $data = $builder->build($article, null, $currentSite);
+
+        // then
+        $this->assertEquals($expectedAvailability, $data["offers"]["availability"]);
+    }
+
+    public static function availabilityDilicomProvider(): array
+    {
+        return [
+            "sold out" => [6, false, null, "https://schema.org/OutOfStock"],
+            "soon unavailable" => [9, false, null, "https://schema.org/LimitedAvailability"],
+            "to be reprinted" => [3, false, null, "https://schema.org/BackOrder"],
+            "preorderable, not yet published" => [1, true, "2099-01-01", "https://schema.org/PreOrder"],
+            "not preorderable, not yet published" => [1, false, "2099-01-01", "https://schema.org/OutOfStock"],
+            "available" => [1, false, null, "https://schema.org/InStock"],
+        ];
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testBuildMapsFcfaCurrencyOptionToXof()
+    {
+        // given
+        $propelArticle = ModelFactory::createArticle(typeId: ArticleType::EBOOK, price: 1000);
+        $article = (new ArticleManager())->getById($propelArticle->getId());
+        $currentSite = $this->createMock(CurrentSite::class);
+        $currentSite->method("getOption")->with("currency")->willReturn("FCFA");
+        $builder = new ArticleStructuredDataBuilder();
+
+        // when
+        $data = $builder->build($article, null, $currentSite);
+
+        // then
+        $this->assertEquals("XOF", $data["offers"]["priceCurrency"]);
     }
 }

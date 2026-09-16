@@ -89,7 +89,76 @@ class ArticleStructuredDataBuilder
             }
         }
 
+        $offers = $this->_buildOffers($article, $type, $currentSite);
+        if ($offers !== null) {
+            $data["offers"] = $offers;
+        }
+
         return $data;
+    }
+
+    private function _buildOffers(Article $article, ArticleType $type, CurrentSite $currentSite): ?array
+    {
+        if ($type->isDownloadable()) {
+            return $this->_buildSimpleOffer(
+                price: $article->get("price") / 100,
+                availability: $this->_mapAvailability($article),
+                currency: $this->_getCurrency($currentSite),
+            );
+        }
+
+        return null;
+    }
+
+    private function _buildSimpleOffer(
+        float  $price,
+        string $availability,
+        string $currency,
+        string $condition = "https://schema.org/NewCondition",
+    ): array
+    {
+        return [
+            "@type" => "Offer",
+            "priceCurrency" => $currency,
+            "price" => number_format($price, 2, ".", ""),
+            "availability" => $availability,
+            "itemCondition" => $condition,
+        ];
+    }
+
+    private function _mapAvailability(Article $article): string
+    {
+        if ($article->isSoldOut()) {
+            return "https://schema.org/OutOfStock";
+        }
+
+        if ($article->isSoonUnavailable()) {
+            return "https://schema.org/LimitedAvailability";
+        }
+
+        if ($article->isToBeReprinted()) {
+            return "https://schema.org/BackOrder";
+        }
+
+        if (!$article->isPublished() && $article->isPreorderable()) {
+            return "https://schema.org/PreOrder";
+        }
+
+        if (!$article->isPublished()) {
+            return "https://schema.org/OutOfStock";
+        }
+
+        if ($article->isAvailable()) {
+            return "https://schema.org/InStock";
+        }
+
+        return "https://schema.org/OutOfStock";
+    }
+
+    private function _getCurrency(CurrentSite $currentSite): string
+    {
+        $currency = $currentSite->getOption("currency") ?? "EUR";
+        return $currency === "FCFA" ? "XOF" : $currency;
     }
 
     private function _ensureUrlIsAbsolute(string $url, CurrentSite $currentSite): string
