@@ -34,6 +34,7 @@ use Propel\Runtime\Exception\PropelException;
  */
 class Stock extends BaseStock
 {
+    public const CONDITION_NEW = "Neuf";
 
     public function isWatermarked(): bool
     {
