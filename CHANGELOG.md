@@ -26,6 +26,15 @@
   `<head>`, incluant prix, disponibilité, état (neuf/occasion) et identifiant
   produit (ISBN ou GTIN).
 
+## 3.16.4 (23 septembre 2026)
+
+### Corrections
+
+- Dans une liste d'articles paginée (collection, recherche...), les boutons
+  panier, envie et alerte des articles chargés après un clic sur "Afficher
+  plus de résultats" (ou via le défilement infini) ne réagissaient plus au
+  clic.
+
 ## 3.16.3 (11 septembre 2026)
 
 ### Corrections
