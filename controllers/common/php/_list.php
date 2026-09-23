@@ -522,10 +522,12 @@ if (!isset($_ITEM_NAME)) {
 
     $listContent = '
 
-        <div id="listOptions">
+        <div id="listOptions" class="d-flex justify-content-between align-items-center flex-wrap">
             <span>
                 <span id="listCount">'.$num.'</span> '.$_ITEM_NAME.s($num). '
             </span>
+
+            <span class="d-flex align-items-center flex-wrap">
 
             Afficher :
 
@@ -562,6 +564,8 @@ if (!isset($_ITEM_NAME)) {
                     <a class="dropdown-item" href="'.htmlspecialchars($sortQueries['best_price1']).'"'.$sel['best_price1'].'>prix, du + cher au - cher</a>
                     <a class="dropdown-item" href="'.htmlspecialchars($sortQueries['random0']).'"'.$sel['random0'].'>ordre aléatoire</a>
                 </div>
+            </span>
+
             </span>
 
         </div>
