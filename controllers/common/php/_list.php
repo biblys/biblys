@@ -247,8 +247,7 @@ $sql = EntityManager::prepareAndExecute("
         MAX(`article_copyright`) AS `article_copyright`, 
         MAX(`article_ean`) AS `article_ean`, 
         MAX(`article_links`) AS `article_links`,
-        MAX(`article_keywords`) AS `article_keywords`,
-        MAX(`stock_id`) AS `stock_id`, 
+        MAX(`stock_id`) AS `stock_id`,
         MAX(`stock_selling_date`) AS `stock_selling_date`, 
         MAX(`stock_return_date`) AS `stock_return_date`, 
         MAX(`stock_lost_date`) AS `stock_lost_date`, 
@@ -365,7 +364,7 @@ while ($x = $sql->fetch(PDO::FETCH_ASSOC)) {
     ';
 
     $table .= '
-        <tr class="item'.$x["condition"].'" data-keywords="'.$x["article_keywords"].'">
+        <tr class="item'.$x["condition"].'">
             <td><a href="'.$x["article_url"].'" class="article_title">'.$x["article_title"].'</a>'.$x['cycle'].'</td>
             <td title="'.$x["article_authors"].'">'.$x["authors"].'</td>
             <td class="right"><a href="/collection/'.$x['collection_url'].'">'.$x["article_collection"].'</a>'.$x["number"].'</td>
@@ -564,8 +563,6 @@ if (!isset($_ITEM_NAME)) {
                     <a class="dropdown-item" href="'.htmlspecialchars($sortQueries['random0']).'"'.$sel['random0'].'>ordre aléatoire</a>
                 </div>
             </span>
-
-            &nbsp;<input type="search" id="listSearch" placeholder="Filtrer la liste...">
 
         </div>
 
