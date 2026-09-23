@@ -527,9 +527,9 @@ if (!isset($_ITEM_NAME)) {
                 <span id="listCount">'.$num.'</span> '.$_ITEM_NAME.s($num). '
             </span>
 
-            <span class="d-flex align-items-center flex-wrap">
+            <span class="d-flex align-items-center flex-wrap" style="gap: 0.5rem">
 
-            Afficher :
+            Afficher
 
             <span id="listFilter" class="dropdown">
                 <button class="btn btn-outline-secondary btn-sm dropdown-toggle" data-toggle="dropdown">
@@ -543,9 +543,7 @@ if (!isset($_ITEM_NAME)) {
                 </div>
             </span>
 
-            &nbsp;
-
-            Trier par :
+            triés par
 
             <span id="listSort" class="dropdown">
                 <button class="btn btn-outline-secondary btn-sm dropdown-toggle" data-toggle="dropdown">
@@ -566,7 +564,6 @@ if (!isset($_ITEM_NAME)) {
                 </div>
             </span>
 
-            &nbsp;
             <button type="button" id="listApply" class="btn btn-primary btn-sm">Actualiser</button>
 
             </span>
