@@ -4,6 +4,9 @@
 
 ### Améliorations
 
+- Dans une liste d'articles paginée (collection, recherche, éditeur,
+  auteur...), le défilement infini et le bouton « Afficher plus de
+  résultats » sont remplacés par une pagination classique (liens de page).
 - Un nouveau moyen de paiement en espèces peut être activé via l'option de
   site `payment_cash`. Il n'est proposé que pour les commandes retirées en
   magasin.

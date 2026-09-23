@@ -24,6 +24,7 @@ use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Images\ImagesService;
+use Biblys\Service\Pagination;
 use Biblys\Service\Slug\SlugService;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -199,10 +200,6 @@ if ($articles_per_page) {
     $npp = $articles_per_page;
 }
 
-$offset = (int) $request->query->get("s", 0);
-$_REQ_LIMIT = ' LIMIT '.$npp.' OFFSET '.$offset;
-$nextPageNum = $offset + $npp;
-
 $active_stock_query = null;
 $active_stock = $currentSite->getOption("active_stock");
 if ($active_stock) {
@@ -223,6 +220,13 @@ $sql_query = "
 // Compter le nombre de résultats
 $numQ = EntityManager::prepareAndExecute("SELECT `articles`.`article_id` ".$sql_query, []);
 $num = count($numQ->fetchAll());
+
+// Pagination
+$pageIndex = max(0, (int) $request->query->get("p", 0));
+$pagination = new Pagination($pageIndex, $num, $npp);
+$pagination->setQueryParams(array_diff_key($request->query->all(), array_flip(['p', 's', '_FORMAT'])));
+$offset = $pagination->getOffset();
+$_REQ_LIMIT = ' LIMIT '.$npp.' OFFSET '.$offset;
 
 // Requête de résultat
 $sql = EntityManager::prepareAndExecute("
@@ -260,7 +264,6 @@ $sql = EntityManager::prepareAndExecute("
     []
 );
 
-$ix = $offset;
 $table = null;
 while ($x = $sql->fetch(PDO::FETCH_ASSOC)) {
     $x['new'] = 0;
@@ -381,27 +384,81 @@ while ($x = $sql->fetch(PDO::FETCH_ASSOC)) {
     }
     $_og_description .= $x['article_title'];
 
-    $ix++;
-
     $json[] = $x;
 }
 $sql->closeCursor();
 
-// Page suivante
-if ($ix < $num) {
-    $nextPage = '<div class="center"><br><button id="nextPage" data-next_page="'.$nextPageNum.'">Afficher plus de résultats</button></div>';
-} else {
-    $nextPage = null;
+// Pagination
+$paginationNav = null;
+if ($pagination->getTotal() > 1) {
+    if ($pagination->getTotal() <= 10) {
+        $paginationNav = '<nav class="Pagination text-center mt-2 mb-4" aria-label="Page navigation"><ul class="pagination justify-content-center">';
+
+        if ($pagination->getPrevious() !== false) {
+            $paginationNav .= '
+                <li class="Pagination__previous page-item">
+                    <a href="'.htmlspecialchars($pagination->getPreviousQuery() ?: '?').'" aria-label="Précédent" class="page-link">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            ';
+        }
+
+        for ($pageNumber = 1; $pageNumber <= $pagination->getTotal(); $pageNumber++) {
+            if ($pagination->getCurrent() === $pageNumber) {
+                $paginationNav .= '<li class="Pagination__page Pagination__page--current active page-item"><span class="pagination-page pagination-page-current page-link">'.$pageNumber.'</span></li>';
+            } else {
+                $paginationNav .= '<li class="Pagination__page page-item"><a href="'.htmlspecialchars($pagination->getQueryForPageNumber($pageNumber) ?: '?').'" class="page-link">'.$pageNumber.'</a></li>';
+            }
+        }
+
+        if ($pagination->getNext() !== false) {
+            $paginationNav .= '
+                <li class="Pagination__next page-item">
+                    <a href="'.htmlspecialchars($pagination->getNextQuery()).'" aria-label="Suivant" class="page-link">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            ';
+        }
+
+        $paginationNav .= '</ul></nav>';
+    } else {
+        $paginationNav = '<nav class="Pagination Pagination--with-menu mt-2 mb-4">';
+
+        if ($pagination->getPrevious() !== false) {
+            $paginationNav .= '<a href="'.htmlspecialchars($pagination->getPreviousQuery() ?: '?').'" aria-label="Aller à la page précédente" class="btn btn-outline-primary">&laquo; Précédent</a>';
+        }
+
+        $paginationNav .= '
+            <form class="form-inline mb-0" method="get">
+                <div class="Pagination__page-selector form-group text-center">
+                    <label for="target-page">Page</label>
+                    <select name="p" class="form-control" id="target-page" aria-label="Aller à la page" onchange="this.form.submit()">
+        ';
+        for ($pageNumber = 1; $pageNumber <= $pagination->getTotal(); $pageNumber++) {
+            $selected = $pagination->getCurrent() === $pageNumber ? ' selected' : '';
+            $paginationNav .= '<option value="'.($pageNumber - 1).'"'.$selected.'>'.$pageNumber.'</option>';
+        }
+        $paginationNav .= '
+                    </select>
+                    sur '.$pagination->getTotal().'
+                    <button type="submit" class="btn btn-primary">Aller</button>
+                </div>
+            </form>
+        ';
+
+        if ($pagination->getNext() !== false) {
+            $paginationNav .= '<a href="'.htmlspecialchars($pagination->getNextQuery()).'" aria-label="Aller à la page suivante" class="btn btn-outline-primary">Suivant &raquo;</a>';
+        }
+
+        $paginationNav .= '</nav>';
+    }
 }
 
 if (isset($_GET['_FORMAT']) && $_GET['_FORMAT'] == "json") {
     $_WS["query"] = $_GET["q"];
     $_WS["results"] = $num;
-    if ($ix < $num) {
-        $_WS["nextPage"] = $nextPageNum;
-    } else {
-        $_WS["nextPage"] = 0;
-    }
     $_WS["articles"] = $json;
 
     $response = new JsonResponse();
@@ -476,7 +533,7 @@ if (isset($_GET['_FORMAT']) && $_GET['_FORMAT'] == "json") {
             </tfooter>
         </table>
 
-        '.$nextPage.'
+        '.$paginationNav.'
 
     ';
 }

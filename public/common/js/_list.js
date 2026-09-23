@@ -14,32 +14,25 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-let listLoading = false;
-
-function loadList(start = 0) {
-  listLoading = true; // Chargement en cours
-
+function loadList() {
   const articleListElement = document.getElementById('articleList');
 
   // Variables de la requête
   const query = articleListElement.dataset.search_terms; // Termes de recherche
   const sort = articleListElement.dataset.sort; // Ordre de tri
   const order = articleListElement.dataset.order; // Tri descendant/ascendant
-  start = typeof start !== 'undefined' ? start : '0'; // Première ligne
 
-  // Chargement... (remplacer ou ajouter)
+  // Chargement...
   const listTbody = document.querySelector('.list tbody');
-  if (start === 0) listTbody.innerHTML = '<tr id="loadingTr"><td colspan=6 class="center loading">Chargement...</td></tr>';
-  else listTbody.insertAdjacentHTML('beforeend', '<tr id="loadingTr"><td colspan=6 class="center loading">Chargement...</td></tr>');
+  listTbody.innerHTML = '<tr id="loadingTr"><td colspan=6 class="center loading">Chargement...</td></tr>';
 
   // Mise à jour dynamique de l'URL
   window.history.pushState(null, 'Title', window.location.pathname + '?q=' + query + '&o=' + sort + '&d=' + order);
 
-  // Requête
-  fetch(window.location.pathname + '?_FORMAT=json&q=' + query + '&o=' + sort + '&d=' + order + '&s=' + start)
+  // Requête (toujours la première page : changer de filtre/tri repart de zéro)
+  fetch(window.location.pathname + '?_FORMAT=json&q=' + query + '&o=' + sort + '&d=' + order)
     .then(response => response.json())
     .then(ws => {
-      listLoading = false; // Fin du chargement
       if (ws.error) {
         window._alert('Erreur : impossible d\'afficher les résultats.');
         document.getElementById('listCount').textContent = '0';
@@ -51,7 +44,6 @@ function loadList(start = 0) {
           listTbody.innerHTML = '<tr><td colspan=6 class="center article_title">Aucun résultat !</td></tr>';
         } else {
           document.getElementById('listCount').textContent = ws.results;
-          let article;
           for (let i = 0; i < ws.articles.length; i++) {
             /**
              * @var article {object}
@@ -60,7 +52,6 @@ function loadList(start = 0) {
              * @property {string} article_authors
              * @property {string} article_collection
              * @property {string} collection_url
-             * @property {string} article_covers
              * @property {string} article_condition
              * @property {string} article_keywords
              * @property {string} cycle
@@ -70,13 +61,11 @@ function loadList(start = 0) {
              * @property {string} cart
              * @property {string} wish
              * @property {string} alert
-             * @property {string} covers
              * @property {string} condition
-             * @property {string} article_keywords
              * @property {string} authors
              *
              */
-            article = ws.articles[i];
+            const article = ws.articles[i];
 
             const line =
               '<tr class="item ' + article.condition + '" data-keywords="' + article.article_keywords + '">' +
@@ -89,23 +78,13 @@ function loadList(start = 0) {
               '</tr>';
             table += line;
           }
-          const nextPageElem = document.getElementById('nextPage');
-          if (ws.nextPage !== 0) {
-            nextPageElem.dataset.next_page = ws.nextPage;
-            nextPageElem.style.display = '';
-          }
-          const loadingTr = document.getElementById('loadingTr');
-          if (loadingTr) loadingTr.remove();
-          if (start === 0) listTbody.innerHTML = table;
-          else listTbody.insertAdjacentHTML('beforeend', table);
-          document.getElementById('coverLane').innerHTML = article.covers;
+          listTbody.innerHTML = table;
           window.reloadEvents();
         }
       }
       document.querySelectorAll('#search input').forEach(input => input.classList.remove('loading'));
     })
     .catch(() => {
-      listLoading = false; // Fin du chargement
       const loadingTr = document.getElementById('loadingTr');
       if (loadingTr) loadingTr.remove();
       document.querySelectorAll('#search input').forEach(input => input.classList.remove('loading'));
@@ -126,8 +105,6 @@ function filterList() {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-
-  listLoading = false;
 
   // Modifier le filtre
   document.querySelectorAll('#listFilter a').forEach(a => {
@@ -161,16 +138,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
-  // Afficher plus de résultats
-  const nextPageElem = document.getElementById('nextPage');
-  if (nextPageElem) {
-    nextPageElem.addEventListener('click', function() {
-      this.style.display = 'none';
-      const nextPage = Number(this.dataset.next_page);
-      loadList(nextPage);
-    });
-  }
-
   // Filtrer la liste
   const listSearch = document.getElementById('listSearch');
   if (listSearch) {
@@ -178,32 +145,5 @@ document.addEventListener('DOMContentLoaded', function() {
       filterList();
     });
   }
-
-  /* Infinite scroll */
-
-  // L'élément est-il visible par l'utilisateur ?
-  function isScrolledIntoView(elem) {
-    const rect = elem.getBoundingClientRect();
-    const windowHeight = (window.innerHeight || document.documentElement.clientHeight);
-    const windowTop = window.scrollY;
-    const elemTop = rect.top + windowTop;
-    const elemBottom = elemTop + rect.height;
-    const docViewTop = windowTop;
-    const docViewBottom = docViewTop + windowHeight;
-    return ((elemBottom <= docViewBottom) && (elemTop >= docViewTop));
-  }
-
-  // On surveille l'évènement scroll
-  window.addEventListener('scroll', function() {
-    const nextPageElement = document.getElementById('nextPage');
-    if (nextPageElement && nextPageElement.style.display !== 'none') {
-      const lastItem = document.querySelector('.item:last-child');
-      if (lastItem && isScrolledIntoView(lastItem) && listLoading === false) {
-        nextPageElement.style.display = 'none';
-        const nextPage = Number(nextPageElement.dataset.next_page);
-        loadList(nextPage);
-      }
-    }
-  });
 
 });
