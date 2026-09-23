@@ -4,6 +4,15 @@
 
 ### Améliorations
 
+- Dans une liste d'articles paginée (collection, recherche, éditeur,
+  auteur...), le défilement infini et le bouton « Afficher plus de
+  résultats » sont remplacés par une pagination classique (liens de page).
+- Dans cette même liste, les filtres (neuf/occasion/pas en stock) et le tri
+  ne rechargent plus la page en temps réel : les choix sont mis en attente
+  et appliqués d'un coup via un nouveau bouton « Actualiser ».
+- Toujours dans cette liste, le champ « Filtrer la liste » (filtrage côté
+  navigateur) est retiré, et le nombre de livres/les options de
+  filtre/tri sont réalignés (compte à gauche, options à droite).
 - Un nouveau moyen de paiement en espèces peut être activé via l'option de
   site `payment_cash`. Il n'est proposé que pour les commandes retirées en
   magasin.

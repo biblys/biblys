@@ -24,9 +24,9 @@ use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Images\ImagesService;
+use Biblys\Service\Pagination;
 use Biblys\Service\Slug\SlugService;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 $request = LegacyCodeHelper::getGlobalRequest();
@@ -43,7 +43,6 @@ $currentSite = CurrentSite::buildFromConfig($config);
 $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
 $imagesService = new ImagesService($config, $currentSite, new Filesystem());
 
-$json = null; // JSON response
 $filters = null;
 
 $sel_etat = null;
@@ -199,10 +198,6 @@ if ($articles_per_page) {
     $npp = $articles_per_page;
 }
 
-$offset = (int) $request->query->get("s", 0);
-$_REQ_LIMIT = ' LIMIT '.$npp.' OFFSET '.$offset;
-$nextPageNum = $offset + $npp;
-
 $active_stock_query = null;
 $active_stock = $currentSite->getOption("active_stock");
 if ($active_stock) {
@@ -223,6 +218,13 @@ $sql_query = "
 // Compter le nombre de résultats
 $numQ = EntityManager::prepareAndExecute("SELECT `articles`.`article_id` ".$sql_query, []);
 $num = count($numQ->fetchAll());
+
+// Pagination
+$pageIndex = max(0, (int) $request->query->get("p", 0));
+$pagination = new Pagination($pageIndex, $num, $npp);
+$pagination->setQueryParams(array_diff_key($request->query->all(), array_flip(['p', 's', '_FORMAT'])));
+$offset = $pagination->getOffset();
+$_REQ_LIMIT = ' LIMIT '.$npp.' OFFSET '.$offset;
 
 // Requête de résultat
 $sql = EntityManager::prepareAndExecute("
@@ -245,8 +247,7 @@ $sql = EntityManager::prepareAndExecute("
         MAX(`article_copyright`) AS `article_copyright`, 
         MAX(`article_ean`) AS `article_ean`, 
         MAX(`article_links`) AS `article_links`,
-        MAX(`article_keywords`) AS `article_keywords`,
-        MAX(`stock_id`) AS `stock_id`, 
+        MAX(`stock_id`) AS `stock_id`,
         MAX(`stock_selling_date`) AS `stock_selling_date`, 
         MAX(`stock_return_date`) AS `stock_return_date`, 
         MAX(`stock_lost_date`) AS `stock_lost_date`, 
@@ -260,7 +261,6 @@ $sql = EntityManager::prepareAndExecute("
     []
 );
 
-$ix = $offset;
 $table = null;
 while ($x = $sql->fetch(PDO::FETCH_ASSOC)) {
     $x['new'] = 0;
@@ -364,7 +364,7 @@ while ($x = $sql->fetch(PDO::FETCH_ASSOC)) {
     ';
 
     $table .= '
-        <tr class="item'.$x["condition"].'" data-keywords="'.$x["article_keywords"].'">
+        <tr class="item'.$x["condition"].'">
             <td><a href="'.$x["article_url"].'" class="article_title">'.$x["article_title"].'</a>'.$x['cycle'].'</td>
             <td title="'.$x["article_authors"].'">'.$x["authors"].'</td>
             <td class="right"><a href="/collection/'.$x['collection_url'].'">'.$x["article_collection"].'</a>'.$x["number"].'</td>
@@ -380,38 +380,80 @@ while ($x = $sql->fetch(PDO::FETCH_ASSOC)) {
         $_og_description .= ', ';
     }
     $_og_description .= $x['article_title'];
-
-    $ix++;
-
-    $json[] = $x;
 }
 $sql->closeCursor();
 
-// Page suivante
-if ($ix < $num) {
-    $nextPage = '<div class="center"><br><button id="nextPage" data-next_page="'.$nextPageNum.'">Afficher plus de résultats</button></div>';
-} else {
-    $nextPage = null;
+// Pagination
+$paginationNav = null;
+if ($pagination->getTotal() > 1) {
+    if ($pagination->getTotal() <= 10) {
+        $paginationNav = '<nav class="Pagination text-center mt-2 mb-4" aria-label="Page navigation"><ul class="pagination justify-content-center">';
+
+        if ($pagination->getPrevious() !== false) {
+            $paginationNav .= '
+                <li class="Pagination__previous page-item">
+                    <a href="'.htmlspecialchars($pagination->getPreviousQuery() ?: '?').'" aria-label="Précédent" class="page-link">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            ';
+        }
+
+        for ($pageNumber = 1; $pageNumber <= $pagination->getTotal(); $pageNumber++) {
+            if ($pagination->getCurrent() === $pageNumber) {
+                $paginationNav .= '<li class="Pagination__page Pagination__page--current active page-item"><span class="pagination-page pagination-page-current page-link">'.$pageNumber.'</span></li>';
+            } else {
+                $paginationNav .= '<li class="Pagination__page page-item"><a href="'.htmlspecialchars($pagination->getQueryForPageNumber($pageNumber) ?: '?').'" class="page-link">'.$pageNumber.'</a></li>';
+            }
+        }
+
+        if ($pagination->getNext() !== false) {
+            $paginationNav .= '
+                <li class="Pagination__next page-item">
+                    <a href="'.htmlspecialchars($pagination->getNextQuery()).'" aria-label="Suivant" class="page-link">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            ';
+        }
+
+        $paginationNav .= '</ul></nav>';
+    } else {
+        $paginationNav = '<nav class="Pagination Pagination--with-menu mt-2 mb-4">';
+
+        if ($pagination->getPrevious() !== false) {
+            $paginationNav .= '<a href="'.htmlspecialchars($pagination->getPreviousQuery() ?: '?').'" aria-label="Aller à la page précédente" class="btn btn-outline-primary">&laquo; Précédent</a>';
+        }
+
+        $paginationNav .= '
+            <form class="form-inline mb-0" method="get">
+                <div class="Pagination__page-selector form-group text-center">
+                    <label for="target-page">Page</label>
+                    <select name="p" class="form-control" id="target-page" aria-label="Aller à la page">
+        ';
+        for ($pageNumber = 1; $pageNumber <= $pagination->getTotal(); $pageNumber++) {
+            $selected = $pagination->getCurrent() === $pageNumber ? ' selected' : '';
+            $paginationNav .= '<option value="'.($pageNumber - 1).'"'.$selected.'>'.$pageNumber.'</option>';
+        }
+        $paginationNav .= '
+                    </select>
+                    sur '.$pagination->getTotal().'
+                    <button type="submit" class="btn btn-primary">Aller</button>
+                </div>
+            </form>
+        ';
+
+        if ($pagination->getNext() !== false) {
+            $paginationNav .= '<a href="'.htmlspecialchars($pagination->getNextQuery()).'" aria-label="Aller à la page suivante" class="btn btn-outline-primary">Suivant &raquo;</a>';
+        }
+
+        $paginationNav .= '</nav>';
+    }
 }
 
-if (isset($_GET['_FORMAT']) && $_GET['_FORMAT'] == "json") {
-    $_WS["query"] = $_GET["q"];
-    $_WS["results"] = $num;
-    if ($ix < $num) {
-        $_WS["nextPage"] = $nextPageNum;
-    } else {
-        $_WS["nextPage"] = 0;
-    }
-    $_WS["articles"] = $json;
-
-    $response = new JsonResponse();
-    $response->setData($_WS);
-    $response->send();
-    die();
-} else {
-    if (!isset($_ITEM_NAME)) {
-        $_ITEM_NAME = "livre";
-    }
+if (!isset($_ITEM_NAME)) {
+    $_ITEM_NAME = "livre";
+}
 
     $sel = array('all' => null, 'neuf' => null, 'occasion' => null, 'command' => null, 'indisp' => null, 'article_title_alphabetic0' => null, 'article_authors_alphabetic0' => null,
         'article_collection0' => null, 'article_number0' => null, 'article_cycle0' => null, 'article_tome0' => null, 'article_pubdate1' => null, 'stock_purchase_date1' => null,
@@ -420,55 +462,115 @@ if (isset($_GET['_FORMAT']) && $_GET['_FORMAT'] == "json") {
     $sel[$listOrderBy.$listSortOrder] = ' data-selected="true"';
     $sel[$sel_etat] = ' data-selected="true"';
 
+    $filterLabels = [
+        'all' => 'tous les livres',
+        'neuf' => 'livres neufs',
+        'occasion' => 'livres d\'occasion',
+        'indisp' => 'pas en stock',
+    ];
+    $filterLabel = $filterLabels[$sel_etat] ?? $filterLabels['all'];
+
+    $filterColors = ['all' => 'black', 'neuf' => 'green', 'occasion' => 'orange', 'indisp' => 'red'];
+    $filterColor = $filterColors[$sel_etat] ?? $filterColors['all'];
+
+    $sortLabels = [
+        'article_title_alphabetic0' => 'titre',
+        'article_authors_alphabetic0' => 'auteur',
+        'article_collection0' => 'collection',
+        'article_number0' => 'numéro de collection',
+        'article_cycle0' => 'série',
+        'article_tome0' => 'numéro de volume',
+        'article_pubdate1' => 'date de parution',
+        'stock_purchase_date1' => 'date d\'ajout au stock',
+        'best_price0' => 'prix, du - cher au + cher',
+        'best_price1' => 'prix, du + cher au - cher',
+        'random0' => 'ordre aléatoire',
+    ];
+    $sortLabel = $sortLabels[$listOrderBy.$listSortOrder] ?? $sortLabels['stock_purchase_date1'];
+
+    // Liens de filtre et de tri (rechargement de page, sans AJAX)
+    $baseQueryParams = $request->query->all();
+    unset($baseQueryParams['p'], $baseQueryParams['s'], $baseQueryParams['_FORMAT'], $baseQueryParams['q']);
+
+    $filterQueries = [];
+    foreach (['all', 'neuf', 'occasion', 'indisp'] as $filter) {
+        $filterTerms = trim(preg_replace('/ ?etat:\S+/', '', (string) $_GET['q']));
+        if ($filter !== 'all') {
+            $filterTerms = trim($filterTerms.' etat:'.$filter);
+        }
+        $filterParams = $baseQueryParams;
+        if ($filterTerms !== '') {
+            $filterParams['q'] = $filterTerms;
+        }
+        $filterQueries[$filter] = count($filterParams) ? '?'.http_build_query($filterParams) : '?';
+    }
+
+    $sortQueries = [];
+    foreach ([
+        'article_title_alphabetic0', 'article_authors_alphabetic0', 'article_collection0',
+        'article_number0', 'article_cycle0', 'article_tome0', 'article_pubdate1',
+        'stock_purchase_date1', 'best_price0', 'best_price1', 'random0',
+    ] as $sortKey) {
+        $sortParams = $baseQueryParams;
+        if ((string) $_GET['q'] !== '') {
+            $sortParams['q'] = $_GET['q'];
+        }
+        $sortParams['o'] = substr($sortKey, 0, -1);
+        $sortParams['d'] = substr($sortKey, -1);
+        $sortQueries[$sortKey] = '?'.http_build_query($sortParams);
+    }
+
     $listContent = '
 
-        <div id="listOptions">
+        <div id="listOptions" class="d-flex justify-content-between align-items-center flex-wrap">
             <span>
                 <span id="listCount">'.$num.'</span> '.$_ITEM_NAME.s($num). '
             </span>
 
-            Afficher :
+            <span class="d-flex align-items-center flex-wrap" style="gap: 0.5rem">
+
+            Afficher
 
             <span id="listFilter" class="dropdown">
                 <button class="btn btn-outline-secondary btn-sm dropdown-toggle" data-toggle="dropdown">
-                    <i class="fa fa-square"></i>&nbsp; tous les livres <span class="caret"></span>
+                    <i class="fa fa-square '.$filterColor.'"></i>&nbsp; '.$filterLabel.' <span class="caret"></span>
                 </button>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item pointer" data-filter="all' .$sel['all'].'"><i class="fa fa-square black"></i>&nbsp; tous les livres</a>
-                    <a class="dropdown-item pointer" data-filter="neuf"'.$sel['neuf'].'><i class="fa fa-square green"></i>&nbsp; livres neufs</a>
-                    <a class="dropdown-item pointer" data-filter="occasion"'.$sel['occasion'].'><i class="fa fa-square orange"></i>&nbsp; livres d\'occasion</a>
-                    <a class="dropdown-item pointer" data-filter="indisp"'.$sel['indisp'].'><i class="fa fa-square red"></i>&nbsp; pas en stock</a>
+                    <a class="dropdown-item" href="'.htmlspecialchars($filterQueries['all']).'" data-color="black"'.$sel['all'].'><i class="fa fa-square black"></i>&nbsp; tous les livres</a>
+                    <a class="dropdown-item" href="'.htmlspecialchars($filterQueries['neuf']).'" data-color="green"'.$sel['neuf'].'><i class="fa fa-square green"></i>&nbsp; livres neufs</a>
+                    <a class="dropdown-item" href="'.htmlspecialchars($filterQueries['occasion']).'" data-color="orange"'.$sel['occasion'].'><i class="fa fa-square orange"></i>&nbsp; livres d\'occasion</a>
+                    <a class="dropdown-item" href="'.htmlspecialchars($filterQueries['indisp']).'" data-color="red"'.$sel['indisp'].'><i class="fa fa-square red"></i>&nbsp; pas en stock</a>
                 </div>
             </span>
 
-            &nbsp;
-
-            Trier par :
+            triés par
 
             <span id="listSort" class="dropdown">
                 <button class="btn btn-outline-secondary btn-sm dropdown-toggle" data-toggle="dropdown">
-                    date d\'ajout au stock <span class="caret"></span>
+                    '.$sortLabel.' <span class="caret"></span>
                 </button>
                 <div class="dropdown-menu">
-                    <a class="pointer dropdown-item" data-sort="article_title_alphabetic" data-order=0'.$sel['article_title_alphabetic0'].'>titre</a>
-                    <a class="pointer dropdown-item" data-sort="article_authors_alphabetic" data-order=0'.$sel['article_authors_alphabetic0'].'>auteur</a>
-                    <a class="pointer dropdown-item" data-sort="article_collection" data-order=0'.$sel['article_collection0'].'>collection</a>
-                    <a class="pointer dropdown-item" data-sort="article_number" data-order=0'.$sel['article_number0'].'>numéro de collection</a>
-                    <a class="pointer dropdown-item" data-sort="article_cycle" data-order=0'.$sel['article_cycle0'].'>série</a>
-                    <a class="pointer dropdown-item" data-sort="article_tome" data-order=0'.$sel['article_tome0'].'>numéro de volume</a>
-                    <a class="pointer dropdown-item" data-sort="article_pubdate" data-order=1'.$sel['article_pubdate1'].'>date de parution</a>
-                    <a class="pointer dropdown-item" data-sort="stock_purchase_date" data-order=1'.$sel['stock_purchase_date1'].'>date d\'ajout au stock</a>
-                    <a class="pointer dropdown-item" data-sort="best_price" data-order=0'.$sel['best_price0'].'>prix, du - cher au + cher</a>
-                    <a class="pointer dropdown-item" data-sort="best_price" data-order=1'.$sel['best_price1'].'>prix, du + cher au - cher</a>
-                    <a class="pointer dropdown-item" data-sort="random" data-order=0'.$sel['random0'].'>ordre aléatoire</a>
+                    <a class="dropdown-item" href="'.htmlspecialchars($sortQueries['article_title_alphabetic0']).'"'.$sel['article_title_alphabetic0'].'>titre</a>
+                    <a class="dropdown-item" href="'.htmlspecialchars($sortQueries['article_authors_alphabetic0']).'"'.$sel['article_authors_alphabetic0'].'>auteur</a>
+                    <a class="dropdown-item" href="'.htmlspecialchars($sortQueries['article_collection0']).'"'.$sel['article_collection0'].'>collection</a>
+                    <a class="dropdown-item" href="'.htmlspecialchars($sortQueries['article_number0']).'"'.$sel['article_number0'].'>numéro de collection</a>
+                    <a class="dropdown-item" href="'.htmlspecialchars($sortQueries['article_cycle0']).'"'.$sel['article_cycle0'].'>série</a>
+                    <a class="dropdown-item" href="'.htmlspecialchars($sortQueries['article_tome0']).'"'.$sel['article_tome0'].'>numéro de volume</a>
+                    <a class="dropdown-item" href="'.htmlspecialchars($sortQueries['article_pubdate1']).'"'.$sel['article_pubdate1'].'>date de parution</a>
+                    <a class="dropdown-item" href="'.htmlspecialchars($sortQueries['stock_purchase_date1']).'"'.$sel['stock_purchase_date1'].'>date d\'ajout au stock</a>
+                    <a class="dropdown-item" href="'.htmlspecialchars($sortQueries['best_price0']).'"'.$sel['best_price0'].'>prix, du - cher au + cher</a>
+                    <a class="dropdown-item" href="'.htmlspecialchars($sortQueries['best_price1']).'"'.$sel['best_price1'].'>prix, du + cher au - cher</a>
+                    <a class="dropdown-item" href="'.htmlspecialchars($sortQueries['random0']).'"'.$sel['random0'].'>ordre aléatoire</a>
                 </div>
             </span>
 
-            &nbsp;<input type="search" id="listSearch" placeholder="Filtrer la liste...">
+            <button type="button" id="listApply" class="btn btn-primary btn-sm">Actualiser</button>
+
+            </span>
 
         </div>
 
-        <table id="articleList" class="table list" data-search_terms="'.htmlspecialchars($_GET['q']).'" data-sort="'.htmlspecialchars($listOrderBy).'" data-order='.htmlspecialchars($listSortOrder).'>
+        <table id="articleList" class="table list">
             <tbody>
                 '.$table.'
             </tbody>
@@ -476,10 +578,9 @@ if (isset($_GET['_FORMAT']) && $_GET['_FORMAT'] == "json") {
             </tfooter>
         </table>
 
-        '.$nextPage.'
+        <div id="listPagination">'.$paginationNav.'</div>
 
     ';
-}
 
 if (!empty($_ECHO)) {
     $_ECHO .= $listContent;
