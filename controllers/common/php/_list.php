@@ -490,7 +490,7 @@ if (!isset($_ITEM_NAME)) {
 
     // Liens de filtre et de tri (rechargement de page, sans AJAX)
     $baseQueryParams = $request->query->all();
-    unset($baseQueryParams['p'], $baseQueryParams['s'], $baseQueryParams['_FORMAT'], $baseQueryParams['q'], $baseQueryParams['o'], $baseQueryParams['d']);
+    unset($baseQueryParams['p'], $baseQueryParams['s'], $baseQueryParams['_FORMAT'], $baseQueryParams['q']);
 
     $filterQueries = [];
     foreach (['all', 'neuf', 'occasion', 'indisp'] as $filter) {
@@ -536,10 +536,10 @@ if (!isset($_ITEM_NAME)) {
                     <i class="fa fa-square '.$filterColor.'"></i>&nbsp; '.$filterLabel.' <span class="caret"></span>
                 </button>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item" href="'.htmlspecialchars($filterQueries['all']).'"'.$sel['all'].'><i class="fa fa-square black"></i>&nbsp; tous les livres</a>
-                    <a class="dropdown-item" href="'.htmlspecialchars($filterQueries['neuf']).'"'.$sel['neuf'].'><i class="fa fa-square green"></i>&nbsp; livres neufs</a>
-                    <a class="dropdown-item" href="'.htmlspecialchars($filterQueries['occasion']).'"'.$sel['occasion'].'><i class="fa fa-square orange"></i>&nbsp; livres d\'occasion</a>
-                    <a class="dropdown-item" href="'.htmlspecialchars($filterQueries['indisp']).'"'.$sel['indisp'].'><i class="fa fa-square red"></i>&nbsp; pas en stock</a>
+                    <a class="dropdown-item" href="'.htmlspecialchars($filterQueries['all']).'" data-color="black"'.$sel['all'].'><i class="fa fa-square black"></i>&nbsp; tous les livres</a>
+                    <a class="dropdown-item" href="'.htmlspecialchars($filterQueries['neuf']).'" data-color="green"'.$sel['neuf'].'><i class="fa fa-square green"></i>&nbsp; livres neufs</a>
+                    <a class="dropdown-item" href="'.htmlspecialchars($filterQueries['occasion']).'" data-color="orange"'.$sel['occasion'].'><i class="fa fa-square orange"></i>&nbsp; livres d\'occasion</a>
+                    <a class="dropdown-item" href="'.htmlspecialchars($filterQueries['indisp']).'" data-color="red"'.$sel['indisp'].'><i class="fa fa-square red"></i>&nbsp; pas en stock</a>
                 </div>
             </span>
 
@@ -565,6 +565,9 @@ if (!isset($_ITEM_NAME)) {
                     <a class="dropdown-item" href="'.htmlspecialchars($sortQueries['random0']).'"'.$sel['random0'].'>ordre aléatoire</a>
                 </div>
             </span>
+
+            &nbsp;
+            <button type="button" id="listApply" class="btn btn-primary btn-sm">Actualiser</button>
 
             </span>
 
