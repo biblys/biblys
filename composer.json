@@ -61,7 +61,7 @@
     "symfony/yaml": "^6.0",
     "symfony/config": "^6.0",
     "monolog/monolog": "^3.0",
-    "google/recaptcha": "^1.1",
+    "google/recaptcha": "^2.0",
     "guzzlehttp/guzzle": "~8.0",
     "biblys/isbn": "~3.0",
     "symfony/form": "^6.0",
