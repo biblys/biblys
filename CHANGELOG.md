@@ -7,6 +7,9 @@
 - Dans une liste d'articles paginée (collection, recherche, éditeur,
   auteur...), le défilement infini et le bouton « Afficher plus de
   résultats » sont remplacés par une pagination classique (liens de page).
+- Dans cette même liste, les filtres (neuf/occasion/pas en stock) et le tri
+  sont désormais de simples liens (rechargement de page) au lieu d'un
+  chargement en temps réel.
 - Un nouveau moyen de paiement en espèces peut être activé via l'option de
   site `payment_cash`. Il n'est proposé que pour les commandes retirées en
   magasin.

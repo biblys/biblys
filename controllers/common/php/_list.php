@@ -27,7 +27,6 @@ use Biblys\Service\Images\ImagesService;
 use Biblys\Service\Pagination;
 use Biblys\Service\Slug\SlugService;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 $request = LegacyCodeHelper::getGlobalRequest();
@@ -44,7 +43,6 @@ $currentSite = CurrentSite::buildFromConfig($config);
 $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
 $imagesService = new ImagesService($config, $currentSite, new Filesystem());
 
-$json = null; // JSON response
 $filters = null;
 
 $sel_etat = null;
@@ -383,8 +381,6 @@ while ($x = $sql->fetch(PDO::FETCH_ASSOC)) {
         $_og_description .= ', ';
     }
     $_og_description .= $x['article_title'];
-
-    $json[] = $x;
 }
 $sql->closeCursor();
 
@@ -456,20 +452,9 @@ if ($pagination->getTotal() > 1) {
     }
 }
 
-if (isset($_GET['_FORMAT']) && $_GET['_FORMAT'] == "json") {
-    $_WS["query"] = $_GET["q"];
-    $_WS["results"] = $num;
-    $_WS["articles"] = $json;
-    $_WS["pagination"] = $paginationNav;
-
-    $response = new JsonResponse();
-    $response->setData($_WS);
-    $response->send();
-    die();
-} else {
-    if (!isset($_ITEM_NAME)) {
-        $_ITEM_NAME = "livre";
-    }
+if (!isset($_ITEM_NAME)) {
+    $_ITEM_NAME = "livre";
+}
 
     $sel = array('all' => null, 'neuf' => null, 'occasion' => null, 'command' => null, 'indisp' => null, 'article_title_alphabetic0' => null, 'article_authors_alphabetic0' => null,
         'article_collection0' => null, 'article_number0' => null, 'article_cycle0' => null, 'article_tome0' => null, 'article_pubdate1' => null, 'stock_purchase_date1' => null,
@@ -477,6 +462,61 @@ if (isset($_GET['_FORMAT']) && $_GET['_FORMAT'] == "json") {
 
     $sel[$listOrderBy.$listSortOrder] = ' data-selected="true"';
     $sel[$sel_etat] = ' data-selected="true"';
+
+    $filterLabels = [
+        'all' => 'tous les livres',
+        'neuf' => 'livres neufs',
+        'occasion' => 'livres d\'occasion',
+        'indisp' => 'pas en stock',
+    ];
+    $filterLabel = $filterLabels[$sel_etat] ?? $filterLabels['all'];
+
+    $sortLabels = [
+        'article_title_alphabetic0' => 'titre',
+        'article_authors_alphabetic0' => 'auteur',
+        'article_collection0' => 'collection',
+        'article_number0' => 'numéro de collection',
+        'article_cycle0' => 'série',
+        'article_tome0' => 'numéro de volume',
+        'article_pubdate1' => 'date de parution',
+        'stock_purchase_date1' => 'date d\'ajout au stock',
+        'best_price0' => 'prix, du - cher au + cher',
+        'best_price1' => 'prix, du + cher au - cher',
+        'random0' => 'ordre aléatoire',
+    ];
+    $sortLabel = $sortLabels[$listOrderBy.$listSortOrder] ?? $sortLabels['stock_purchase_date1'];
+
+    // Liens de filtre et de tri (rechargement de page, sans AJAX)
+    $baseQueryParams = $request->query->all();
+    unset($baseQueryParams['p'], $baseQueryParams['s'], $baseQueryParams['_FORMAT'], $baseQueryParams['q'], $baseQueryParams['o'], $baseQueryParams['d']);
+
+    $filterQueries = [];
+    foreach (['all', 'neuf', 'occasion', 'indisp'] as $filter) {
+        $filterTerms = trim(preg_replace('/ ?etat:\S+/', '', (string) $_GET['q']));
+        if ($filter !== 'all') {
+            $filterTerms = trim($filterTerms.' etat:'.$filter);
+        }
+        $filterParams = $baseQueryParams;
+        if ($filterTerms !== '') {
+            $filterParams['q'] = $filterTerms;
+        }
+        $filterQueries[$filter] = count($filterParams) ? '?'.http_build_query($filterParams) : '?';
+    }
+
+    $sortQueries = [];
+    foreach ([
+        'article_title_alphabetic0', 'article_authors_alphabetic0', 'article_collection0',
+        'article_number0', 'article_cycle0', 'article_tome0', 'article_pubdate1',
+        'stock_purchase_date1', 'best_price0', 'best_price1', 'random0',
+    ] as $sortKey) {
+        $sortParams = $baseQueryParams;
+        if ((string) $_GET['q'] !== '') {
+            $sortParams['q'] = $_GET['q'];
+        }
+        $sortParams['o'] = substr($sortKey, 0, -1);
+        $sortParams['d'] = substr($sortKey, -1);
+        $sortQueries[$sortKey] = '?'.http_build_query($sortParams);
+    }
 
     $listContent = '
 
@@ -489,13 +529,13 @@ if (isset($_GET['_FORMAT']) && $_GET['_FORMAT'] == "json") {
 
             <span id="listFilter" class="dropdown">
                 <button class="btn btn-outline-secondary btn-sm dropdown-toggle" data-toggle="dropdown">
-                    <i class="fa fa-square"></i>&nbsp; tous les livres <span class="caret"></span>
+                    <i class="fa fa-square"></i>&nbsp; '.$filterLabel.' <span class="caret"></span>
                 </button>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item pointer" data-filter="all' .$sel['all'].'"><i class="fa fa-square black"></i>&nbsp; tous les livres</a>
-                    <a class="dropdown-item pointer" data-filter="neuf"'.$sel['neuf'].'><i class="fa fa-square green"></i>&nbsp; livres neufs</a>
-                    <a class="dropdown-item pointer" data-filter="occasion"'.$sel['occasion'].'><i class="fa fa-square orange"></i>&nbsp; livres d\'occasion</a>
-                    <a class="dropdown-item pointer" data-filter="indisp"'.$sel['indisp'].'><i class="fa fa-square red"></i>&nbsp; pas en stock</a>
+                    <a class="dropdown-item" href="'.htmlspecialchars($filterQueries['all']).'"'.$sel['all'].'><i class="fa fa-square black"></i>&nbsp; tous les livres</a>
+                    <a class="dropdown-item" href="'.htmlspecialchars($filterQueries['neuf']).'"'.$sel['neuf'].'><i class="fa fa-square green"></i>&nbsp; livres neufs</a>
+                    <a class="dropdown-item" href="'.htmlspecialchars($filterQueries['occasion']).'"'.$sel['occasion'].'><i class="fa fa-square orange"></i>&nbsp; livres d\'occasion</a>
+                    <a class="dropdown-item" href="'.htmlspecialchars($filterQueries['indisp']).'"'.$sel['indisp'].'><i class="fa fa-square red"></i>&nbsp; pas en stock</a>
                 </div>
             </span>
 
@@ -505,20 +545,20 @@ if (isset($_GET['_FORMAT']) && $_GET['_FORMAT'] == "json") {
 
             <span id="listSort" class="dropdown">
                 <button class="btn btn-outline-secondary btn-sm dropdown-toggle" data-toggle="dropdown">
-                    date d\'ajout au stock <span class="caret"></span>
+                    '.$sortLabel.' <span class="caret"></span>
                 </button>
                 <div class="dropdown-menu">
-                    <a class="pointer dropdown-item" data-sort="article_title_alphabetic" data-order=0'.$sel['article_title_alphabetic0'].'>titre</a>
-                    <a class="pointer dropdown-item" data-sort="article_authors_alphabetic" data-order=0'.$sel['article_authors_alphabetic0'].'>auteur</a>
-                    <a class="pointer dropdown-item" data-sort="article_collection" data-order=0'.$sel['article_collection0'].'>collection</a>
-                    <a class="pointer dropdown-item" data-sort="article_number" data-order=0'.$sel['article_number0'].'>numéro de collection</a>
-                    <a class="pointer dropdown-item" data-sort="article_cycle" data-order=0'.$sel['article_cycle0'].'>série</a>
-                    <a class="pointer dropdown-item" data-sort="article_tome" data-order=0'.$sel['article_tome0'].'>numéro de volume</a>
-                    <a class="pointer dropdown-item" data-sort="article_pubdate" data-order=1'.$sel['article_pubdate1'].'>date de parution</a>
-                    <a class="pointer dropdown-item" data-sort="stock_purchase_date" data-order=1'.$sel['stock_purchase_date1'].'>date d\'ajout au stock</a>
-                    <a class="pointer dropdown-item" data-sort="best_price" data-order=0'.$sel['best_price0'].'>prix, du - cher au + cher</a>
-                    <a class="pointer dropdown-item" data-sort="best_price" data-order=1'.$sel['best_price1'].'>prix, du + cher au - cher</a>
-                    <a class="pointer dropdown-item" data-sort="random" data-order=0'.$sel['random0'].'>ordre aléatoire</a>
+                    <a class="dropdown-item" href="'.htmlspecialchars($sortQueries['article_title_alphabetic0']).'"'.$sel['article_title_alphabetic0'].'>titre</a>
+                    <a class="dropdown-item" href="'.htmlspecialchars($sortQueries['article_authors_alphabetic0']).'"'.$sel['article_authors_alphabetic0'].'>auteur</a>
+                    <a class="dropdown-item" href="'.htmlspecialchars($sortQueries['article_collection0']).'"'.$sel['article_collection0'].'>collection</a>
+                    <a class="dropdown-item" href="'.htmlspecialchars($sortQueries['article_number0']).'"'.$sel['article_number0'].'>numéro de collection</a>
+                    <a class="dropdown-item" href="'.htmlspecialchars($sortQueries['article_cycle0']).'"'.$sel['article_cycle0'].'>série</a>
+                    <a class="dropdown-item" href="'.htmlspecialchars($sortQueries['article_tome0']).'"'.$sel['article_tome0'].'>numéro de volume</a>
+                    <a class="dropdown-item" href="'.htmlspecialchars($sortQueries['article_pubdate1']).'"'.$sel['article_pubdate1'].'>date de parution</a>
+                    <a class="dropdown-item" href="'.htmlspecialchars($sortQueries['stock_purchase_date1']).'"'.$sel['stock_purchase_date1'].'>date d\'ajout au stock</a>
+                    <a class="dropdown-item" href="'.htmlspecialchars($sortQueries['best_price0']).'"'.$sel['best_price0'].'>prix, du - cher au + cher</a>
+                    <a class="dropdown-item" href="'.htmlspecialchars($sortQueries['best_price1']).'"'.$sel['best_price1'].'>prix, du + cher au - cher</a>
+                    <a class="dropdown-item" href="'.htmlspecialchars($sortQueries['random0']).'"'.$sel['random0'].'>ordre aléatoire</a>
                 </div>
             </span>
 
@@ -526,7 +566,7 @@ if (isset($_GET['_FORMAT']) && $_GET['_FORMAT'] == "json") {
 
         </div>
 
-        <table id="articleList" class="table list" data-search_terms="'.htmlspecialchars($_GET['q']).'" data-sort="'.htmlspecialchars($listOrderBy).'" data-order='.htmlspecialchars($listSortOrder).'>
+        <table id="articleList" class="table list">
             <tbody>
                 '.$table.'
             </tbody>
@@ -537,7 +577,6 @@ if (isset($_GET['_FORMAT']) && $_GET['_FORMAT'] == "json") {
         <div id="listPagination">'.$paginationNav.'</div>
 
     ';
-}
 
 if (!empty($_ECHO)) {
     $_ECHO .= $listContent;
