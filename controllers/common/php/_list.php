@@ -429,7 +429,7 @@ if ($pagination->getTotal() > 1) {
             <form class="form-inline mb-0" method="get">
                 <div class="Pagination__page-selector form-group text-center">
                     <label for="target-page">Page</label>
-                    <select name="p" class="form-control" id="target-page" aria-label="Aller à la page" onchange="this.form.submit()">
+                    <select name="p" class="form-control" id="target-page" aria-label="Aller à la page">
         ';
         for ($pageNumber = 1; $pageNumber <= $pagination->getTotal(); $pageNumber++) {
             $selected = $pagination->getCurrent() === $pageNumber ? ' selected' : '';
