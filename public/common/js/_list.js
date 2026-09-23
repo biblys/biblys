@@ -98,7 +98,8 @@ function loadList(start = 0) {
           if (loadingTr) loadingTr.remove();
           if (start === 0) listTbody.innerHTML = table;
           else listTbody.insertAdjacentHTML('beforeend', table);
-          document.getElementById('coverLane').innerHTML = article.covers;
+          const coverLane = document.getElementById('coverLane');
+          if (coverLane) coverLane.innerHTML = article.covers;
           window.reloadEvents();
         }
       }
