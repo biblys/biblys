@@ -460,6 +460,7 @@ if (isset($_GET['_FORMAT']) && $_GET['_FORMAT'] == "json") {
     $_WS["query"] = $_GET["q"];
     $_WS["results"] = $num;
     $_WS["articles"] = $json;
+    $_WS["pagination"] = $paginationNav;
 
     $response = new JsonResponse();
     $response->setData($_WS);
@@ -533,7 +534,7 @@ if (isset($_GET['_FORMAT']) && $_GET['_FORMAT'] == "json") {
             </tfooter>
         </table>
 
-        '.$paginationNav.'
+        <div id="listPagination">'.$paginationNav.'</div>
 
     ';
 }

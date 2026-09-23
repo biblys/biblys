@@ -81,6 +81,9 @@ function loadList() {
           listTbody.innerHTML = table;
           window.reloadEvents();
         }
+
+        const listPagination = document.getElementById('listPagination');
+        if (listPagination) listPagination.innerHTML = ws.pagination || '';
       }
       document.querySelectorAll('#search input').forEach(input => input.classList.remove('loading'));
     })
