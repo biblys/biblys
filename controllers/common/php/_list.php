@@ -471,6 +471,9 @@ if (!isset($_ITEM_NAME)) {
     ];
     $filterLabel = $filterLabels[$sel_etat] ?? $filterLabels['all'];
 
+    $filterColors = ['all' => 'black', 'neuf' => 'green', 'occasion' => 'orange', 'indisp' => 'red'];
+    $filterColor = $filterColors[$sel_etat] ?? $filterColors['all'];
+
     $sortLabels = [
         'article_title_alphabetic0' => 'titre',
         'article_authors_alphabetic0' => 'auteur',
@@ -529,7 +532,7 @@ if (!isset($_ITEM_NAME)) {
 
             <span id="listFilter" class="dropdown">
                 <button class="btn btn-outline-secondary btn-sm dropdown-toggle" data-toggle="dropdown">
-                    <i class="fa fa-square"></i>&nbsp; '.$filterLabel.' <span class="caret"></span>
+                    <i class="fa fa-square '.$filterColor.'"></i>&nbsp; '.$filterLabel.' <span class="caret"></span>
                 </button>
                 <div class="dropdown-menu">
                     <a class="dropdown-item" href="'.htmlspecialchars($filterQueries['all']).'"'.$sel['all'].'><i class="fa fa-square black"></i>&nbsp; tous les livres</a>
