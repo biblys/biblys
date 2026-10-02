@@ -1,21 +1,9 @@
 # Historique des modifications
 
-## 3.17.0 (DEV)
+## 3.17.0 (2 octobre 2026)
 
 ### Améliorations
 
-- Dans une liste d'articles paginée (collection, recherche, éditeur,
-  auteur...), le défilement infini et le bouton « Afficher plus de
-  résultats » sont remplacés par une pagination classique (liens de page).
-- Dans cette même liste, les filtres (neuf/occasion/pas en stock) et le tri
-  ne rechargent plus la page en temps réel : les choix sont mis en attente
-  et appliqués d'un coup via un nouveau bouton « Actualiser ».
-- Toujours dans cette liste, le champ « Filtrer la liste » (filtrage côté
-  navigateur) est retiré, et le nombre de livres/les options de
-  filtre/tri sont réalignés (compte à gauche, options à droite).
-- Un nouveau moyen de paiement en espèces peut être activé via l'option de
-  site `payment_cash`. Il n'est proposé que pour les commandes retirées en
-  magasin.
 - Une offre spéciale peut désormais exiger un montant minimum de panier (hors
   frais de port), en plus ou à la place de la condition de quantité minimum
   dans une collection.
@@ -25,6 +13,18 @@
   (Schema.org, type `Product`, enrichi en `Book` pour les livres) dans leur
   `<head>`, incluant prix, disponibilité, état (neuf/occasion) et identifiant
   produit (ISBN ou GTIN).
+- Un nouveau moyen de paiement en espèces peut être activé via l'option de
+  site `payment_cash`. Il n'est proposé que pour les commandes retirées en
+  magasin.
+- Dans une liste d'articles paginée (collection, recherche, éditeur,
+  auteur...), le défilement infini et le bouton « Afficher plus de
+  résultats » sont remplacés par une pagination classique (liens de page).
+- Dans cette même liste, les filtres (neuf/occasion/pas en stock) et le tri
+  ne rechargent plus la page en temps réel : les choix sont mis en attente
+  et appliqués d'un coup via un nouveau bouton « Actualiser ».
+- Toujours dans cette liste, le champ « Filtrer la liste » (filtrage côté
+  navigateur) est retiré, et le nombre de livres/les options de
+  filtre/tri sont réalignés (compte à gauche, options à droite).
 
 ## 3.16.4 (23 septembre 2026)
 
