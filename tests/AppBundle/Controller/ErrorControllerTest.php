@@ -25,6 +25,7 @@ use Biblys\Test\ModelFactory;
 use Biblys\Service\TemplateService;
 use Exception;
 use Mockery;
+use Model\Map\RedirectionTableMap;
 use Model\RedirectionQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
@@ -349,6 +350,54 @@ class ErrorControllerTest extends TestCase
         $this->assertNotNull($redirection->getLastUsedAt());
     }
 
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws PropelException
+     */
+    public function testHandlePageNotFoundWithRedirectionToTheSameUrl()
+    {
+        // given
+        $redirection = ModelFactory::createRedirection(oldUrl: "/old-url", newUrl: "/new-url");
+        RedirectionQuery::create()
+            ->filterById($redirection->getId())
+            ->update(["NewUrl" => "/old-url"]);
+        RedirectionTableMap::clearInstancePool();
+
+        $controller = new ErrorController();
+        $request = new Request();
+        $exception = new ResourceNotFoundException("Page not found");
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getOption")->with("publisher_filter")->andReturn(null);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService
+            ->shouldReceive("renderResponse")
+            ->once()
+            ->andReturn(new Response("Page not found"));
+        $config = Mockery::mock(Config::class);
+        $currentUrlService = Mockery::mock(CurrentUrlService::class);
+        $currentUrlService->shouldReceive("getRelativeUrl")->andReturn("/old-url");
+        $session = Mockery::mock(Session::class);
+
+        // when
+        $response = $controller->exception(
+            $request,
+            $config,
+            $currentSite,
+            $currentUrlService,
+            $urlGenerator,
+            $session,
+            $templateService,
+            $exception
+        );
+
+        // then
+        $this->assertEquals(404, $response->getStatusCode(), "responds with HTTP status 404");
+        $this->assertFalse($response->headers->has("Location"), "does not redirect to the same url");
+    }
 
     /**
      * @throws LoaderError
