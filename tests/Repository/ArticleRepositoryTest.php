@@ -65,6 +65,31 @@ class ArticleRepositoryTest extends TestCase
     /**
      * @throws PropelException
      */
+    public function testFindEbookVersionForIgnoresNonEbookArticles(): void
+    {
+        // given
+        $publisher = ModelFactory::createPublisher();
+        $paperback = ModelFactory::createArticle(item: 42, publisher: $publisher);
+        ModelFactory::createArticle(
+            item: 42,
+            url: "author/article-audiobook",
+            publisher: $publisher,
+            typeId: ArticleType::BOOK,
+        );
+        $currentSite = $this->createMock(CurrentSite::class);
+        $currentSite->method("getOption")->with("ebook_publisher_id")->willReturn((string) $publisher->getId());
+        $repository = new ArticleRepository();
+
+        // when
+        $result = $repository->findEbookVersionFor($paperback, $currentSite);
+
+        // then
+        $this->assertNull($result);
+    }
+
+    /**
+     * @throws PropelException
+     */
     public function testFindEbookVersionForReturnsNullWhenNoOptionConfigured(): void
     {
         // given

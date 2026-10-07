@@ -18,6 +18,7 @@
 
 namespace Repository;
 
+use Biblys\Data\ArticleType;
 use Biblys\Service\CurrentSite;
 use Model\Article;
 use Model\ArticleQuery;
@@ -42,6 +43,7 @@ class ArticleRepository
             ->filterByItem($item)
             ->filterById($article->getId(), Criteria::NOT_EQUAL)
             ->filterByPublisherId((int) $ebookPublisherId)
+            ->filterByTypeId(ArticleType::EBOOK)
             ->findOne();
     }
 }
