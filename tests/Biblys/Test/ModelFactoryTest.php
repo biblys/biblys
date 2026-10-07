@@ -18,6 +18,7 @@
 
 namespace Biblys\Test;
 
+use Model\BookCollectionQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 
@@ -40,5 +41,24 @@ class ModelFactoryTest extends TestCase
         $customer = $order->getCustomer();
         $this->assertEquals($user->getId(), $customer->getUserId());
         $this->assertNull($customer->getAxysAccountId());
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testCreateCollectionReusesCollectionWithTheSameNameAndPublisher(): void
+    {
+        // given
+        $publisher = ModelFactory::createPublisher();
+        $existing = ModelFactory::createCollection(publisher: $publisher, name: "Pereira");
+        BookCollectionQuery::create()
+            ->filterById($existing->getId())
+            ->update(["Url" => "stale-url"]);
+
+        // when
+        $collection = ModelFactory::createCollection(publisher: $publisher, name: "Pereira");
+
+        // then
+        $this->assertEquals($existing->getId(), $collection->getId());
     }
 }
