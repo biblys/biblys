@@ -147,7 +147,7 @@ XML
         $this->assertEquals("application/rss+xml", $response->headers->get("Content-Type"));
         $this->assertEquals(<<<XML
 <?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:slash="http://purl.org/rss/1.0/modules/slash/">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Éditions Paronymie · Actualités</title>
     <description>Les derniers billets du blog</description>
@@ -161,7 +161,6 @@ XML
       <link>https://example.com/post/1</link>
       <guid>https://example.com/post/1</guid>
       <content:encoded><![CDATA[<img src="/images/post/1.jpg" alt="" role="presentation" /><p>Un contenu d'actualité qui va vous étonner.</p>]]></content:encoded>
-      <slash:comments>0</slash:comments>
     </item>
   </channel>
 </rss>
@@ -293,7 +292,7 @@ XML
         $this->assertEquals("application/rss+xml", $response->headers->get("Content-Type"));
         $this->assertEquals(<<<XML
 <?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:slash="http://purl.org/rss/1.0/modules/slash/">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Éditions Paronymie · Parutions</title>
     <description>Les derniers articles du catalogue</description>
@@ -307,7 +306,6 @@ XML
       <link>https://example.com/articles/1</link>
       <guid>https://example.com/articles/1</guid>
       <content:encoded><![CDATA[<img src="/images/articles/1.jpg" alt="" role="presentation" /><p>Ce livre paraît aujourd'hui.</p>]]></content:encoded>
-      <slash:comments>0</slash:comments>
     </item>
     <item>
       <title>Un article sans quatrième</title>
@@ -315,7 +313,6 @@ XML
       <link>https://example.com/articles/1</link>
       <guid>https://example.com/articles/1</guid>
       <content:encoded><![CDATA[<img src="/images/articles/1.jpg" alt="" role="presentation" /><p>Pas de texte sur la quatrième de couverture.</p>]]></content:encoded>
-      <slash:comments>0</slash:comments>
     </item>
   </channel>
 </rss>
