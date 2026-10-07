@@ -189,8 +189,6 @@ class ModelFactory
         ?int       $noosfereId = null,
     ): BookCollection
     {
-        $slugService = new SlugService();
-
         if ($name === null) {
             $name = Factory::create('fr_FR')->company();
         }
@@ -200,16 +198,14 @@ class ModelFactory
 
         $publisher = $publisher ?? self::createPublisher();
         $collection->setPublisherId($publisher->getId());
-        $slug = $slugService->createForBookCollection(
-            $collection->getName(),
-            $publisher->getName()
-        );
 
         try {
             $collection->save();
         } catch (EntityAlreadyExistsException) {
-            $collection = BookCollectionQuery::create()->findOneByUrl($slug);
-            $collection->setPublisherId($publisher->getId());
+            $collection = BookCollectionQuery::create()
+                ->filterByPublisherId($publisher->getId())
+                ->filterByName($name)
+                ->findOne();
         }
 
         $collection->setNoosfereId($noosfereId);
