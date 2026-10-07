@@ -102,6 +102,51 @@ class ErrorControllerTest extends TestCase
     }
 
     /**
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
+    public function testHandlePageNotFoundWithInvalidUtf8Url()
+    {
+        // given
+        $controller = new ErrorController();
+        $request = new Request();
+        $exception = new ResourceNotFoundException("Page not found");
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldNotReceive("getOption");
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService
+            ->shouldReceive("renderResponse")
+            ->once()
+            ->andReturn(new Response("Page not found"));
+        $config = Mockery::mock(Config::class);
+        $currentUrlService = Mockery::mock(CurrentUrlService::class);
+        $currentUrlService->shouldReceive("getRelativeUrl")->andReturn("/\xC4\xBC\xFF\xFE1.zip");
+        $session = Mockery::mock(Session::class);
+
+        // when
+        $response = $controller->exception(
+            $request,
+            $config,
+            $currentSite,
+            $currentUrlService,
+            $urlGenerator,
+            $session,
+            $templateService,
+            $exception
+        );
+
+        // then
+        $this->assertEquals(
+            404,
+            $response->getStatusCode(),
+            "it should respond with HTTP status 404 without querying the database"
+        );
+    }
+
+    /**
      * @throws SyntaxError
      * @throws RuntimeError
      * @throws LoaderError
