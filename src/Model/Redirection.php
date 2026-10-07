@@ -20,6 +20,7 @@ namespace Model;
 
 use Biblys\Exception\InvalidEntityException;
 use Model\Base\Redirection as BaseRedirection;
+use Model\Map\RedirectionTableMap;
 use Propel\Runtime\Connection\ConnectionInterface;
 
 /**
@@ -39,6 +40,10 @@ class Redirection extends BaseRedirection
      */
     public function preSave(?ConnectionInterface $con = null): bool
     {
+        if (!$this->isNew() && !$this->isColumnModified(RedirectionTableMap::COL_REDIRECTION_OLD) && !$this->isColumnModified(RedirectionTableMap::COL_REDIRECTION_NEW)) {
+            return parent::preSave($con);
+        }
+
         if (!str_starts_with($this->getOldUrl(), "/")) {
             throw new InvalidEntityException("L'ancienne URL doit commencer par un slash (/).");
         }

@@ -165,6 +165,37 @@ class ErrorController extends Controller
     ): Response
     {
         $currentUrl = $currentUrlService->getRelativeUrl();
+
+        if (mb_check_encoding($currentUrl, "UTF-8")) {
+            $redirectResponse = $this->_redirectToMatchingResource($currentSite, $urlGenerator, $currentUrl);
+            if ($redirectResponse) {
+                return $redirectResponse;
+            }
+        }
+
+        if ($request->headers->get("Accept") === "application/json") {
+            return $this->_toJsonErrorResponse($exception, 404);
+        }
+
+        $response = $templateService->renderResponse("AppBundle:Error:404.html.twig", [
+            "exception" => $exception,
+            "exceptionClass" => get_class($exception),
+            "current_url" => $currentUrl,
+        ]);
+        $response->setStatusCode(404);
+
+        return $response;
+    }
+
+    /**
+     * @throws PropelException
+     */
+    private function _redirectToMatchingResource(
+        CurrentSite  $currentSite,
+        UrlGenerator $urlGenerator,
+        string       $currentUrl,
+    ): ?RedirectResponse
+    {
         $currentUrlWithoutFirstSlash = ltrim($currentUrl, "/");
 
         $article = ArticleQuery::create()
@@ -187,24 +218,13 @@ class ErrorController extends Controller
 
         $redirection = RedirectionQuery::create()
             ->findOneByOldUrl($currentUrl);
-        if ($redirection) {
+        if ($redirection && $redirection->getNewUrl() !== $currentUrl) {
             $redirection->setLastUsedAt(new DateTime());
             $redirection->save();
             return new RedirectResponse($redirection->getNewUrl(), 301);
         }
 
-        if ($request->headers->get("Accept") === "application/json") {
-            return $this->_toJsonErrorResponse($exception, 404);
-        }
-
-        $response = $templateService->renderResponse("AppBundle:Error:404.html.twig", [
-            "exception" => $exception,
-            "exceptionClass" => get_class($exception),
-            "current_url" => $currentUrl,
-        ]);
-        $response->setStatusCode(404);
-
-        return $response;
+        return null;
     }
 
     /**
