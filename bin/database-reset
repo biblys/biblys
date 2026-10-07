@@ -22,7 +22,10 @@ $config = Config::load();
 $connection = Propel::getConnection();
 
 $connection->exec(sprintf("DROP DATABASE IF EXISTS `%s`", $config->get("db.base")));
-$connection->exec(sprintf("CREATE DATABASE `%s`", $config->get("db.base")));
+$connection->exec(sprintf(
+    "CREATE DATABASE `%s` CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci",
+    $config->get("db.base")
+));
 $connection->exec(sprintf("USE `%s`", $config->get("db.base")));
 
 echo "Database was reset. \r\n";
