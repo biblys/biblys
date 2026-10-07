@@ -1,5 +1,21 @@
 # Historique des modifications
 
+## 3.17.1 (7 octobre 2026)
+
+### Corrections
+
+- Une redirection enregistrée dont la nouvelle URL ne commence pas par un
+  slash ne provoque plus d'erreur lorsqu'on visite son ancienne URL : la
+  redirection est appliquée.
+- Une redirection enregistrée dont l'ancienne et la nouvelle URL sont
+  identiques n'est plus appliquée : la page d'erreur 404 s'affiche, sans
+  boucle de redirection ni erreur serveur.
+- Les adresses `/api/auth` et `/api/me`, qui ne sont plus gérées, affichent
+  désormais une page d'erreur 404 au lieu d'une erreur serveur.
+- Une adresse contenant des caractères invalides (non UTF-8) affiche désormais
+  une page d'erreur 404 au lieu d'une erreur serveur lorsque la base de données
+  utilise un encodage différent.
+
 ## 3.17.0 (2 octobre 2026)
 
 ### Améliorations
