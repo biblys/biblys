@@ -1,5 +1,11 @@
 # Historique des modifications
 
+## 3.18.0 (DEV)
+
+### Améliorations
+
+- La recherche de clients depuis la caisse a été améliorée.
+
 ## 3.17.0 (2 octobre 2026)
 
 ### Améliorations

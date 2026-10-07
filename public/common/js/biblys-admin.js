@@ -363,7 +363,7 @@ function reloadAdminEvents() {
       if (go == 1) {
         create_sale($('#cart_id').val(), {
           seller_id: $('#seller_id').val(),
-          customer_id: $('#customer_id').val(),
+          customer_id: $('#customer input[name=customer_id]').val(),
           cart_cash: $('#cart_cash').val() * 100,
           cart_cheque: $('#cart_cheque').val() * 100,
           cart_card: $('#cart_card').val() * 100,
@@ -686,55 +686,26 @@ function reloadAdminEvents() {
     .removeClass('event');
 
   // Rechercher un client existant
-  $('#customer.event')
-    .autocomplete({
-      source: '/x/adm_customers',
-      minLength: 3,
-      delay: 250,
-      select: function(event, ui) {
-        if (ui.item.create == '1') {
-          // Creer un nouveau client
-          window.open('/pages/adm_customer', '_blank');
-        } else {
-          // Selectionner un client existant
-          selectCustomer(ui.item.id, ui.item.label);
-        }
-      }
-      // Annuler la sélection du client
-    })
-    .click(function() {
-      update_cart_info(
-        $('#cart_id').val(),
-        'customer_id',
-        0
-      ).then(function(res) {
-        if (res) {
-          $('#customer')
-            .removeClass('pointer')
-            .removeAttr('readonly')
-            .val('');
-          $('#customer_id').val('');
-        }
-      });
-    })
-    .removeClass('event');
+  const customerField = document.querySelector('#customer.EntitySearchField');
+  if (customerField) {
+    import('/common/js/entity-search-field.js').then(({ default: EntitySearchField }) => {
+      new EntitySearchField(customerField, {
+        onResultSelected: async (field, { value }) => {
+          const res = await update_cart_info($('#cart_id').val(), 'customer_id', value);
+          if (!res) {
+            field.reset();
+            return;
+          }
 
-  // Sélectionner un client
-  function selectCustomer(id, name) {
-    update_cart_info(
-      $('#cart_id').val(),
-      'customer_id',
-      id
-    ).then(function(res) {
-      if (res) {
-        $('#customer')
-          .addClass('pointer')
-          .attr('readonly', 'readonly')
-          .val(name);
-        $('#customer_id').val(id);
-        $('#article').focus();
-        notify(res.success);
-      }
+          notify(res.success);
+          $('#article').focus();
+        },
+        onReset: () => update_cart_info($('#cart_id').val(), 'customer_id', 0),
+        action: {
+          label: 'Créer un nouveau client',
+          onSelect: () => window.open('/pages/adm_customer', '_blank'),
+        },
+      });
     });
   }
 

@@ -72,19 +72,23 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
             </div>
           </div>
 
+          {% set customerField = {
+            field_id: "customer",
+            query_url: path("customer_search"),
+            label: "Rechercher un client…",
+            input_name: "customer_id",
+          } %}
+          {% if customer %}
+            {% set customerField = customerField|merge({
+              selected_result_value: customer.getId(),
+              selected_result_label: customer.getLastName() ~ ", " ~ customer.getFirstName() ~ " (" ~ customer.getEmail() ~ ")",
+            }) %}
+          {% endif %}
+
           <div class="form-group row mb-0">
-            <label for="customer" class="col-2 col-form-label">Client</label>
+            <div class="col-2 col-form-label">Client</div>
             <div class="col">
-              {% if customer %}
-                <input type="text" name="customer" id="customer"
-                       placeholder="Rechercher un client..."
-                       value="{{ customer.getLastName() }}, {{ customer.getFirstName() }} ({{ customer.getEmail() }})"
-                       readonly class="form-control pointer event">
-                <input type="hidden" name="customer_id" id="customer_id" value="{{ customer.getId() }}" required>
-              {% else %}
-                <input type="text" name="customer" id="customer" placeholder="Rechercher un client..." class="form-control event">
-                <input type="hidden" name="customer_id" id="customer_id" required>
-              {% endif %}
+              {% include "AppBundle:Utils:_entity-search-field.html.twig" with customerField %}
             </div>
           </div>
 

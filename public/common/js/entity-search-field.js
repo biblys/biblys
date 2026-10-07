@@ -45,6 +45,7 @@ export default class EntitySearchField {
    * @param {HTMLElement} element
    * @param {object} options
    * @param {(field: EntitySearchField, result: Result) => {}} options.onResultSelected
+   * @param {(field: EntitySearchField) => {}} options.onReset called when the user unlocks the field to change the selection
    * @param {object} options.action
    * @param {string} options.action.label
    * @param {(field: EntitySearchField, query: string) => {}} options.action.onSelect
@@ -78,6 +79,7 @@ export default class EntitySearchField {
     this.subMenu = element.querySelector('.autocomplete-results');
 
     this.onResultSelectedCallback = options.onResultSelected;
+    this.onResetCallback = options.onReset;
 
     this.shouldSubmitParentForm = element.dataset.submit_form !== undefined;
     this.parentForm = element.closest('form');
@@ -99,7 +101,7 @@ export default class EntitySearchField {
     this.#showHelpText();
 
     if (this.#lockedMode) {
-      this.#switchToSearchMode();
+      this.#unlock();
     }
   }
 
@@ -109,11 +111,16 @@ export default class EntitySearchField {
 
   #onButtonClick(event) {
     if (this.#lockedMode) {
-      this.#switchToSearchMode();
+      this.#unlock();
       return;
     }
 
     return this.#search(event);
+  }
+
+  #unlock() {
+    this.#switchToSearchMode();
+    this.onResetCallback?.(this);
   }
 
   #onInput(event) {
