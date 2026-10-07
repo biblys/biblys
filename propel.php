@@ -31,7 +31,7 @@ $propelConfig = [
                     'user' => $config->get("db.user"),
                     'password' => $config->get("db.pass"),
                     'settings' => [
-                        'charset' => 'utf8'
+                        'charset' => 'utf8mb4'
                     ]
                 ]
             ]
