@@ -62,7 +62,7 @@ class CFRewardControllerTest extends TestCase
             $request,
             $urlGenerator,
             $currentUser,
-            $reward->getId()
+            $reward->getCampaignId()
         );
 
         // then
