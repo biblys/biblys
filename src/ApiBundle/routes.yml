@@ -1,13 +1,3 @@
-# External Auth
-
-api_auth:
-  path: /api/auth
-  controller: ApiBundle\Controller\AuthController::authAction
-
-api_me:
-  path: /api/me
-  controller: ApiBundle\Controller\AuthController::meAction
-
 # Articles
 
 api_articles_export:
