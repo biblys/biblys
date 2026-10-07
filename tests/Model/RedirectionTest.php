@@ -21,6 +21,7 @@ namespace Model;
 use Biblys\Exception\InvalidEntityException;
 use Biblys\Test\Helpers;
 use Exception;
+use Model\Map\RedirectionTableMap;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 
@@ -97,5 +98,32 @@ class RedirectionTest extends TestCase
         // then
         $this->assertInstanceOf(InvalidEntityException::class, $exception);
         $this->assertEquals("L'ancienne URL et la nouvelle URL doivent être différentes.", $exception->getMessage());
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testUpdatingLastUsedAtOnLegacyInvalidRedirection()
+    {
+        // given
+        $redirection = new Redirection();
+        $redirection->setOldUrl("/old-url");
+        $redirection->setNewUrl("/new-url");
+        $redirection->save();
+        RedirectionQuery::create()
+            ->filterById($redirection->getId())
+            ->update(["NewUrl" => "/old-url"]);
+        RedirectionTableMap::clearInstancePool();
+        $legacyRedirection = RedirectionQuery::create()->findPk($redirection->getId());
+
+        // when
+        $legacyRedirection->setLastUsedAt(new \DateTime());
+        $legacyRedirection->save();
+
+        // then
+        $this->assertNotNull(
+            RedirectionQuery::create()->findPk($redirection->getId())->getLastUsedAt(),
+            "should save last used date without revalidating urls"
+        );
     }
 }
