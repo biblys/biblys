@@ -218,7 +218,7 @@ class ErrorController extends Controller
 
         $redirection = RedirectionQuery::create()
             ->findOneByOldUrl($currentUrl);
-        if ($redirection) {
+        if ($redirection && $redirection->getNewUrl() !== $currentUrl) {
             $redirection->setLastUsedAt(new DateTime());
             $redirection->save();
             return new RedirectResponse($redirection->getNewUrl(), 301);
