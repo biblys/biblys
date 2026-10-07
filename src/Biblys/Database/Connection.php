@@ -44,7 +44,7 @@ class Connection
                 $config->get("db.user"),
                 $config->get("db.pass"),
             );
-            $_SQL->exec("SET CHARACTER SET utf8");
+            $_SQL->exec("SET NAMES utf8mb4 COLLATE utf8mb4_general_ci");
             $_SQL->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $GLOBALS["_SQL"] = $_SQL;
 
@@ -92,8 +92,8 @@ class Connection
             "user" => $config->get("db.user"),
             "password" => $config->get("db.pass"),
             "settings" => [
-                "charset" => "utf8",
-                "queries" => [],
+                "charset" => "utf8mb4",
+                "queries" => ["SET NAMES utf8mb4 COLLATE utf8mb4_general_ci"],
             ],
             "classname" => "\\Propel\\Runtime\\Connection\\ConnectionWrapper",
             "model_paths" => [

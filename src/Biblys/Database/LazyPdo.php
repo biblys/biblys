@@ -76,7 +76,7 @@ class LazyPdo extends PDO
         }
 
         $this->connected = true;
-        parent::exec("SET CHARACTER SET utf8");
+        parent::exec("SET NAMES utf8mb4 COLLATE utf8mb4_general_ci");
         parent::setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
 
