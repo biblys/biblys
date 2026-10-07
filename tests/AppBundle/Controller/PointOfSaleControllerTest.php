@@ -86,6 +86,45 @@ class PointOfSaleControllerTest extends TestCase
     /**
      * @throws PropelException
      */
+    public function testIndexActionPreselectsCustomerInSearchField(): void
+    {
+        // given
+        $controller = $this->_getController();
+        $customer = ModelFactory::createCustomer(
+            firstName: "Silas",
+            lastName: "Coade",
+            email: "silas.coade@paronymie.fr",
+        );
+        $cart = EntityFactory::createCart();
+        $cart->set("customer_id", $customer->getId());
+        $cartManager = new \CartManager();
+        $cartManager->update($cart);
+        $request = new Request(query: ['cart_id' => $cart->get('id')]);
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authAdmin");
+
+        // when
+        $response = $controller->indexAction(
+            $request,
+            $currentUser,
+            $this->_getCurrentSiteMock(),
+            Helpers::getTemplateService(),
+            Mockery::mock(UrlGenerator::class),
+            new QueryParamsService($request),
+        );
+
+        // then
+        $content = $response->getContent();
+        $this->assertStringContainsString('data-query_url="/admin/customers/search"', $content);
+        $this->assertStringContainsString('name="customer_id"', $content);
+        $this->assertStringContainsString("value=\"{$customer->getId()}\"", $content);
+        $this->assertStringContainsString("Coade, Silas (silas.coade@paronymie.fr)", $content);
+    }
+
+    /**
+     * @throws PropelException
+     */
     public function testIndexActionRedirectsToCartWhenNoCartIdProvided(): void
     {
         // given
