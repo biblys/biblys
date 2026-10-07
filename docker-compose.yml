@@ -10,6 +10,9 @@ services:
   db:
     image: mariadb:13.0
     container_name: biblys-mysql
+    command:
+      - '--character-set-server=utf8mb4'
+      - '--collation-server=utf8mb4_general_ci'
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: yes
       MYSQL_DATABASE: biblys

@@ -76,6 +76,15 @@ docker compose up -d
 
 ### 8. Create database
 
+When using your own MySQL or MariaDB server instead of the provided docker
+image, create the database with the `utf8mb4` character set first:
+
+```sql
+CREATE DATABASE biblys CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+```
+
+Then create the tables:
+
 ```shell
 composer run propel:migrate
 ```

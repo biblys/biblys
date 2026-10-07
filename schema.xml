@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <database name="default" defaultIdMethod="native" namespace="Model" defaultPhpNamingMethod="underscore">
+  <vendor type="mysql">
+    <parameter name="Charset" value="utf8mb4"/>
+    <parameter name="Collate" value="utf8mb4_general_ci"/>
+  </vendor>
   <table name="alerts" idMethod="native" phpName="Alert">
     <column name="alert_id" phpName="Id" type="INTEGER" sqlType="int unsigned" primaryKey="true" autoIncrement="true" required="true"/>
     <column name="site_id" phpName="SiteId" type="INTEGER" sqlType="int unsigned"/>
