@@ -64,7 +64,10 @@ class ArticleStructuredDataBuilder
         }
 
         $summary = $article->getSummary() ?: "";
-        $data["description"] = truncate(strip_tags($summary), 500, "...", true);
+        $description = trim(truncate(strip_tags($summary), 500, "...", true));
+        if ($description !== "") {
+            $data["description"] = $description;
+        }
 
         $publisher = $article->getPublisher();
         if ($publisher) {

@@ -59,6 +59,23 @@ class ArticleStructuredDataBuilderTest extends TestCase
     /**
      * @throws PropelException
      */
+    public function testBuildOmitsDescriptionWhenArticleHasNoSummary()
+    {
+        // given
+        $article = ModelFactory::createArticle(typeId: ArticleType::BOOK, summary: "<p> </p>");
+        $currentSite = $this->createMock(CurrentSite::class);
+        $builder = new ArticleStructuredDataBuilder(new StockRepository());
+
+        // when
+        $data = $builder->build($article, "/images/cover.jpg", $currentSite);
+
+        // then
+        $this->assertArrayNotHasKey("description", $data);
+    }
+
+    /**
+     * @throws PropelException
+     */
     public function testBuildReturnsEmptyArrayForSubscription()
     {
         // given
