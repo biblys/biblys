@@ -12,6 +12,8 @@
   d'une erreur serveur.
 - Les données structurées des pages article n'incluent plus d'offre (prix et
   disponibilité) pour les articles sans couverture.
+- Les données structurées des pages article n'incluent plus de champ
+  description vide pour les articles sans résumé.
 
 ## 3.17.1 (7 octobre 2026)
 

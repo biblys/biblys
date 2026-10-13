@@ -22,6 +22,7 @@ use Biblys\Data\ArticleType;
 use Biblys\Service\CurrentSite;
 use Biblys\Test\ModelFactory;
 use DateTime;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Repository\StockRepository;
@@ -54,6 +55,34 @@ class ArticleStructuredDataBuilderTest extends TestCase
         $this->assertEquals("Citoyens de demain", $data["name"]);
         $this->assertEquals("Un roman essentiel.", $data["description"]);
         $this->assertEquals("Éditions Paronymie", $data["brand"]["name"]);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    #[DataProvider("blankSummaryProvider")]
+    public function testBuildOmitsDescriptionWhenArticleHasNoSummary(string $summary)
+    {
+        // given
+        $article = ModelFactory::createArticle(typeId: ArticleType::BOOK, summary: $summary);
+        $currentSite = $this->createMock(CurrentSite::class);
+        $builder = new ArticleStructuredDataBuilder(new StockRepository());
+
+        // when
+        $data = $builder->build($article, "/images/cover.jpg", $currentSite);
+
+        // then
+        $this->assertArrayNotHasKey("description", $data);
+    }
+
+    public static function blankSummaryProvider(): array
+    {
+        return [
+            "empty paragraph" => ["<p> </p>"],
+            "html non-breaking space" => ["<p>&nbsp;</p>"],
+            "several html non-breaking spaces" => ["<p>&nbsp; &nbsp;</p>"],
+            "non-breaking space character" => ["<p>\u{00A0}</p>"],
+        ];
     }
 
     /**
