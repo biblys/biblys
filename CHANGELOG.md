@@ -1,5 +1,13 @@
 # Historique des modifications
 
+## 3.17.2 (13 octobre 2026)
+
+### Améliorations
+
+- Dans les listes d'articles, une info-bulle s'affiche au-dessus du bouton
+  « Actualiser » dès qu'un filtre ou un tri a été modifié, pour indiquer qu'il
+  faut cliquer dessus afin d'appliquer le choix.
+
 ## 3.17.1 (7 octobre 2026)
 
 ### Corrections
