@@ -28,6 +28,7 @@ use Model\Role;
 use Model\RoleQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 require_once __DIR__."/../../setUp.php";
 
@@ -232,5 +233,41 @@ class ContributionControllerTest extends TestCase
             $response->getContent(),
             "it should response with authors"
         );
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testUpdateActionWithUnknownContribution()
+    {
+        // given
+        $request = RequestFactory::createAuthRequestForAdminUser('{"job_id":"2"}');
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $controller = new ContributionController();
+
+        // then
+        $this->expectException(ResourceNotFoundException::class);
+        $this->expectExceptionMessage("Cannot find contribution with id 0");
+
+        // when
+        $controller->update($request, $currentUser, 0);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testDeleteActionWithUnknownContribution()
+    {
+        // given
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $controller = new ContributionController();
+
+        // then
+        $this->expectException(ResourceNotFoundException::class);
+        $this->expectExceptionMessage("Cannot find contribution with id 0");
+
+        // when
+        $controller->delete($currentUser, 0);
     }
 }

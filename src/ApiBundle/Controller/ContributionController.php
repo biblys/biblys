@@ -30,6 +30,7 @@ use Model\RoleQuery;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 class ContributionController extends Controller
 {
@@ -124,6 +125,11 @@ class ContributionController extends Controller
         $jobId = $params["job_id"];
 
         $contribution = RoleQuery::create()->findPk($id);
+        if (!$contribution) {
+            throw new ResourceNotFoundException(
+                sprintf("Cannot find contribution with id %s", $id)
+            );
+        }
 
         $articlePublisher = PublisherQuery::create()->findPk($contribution->getArticle()->getPublisherId());
         $currentUser->authPublisher($articlePublisher);
@@ -142,6 +148,11 @@ class ContributionController extends Controller
     public function delete(CurrentUser $currentUser, int $id): JsonResponse
     {
         $contribution = RoleQuery::create()->findPk($id);
+        if (!$contribution) {
+            throw new ResourceNotFoundException(
+                sprintf("Cannot find contribution with id %s", $id)
+            );
+        }
 
         $articlePublisher = PublisherQuery::create()->findPk($contribution->getArticle()->getPublisherId());
         $currentUser->authPublisher($articlePublisher);
