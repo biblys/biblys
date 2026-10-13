@@ -8,6 +8,12 @@
   « Actualiser » dès qu'un filtre ou un tri a été modifié, pour indiquer qu'il
   faut cliquer dessus afin d'appliquer le choix.
 
+### Corrections
+
+- Modifier ou supprimer une contribution (auteur, traducteur…) qui n'existe
+  plus, par exemple déjà supprimée, affiche désormais une erreur 404 au lieu
+  d'une erreur serveur.
+
 ## 3.17.1 (7 octobre 2026)
 
 ### Corrections
