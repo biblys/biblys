@@ -160,7 +160,7 @@ class ArticleStructuredDataBuilderTest extends TestCase
     /**
      * @throws PropelException
      */
-    public function testBuildAddsSimpleOfferForDownloadableArticle()
+    public function testBuildOmitsOffersWhenArticleHasNoImage()
     {
         // given
         $article = ModelFactory::createArticle(
@@ -173,6 +173,29 @@ class ArticleStructuredDataBuilderTest extends TestCase
 
         // when
         $data = $builder->build($article, null, $currentSite);
+
+        // then
+        $this->assertEquals(["Product", "Book"], $data["@type"]);
+        $this->assertArrayNotHasKey("image", $data);
+        $this->assertArrayNotHasKey("offers", $data);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testBuildAddsSimpleOfferForDownloadableArticle()
+    {
+        // given
+        $article = ModelFactory::createArticle(
+            typeId: ArticleType::EBOOK,
+            price: 1290,
+            availabilityDilicom: 1,
+        );
+        $currentSite = $this->createMock(CurrentSite::class);
+        $builder = new ArticleStructuredDataBuilder(new StockRepository());
+
+        // when
+        $data = $builder->build($article, "/images/cover.jpg", $currentSite);
 
         // then
         $this->assertEquals("Offer", $data["offers"]["@type"]);
@@ -203,7 +226,7 @@ class ArticleStructuredDataBuilderTest extends TestCase
         $builder = new ArticleStructuredDataBuilder(new StockRepository());
 
         // when
-        $data = $builder->build($article, null, $currentSite);
+        $data = $builder->build($article, "/images/cover.jpg", $currentSite);
 
         // then
         $this->assertEquals($expectedAvailability, $data["offers"]["availability"]);
@@ -233,7 +256,7 @@ class ArticleStructuredDataBuilderTest extends TestCase
         $builder = new ArticleStructuredDataBuilder(new StockRepository());
 
         // when
-        $data = $builder->build($article, null, $currentSite);
+        $data = $builder->build($article, "/images/cover.jpg", $currentSite);
 
         // then
         $this->assertEquals("XOF", $data["offers"]["priceCurrency"]);
@@ -255,7 +278,7 @@ class ArticleStructuredDataBuilderTest extends TestCase
         $builder = new ArticleStructuredDataBuilder(new StockRepository());
 
         // when
-        $data = $builder->build($article, null, $currentSite);
+        $data = $builder->build($article, "/images/cover.jpg", $currentSite);
 
         // then
         $this->assertEquals("Offer", $data["offers"]["@type"]);
@@ -276,7 +299,7 @@ class ArticleStructuredDataBuilderTest extends TestCase
         $builder = new ArticleStructuredDataBuilder(new StockRepository());
 
         // when
-        $data = $builder->build($article, null, $currentSite);
+        $data = $builder->build($article, "/images/cover.jpg", $currentSite);
 
         // then
         $this->assertArrayNotHasKey("offers", $data);
@@ -295,7 +318,7 @@ class ArticleStructuredDataBuilderTest extends TestCase
         $builder = new ArticleStructuredDataBuilder(new StockRepository());
 
         // when
-        $data = $builder->build($article, null, $currentSite);
+        $data = $builder->build($article, "/images/cover.jpg", $currentSite);
 
         // then
         $this->assertEquals("Offer", $data["offers"]["@type"]);
@@ -317,7 +340,7 @@ class ArticleStructuredDataBuilderTest extends TestCase
         $builder = new ArticleStructuredDataBuilder(new StockRepository());
 
         // when
-        $data = $builder->build($article, null, $currentSite);
+        $data = $builder->build($article, "/images/cover.jpg", $currentSite);
 
         // then
         $this->assertEquals("AggregateOffer", $data["offers"]["@type"]);
@@ -341,7 +364,7 @@ class ArticleStructuredDataBuilderTest extends TestCase
         $builder = new ArticleStructuredDataBuilder(new StockRepository());
 
         // when
-        $data = $builder->build($article, null, $currentSite);
+        $data = $builder->build($article, "/images/cover.jpg", $currentSite);
 
         // then
         $this->assertEquals("Offer", $data["offers"]["@type"]);

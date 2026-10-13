@@ -101,9 +101,12 @@ class ArticleStructuredDataBuilder
             }
         }
 
-        $offers = $this->_buildOffers($article, $type, $currentSite);
-        if ($offers !== null) {
-            $data["offers"] = $offers;
+        // Google rejects merchant listings without an image
+        if ($imageUrl) {
+            $offers = $this->_buildOffers($article, $type, $currentSite);
+            if ($offers !== null) {
+                $data["offers"] = $offers;
+            }
         }
 
         return $data;
