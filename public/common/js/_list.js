@@ -25,6 +25,13 @@ document.addEventListener('DOMContentLoaded', function() {
   pendingParams.delete('s');
   pendingParams.delete('_FORMAT');
 
+  const initialQuery = pendingParams.toString();
+
+  function updateApplyHint() {
+    const hasPendingChange = pendingParams.toString() !== initialQuery;
+    applyButton.toggleAttribute('data-pending', hasPendingChange);
+  }
+
   function rememberChoice(link, keys) {
     const linkParams = new URL(link.href, window.location.href).searchParams;
     keys.forEach(function(key) {
@@ -32,6 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
       else pendingParams.delete(key);
     });
     pendingParams.delete('p');
+    updateApplyHint();
   }
 
   function markSelected(link, group) {
