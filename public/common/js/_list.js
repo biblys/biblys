@@ -25,6 +25,23 @@ document.addEventListener('DOMContentLoaded', function() {
   pendingParams.delete('s');
   pendingParams.delete('_FORMAT');
 
+  const initialQuery = pendingParams.toString();
+
+  const canShowPopover = window.jQuery && window.jQuery.fn.popover;
+  if (canShowPopover) {
+    window.jQuery(applyButton).popover({
+      content: 'Cliquez sur « Actualiser » pour appliquer vos choix.',
+      placement: 'top',
+      trigger: 'manual',
+    });
+  }
+
+  function updateApplyHint() {
+    if (!canShowPopover) return;
+    const hasPendingChange = pendingParams.toString() !== initialQuery;
+    window.jQuery(applyButton).popover(hasPendingChange ? 'show' : 'hide');
+  }
+
   function rememberChoice(link, keys) {
     const linkParams = new URL(link.href, window.location.href).searchParams;
     keys.forEach(function(key) {
@@ -32,6 +49,7 @@ document.addEventListener('DOMContentLoaded', function() {
       else pendingParams.delete(key);
     });
     pendingParams.delete('p');
+    updateApplyHint();
   }
 
   function markSelected(link, group) {
