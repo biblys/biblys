@@ -64,7 +64,10 @@ class ArticleStructuredDataBuilder
         }
 
         $summary = $article->getSummary() ?: "";
-        $data["description"] = truncate(strip_tags($summary), 500, "...", true);
+        $summaryText = strip_tags($summary);
+        if (!$this->_isBlank($summaryText)) {
+            $data["description"] = trim(truncate($summaryText, 500, "...", true));
+        }
 
         $publisher = $article->getPublisher();
         if ($publisher) {
@@ -101,9 +104,11 @@ class ArticleStructuredDataBuilder
             }
         }
 
-        $offers = $this->_buildOffers($article, $type, $currentSite);
-        if ($offers !== null) {
-            $data["offers"] = $offers;
+        if ($imageUrl) {
+            $offers = $this->_buildOffers($article, $type, $currentSite);
+            if ($offers !== null) {
+                $data["offers"] = $offers;
+            }
         }
 
         return $data;
@@ -207,6 +212,11 @@ class ArticleStructuredDataBuilder
         }
 
         return "https://schema.org/OutOfStock";
+    }
+
+    private function _isBlank(string $text): bool
+    {
+        return preg_match('/^[\s\p{Z}]*$/u', html_entity_decode($text)) === 1;
     }
 
     private function _getCurrency(CurrentSite $currentSite): string

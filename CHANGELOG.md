@@ -6,6 +6,21 @@
 
 - La recherche de clients depuis la caisse a été améliorée.
 
+## 3.17.2 (13 octobre 2026)
+
+### Corrections
+
+- Dans les listes d'articles, une info-bulle s'affiche au-dessus du bouton
+  « Actualiser » dès qu'un filtre ou un tri a été modifié, pour indiquer qu'il
+  faut cliquer dessus afin d'appliquer le choix.
+- Modifier ou supprimer une contribution (auteur, traducteur…) qui n'existe
+  plus, par exemple déjà supprimée, affiche désormais une erreur 404 au lieu
+  d'une erreur serveur.
+- Les données structurées des pages article n'incluent plus d'offre (prix et
+  disponibilité) pour les articles sans couverture.
+- Les données structurées des pages article n'incluent plus de champ
+  description vide pour les articles sans résumé.
+
 ## 3.17.1 (7 octobre 2026)
 
 ### Corrections
