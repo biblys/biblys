@@ -1058,6 +1058,28 @@ table.list td {
   vertical-align: middle !important;
 }
 
+#listApply {
+  position: relative;
+}
+
+#listApply[data-pending]::after {
+  content: "Cliquez sur « Actualiser »\A pour appliquer vos choix.";
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1070;
+  padding: 4px 8px;
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.9);
+  color: white;
+  font-size: 14px;
+  font-weight: normal;
+  text-align: center;
+  white-space: pre;
+  pointer-events: none;
+}
+
 /* DEFAULT BUTTON */
 
 a.button {
