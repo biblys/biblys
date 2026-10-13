@@ -10,6 +10,8 @@
 - Modifier ou supprimer une contribution (auteur, traducteur…) qui n'existe
   plus, par exemple déjà supprimée, affiche désormais une erreur 404 au lieu
   d'une erreur serveur.
+- Les données structurées des pages article n'incluent plus d'offre (prix et
+  disponibilité) pour les articles sans couverture.
 
 ## 3.17.1 (7 octobre 2026)
 
