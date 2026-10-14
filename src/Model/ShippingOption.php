@@ -35,10 +35,11 @@ use Propel\Runtime\Exception\PropelException;
  */
 class ShippingOption extends BaseShippingOption
 {
+    public const PICKUP_TYPE = "magasin";
 
     public function isCompliantWithFrenchLaw(): bool
     {
-        if ($this->getType() === 'magasin') {
+        if ($this->getType() === self::PICKUP_TYPE) {
             return true;
         }
 

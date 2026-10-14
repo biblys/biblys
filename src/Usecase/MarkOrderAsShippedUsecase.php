@@ -24,6 +24,7 @@ use Biblys\Service\Mailer;
 use Biblys\Service\TemplateService;
 use DateTime;
 use Model\Order;
+use Model\ShippingOption;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Twig\Error\LoaderError;
@@ -63,7 +64,7 @@ readonly class MarkOrderAsShippedUsecase
         $mailSubject = "Votre commande $mailSubjectSuffix";
         $mailMessage = $this->currentSite->getOption("shipped_mail_message") ?? "Votre commande n°{$order->getId()} a été expédiée.";
 
-        $isPickup = $order->getShippingOption()->getType() === "magasin";
+        $isPickup = $order->getShippingOption()->getType() === ShippingOption::PICKUP_TYPE;
         if ($isPickup) {
             $mailSubject = "Votre commande est disponible en magasin !";
             $mailMessage = "Votre commande n°{$order->getId()} est disponible en magasin.";
