@@ -48,7 +48,7 @@ class ShippingOptionQuery extends BaseShippingOptionQuery
         $query = self::create();
         $fees = $query->orderByFee()->find();
 
-        $shippingTypes = ['magasin', 'normal', 'colissimo', 'mondial-relay'];
+        $shippingTypes = [ShippingOption::PICKUP_TYPE, 'normal', 'colissimo', 'mondial-relay'];
 
         $feesForEachTypes = array_map(
             function ($type) use ($fees, $zonesForCountry, $weight, $amount, $articleCount) {

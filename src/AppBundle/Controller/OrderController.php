@@ -30,6 +30,7 @@ use Exception;
 use Framework\Controller;
 use Model\OrderQuery;
 use Model\Payment;
+use Model\ShippingOption;
 use Model\StockQuery;
 use Order;
 use OrderManager;
@@ -85,10 +86,10 @@ class OrderController extends Controller
             } elseif ($status == 2) {
                 $where['order_payment_date'] = 'NOT NULL';
                 $where['order_shipping_date'] = 'NULL';
-                $where['order_shipping_mode'] = '!= magasin';
+                $where['order_shipping_mode'] = '!= ' . ShippingOption::PICKUP_TYPE;
             } elseif ($status == 3) {
                 $where['order_shipping_date'] = 'NULL';
-                $where['order_shipping_mode'] = 'magasin';
+                $where['order_shipping_mode'] = ShippingOption::PICKUP_TYPE;
             } elseif ($status == 4) {
                 $where['order_cancel_date'] = 'NOT NULL';
             }

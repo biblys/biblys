@@ -250,7 +250,7 @@ class CreateSeedsCommand extends Command
         // Order to be paid, picked up in-store so the cash payment option can be tested
         $pickupShippingOption = new ShippingOption();
         $pickupShippingOption->setMode("Retrait en magasin");
-        $pickupShippingOption->setType("magasin");
+        $pickupShippingOption->setType(ShippingOption::PICKUP_TYPE);
         $pickupShippingOption->setShippingZoneId(1);
         $pickupShippingOption->setFee(0);
         $pickupShippingOption->save();
