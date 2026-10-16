@@ -54,6 +54,7 @@ use Model\Tag;
 use Model\TagQuery;
 use Propel\Runtime\Exception\PropelException;
 use Psr\Http\Client\ClientExceptionInterface;
+use Repository\ShippingOptionRepository;
 use Repository\StockRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -121,7 +122,10 @@ class ArticleController extends Controller
         $metaTags->setTitle($articleModel->getTitle());
         $metaTags->setUrl($urlGenerator->generate("article_show", ["slug" => $articleModel->getUrl()]));
 
-        $structuredDataBuilder = new ArticleStructuredDataBuilder(new StockRepository());
+        $structuredDataBuilder = new ArticleStructuredDataBuilder(
+            new StockRepository(),
+            new ShippingOptionRepository(),
+        );
         $structuredDataImageUrl = $imagesService->imageExistsFor($articleModel)
             ? $imagesService->getImageUrlFor($articleModel)
             : null;

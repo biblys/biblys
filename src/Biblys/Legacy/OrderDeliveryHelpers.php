@@ -38,6 +38,7 @@ use Model\Cart;
 use Model\Order;
 use Model\OrderQuery;
 use Model\Page;
+use Model\ShippingOption;
 use Model\SpecialOfferQuery;
 use Model\Stock;
 use Model\StockQuery;
@@ -310,7 +311,7 @@ class OrderDeliveryHelpers
         }
 
         $mailAddressType = '<p><strong>Adresse d’expédition :</strong></p>';
-        if ($shipping && $shipping->get("type") === "magasin") {
+        if ($shipping && $shipping->get("type") === ShippingOption::PICKUP_TYPE) {
             $mailAddressType = '<p>Vous avez choisi le retrait en magasin. Vous serez averti par courriel lorsque votre commande sera disponible.</p><p><strong>Adresse de facturation :</strong></p>';
         }
 
