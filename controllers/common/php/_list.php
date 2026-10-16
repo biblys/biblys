@@ -425,8 +425,27 @@ if ($pagination->getTotal() > 1) {
             $paginationNav .= '<a href="'.htmlspecialchars($pagination->getPreviousQuery() ?: '?').'" aria-label="Aller à la page précédente" class="btn btn-outline-primary">&laquo; Précédent</a>';
         }
 
+        $flattenQueryParams = function (array $params, string $prefix = '') use (&$flattenQueryParams): array {
+            $flattened = [];
+            foreach ($params as $key => $value) {
+                $name = $prefix === '' ? (string) $key : $prefix.'['.$key.']';
+                $flattened = array_merge(
+                    $flattened,
+                    is_array($value) ? $flattenQueryParams($value, $name) : [$name => (string) $value]
+                );
+            }
+            return $flattened;
+        };
+
+        $queryParamsToKeep = array_diff_key($request->query->all(), array_flip(['p', 's', '_FORMAT']));
+        $pageSelectorHiddenFields = '';
+        foreach ($flattenQueryParams($queryParamsToKeep) as $name => $value) {
+            $pageSelectorHiddenFields .= '<input type="hidden" name="'.htmlspecialchars($name).'" value="'.htmlspecialchars($value).'">';
+        }
+
         $paginationNav .= '
             <form class="form-inline mb-0" method="get">
+                '.$pageSelectorHiddenFields.'
                 <div class="Pagination__page-selector form-group text-center">
                     <label for="target-page">Page</label>
                     <select name="p" class="form-control" id="target-page" aria-label="Aller à la page">

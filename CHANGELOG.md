@@ -6,6 +6,9 @@
 
 - Dans les résultats de la recherche (ancienne version), les liens de pagination
   ne provoquent plus l'erreur « Requête invalide : Unexpected parameter 'p' ».
+- Dans les listes d'articles de plus de 10 pages, le bouton « Aller » du
+  sélecteur de page conserve désormais la recherche, le tri et les filtres en
+  cours au lieu de provoquer une erreur ou de les réinitialiser.
 
 ## 3.17.2 (13 octobre 2026)
 
