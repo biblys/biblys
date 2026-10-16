@@ -1,5 +1,12 @@
 # Historique des modifications
 
+## 3.17.3 (16 octobre 2026)
+
+### Corrections
+
+- Dans les résultats de la recherche (ancienne version), les liens de pagination
+  ne provoquent plus l'erreur « Requête invalide : Unexpected parameter 'p' ».
+
 ## 3.17.2 (13 octobre 2026)
 
 ### Corrections

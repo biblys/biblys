@@ -37,6 +37,7 @@ return function (
         "d" => ["type" => "numeric", "default" => 0],
         "_FORMAT" => ["type" => "string", "default" => "html"],
         "s" => ["type" => "numeric", "default" => 0],
+        "p" => ["type" => "numeric", "default" => 0],
     ]);
     $query = $queryParams->get("q");
 
