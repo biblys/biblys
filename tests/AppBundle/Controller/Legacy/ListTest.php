@@ -30,7 +30,6 @@ class ListTest extends TestCase
     protected function tearDown(): void
     {
         unset($GLOBALS["LEGACY_REQUEST"]);
-        $_GET = [];
     }
 
     public function testPageSelectorKeepsCurrentQueryParams()
@@ -45,7 +44,6 @@ class ListTest extends TestCase
             );
         }
         $query = ["o" => "article_title_alphabetic", "p" => "3", "s" => "1", "_FORMAT" => "html"];
-        $_GET = $query;
         $GLOBALS["LEGACY_REQUEST"] = new Request(query: $query);
 
         $_REQ = "";
@@ -71,12 +69,29 @@ class ListTest extends TestCase
         );
     }
 
+    public function testListKeepsSearchQueryInSortLinks()
+    {
+        // given
+        $GLOBALS["LEGACY_REQUEST"] = new Request(query: ["q" => "Fleuve Noir"]);
+        $_REQ = null;
+        $terms = null;
+
+        // when
+        $content = require __DIR__ . "/../../../../controllers/common/php/_list.php";
+
+        // then
+        $this->assertStringContainsString(
+            "?q=Fleuve+Noir&amp;o=article_title_alphabetic&amp;d=0",
+            $content,
+            "it should keep the search query in sort links"
+        );
+    }
+
     #[DataProvider("paramsThatMustBeStringsProvider")]
     public function testListRejectsParamGivenAsArray(string $paramName)
     {
         // given
         $query = [$paramName => ["../?", "../%3f"]];
-        $_GET = $query;
         $GLOBALS["LEGACY_REQUEST"] = new Request(query: $query);
 
         // then

@@ -55,9 +55,7 @@ $filters = null;
 $sel_etat = null;
 $_og_image = null;
 $_og_description = null;
-if (!isset($_GET['q'])) {
-    $_GET['q'] = null;
-}
+$searchQuery = (string) $request->query->get('q', '');
 
 if (!isset($defaultOrderBy)) {
     $defaultOrderBy = null;
@@ -84,8 +82,8 @@ if ($listOrderBy != null && !in_array($listOrderBy, [
 }
 
 // Requête de recherche
-if (!empty($_GET["q"])) {
-    $queries = explode(" ", $_GET["q"]);
+if (!empty($searchQuery)) {
+    $queries = explode(" ", $searchQuery);
 
     $sql = array();
     foreach ($queries as $q) {
@@ -520,7 +518,7 @@ if (!isset($_ITEM_NAME)) {
 
     $filterQueries = [];
     foreach (['all', 'neuf', 'occasion', 'indisp'] as $filter) {
-        $filterTerms = trim(preg_replace('/ ?etat:\S+/', '', (string) $_GET['q']));
+        $filterTerms = trim(preg_replace('/ ?etat:\S+/', '', $searchQuery));
         if ($filter !== 'all') {
             $filterTerms = trim($filterTerms.' etat:'.$filter);
         }
@@ -538,8 +536,8 @@ if (!isset($_ITEM_NAME)) {
         'stock_purchase_date1', 'best_price0', 'best_price1', 'random0',
     ] as $sortKey) {
         $sortParams = $baseQueryParams;
-        if ((string) $_GET['q'] !== '') {
-            $sortParams['q'] = $_GET['q'];
+        if ($searchQuery !== '') {
+            $sortParams['q'] = $searchQuery;
         }
         $sortParams['o'] = substr($sortKey, 0, -1);
         $sortParams['d'] = substr($sortKey, -1);
