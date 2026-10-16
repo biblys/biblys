@@ -6,6 +6,26 @@
 
 - La recherche de clients depuis la caisse a été améliorée.
 
+## 3.17.3 (16 octobre 2026)
+
+### Corrections
+
+- Dans les résultats de la recherche (ancienne version), les liens de pagination
+  ne provoquent plus l'erreur « Requête invalide : Unexpected parameter 'p' ».
+- Dans les listes d'articles de plus de 10 pages, le bouton « Aller » du
+  sélecteur de page conserve désormais la recherche, le tri et les filtres en
+  cours au lieu de provoquer une erreur ou de les réinitialiser.
+- Les listes d'articles répondent par une erreur 400 plutôt que par une erreur
+  serveur lorsque le paramètre de recherche `q` est envoyé sous forme de
+  tableau (`?q[]=…`).
+- Enregistrer un article sans collection valide (par exemple en tapant dans le
+  champ de recherche sans choisir de résultat) affiche désormais un message
+  d'erreur explicite au lieu d'une erreur serveur.
+- Dans les champs de recherche à sélection (collection, rayon, pays…),
+  un champ obligatoire est désormais invalide tant qu'aucun résultat n'est
+  sélectionné, et choisir « Créer… » sans résultat ne remplit plus la valeur
+  envoyée avec « undefined ».
+
 ## 3.17.2 (13 octobre 2026)
 
 ### Corrections

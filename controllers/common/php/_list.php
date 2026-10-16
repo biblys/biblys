@@ -31,6 +31,13 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 $request = LegacyCodeHelper::getGlobalRequest();
 
+$queryParams = $request->query->all();
+foreach (['q', 'o', 'd', 'p'] as $paramName) {
+    if (isset($queryParams[$paramName]) && !is_string($queryParams[$paramName])) {
+        throw new BadRequestHttpException("Parameter '$paramName' must be a string");
+    }
+}
+
 $sm = new StockManager();
 
 $pdo = array(); // PDO search query
@@ -48,9 +55,7 @@ $filters = null;
 $sel_etat = null;
 $_og_image = null;
 $_og_description = null;
-if (!isset($_GET['q'])) {
-    $_GET['q'] = null;
-}
+$searchQuery = (string) $request->query->get('q', '');
 
 if (!isset($defaultOrderBy)) {
     $defaultOrderBy = null;
@@ -77,8 +82,8 @@ if ($listOrderBy != null && !in_array($listOrderBy, [
 }
 
 // Requête de recherche
-if (!empty($_GET["q"])) {
-    $queries = explode(" ", $_GET["q"]);
+if (!empty($searchQuery)) {
+    $queries = explode(" ", $searchQuery);
 
     $sql = array();
     foreach ($queries as $q) {
@@ -425,8 +430,27 @@ if ($pagination->getTotal() > 1) {
             $paginationNav .= '<a href="'.htmlspecialchars($pagination->getPreviousQuery() ?: '?').'" aria-label="Aller à la page précédente" class="btn btn-outline-primary">&laquo; Précédent</a>';
         }
 
+        $flattenQueryParams = function (array $params, string $prefix = '') use (&$flattenQueryParams): array {
+            $flattened = [];
+            foreach ($params as $key => $value) {
+                $name = $prefix === '' ? (string) $key : $prefix.'['.$key.']';
+                $flattened = array_merge(
+                    $flattened,
+                    is_array($value) ? $flattenQueryParams($value, $name) : [$name => (string) $value]
+                );
+            }
+            return $flattened;
+        };
+
+        $queryParamsToKeep = array_diff_key($request->query->all(), array_flip(['p', 's', '_FORMAT']));
+        $pageSelectorHiddenFields = '';
+        foreach ($flattenQueryParams($queryParamsToKeep) as $name => $value) {
+            $pageSelectorHiddenFields .= '<input type="hidden" name="'.htmlspecialchars($name).'" value="'.htmlspecialchars($value).'">';
+        }
+
         $paginationNav .= '
             <form class="form-inline mb-0" method="get">
+                '.$pageSelectorHiddenFields.'
                 <div class="Pagination__page-selector form-group text-center">
                     <label for="target-page">Page</label>
                     <select name="p" class="form-control" id="target-page" aria-label="Aller à la page">
@@ -494,7 +518,7 @@ if (!isset($_ITEM_NAME)) {
 
     $filterQueries = [];
     foreach (['all', 'neuf', 'occasion', 'indisp'] as $filter) {
-        $filterTerms = trim(preg_replace('/ ?etat:\S+/', '', (string) $_GET['q']));
+        $filterTerms = trim(preg_replace('/ ?etat:\S+/', '', $searchQuery));
         if ($filter !== 'all') {
             $filterTerms = trim($filterTerms.' etat:'.$filter);
         }
@@ -512,8 +536,8 @@ if (!isset($_ITEM_NAME)) {
         'stock_purchase_date1', 'best_price0', 'best_price1', 'random0',
     ] as $sortKey) {
         $sortParams = $baseQueryParams;
-        if ((string) $_GET['q'] !== '') {
-            $sortParams['q'] = $_GET['q'];
+        if ($searchQuery !== '') {
+            $sortParams['q'] = $searchQuery;
         }
         $sortParams['o'] = substr($sortKey, 0, -1);
         $sortParams['d'] = substr($sortKey, -1);
