@@ -2011,9 +2011,9 @@
   integrity sha512-NuHqBY1PB/D8xU6s/thBgOAiAP7HOYDQ32+BFZILJ8ivkUkAHQnWfn6WhL79Owj1qmUnoN/YPhktdIoucipkAQ==
 
 ace-builds@^1.4.8:
-  version "1.44.0"
-  resolved "https://registry.yarnpkg.com/ace-builds/-/ace-builds-1.44.0.tgz#d657730f665fccf72d2945d95887e12c514a29f1"
-  integrity sha512-PFNMSYqFdEUkul2Ntud0HvA09AgY+F1ag0UYdpMH60wNI/qOA8cB8tlTgoALMEwIdUPJK2CjrIQ7OnbiSS/ugQ==
+  version "1.45.0"
+  resolved "https://registry.yarnpkg.com/ace-builds/-/ace-builds-1.45.0.tgz#bb0c318c60524da854cee3824c7ac92b24d4ee12"
+  integrity sha512-tAAorvbQRlsdDeuf4RnBLgaRk4HVT9td2D4QKEqXyuQkZmFoqHxl9JuV2o1XkuDT+zOreooGPiG1tU/Y+pNFkg==
 
 acorn-jsx@^5.3.2:
   version "5.3.2"
