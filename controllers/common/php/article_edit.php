@@ -192,6 +192,11 @@ return function (
 
         $collectionId = $request->request->get('collection_id');
         $collection = BookCollectionQuery::create()->findPk($collectionId);
+        if (!$collection) {
+            throw new BadRequestHttpException(
+                "Aucune collection valide n'a été sélectionnée. Choisissez une collection dans la liste de résultats."
+            );
+        }
         $articleEntity->set("collection_id", $collection->getId());
         $articleEntity->set("collection", $collection->getName());
 
