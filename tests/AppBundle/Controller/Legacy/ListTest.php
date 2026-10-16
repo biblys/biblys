@@ -18,8 +18,10 @@
 namespace AppBundle\Controller\Legacy;
 
 use Biblys\Test\ModelFactory;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 require_once __DIR__ . "/../../../setUp.php";
 
@@ -67,5 +69,26 @@ class ListTest extends TestCase
             $content,
             "it should not keep the format parameter"
         );
+    }
+
+    #[DataProvider("paramsThatMustBeStringsProvider")]
+    public function testListRejectsParamGivenAsArray(string $paramName)
+    {
+        // given
+        $query = [$paramName => ["../?", "../%3f"]];
+        $_GET = $query;
+        $GLOBALS["LEGACY_REQUEST"] = new Request(query: $query);
+
+        // then
+        $this->expectException(BadRequestHttpException::class);
+        $this->expectExceptionMessage("Parameter '$paramName' must be a string");
+
+        // when
+        require __DIR__ . "/../../../../controllers/common/php/_list.php";
+    }
+
+    public static function paramsThatMustBeStringsProvider(): array
+    {
+        return [["q"], ["o"], ["d"], ["p"]];
     }
 }
