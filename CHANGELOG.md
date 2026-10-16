@@ -9,6 +9,9 @@
 - Dans les listes d'articles de plus de 10 pages, le bouton « Aller » du
   sélecteur de page conserve désormais la recherche, le tri et les filtres en
   cours au lieu de provoquer une erreur ou de les réinitialiser.
+- Les listes d'articles répondent par une erreur 400 plutôt que par une erreur
+  serveur lorsque le paramètre de recherche `q` est envoyé sous forme de
+  tableau (`?q[]=…`).
 
 ## 3.17.2 (13 octobre 2026)
 

@@ -31,6 +31,13 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 $request = LegacyCodeHelper::getGlobalRequest();
 
+$queryParams = $request->query->all();
+foreach (['q', 'o', 'd', 'p'] as $paramName) {
+    if (isset($queryParams[$paramName]) && !is_string($queryParams[$paramName])) {
+        throw new BadRequestHttpException("Parameter '$paramName' must be a string");
+    }
+}
+
 $sm = new StockManager();
 
 $pdo = array(); // PDO search query
