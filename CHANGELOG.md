@@ -15,6 +15,10 @@
 - Enregistrer un article sans collection valide (par exemple en tapant dans le
   champ de recherche sans choisir de résultat) affiche désormais un message
   d'erreur explicite au lieu d'une erreur serveur.
+- Dans les champs de recherche à sélection (collection, rayon, pays…),
+  un champ obligatoire est désormais invalide tant qu'aucun résultat n'est
+  sélectionné, et choisir « Créer… » sans résultat ne remplit plus la valeur
+  envoyée avec « undefined ».
 
 ## 3.17.2 (13 octobre 2026)
 

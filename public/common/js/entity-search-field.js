@@ -93,6 +93,8 @@ export default class EntitySearchField {
     document.addEventListener('keydown', this.#onKeyDown.bind(this));
 
     this.customAction = options.action;
+
+    this.#updateValidity();
   }
 
   #onInputFocus() {
@@ -251,8 +253,11 @@ export default class EntitySearchField {
   #onItemSelect() {
     const selectedResult = this.#results[this.#focusItemIndex];
 
-    if (!selectedResult && this.customAction) {
-      this.customAction.onSelect(this, this.#currentQuery);
+    if (!selectedResult) {
+      if (this.customAction) {
+        this.customAction.onSelect(this, this.#currentQuery);
+      }
+      return;
     }
 
     this.selectResult(selectedResult);
@@ -262,9 +267,14 @@ export default class EntitySearchField {
    * @param {Result} result
    */
   selectResult(result) {
-    if (this.valueInput) {
-      this.valueInput.value = result?.value;
+    if (!result) {
+      return;
     }
+
+    if (this.valueInput) {
+      this.valueInput.value = result.value;
+    }
+    this.#updateValidity();
 
     this.#switchToLockedMode(result);
     if (this.onResultSelectedCallback) {
@@ -299,6 +309,7 @@ export default class EntitySearchField {
     if (this.valueInput) {
       this.valueInput.value = '';
     }
+    this.#updateValidity();
     this.searchInput.value = '';
     this.searchInput.readOnly = false;
     this.searchInput.style.cursor = 'text';
@@ -318,6 +329,20 @@ export default class EntitySearchField {
   #hideResults() {
     this.subMenu.innerHTML = '';
     this.#subMenuDisplayed = false;
+  }
+
+  /**
+   * The search input is "required", but it also contains the text typed by
+   * the user. Only a selected result fills the value input, so a required
+   * field is invalid until a result is selected.
+   */
+  #updateValidity() {
+    if (!this.valueInput || !this.searchInput.required) {
+      return;
+    }
+
+    const message = this.valueInput.value ? '' : 'Sélectionnez un résultat dans la liste.';
+    this.searchInput.setCustomValidity(message);
   }
 
   /** Public API **/
