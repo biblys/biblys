@@ -30,6 +30,7 @@ use Mockery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
 require_once __DIR__ . "/../../../setUp.php";
@@ -83,5 +84,54 @@ class ArticleEditTest extends TestCase
             $response->getContent(),
             "displays the LemonInk field"
         );
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testSavingAnArticleWithoutCollection()
+    {
+        // given
+        $controller = require __DIR__."/../../../../controllers/common/php/article_edit.php";
+
+        $article = ModelFactory::createArticle();
+        $postParams = [
+            "article_id" => $article->getId(),
+            "article_title" => "Un titre",
+            "article_summary" => "",
+            "type_id" => ArticleType::BOOK,
+            "collection_id" => "",
+        ];
+        $_POST = $postParams;
+        $request = new Request(request: $postParams);
+        $request->setMethod("POST");
+
+        $user = ModelFactory::createUser();
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("isAdmin")->andReturn(true);
+        $currentUser->shouldReceive("getCurrentRight")->andReturn(null);
+        $currentUser->shouldReceive("getUser")->andReturn($user);
+        $currentUser->shouldReceive("authPublisher")->andReturn(true);
+        $currentUser->shouldReceive("hasPublisherRight")->andReturn(false);
+
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getOption")->andReturn("null");
+
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->shouldReceive("generate")->andReturn("url");
+        $config = new Config([]);
+        $templateService = Helpers::getTemplateService();
+
+        // then
+        $this->expectException(BadRequestHttpException::class);
+        $this->expectExceptionMessage("Aucune collection valide n'a été sélectionnée");
+
+        // when
+        try {
+            $controller($request, $currentUser, $currentSite, $urlGenerator, $config, $templateService);
+        } finally {
+            $_POST = [];
+        }
     }
 }

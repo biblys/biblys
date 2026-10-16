@@ -12,6 +12,9 @@
 - Les listes d'articles répondent par une erreur 400 plutôt que par une erreur
   serveur lorsque le paramètre de recherche `q` est envoyé sous forme de
   tableau (`?q[]=…`).
+- Enregistrer un article sans collection valide (par exemple en tapant dans le
+  champ de recherche sans choisir de résultat) affiche désormais un message
+  d'erreur explicite au lieu d'une erreur serveur.
 
 ## 3.17.2 (13 octobre 2026)
 
