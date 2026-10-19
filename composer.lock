@@ -2716,16 +2716,16 @@
         },
         {
             "name": "lemonink/lemonink-php",
-            "version": "1.1.0",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lemonink/lemonink-php.git",
-                "reference": "1dbd691bde67dac87af13ac34772104d785b31b7"
+                "reference": "9809729cb9003af11d4a4b607d00ec77258ca1a6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lemonink/lemonink-php/zipball/1dbd691bde67dac87af13ac34772104d785b31b7",
-                "reference": "1dbd691bde67dac87af13ac34772104d785b31b7",
+                "url": "https://api.github.com/repos/lemonink/lemonink-php/zipball/9809729cb9003af11d4a4b607d00ec77258ca1a6",
+                "reference": "9809729cb9003af11d4a4b607d00ec77258ca1a6",
                 "shasum": ""
             },
             "require": {
@@ -2756,9 +2756,9 @@
             ],
             "support": {
                 "issues": "https://github.com/lemonink/lemonink-php/issues",
-                "source": "https://github.com/lemonink/lemonink-php/tree/v1.1.0"
+                "source": "https://github.com/lemonink/lemonink-php/tree/v1.2.0"
             },
-            "time": "2023-02-16T07:24:10+00:00"
+            "time": "2026-10-19T09:06:06+00:00"
         },
         {
             "name": "mailjet/mailjet-apiv3-php",
