@@ -2570,16 +2570,16 @@
         },
         {
             "name": "league/html-to-markdown",
-            "version": "5.2.0",
+            "version": "5.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/html-to-markdown.git",
-                "reference": "c055ef510196411cc02360d8042fa57285d119a9"
+                "reference": "dd2fcb13e4c1a29521413849121032bca1fe2131"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/html-to-markdown/zipball/c055ef510196411cc02360d8042fa57285d119a9",
-                "reference": "c055ef510196411cc02360d8042fa57285d119a9",
+                "url": "https://api.github.com/repos/thephpleague/html-to-markdown/zipball/dd2fcb13e4c1a29521413849121032bca1fe2131",
+                "reference": "dd2fcb13e4c1a29521413849121032bca1fe2131",
                 "shasum": ""
             },
             "require": {
@@ -2635,7 +2635,7 @@
             ],
             "support": {
                 "issues": "https://github.com/thephpleague/html-to-markdown/issues",
-                "source": "https://github.com/thephpleague/html-to-markdown/tree/5.2.0"
+                "source": "https://github.com/thephpleague/html-to-markdown/tree/5.2.2"
             },
             "funding": [
                 {
@@ -2655,7 +2655,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-10-18T18:17:10+00:00"
+            "time": "2026-10-19T00:15:18+00:00"
         },
         {
             "name": "league/mime-type-detection",
