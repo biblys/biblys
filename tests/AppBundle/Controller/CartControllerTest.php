@@ -25,7 +25,9 @@ namespace AppBundle\Controller;
 
 use Biblys\Data\ArticleType;
 use Biblys\Legacy\LegacyCodeHelper;
+use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
+use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
 use Exception;
 use Mockery;
@@ -33,6 +35,7 @@ use Model\StockQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 require_once __DIR__."/../../setUp.php";
 
@@ -186,14 +189,15 @@ class CartControllerTest extends TestCase
         $controller = new CartController();
 
         $site = ModelFactory::createSite();
-        $stock = ModelFactory::createStockItem();
+        $article = ModelFactory::createArticle(price: 999);
+        $stock = ModelFactory::createStockItem(article: $article, sellingPrice: 999);
         LegacyCodeHelper::setGlobalSite($site);
         $cart = ModelFactory::createCart();
         $currentUser = Mockery::mock(CurrentUser::class);
         $currentUser->shouldReceive("getOrCreateCart")->andReturn($cart);
 
         // when
-        $response = $controller->addStockAction($currentUser, $stock->getId());
+        $response = $controller->addStockAction($currentUser, new CurrentSite($site), $stock->getId());
 
         // then
         $this->assertEquals(
@@ -213,6 +217,64 @@ class CartControllerTest extends TestCase
             $cart->getCount(),
             "it should have updated cart article count"
         );
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testAddStockCopyWithVirtualStockWhenPriceMatchesArticlePrice()
+    {
+        // given
+        $controller = new CartController();
+
+        $site = ModelFactory::createSite();
+        LegacyCodeHelper::setGlobalSite($site);
+        ModelFactory::createSiteOption(key: "virtual_stock", value: 1);
+        $article = ModelFactory::createArticle(price: 699);
+        $stock = ModelFactory::createStockItem(article: $article, sellingPrice: 699);
+        $cart = ModelFactory::createCart();
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("getOrCreateCart")->andReturn($cart);
+
+        // when
+        $response = $controller->addStockAction($currentUser, new CurrentSite($site), $stock->getId());
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $stock->reload();
+        $this->assertEquals($cart->getId(), $stock->getCartId());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testAddStockCopyWithVirtualStockWhenPriceDiffersFromArticlePrice()
+    {
+        // given
+        $controller = new CartController();
+
+        $site = ModelFactory::createSite();
+        LegacyCodeHelper::setGlobalSite($site);
+        ModelFactory::createSiteOption(key: "virtual_stock", value: 1);
+        $article = ModelFactory::createArticle(price: 699);
+        $stock = ModelFactory::createStockItem(article: $article, sellingPrice: 99);
+        $cart = ModelFactory::createCart();
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("getOrCreateCart")->andReturn($cart);
+
+        // when
+        $exception = Helpers::runAndCatchException(
+            fn() => $controller->addStockAction($currentUser, new CurrentSite($site), $stock->getId())
+        );
+
+        // then
+        $this->assertInstanceOf(BadRequestHttpException::class, $exception);
+        $this->assertEquals(
+            "Cet exemplaire n'est pas vendu au prix de l'article, il ne peut pas être ajouté au panier.",
+            $exception->getMessage()
+        );
+        $stock->reload();
+        $this->assertNull($stock->getCartId(), "it should not have added the copy to cart");
     }
 
     /** addCrowdfundingReward */
