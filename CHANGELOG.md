@@ -1,5 +1,22 @@
 # Historique des modifications
 
+## 3.17.4 (21 octobre 2026)
+
+### Corrections
+
+- Marquer comme payée une commande sans adresse e-mail (par exemple une vente
+  en caisse) ne provoque plus d'erreur : le mail de confirmation de paiement
+  n'est simplement pas envoyé.
+- Ajouter un paiement depuis la page d'une commande est désormais refusé, avec
+  un message d'erreur, quand son montant dépasse le reste à payer.
+- Demander un lien de connexion avec une adresse e-mail contenant des
+  caractères de contrôle affiche désormais « adresse invalide » au lieu d'une
+  erreur serveur.
+- Un cookie d'identification (`user_uid` ou `visitor_uid`) mal encodé, qui
+  n'est pas en UTF-8, est désormais ignoré au lieu de provoquer une erreur.
+- Sur un site avec stock virtuel, un exemplaire dont le prix diffère de celui
+  de l'article ne peut plus être ajouté au panier par son identifiant.
+
 ## 3.17.3 (16 octobre 2026)
 
 ### Corrections
