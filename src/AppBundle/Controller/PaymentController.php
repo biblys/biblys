@@ -39,6 +39,7 @@ use InvalidArgumentException;
 use Model\OrderQuery;
 use Model\Payment;
 use Model\PaymentQuery;
+use Model\ShippingOption;
 use Payplug\Exception\BadRequestException;
 use Payplug\Exception\ConfigurationException;
 use Payplug\Exception\ConfigurationNotSetException;
@@ -336,7 +337,7 @@ class PaymentController extends Controller
         try {
             $order = $paymentService->getPayableOrderBySlug($slug);
 
-            $orderWillBeCollected = $order->getShippingMode() === "magasin";
+            $orderWillBeCollected = $order->getShippingMode() === ShippingOption::PICKUP_TYPE;
             $orderWillBeShipped = !$orderWillBeCollected;
 
             $stripeIsAvailable = !!$config->get("stripe");
