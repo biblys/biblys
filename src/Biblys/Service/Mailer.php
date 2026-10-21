@@ -164,8 +164,15 @@ class Mailer
             new RFCValidation(),
             new DNSCheckValidation()
         ]);
+        $printableEmail = preg_replace('/[[:cntrl:]]/', '', $email);
+        $invalidEmailMessage = "L'adresse $printableEmail est invalide.";
+
+        if ($printableEmail !== $email) {
+            throw new InvalidEmailAddressException($invalidEmailMessage);
+        }
+
         if ($validator->isValid($email, $multipleValidations) === false) {
-            throw new InvalidEmailAddressException("L'adresse $email est invalide.");
+            throw new InvalidEmailAddressException($invalidEmailMessage);
         }
     }
 }
