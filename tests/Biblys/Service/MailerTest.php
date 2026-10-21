@@ -51,6 +51,30 @@ class MailerTest extends TestCase
         );
     }
 
+    public function testValidateEmailWithNullByte()
+    {
+        $this->expectException(InvalidEmailAddressException::class);
+        $this->expectExceptionMessage("L'adresse customer@biblys.fr est invalide.");
+
+        // given
+        $mailer = new Mailer(LegacyCodeHelper::getGlobalConfig());
+
+        // when
+        $mailer->validateEmail("custo\0mer@biblys.fr");
+    }
+
+    public function testValidateEmailWithNullByteAndNoAtSign()
+    {
+        $this->expectException(InvalidEmailAddressException::class);
+        $this->expectExceptionMessage("L'adresse customerbiblys.fr est invalide.");
+
+        // given
+        $mailer = new Mailer(LegacyCodeHelper::getGlobalConfig());
+
+        // when
+        $mailer->validateEmail("customerbiblys\0.fr");
+    }
+
     /**
      * @throws TransportExceptionInterface
      */

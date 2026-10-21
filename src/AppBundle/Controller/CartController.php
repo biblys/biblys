@@ -21,6 +21,7 @@ namespace AppBundle\Controller;
 
 use Article;
 use ArticleManager;
+use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Cart;
 use CartManager;
@@ -93,7 +94,7 @@ class CartController extends Controller
     /**
      * @throws Exception
      */
-    public function addStockAction(CurrentUser $currentUser, int $stockId): Response
+    public function addStockAction(CurrentUser $currentUser, CurrentSite $currentSite, int $stockId): Response
     {
         $sm = new StockManager();
 
@@ -102,6 +103,15 @@ class CartController extends Controller
         if (!$stock) {
             throw new BadRequestHttpException(
                 "Cannot find stock with id $stockId"
+            );
+        }
+
+        // On a site with virtual stock, copies are created on demand at the article
+        // price: a copy with another price is a leftover that must not be sold.
+        $usesVirtualStock = (bool) $currentSite->getOption("virtual_stock");
+        if ($usesVirtualStock && $stock->get("selling_price") != $stock->get("article")->get("price")) {
+            throw new BadRequestHttpException(
+                "Cet exemplaire n'est pas vendu au prix de l'article, il ne peut pas être ajouté au panier."
             );
         }
 

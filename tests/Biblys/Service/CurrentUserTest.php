@@ -75,7 +75,7 @@ class CurrentUserTest extends TestCase
      * @throws PropelException
      * @throws Exception
      */
-    public function testBuildFromRequestWithBadlyEncodedVisitorUidCookie()
+    public function testBuildFromRequestIgnoresBadlyEncodedVisitorUidCookie()
     {
         // given
         $site = ModelFactory::createSite();
@@ -86,18 +86,18 @@ class CurrentUserTest extends TestCase
         $request->cookies->set("visitor_uid", $latin1VisitorUid);
 
         // when
-        $error = Helpers::runAndCatchException(fn() => CurrentUser::buildFromRequestAndConfig($request, $config));
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
 
         // then
-        $this->assertInstanceOf(BadRequestHttpException::class, $error);
-        $this->assertEquals("Cookies must use charset UTF-8", $error->getMessage());
+        $this->assertNull($currentUser->getToken(), "it ignores the cookie");
+        $this->assertFalse($currentUser->isAuthenticated());
     }
 
     /**
      * @throws PropelException
      * @throws Exception
      */
-    public function testBuildFromRequestWithBadlyEncodedUserUidCookie()
+    public function testBuildFromRequestIgnoresBadlyEncodedUserUidCookie()
     {
         // given
         $site = ModelFactory::createSite();
@@ -108,11 +108,11 @@ class CurrentUserTest extends TestCase
         $request->cookies->set("user_uid", $latin1UserUid);
 
         // when
-        $error = Helpers::runAndCatchException(fn() => CurrentUser::buildFromRequestAndConfig($request, $config));
+        $currentUser = CurrentUser::buildFromRequestAndConfig($request, $config);
 
         // then
-        $this->assertInstanceOf(BadRequestHttpException::class, $error);
-        $this->assertEquals("Cookies must use charset UTF-8", $error->getMessage());
+        $this->assertNull($currentUser->getToken(), "it ignores the cookie");
+        $this->assertFalse($currentUser->isAuthenticated());
     }
 
     /**

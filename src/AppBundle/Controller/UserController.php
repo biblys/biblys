@@ -378,7 +378,9 @@ class UserController extends Controller
             );
 
             $currentUser->setUser($user);
-            $currentUser->transfertVisitorCartToUser(visitorToken: $request->cookies->get("visitor_uid"));
+            $currentUser->transfertVisitorCartToUser(
+                visitorToken: CurrentUser::ignoreIfNotUtf8($request->cookies->get("visitor_uid"))
+            );
 
             $redirectUrl = !empty($token["after_login_url"]) ? $token["after_login_url"] : "/";
             $response = new RedirectResponse($redirectUrl);
