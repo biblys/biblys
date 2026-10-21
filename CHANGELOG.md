@@ -5,6 +5,8 @@
 ### Améliorations
 
 - La recherche de clients depuis la caisse a été améliorée.
+- Les données structurées des pages article incluent désormais la politique de
+  retour et les frais de livraison dans les offres.
 
 ## 3.17.3 (16 octobre 2026)
 

@@ -22,15 +22,29 @@ use Biblys\Data\ArticleType;
 use Biblys\Service\CurrentSite;
 use Biblys\Test\ModelFactory;
 use DateTime;
+use Model\ShippingOptionQuery;
+use Model\ShippingZoneQuery;
+use Model\ShippingZonesCountriesQuery;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
+use Repository\ShippingOptionRepository;
 use Repository\StockRepository;
 
 require_once __DIR__ . "/../../../setUp.php";
 
 class ArticleStructuredDataBuilderTest extends TestCase
 {
+    /**
+     * @throws PropelException
+     */
+    public function setUp(): void
+    {
+        ShippingOptionQuery::create()->deleteAll();
+        ShippingZonesCountriesQuery::create()->deleteAll();
+        ShippingZoneQuery::create()->deleteAll();
+    }
+
     /**
      * @throws PropelException
      */
@@ -45,7 +59,7 @@ class ArticleStructuredDataBuilderTest extends TestCase
             summary: "<p>Un roman <strong>essentiel</strong>.</p>",
         );
         $currentSite = $this->createMock(CurrentSite::class);
-        $builder = new ArticleStructuredDataBuilder(new StockRepository());
+        $builder = new ArticleStructuredDataBuilder(new StockRepository(), new ShippingOptionRepository());
 
         // when
         $data = $builder->build($article, "/images/cover.jpg", $currentSite);
@@ -66,7 +80,7 @@ class ArticleStructuredDataBuilderTest extends TestCase
         // given
         $article = ModelFactory::createArticle(typeId: ArticleType::BOOK, summary: $summary);
         $currentSite = $this->createMock(CurrentSite::class);
-        $builder = new ArticleStructuredDataBuilder(new StockRepository());
+        $builder = new ArticleStructuredDataBuilder(new StockRepository(), new ShippingOptionRepository());
 
         // when
         $data = $builder->build($article, "/images/cover.jpg", $currentSite);
@@ -93,7 +107,7 @@ class ArticleStructuredDataBuilderTest extends TestCase
         // given
         $article = ModelFactory::createArticle(typeId: ArticleType::SUBSCRIPTION);
         $currentSite = $this->createMock(CurrentSite::class);
-        $builder = new ArticleStructuredDataBuilder(new StockRepository());
+        $builder = new ArticleStructuredDataBuilder(new StockRepository(), new ShippingOptionRepository());
 
         // when
         $data = $builder->build($article, null, $currentSite);
@@ -116,7 +130,7 @@ class ArticleStructuredDataBuilderTest extends TestCase
             typeId: ArticleType::BOOK,
         );
         $currentSite = $this->createMock(CurrentSite::class);
-        $builder = new ArticleStructuredDataBuilder(new StockRepository());
+        $builder = new ArticleStructuredDataBuilder(new StockRepository(), new ShippingOptionRepository());
 
         // when
         $data = $builder->build($article, null, $currentSite);
@@ -138,7 +152,7 @@ class ArticleStructuredDataBuilderTest extends TestCase
         $ebook = ModelFactory::createArticle(typeId: ArticleType::EBOOK, ean: "9782070368228");
         $audiobook = ModelFactory::createArticle(typeId: ArticleType::EAUDIOBOOK, ean: "9782070368228");
         $currentSite = $this->createMock(CurrentSite::class);
-        $builder = new ArticleStructuredDataBuilder(new StockRepository());
+        $builder = new ArticleStructuredDataBuilder(new StockRepository(), new ShippingOptionRepository());
 
         // when
         $ebookData = $builder->build($ebook, null, $currentSite);
@@ -157,7 +171,7 @@ class ArticleStructuredDataBuilderTest extends TestCase
         // given
         $article = ModelFactory::createArticle(typeId: ArticleType::CD, ean: "3700123456789");
         $currentSite = $this->createMock(CurrentSite::class);
-        $builder = new ArticleStructuredDataBuilder(new StockRepository());
+        $builder = new ArticleStructuredDataBuilder(new StockRepository(), new ShippingOptionRepository());
 
         // when
         $data = $builder->build($article, null, $currentSite);
@@ -177,7 +191,7 @@ class ArticleStructuredDataBuilderTest extends TestCase
         // given
         $article = ModelFactory::createArticle(typeId: ArticleType::GOODIES, ean: "ABC123");
         $currentSite = $this->createMock(CurrentSite::class);
-        $builder = new ArticleStructuredDataBuilder(new StockRepository());
+        $builder = new ArticleStructuredDataBuilder(new StockRepository(), new ShippingOptionRepository());
 
         // when
         $data = $builder->build($article, null, $currentSite);
@@ -198,7 +212,7 @@ class ArticleStructuredDataBuilderTest extends TestCase
             availabilityDilicom: 1,
         );
         $currentSite = $this->createMock(CurrentSite::class);
-        $builder = new ArticleStructuredDataBuilder(new StockRepository());
+        $builder = new ArticleStructuredDataBuilder(new StockRepository(), new ShippingOptionRepository());
 
         // when
         $data = $builder->build($article, null, $currentSite);
@@ -221,7 +235,7 @@ class ArticleStructuredDataBuilderTest extends TestCase
             availabilityDilicom: 1,
         );
         $currentSite = $this->createMock(CurrentSite::class);
-        $builder = new ArticleStructuredDataBuilder(new StockRepository());
+        $builder = new ArticleStructuredDataBuilder(new StockRepository(), new ShippingOptionRepository());
 
         // when
         $data = $builder->build($article, "/images/cover.jpg", $currentSite);
@@ -252,7 +266,7 @@ class ArticleStructuredDataBuilderTest extends TestCase
             publicationDate: $publicationDate ? new DateTime($publicationDate) : null,
         );
         $currentSite = $this->createMock(CurrentSite::class);
-        $builder = new ArticleStructuredDataBuilder(new StockRepository());
+        $builder = new ArticleStructuredDataBuilder(new StockRepository(), new ShippingOptionRepository());
 
         // when
         $data = $builder->build($article, "/images/cover.jpg", $currentSite);
@@ -282,7 +296,7 @@ class ArticleStructuredDataBuilderTest extends TestCase
         $article = ModelFactory::createArticle(typeId: ArticleType::EBOOK, price: 1000);
         $currentSite = $this->createMock(CurrentSite::class);
         $currentSite->method("getOption")->with("currency")->willReturn("FCFA");
-        $builder = new ArticleStructuredDataBuilder(new StockRepository());
+        $builder = new ArticleStructuredDataBuilder(new StockRepository(), new ShippingOptionRepository());
 
         // when
         $data = $builder->build($article, "/images/cover.jpg", $currentSite);
@@ -304,7 +318,7 @@ class ArticleStructuredDataBuilderTest extends TestCase
         );
         $currentSite = $this->createMock(CurrentSite::class);
         $currentSite->method("hasOptionEnabled")->with("virtual_stock")->willReturn(true);
-        $builder = new ArticleStructuredDataBuilder(new StockRepository());
+        $builder = new ArticleStructuredDataBuilder(new StockRepository(), new ShippingOptionRepository());
 
         // when
         $data = $builder->build($article, "/images/cover.jpg", $currentSite);
@@ -325,7 +339,7 @@ class ArticleStructuredDataBuilderTest extends TestCase
         $article = ModelFactory::createArticle(typeId: ArticleType::BOOK, availabilityDilicom: 1);
         $currentSite = $this->createMock(CurrentSite::class);
         $currentSite->method("hasOptionEnabled")->willReturn(false);
-        $builder = new ArticleStructuredDataBuilder(new StockRepository());
+        $builder = new ArticleStructuredDataBuilder(new StockRepository(), new ShippingOptionRepository());
 
         // when
         $data = $builder->build($article, "/images/cover.jpg", $currentSite);
@@ -344,7 +358,7 @@ class ArticleStructuredDataBuilderTest extends TestCase
         ModelFactory::createStockItem(article: $article, sellingPrice: 1500, condition: "Neuf");
         $currentSite = $this->createMock(CurrentSite::class);
         $currentSite->method("hasOptionEnabled")->willReturn(false);
-        $builder = new ArticleStructuredDataBuilder(new StockRepository());
+        $builder = new ArticleStructuredDataBuilder(new StockRepository(), new ShippingOptionRepository());
 
         // when
         $data = $builder->build($article, "/images/cover.jpg", $currentSite);
@@ -366,7 +380,7 @@ class ArticleStructuredDataBuilderTest extends TestCase
         ModelFactory::createStockItem(article: $article, sellingPrice: 900, condition: "Bon état");
         $currentSite = $this->createMock(CurrentSite::class);
         $currentSite->method("hasOptionEnabled")->willReturn(false);
-        $builder = new ArticleStructuredDataBuilder(new StockRepository());
+        $builder = new ArticleStructuredDataBuilder(new StockRepository(), new ShippingOptionRepository());
 
         // when
         $data = $builder->build($article, "/images/cover.jpg", $currentSite);
@@ -390,7 +404,7 @@ class ArticleStructuredDataBuilderTest extends TestCase
         ModelFactory::createStockItem(article: $article, sellingPrice: 600, condition: "Neuf");
         $currentSite = $this->createMock(CurrentSite::class);
         $currentSite->method("hasOptionEnabled")->willReturn(false);
-        $builder = new ArticleStructuredDataBuilder(new StockRepository());
+        $builder = new ArticleStructuredDataBuilder(new StockRepository(), new ShippingOptionRepository());
 
         // when
         $data = $builder->build($article, "/images/cover.jpg", $currentSite);
@@ -400,5 +414,321 @@ class ArticleStructuredDataBuilderTest extends TestCase
         $this->assertEquals("6.00", $data["offers"]["price"]);
         $this->assertEquals("https://schema.org/NewCondition", $data["offers"]["itemCondition"]);
         $this->assertArrayNotHasKey("offerCount", $data["offers"]);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testBuildAddsReturnWindowForEuropeanCountryToSimpleOffer()
+    {
+        // given
+        $article = ModelFactory::createArticle(typeId: ArticleType::BOOK);
+        ModelFactory::createStockItem(article: $article, sellingPrice: 1500, condition: "Neuf");
+        $zone = ModelFactory::createShippingZone();
+        ModelFactory::createCountry(name: "France", code: "FR", shippingZone: $zone);
+        ModelFactory::createCountry(name: "Belgique", code: "BE", shippingZone: $zone);
+        ModelFactory::createShippingOption(fee: 450, shippingZone: $zone);
+        $currentSite = $this->createMock(CurrentSite::class);
+        $currentSite->method("hasOptionEnabled")->willReturn(false);
+        $builder = new ArticleStructuredDataBuilder(new StockRepository(), new ShippingOptionRepository());
+
+        // when
+        $data = $builder->build($article, "/images/cover.jpg", $currentSite);
+
+        // then
+        $this->assertEquals([[
+            "@type" => "MerchantReturnPolicy",
+            "applicableCountry" => ["BE", "FR"],
+            "returnPolicyCategory" => "https://schema.org/MerchantReturnFiniteReturnWindow",
+            "merchantReturnDays" => 14,
+            "returnFees" => "https://schema.org/ReturnFeesCustomerResponsibility",
+        ]], $data["offers"]["hasMerchantReturnPolicy"]);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testBuildDeclaresNoReturnForNonEuropeanCountry()
+    {
+        // given
+        $article = ModelFactory::createArticle(typeId: ArticleType::BOOK);
+        ModelFactory::createStockItem(article: $article, sellingPrice: 1500, condition: "Neuf");
+        $zone = ModelFactory::createShippingZone();
+        ModelFactory::createCountry(name: "Canada", code: "CA", shippingZone: $zone);
+        ModelFactory::createShippingOption(fee: 1500, shippingZone: $zone);
+        $currentSite = $this->createMock(CurrentSite::class);
+        $currentSite->method("hasOptionEnabled")->willReturn(false);
+        $builder = new ArticleStructuredDataBuilder(new StockRepository(), new ShippingOptionRepository());
+
+        // when
+        $data = $builder->build($article, "/images/cover.jpg", $currentSite);
+
+        // then
+        $this->assertEquals([[
+            "@type" => "MerchantReturnPolicy",
+            "applicableCountry" => ["CA"],
+            "returnPolicyCategory" => "https://schema.org/MerchantReturnNotPermitted",
+        ]], $data["offers"]["hasMerchantReturnPolicy"]);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testBuildAddsOneReturnPolicyPerRegimeToAggregateOffer()
+    {
+        // given
+        $article = ModelFactory::createArticle(typeId: ArticleType::BOOK);
+        ModelFactory::createStockItem(article: $article, sellingPrice: 1500, condition: "Neuf");
+        ModelFactory::createStockItem(article: $article, sellingPrice: 900, condition: "Bon état");
+        $franceZone = ModelFactory::createShippingZone(name: "France");
+        $worldZone = ModelFactory::createShippingZone(name: "Monde");
+        ModelFactory::createCountry(name: "France", code: "FR", shippingZone: $franceZone);
+        ModelFactory::createCountry(name: "Canada", code: "CA", shippingZone: $worldZone);
+        ModelFactory::createShippingOption(fee: 450, shippingZone: $franceZone);
+        ModelFactory::createShippingOption(fee: 1500, shippingZone: $worldZone);
+        $currentSite = $this->createMock(CurrentSite::class);
+        $currentSite->method("hasOptionEnabled")->willReturn(false);
+        $builder = new ArticleStructuredDataBuilder(new StockRepository(), new ShippingOptionRepository());
+
+        // when
+        $data = $builder->build($article, "/images/cover.jpg", $currentSite);
+
+        // then
+        $this->assertEquals("AggregateOffer", $data["offers"]["@type"]);
+        $policies = $data["offers"]["hasMerchantReturnPolicy"];
+        $this->assertCount(2, $policies);
+        $this->assertEquals(["FR"], $policies[0]["applicableCountry"]);
+        $this->assertEquals(14, $policies[0]["merchantReturnDays"]);
+        $this->assertEquals(["CA"], $policies[1]["applicableCountry"]);
+        $this->assertEquals("https://schema.org/MerchantReturnNotPermitted", $policies[1]["returnPolicyCategory"]);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testBuildAddsReturnPolicyToOfferOnVirtualStockSite()
+    {
+        // given
+        $article = ModelFactory::createArticle(
+            typeId: ArticleType::BOOK,
+            price: 1990,
+            availabilityDilicom: 1,
+        );
+        $zone = ModelFactory::createShippingZone();
+        ModelFactory::createCountry(code: "FR", shippingZone: $zone);
+        ModelFactory::createShippingOption(fee: 450, shippingZone: $zone);
+        $currentSite = $this->createMock(CurrentSite::class);
+        $currentSite->method("hasOptionEnabled")->with("virtual_stock")->willReturn(true);
+        $builder = new ArticleStructuredDataBuilder(new StockRepository(), new ShippingOptionRepository());
+
+        // when
+        $data = $builder->build($article, "/images/cover.jpg", $currentSite);
+
+        // then
+        $this->assertEquals(
+            "https://schema.org/MerchantReturnFiniteReturnWindow",
+            $data["offers"]["hasMerchantReturnPolicy"][0]["returnPolicyCategory"],
+        );
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testBuildDeclaresNoReturnForDownloadableArticleEvenInEurope()
+    {
+        // given
+        $article = ModelFactory::createArticle(
+            typeId: ArticleType::EBOOK,
+            price: 1290,
+            availabilityDilicom: 1,
+        );
+        $zone = ModelFactory::createShippingZone();
+        ModelFactory::createCountry(name: "France", code: "FR", shippingZone: $zone);
+        ModelFactory::createCountry(name: "Canada", code: "CA", shippingZone: $zone);
+        ModelFactory::createShippingOption(fee: 450, shippingZone: $zone);
+        $currentSite = $this->createMock(CurrentSite::class);
+        $builder = new ArticleStructuredDataBuilder(new StockRepository(), new ShippingOptionRepository());
+
+        // when
+        $data = $builder->build($article, "/images/cover.jpg", $currentSite);
+
+        // then
+        $this->assertEquals([[
+            "@type" => "MerchantReturnPolicy",
+            "applicableCountry" => ["CA", "FR"],
+            "returnPolicyCategory" => "https://schema.org/MerchantReturnNotPermitted",
+        ]], $data["offers"]["hasMerchantReturnPolicy"]);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testBuildOmitsReturnPolicyWhenNoCountryIsServed()
+    {
+        // given
+        $article = ModelFactory::createArticle(typeId: ArticleType::BOOK);
+        ModelFactory::createStockItem(article: $article, sellingPrice: 1500, condition: "Neuf");
+        $currentSite = $this->createMock(CurrentSite::class);
+        $currentSite->method("hasOptionEnabled")->willReturn(false);
+        $builder = new ArticleStructuredDataBuilder(new StockRepository(), new ShippingOptionRepository());
+
+        // when
+        $data = $builder->build($article, "/images/cover.jpg", $currentSite);
+
+        // then
+        $this->assertArrayNotHasKey("hasMerchantReturnPolicy", $data["offers"]);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testBuildAddsShippingDetailsToSimpleOfferForPhysicalArticle()
+    {
+        // given
+        $article = ModelFactory::createArticle(typeId: ArticleType::BOOK);
+        ModelFactory::createStockItem(article: $article, sellingPrice: 1500, condition: "Neuf");
+        $zone = ModelFactory::createShippingZone();
+        ModelFactory::createCountry(name: "France", code: "FR", shippingZone: $zone);
+        ModelFactory::createCountry(name: "Belgique", code: "BE", shippingZone: $zone);
+        ModelFactory::createShippingOption(fee: 450, shippingZone: $zone);
+        $currentSite = $this->createMock(CurrentSite::class);
+        $currentSite->method("hasOptionEnabled")->willReturn(false);
+        $builder = new ArticleStructuredDataBuilder(new StockRepository(), new ShippingOptionRepository());
+
+        // when
+        $data = $builder->build($article, "/images/cover.jpg", $currentSite);
+
+        // then
+        $this->assertEquals([[
+            "@type" => "OfferShippingDetails",
+            "shippingRate" => [
+                "@type" => "MonetaryAmount",
+                "value" => "4.50",
+                "currency" => "EUR",
+            ],
+            "shippingDestination" => [
+                ["@type" => "DefinedRegion", "addressCountry" => "BE"],
+                ["@type" => "DefinedRegion", "addressCountry" => "FR"],
+            ],
+        ]], $data["offers"]["shippingDetails"]);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testBuildAddsOneShippingDetailsEntryPerDistinctRate()
+    {
+        // given
+        $article = ModelFactory::createArticle(typeId: ArticleType::BOOK);
+        ModelFactory::createStockItem(article: $article, sellingPrice: 1500, condition: "Neuf");
+        ModelFactory::createStockItem(article: $article, sellingPrice: 900, condition: "Bon état");
+        $franceZone = ModelFactory::createShippingZone(name: "France");
+        $europeZone = ModelFactory::createShippingZone(name: "Europe");
+        ModelFactory::createCountry(name: "France", code: "FR", shippingZone: $franceZone);
+        ModelFactory::createCountry(name: "Belgique", code: "BE", shippingZone: $europeZone);
+        ModelFactory::createShippingOption(fee: 450, shippingZone: $franceZone);
+        ModelFactory::createShippingOption(fee: 900, shippingZone: $europeZone);
+        $currentSite = $this->createMock(CurrentSite::class);
+        $currentSite->method("hasOptionEnabled")->willReturn(false);
+        $builder = new ArticleStructuredDataBuilder(new StockRepository(), new ShippingOptionRepository());
+
+        // when
+        $data = $builder->build($article, "/images/cover.jpg", $currentSite);
+
+        // then
+        $this->assertEquals("AggregateOffer", $data["offers"]["@type"]);
+        $this->assertCount(2, $data["offers"]["shippingDetails"]);
+        $this->assertEquals("4.50", $data["offers"]["shippingDetails"][0]["shippingRate"]["value"]);
+        $this->assertEquals("9.00", $data["offers"]["shippingDetails"][1]["shippingRate"]["value"]);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testBuildAddsShippingDetailsToOfferOnVirtualStockSite()
+    {
+        // given
+        $article = ModelFactory::createArticle(
+            typeId: ArticleType::BOOK,
+            price: 1990,
+            availabilityDilicom: 1,
+        );
+        $zone = ModelFactory::createShippingZone();
+        ModelFactory::createCountry(code: "FR", shippingZone: $zone);
+        ModelFactory::createShippingOption(fee: 450, shippingZone: $zone);
+        $currentSite = $this->createMock(CurrentSite::class);
+        $currentSite->method("hasOptionEnabled")->with("virtual_stock")->willReturn(true);
+        $builder = new ArticleStructuredDataBuilder(new StockRepository(), new ShippingOptionRepository());
+
+        // when
+        $data = $builder->build($article, "/images/cover.jpg", $currentSite);
+
+        // then
+        $this->assertCount(1, $data["offers"]["shippingDetails"]);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testBuildOmitsShippingDetailsForDownloadableArticle()
+    {
+        // given
+        $article = ModelFactory::createArticle(
+            typeId: ArticleType::EBOOK,
+            price: 1290,
+            availabilityDilicom: 1,
+        );
+        $zone = ModelFactory::createShippingZone();
+        ModelFactory::createCountry(code: "FR", shippingZone: $zone);
+        ModelFactory::createShippingOption(fee: 450, shippingZone: $zone);
+        $currentSite = $this->createMock(CurrentSite::class);
+        $builder = new ArticleStructuredDataBuilder(new StockRepository(), new ShippingOptionRepository());
+
+        // when
+        $data = $builder->build($article, "/images/cover.jpg", $currentSite);
+
+        // then
+        $this->assertArrayNotHasKey("shippingDetails", $data["offers"]);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testBuildOmitsShippingDetailsWhenNoShippingOptionExists()
+    {
+        // given
+        $article = ModelFactory::createArticle(typeId: ArticleType::BOOK);
+        ModelFactory::createStockItem(article: $article, sellingPrice: 1500, condition: "Neuf");
+        $currentSite = $this->createMock(CurrentSite::class);
+        $currentSite->method("hasOptionEnabled")->willReturn(false);
+        $builder = new ArticleStructuredDataBuilder(new StockRepository(), new ShippingOptionRepository());
+
+        // when
+        $data = $builder->build($article, "/images/cover.jpg", $currentSite);
+
+        // then
+        $this->assertArrayNotHasKey("shippingDetails", $data["offers"]);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testBuildUsesSiteCurrencyForShippingRate()
+    {
+        // given
+        $article = ModelFactory::createArticle(typeId: ArticleType::BOOK, price: 1000, availabilityDilicom: 1);
+        $zone = ModelFactory::createShippingZone();
+        ModelFactory::createCountry(code: "SN", shippingZone: $zone);
+        ModelFactory::createShippingOption(fee: 450, shippingZone: $zone);
+        $currentSite = $this->createMock(CurrentSite::class);
+        $currentSite->method("hasOptionEnabled")->with("virtual_stock")->willReturn(true);
+        $currentSite->method("getOption")->with("currency")->willReturn("FCFA");
+        $builder = new ArticleStructuredDataBuilder(new StockRepository(), new ShippingOptionRepository());
+
+        // when
+        $data = $builder->build($article, "/images/cover.jpg", $currentSite);
+
+        // then
+        $this->assertEquals("XOF", $data["offers"]["shippingDetails"][0]["shippingRate"]["currency"]);
     }
 }

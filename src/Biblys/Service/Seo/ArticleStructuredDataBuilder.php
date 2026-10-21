@@ -23,6 +23,7 @@ use Biblys\Isbn\IsbnParsingException;
 use Biblys\Service\CurrentSite;
 use Model\Article;
 use Propel\Runtime\Exception\PropelException;
+use Repository\ShippingOptionRepository;
 use Repository\StockRepository;
 
 class ArticleStructuredDataBuilder
@@ -34,11 +35,23 @@ class ArticleStructuredDataBuilder
 
     private const BOOK_TAXES = ["BOOK", "EBOOK", "EAUDIOBOOK"];
 
-    private StockRepository $stockRepository;
+    private const RETURN_WINDOW_DAYS = 14;
 
-    public function __construct(StockRepository $stockRepository)
+    private const EU_COUNTRY_CODES = [
+        "AT", "BE", "BG", "CY", "CZ", "DE", "DK", "EE", "ES", "FI", "FR", "GR", "HR", "HU", "IE",
+        "IT", "LT", "LU", "LV", "MT", "NL", "PL", "PT", "RO", "SE", "SI", "SK",
+    ];
+
+    private StockRepository $stockRepository;
+    private ShippingOptionRepository $shippingOptionRepository;
+
+    public function __construct(
+        StockRepository          $stockRepository,
+        ShippingOptionRepository $shippingOptionRepository,
+    )
     {
         $this->stockRepository = $stockRepository;
+        $this->shippingOptionRepository = $shippingOptionRepository;
     }
 
     /**
@@ -107,7 +120,7 @@ class ArticleStructuredDataBuilder
         if ($imageUrl) {
             $offers = $this->_buildOffers($article, $type, $currentSite);
             if ($offers !== null) {
-                $data["offers"] = $offers;
+                $data["offers"] = $this->_withMerchantFields($offers, $type);
             }
         }
 
@@ -167,6 +180,87 @@ class ArticleStructuredDataBuilder
             "offerCount" => count($items),
             "availability" => "https://schema.org/InStock",
         ];
+    }
+
+    /**
+     * @throws PropelException
+     */
+    private function _withMerchantFields(array $offers, ArticleType $type): array
+    {
+        $entryRates = $this->shippingOptionRepository->getEntryRates();
+        if ($entryRates === []) {
+            return $offers;
+        }
+
+        $isDownloadable = $type->isDownloadable();
+        $servedCountryCodes = array_merge(...array_column($entryRates, "countryCodes"));
+        sort($servedCountryCodes);
+
+        $offers["hasMerchantReturnPolicy"] = $this->_buildReturnPolicies($servedCountryCodes, $isDownloadable);
+
+        if (!$isDownloadable) {
+            $offers["shippingDetails"] = $this->_buildShippingDetails($entryRates, $offers["priceCurrency"]);
+        }
+
+        return $offers;
+    }
+
+    /**
+     * @param array<int, array{fee: int, countryCodes: string[]}> $entryRates
+     */
+    private function _buildShippingDetails(array $entryRates, string $currency): array
+    {
+        return array_map(
+            fn(array $rate) => [
+                "@type" => "OfferShippingDetails",
+                "shippingRate" => [
+                    "@type" => "MonetaryAmount",
+                    "value" => number_format($rate["fee"] / 100, 2, ".", ""),
+                    "currency" => $currency,
+                ],
+                "shippingDestination" => array_map(
+                    fn(string $countryCode) => [
+                        "@type" => "DefinedRegion",
+                        "addressCountry" => $countryCode,
+                    ],
+                    $rate["countryCodes"],
+                ),
+            ],
+            $entryRates,
+        );
+    }
+
+    /**
+     * @param string[] $servedCountryCodes
+     */
+    private function _buildReturnPolicies(array $servedCountryCodes, bool $isDownloadable): array
+    {
+        $euCountryCodes = $isDownloadable
+            ? []
+            : array_values(array_intersect($servedCountryCodes, self::EU_COUNTRY_CODES));
+        $nonReturnableCountryCodes = array_values(array_diff($servedCountryCodes, $euCountryCodes));
+
+        $policies = [];
+
+        if ($euCountryCodes !== []) {
+            $policies[] = [
+                "@type" => "MerchantReturnPolicy",
+                "applicableCountry" => $euCountryCodes,
+                "returnPolicyCategory" => "https://schema.org/MerchantReturnFiniteReturnWindow",
+                "merchantReturnDays" => self::RETURN_WINDOW_DAYS,
+                "returnFees" => "https://schema.org/ReturnFeesCustomerResponsibility",
+            ];
+        }
+
+        if ($nonReturnableCountryCodes !== []) {
+            $policies[] = [
+                "@type" => "MerchantReturnPolicy",
+                "applicableCountry" => $nonReturnableCountryCodes,
+                "returnPolicyCategory" => "https://schema.org/MerchantReturnNotPermitted",
+            ];
+        }
+
+        return $policies;
     }
 
     private function _buildSimpleOffer(
