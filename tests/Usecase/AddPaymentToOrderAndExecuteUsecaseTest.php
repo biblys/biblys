@@ -161,7 +161,7 @@ class AddPaymentToOrderAndExecuteUsecaseTest extends TestCase
     public function testAddPaymentToOrderClampsAmountToBePaidAtZero(): void
     {
         // given
-        $order = ModelFactory::createOrder(amount: 999, amountToBePaid: 100);
+        $order = ModelFactory::createOrder(amount: 400, amountToBePaid: 100);
         $payment = ModelFactory::createPayment(amount: 500, mode: Payment::MODE_TRANSFER);
         $markOrderAsPaidUsecase = $this->createMock(MarkOrderAsPaidUsecase::class);
         $markOrderAsPaidUsecase->expects($this->once())->method('execute');

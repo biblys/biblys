@@ -203,6 +203,20 @@ class PaymentController extends Controller
         $order = OrderQuery::create()->findPk($orderId);
         $paymentAmount = $bodyParams->getInteger("payment_amount");
 
+        $amountLeftToPay = $order->getAmountLeftToPay();
+        if ($paymentAmount > $amountLeftToPay) {
+            $flashMessages->add(
+                "danger",
+                sprintf(
+                    "Le paiement de %s dépasse le reste à payer de la commande (%d) : %s.",
+                    currency($paymentAmount, true),
+                    $orderId,
+                    currency($amountLeftToPay, true),
+                )
+            );
+            return new RedirectResponse("/pages/adm_order?order_id=$orderId");
+        }
+
         $payment = new Payment();
         $payment->setOrder($order);
         $payment->setMode($bodyParams->get("payment_mode"));

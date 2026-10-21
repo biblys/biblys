@@ -20,6 +20,7 @@ namespace Model;
 
 use Model\Base\Order as BaseOrder;
 use Propel\Runtime\Exception\PropelException;
+use Repository\PaymentRepository;
 
 /**
  * Skeleton subclass for representing a row from the 'orders' table.
@@ -98,6 +99,28 @@ class Order extends BaseOrder
     {
         $shippingCost = $this->getShippingOption()?->getFee() ?? 0;
         return $this->getTotalAmount() + $shippingCost;
+    }
+
+    /**
+     * Sum of executed payments, refunds (negative payments) included.
+     *
+     * @throws PropelException
+     */
+    public function getPayedAmount(): int
+    {
+        $executedPayments = (new PaymentRepository())->findExecutedByOrder($this);
+        $amounts = array_map(fn(Payment $payment) => $payment->getAmount(), $executedPayments);
+
+        return array_sum($amounts);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function getAmountLeftToPay(): int
+    {
+        $total = $this->getAmount() + $this->getShippingCost();
+        return max(0, $total - $this->getPayedAmount());
     }
 
     /**
