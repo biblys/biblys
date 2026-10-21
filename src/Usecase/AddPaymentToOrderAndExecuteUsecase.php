@@ -79,7 +79,7 @@ class AddPaymentToOrderAndExecuteUsecase
         $order->setPaymentMode($payment->getMode());
         $order->save();
 
-        if ($remainingAmount === 0) {
+        if ($order->getAmountLeftToPay() === 0) {
             $this->markOrderAsPaidUsecase->execute(
                 $order,
                 payedAmountInCents: $payment->getAmount(),

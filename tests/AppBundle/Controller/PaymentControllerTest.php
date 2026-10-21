@@ -190,7 +190,7 @@ class PaymentControllerTest extends TestCase
     public function testCreateAction(): void
     {
         // given
-        $order = ModelFactory::createOrder(amountToBePaid: 1500);
+        $order = ModelFactory::createOrder(amount: 1500, amountToBePaid: 1500);
 
         $controller = new PaymentController();
 
@@ -239,6 +239,57 @@ class PaymentControllerTest extends TestCase
         $this->assertNotNull($payment);
         $this->assertEquals(1500, $payment->getAmount());
         $this->assertEquals("cash", $payment->getMode());
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     * @throws TransportExceptionInterface
+     */
+    public function testCreateActionRefusesPaymentExceedingAmountToBePaid(): void
+    {
+        // given
+        $order = ModelFactory::createOrder(amount: 1000, shippingCost: 200, amountToBePaid: 1200);
+        ModelFactory::createPayment(order: $order, amount: 900, mode: "cash");
+
+        $controller = new PaymentController();
+
+        $bodyParams = Mockery::mock(BodyParamsService::class);
+        $bodyParams->shouldReceive("parse")->once();
+        $bodyParams->shouldReceive("getInteger")->with("order_id")->andReturn($order->getId());
+        $bodyParams->shouldReceive("get")->with("payment_mode")->andReturn("cash");
+        $bodyParams->shouldReceive("getInteger")->with("payment_amount")->andReturn(301);
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("authAdmin")->once()->andReturn();
+
+        $mailer = Mockery::mock(Mailer::class);
+        $mailer->expects("send")->never();
+
+        $flashMessagesService = Mockery::mock(FlashMessagesService::class);
+        $flashMessagesService->expects("add")
+            ->with(
+                "danger",
+                "Le paiement de 3,01&nbsp;&euro; dépasse le reste à payer de la commande ({$order->getId()}) : 3,00&nbsp;&euro;.",
+            )
+            ->once();
+
+        // when
+        $response = $controller->createAction(
+            bodyParams: $bodyParams,
+            currentUser: $currentUser,
+            mailer: $mailer,
+            currentSite: Mockery::mock(CurrentSite::class),
+            urlGenerator: Mockery::mock(UrlGenerator::class),
+            templateService: Helpers::getTemplateService(),
+            flashMessages: $flashMessagesService
+        );
+
+        // then
+        $this->assertEquals("/pages/adm_order?order_id={$order->getId()}", $response->getTargetUrl());
+        $order->reload(true);
+        $this->assertFalse($order->isPaid());
+        $this->assertCount(1, PaymentQuery::create()->findByOrderId($order->getId()));
     }
 
     /** stripeWebhookAction */
