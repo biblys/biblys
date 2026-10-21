@@ -58,6 +58,19 @@ class CurrentUser
     }
 
     /**
+     * A cookie that is not valid UTF-8 cannot have been set by Biblys:
+     * ignore it, as if the browser had not sent it.
+     */
+    public static function ignoreIfNotUtf8(?string $cookie): ?string
+    {
+        if ($cookie === null || !mb_check_encoding($cookie, "UTF-8")) {
+            return null;
+        }
+
+        return $cookie;
+    }
+
+    /**
      * @throws PropelException
      */
     private static function buildFromRequest(
@@ -65,7 +78,7 @@ class CurrentUser
         CurrentSite $currentSite,
     ): CurrentUser
     {
-        $cookieToken = $request->cookies->get("user_uid");
+        $cookieToken = self::ignoreIfNotUtf8($request->cookies->get("user_uid"));
         $headerToken = $request->headers->get("AuthToken");
 
         $token = $cookieToken ?: $headerToken;
@@ -76,12 +89,7 @@ class CurrentUser
         }
 
         if ($token === null) {
-            $visitorUid = $request->cookies->get("visitor_uid");
-
-            $isCookieUtf8Encoded = mb_check_encoding($visitorUid ?? "", "UTF-8");
-            if (!$isCookieUtf8Encoded) {
-                throw new BadRequestHttpException("Cookies must use charset UTF-8");
-            }
+            $visitorUid = self::ignoreIfNotUtf8($request->cookies->get("visitor_uid"));
 
             return new CurrentUser(null, $visitorUid);
         }

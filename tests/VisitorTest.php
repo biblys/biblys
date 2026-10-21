@@ -47,6 +47,19 @@ class VisitorTest extends TestCase
         );
     }
 
+    public function testConstructorIgnoresBadlyEncodedUserUidCookie(): void
+    {
+        // given
+        $request = new Request();
+        $request->cookies->set("user_uid", mb_convert_encoding("café", "ISO-8859-1", "UTF-8"));
+
+        // when
+        $visitor = new Visitor($request);
+
+        // then
+        $this->assertFalse($visitor->isLogged(), "should ignore the cookie");
+    }
+
     /**
      * @throws PropelException
      */
