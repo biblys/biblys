@@ -264,4 +264,37 @@ class MarkOrderAsPaidUsecaseTest extends TestCase
         $this->assertTrue($order->isPaid(), "order is marked as paid");
         $this->assertFalse($order->isShipped(), "order marked as shipped");
     }
+
+    /**
+     * @throws PropelException
+     * @throws InvalidEmailAddressException
+     * @throws Exception
+     * @throws TransportExceptionInterface
+     * @throws \Exception
+     */
+    public function testMarkingAsPaidOrderWithoutEmail(): void
+    {
+        // given
+        $order = ModelFactory::createOrder(slug: "order-123");
+        $order->setEmail(null);
+        $order->addStockItem(ModelFactory::createStockItem());
+
+        $urlGenerator = $this->createMock(UrlGeneratorInterface::class);
+        $urlGenerator->method("generate")->willReturn("https://paronymie.fr/order/order-123");
+        $mailer = $this->createMock(Mailer::class);
+        $mailer->expects($this->never())->method("send");
+
+        $usecase = new MarkOrderAsPaidUsecase(
+            urlGenerator: $urlGenerator,
+            templateService: Helpers::getTemplateService(),
+            mailer: $mailer,
+            addArticleToUserLibraryUsecase: $this->createMock(AddArticleToUserLibraryUsecase::class),
+        );
+
+        // when
+        $usecase->execute($order, payedAmountInCents: 999, paymentMode: "Espèces");
+
+        // then
+        $this->assertTrue($order->isPaid(), "order is marked as paid");
+    }
 }

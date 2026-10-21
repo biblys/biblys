@@ -69,35 +69,7 @@ class MarkOrderAsPaidUsecase
             $order->setPaymentDate(new DateTime());
             $order->save();
 
-            $orderUrl = $this->urlGenerator->generate("legacy_order", ["url" => $order->getSlug()]);
-
-            $formatter = new NumberFormatter('fr_FR', NumberFormatter::CURRENCY);
-            $formattedPayedAmount = $formatter->formatCurrency($payedAmountInCents / 100, 'EUR');
-
-            $libraryUrl = "";
-            if ($order->containsDownloadableArticles()) {
-                $libraryUrl = $this->urlGenerator->generate("user_library");
-            }
-
-            $mailSubject = "Paiement pour votre commande bien reçu";
-            $mailBody = $this->templateService->render(
-                "AppBundle:Order:order-payed-email.html.twig",
-                [
-                    "subject" => $mailSubject,
-                    "order_id" => $order->getId(),
-                    "payed_amount" => $formattedPayedAmount, true,
-                    "payment_mode" => $paymentMode,
-                    "has_downloadable" => $order->containsDownloadableArticles(),
-                    "library_url" => $libraryUrl,
-                    "order_url" => $orderUrl,
-                ]
-            );
-
-            $this->mailer->send(
-                $order->getEmail(),
-                $mailSubject,
-                $mailBody,
-            );
+            $this->sendPaymentConfirmationEmail($order, $payedAmountInCents, $paymentMode);
 
             if ($order->containsDownloadableArticles()) {
 
@@ -123,5 +95,50 @@ class MarkOrderAsPaidUsecase
             $con->rollBack();
             throw $exception;
         }
+    }
+
+    /**
+     * @throws InvalidEmailAddressException
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws TransportExceptionInterface
+     */
+    private function sendPaymentConfirmationEmail(Order $order, int $payedAmountInCents, string $paymentMode): void
+    {
+        if (!$order->getEmail()) {
+            return;
+        }
+
+        $orderUrl = $this->urlGenerator->generate("legacy_order", ["url" => $order->getSlug()]);
+
+        $formatter = new NumberFormatter('fr_FR', NumberFormatter::CURRENCY);
+        $formattedPayedAmount = $formatter->formatCurrency($payedAmountInCents / 100, 'EUR');
+
+        $libraryUrl = "";
+        if ($order->containsDownloadableArticles()) {
+            $libraryUrl = $this->urlGenerator->generate("user_library");
+        }
+
+        $mailSubject = "Paiement pour votre commande bien reçu";
+        $mailBody = $this->templateService->render(
+            "AppBundle:Order:order-payed-email.html.twig",
+            [
+                "subject" => $mailSubject,
+                "order_id" => $order->getId(),
+                "payed_amount" => $formattedPayedAmount, true,
+                "payment_mode" => $paymentMode,
+                "has_downloadable" => $order->containsDownloadableArticles(),
+                "library_url" => $libraryUrl,
+                "order_url" => $orderUrl,
+            ]
+        );
+
+        $this->mailer->send(
+            $order->getEmail(),
+            $mailSubject,
+            $mailBody,
+        );
     }
 }
