@@ -43,7 +43,7 @@ class Visitor
             $_COOKIE['visitor_uid'] = $this->visitor_uid;
         }
 
-        $userUidCookie = $request->cookies->get("user_uid");
+        $userUidCookie = CurrentUser::ignoreIfNotUtf8($request->cookies->get("user_uid"));
         if ($userUidCookie) {
             $this->_setUserFromToken($userUidCookie);
         }
