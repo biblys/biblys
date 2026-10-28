@@ -306,6 +306,11 @@ class AdmStockTest extends TestCase
             $response->getContent(),
             "should display the article title"
         );
+        $this->assertSame(
+            preg_match_all("/<a[\s>]/", $response->getContent()),
+            substr_count($response->getContent(), "</a>"),
+            "should have as many closing a tags as opening ones"
+        );
         $this->assertStringContainsString(
             "Enregistrer les modifications",
             $response->getContent(),
