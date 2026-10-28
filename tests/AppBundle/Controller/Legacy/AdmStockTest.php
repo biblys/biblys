@@ -83,6 +83,23 @@ class AdmStockTest extends TestCase
         return $imagesService;
     }
 
+    private function buildTemplateServiceRenderingSearchField(): TemplateService
+    {
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService
+            ->shouldReceive("render")
+            ->with("AppBundle:Utils:_entity-search-field.html.twig", Mockery::type("array"))
+            ->andReturnUsing(fn(string $_, array $vars) => sprintf(
+                '<div class="EntitySearchField" data-query_url="%s" data-input_name="%s" data-value="%s" data-label="%s" data-submit_form="%s"></div>',
+                $vars["query_url"],
+                $vars["input_name"],
+                $vars["selected_result_value"],
+                $vars["selected_result_label"],
+                isset($vars["submit_form"]) ? "1" : "0",
+            ));
+        return $templateService;
+    }
+
     /**
      * @throws PropelException
      */
@@ -200,7 +217,7 @@ class AdmStockTest extends TestCase
             Mockery::mock(UrlGenerator::class),
             Mockery::mock(FlashMessagesService::class),
             $this->buildImagesService(),
-            Mockery::mock(TemplateService::class),
+            $this->buildTemplateServiceRenderingSearchField(),
         );
 
         // then
@@ -215,6 +232,37 @@ class AdmStockTest extends TestCase
             $response->getContent(),
             "should display the add to stock button"
         );
+        $this->assertStringContainsString(
+            'data-query_url="/pages/adm_article_search" data-input_name="add" '
+            . "data-value=\"{$article->getId()}\" data-label=\"Le livre à ajouter\" data-submit_form=\"1\"",
+            $response->getContent(),
+            "should display the article search field prefilled with the article from the add param"
+        );
+        $this->assertStringContainsString(
+            '<form method="get" action="/pages/adm_stock">',
+            $response->getContent(),
+            "should reload the page with the selected article as add param"
+        );
+        $this->assertStringContainsString(
+            "<input type=\"hidden\" name=\"article_id\" value=\"{$article->getId()}\">",
+            $response->getContent(),
+            "should send the article id with the main form"
+        );
+        $this->assertStringContainsString(
+            'id="change-article-link"',
+            $response->getContent(),
+            "should display a button to change the article"
+        );
+        $this->assertMatchesRegularExpression(
+            '/<div class="article-thumb-search" id="article-search" hidden>/',
+            $response->getContent(),
+            "should hide the article search field by default"
+        );
+        $this->assertStringNotContainsString(
+            'type="number" name="article_id"',
+            $response->getContent(),
+            "should not display the article number input anymore"
+        );
     }
 
     /**
@@ -228,6 +276,13 @@ class AdmStockTest extends TestCase
         $article = ModelFactory::createArticle(title: "Le livre à modifier");
         $stockItem = ModelFactory::createStockItem(article: $article);
 
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator
+            ->shouldReceive("generate")
+            ->once()
+            ->with("stock_change_article", ["stockId" => $stockItem->getId()])
+            ->andReturn("/admin/stock/{$stockItem->getId()}/change-article");
+
         $_GET["id"] = $stockItem->getId();
         $request = new Request();
         $request->query->set("id", $stockItem->getId());
@@ -238,10 +293,10 @@ class AdmStockTest extends TestCase
             $this->buildSession(),
             $this->buildCurrentSite(),
             Mockery::mock(Mailer::class),
-            Mockery::mock(UrlGenerator::class),
+            $urlGenerator,
             Mockery::mock(FlashMessagesService::class),
             $this->buildImagesService(),
-            Mockery::mock(TemplateService::class),
+            $this->buildTemplateServiceRenderingSearchField(),
         );
 
         // then
@@ -255,6 +310,32 @@ class AdmStockTest extends TestCase
             "Enregistrer les modifications",
             $response->getContent(),
             "should display the save button"
+        );
+        $this->assertStringContainsString(
+            "data-input_name=\"article_id\" data-value=\"{$article->getId()}\" "
+            . "data-label=\"Le livre à modifier\" data-submit_form=\"1\"",
+            $response->getContent(),
+            "should display the article search field prefilled with the article of the stock item"
+        );
+        $this->assertStringContainsString(
+            "<form method=\"post\" action=\"/admin/stock/{$stockItem->getId()}/change-article\">",
+            $response->getContent(),
+            "should post the selected article to the change article route"
+        );
+        $this->assertStringContainsString(
+            "<input type=\"hidden\" name=\"article_id\" value=\"{$article->getId()}\">",
+            $response->getContent(),
+            "should send the article id with the main form"
+        );
+        $this->assertStringContainsString(
+            'id="change-article-link"',
+            $response->getContent(),
+            "should display a button to change the article"
+        );
+        $this->assertMatchesRegularExpression(
+            '/<div class="article-thumb-search" id="article-search" hidden>/',
+            $response->getContent(),
+            "should hide the article search field by default"
         );
     }
 
@@ -391,6 +472,36 @@ class AdmStockTest extends TestCase
             "/pages/adm_stock?id={$stockItem->getId()}",
             $response->getTargetUrl(),
             "should redirect to the stock item page"
+        );
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testPostChangesArticleOfExistingStockItem(): void
+    {
+        // given
+        ModelFactory::createSite();
+        $originalArticle = ModelFactory::createArticle(title: "Article d'origine");
+        $newArticle = ModelFactory::createArticle(title: "Article corrigé");
+        $stockItem = ModelFactory::createStockItem(article: $originalArticle);
+        $flashMessagesService = Mockery::mock(FlashMessagesService::class);
+        $flashMessagesService->shouldReceive("add")->once();
+
+        // when
+        $this->callControllerWithPost([
+            "article_id" => $newArticle->getId(),
+            "stock_id" => $stockItem->getId(),
+            "stock_num" => 1,
+            "stock_condition" => "Neuf",
+        ], $flashMessagesService);
+
+        // then
+        $stockItem->reload();
+        $this->assertEquals(
+            $newArticle->getId(),
+            $stockItem->getArticleId(),
+            "should link the stock item to the newly selected article"
         );
     }
 
