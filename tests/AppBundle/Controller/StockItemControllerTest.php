@@ -29,6 +29,7 @@ use Exception;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Request;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -177,5 +178,106 @@ class StockItemControllerTest extends TestCase
         $this->assertEquals(302, $response->getStatusCode());
         $this->assertEquals("/pages/adm_stock?id={$stockItem->getId()}", $response->getTargetUrl());
         $this->assertFalse($stockItem->isLost(), "should have canceled the lost status");
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testChangeArticleAction()
+    {
+        // given
+        $controller = new StockItemController();
+        ModelFactory::createSite();
+        $originalArticle = ModelFactory::createArticle(title: "Article d'origine");
+        $newArticle = ModelFactory::createArticle(title: "Nouvel article");
+        $stockItem = ModelFactory::createStockItem(article: $originalArticle, sellingPrice: 1500);
+
+        $request = new Request();
+        $request->request->set("article_id", $newArticle->getId());
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authAdmin");
+
+        $flashMessages = Mockery::mock(FlashMessagesService::class);
+        $flashMessages->expects("add")->with(
+            "success",
+            "L'article de l'exemplaire n° {$stockItem->getId()} a été remplacé par « Nouvel article »."
+        );
+
+        // when
+        $response = $controller->changeArticleAction(
+            $request,
+            $currentUser,
+            $flashMessages,
+            $stockItem->getId()
+        );
+
+        // then
+        $stockItem->reload();
+        $this->assertEquals(302, $response->getStatusCode());
+        $this->assertEquals("/pages/adm_stock?id={$stockItem->getId()}", $response->getTargetUrl());
+        $this->assertEquals(
+            $newArticle->getId(),
+            $stockItem->getArticleId(),
+            "should have linked the stock item to the new article"
+        );
+        $this->assertEquals(1500, $stockItem->getSellingPrice(), "should have kept the selling price");
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testChangeArticleActionWithUnknownArticle()
+    {
+        // given
+        $controller = new StockItemController();
+        ModelFactory::createSite();
+        $stockItem = ModelFactory::createStockItem();
+
+        $request = new Request();
+        $request->request->set("article_id", 999999);
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authAdmin");
+
+        // then
+        $this->expectException(NotFoundHttpException::class);
+        $this->expectExceptionMessage("Article 999999 not found");
+
+        // when
+        $controller->changeArticleAction(
+            $request,
+            $currentUser,
+            Mockery::mock(FlashMessagesService::class),
+            $stockItem->getId()
+        );
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testChangeArticleActionWithUnknownStockItem()
+    {
+        // given
+        $controller = new StockItemController();
+        $article = ModelFactory::createArticle();
+
+        $request = new Request();
+        $request->request->set("article_id", $article->getId());
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authAdmin");
+
+        // then
+        $this->expectException(NotFoundHttpException::class);
+        $this->expectExceptionMessage("Stock item 999999 not found");
+
+        // when
+        $controller->changeArticleAction(
+            $request,
+            $currentUser,
+            Mockery::mock(FlashMessagesService::class),
+            999999
+        );
     }
 }

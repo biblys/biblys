@@ -28,6 +28,7 @@ use Cart;
 use CartManager;
 use Exception;
 use Framework\Controller;
+use Model\ArticleQuery;
 use Model\StockQuery;
 use Propel\Runtime\Exception\PropelException;
 use Stock;
@@ -42,6 +43,7 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException as NotFoundExc
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
+use Usecase\ChangeStockItemArticleUsecase;
 use Usecase\UpdateStockItemPriceUsecase;
 
 class StockItemController extends Controller
@@ -242,6 +244,41 @@ class StockItemController extends Controller
         }
 
         return new RedirectResponse("/pages/cart");
+    }
+
+    /**
+     * POST /admin/stock/{stockId}/change-article
+     * @throws Exception
+     */
+    public function changeArticleAction(
+        Request              $request,
+        CurrentUser          $currentUser,
+        FlashMessagesService $flashMessages,
+        int                  $stockId
+    ): RedirectResponse
+    {
+        $currentUser->authAdmin();
+
+        $articleId = $request->request->get("article_id");
+        $article = ArticleQuery::create()->findPk($articleId);
+        if (!$article) {
+            throw new NotFoundHttpException("Article $articleId not found");
+        }
+
+        $stockItem = StockQuery::create()->findPk($stockId);
+        if (!$stockItem) {
+            throw new NotFoundHttpException("Stock item $stockId not found");
+        }
+
+        $usecase = new ChangeStockItemArticleUsecase();
+        $usecase->execute($stockItem, $article);
+
+        $flashMessages->add(
+            "success",
+            "L'article de l'exemplaire n° $stockId a été remplacé par « {$article->getTitle()} »."
+        );
+
+        return new RedirectResponse("/pages/adm_stock?id=$stockId");
     }
 
     /**
