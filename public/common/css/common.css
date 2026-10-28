@@ -875,6 +875,10 @@ form.update {
   width: 90%;
 }
 
+.article-thumb-search {
+  margin: 10px 0 10px 10px;
+}
+
 .article-thumb h3 {
   overflow: hidden;
   text-overflow: ellipsis;

@@ -383,6 +383,35 @@ return function (
         );
     }
 
+    $articleSearchFieldVars = [
+        "query_url" => "/pages/adm_article_search",
+        "label" => "Rechercher un article par titre, auteur, mot-clé, ISBN...",
+        "selected_result_value" => $article->getId(),
+        "selected_result_label" => $article->getTitle(),
+        "submit_form" => true,
+        "autoload" => true,
+    ];
+    if ($mode === "update") {
+        $changeArticleFormAction = $urlGenerator->generate(
+            "stock_change_article",
+            ["stockId" => $stockEntity->get("id")]
+        );
+        $changeArticleFormMethod = "post";
+        $changeArticleFormHiddenFields = null;
+        $articleSearchFieldVars["input_name"] = "article_id";
+    } else {
+        $changeArticleFormAction = "/pages/adm_stock";
+        $changeArticleFormMethod = "get";
+        $changeArticleFormHiddenFields = $copyId
+            ? '<input type="hidden" name="copy" value="' . htmlspecialchars($copyId) . '">'
+            : null;
+        $articleSearchFieldVars["input_name"] = "add";
+    }
+    $articleSearchField = $templateService->render(
+        "AppBundle:Utils:_entity-search-field.html.twig",
+        $articleSearchFieldVars
+    );
+
     $content .= '
         <div class="article-thumb">
             ' . $articleCover . '
@@ -395,6 +424,24 @@ return function (
                     coll. ' . $a['article_collection'] . ' ' . numero($a['article_number']) . ' (' . $a['article_publisher'] . ')<br />
                     Prix éditeur : ' . price($a['article_price'], 'EUR') . '
                 </p>
+                <p>
+                    <button type="button" id="change-article-link" class="btn btn-primary btn-sm">
+                        Modifier l\'article
+                    </button>
+                </p>
+                <div class="article-thumb-search" id="article-search" hidden>
+                    <form method="' . $changeArticleFormMethod . '" action="' . $changeArticleFormAction . '">
+                        ' . $changeArticleFormHiddenFields . '
+                        ' . $articleSearchField . '
+                    </form>
+                </div>
+                <script>
+                    document.getElementById("change-article-link").addEventListener("click", function (event) {
+                        document.getElementById("article-search").hidden = false;
+                        event.currentTarget.hidden = true;
+                        document.querySelector("#article-search .EntitySearchField__search-input").focus();
+                    });
+                </script>
             </div>
         </div>
     </a>
@@ -678,13 +725,12 @@ return function (
 
     <form enctype="multipart/form-data" method="post" action="/pages/adm_stock" class="fieldset">
         <fieldset>
+            <input type="hidden" name="article_id" value="' . $article->getId() . '">
 
             <label title="Chaque exemplaire en base a un numéro unique" for="stock_id" class="readonly">Exemplaire n&deg; </label>
             <input type="text" name="stock_id" id="stock_id" value="' . $_GET['id'] . '" class="mini" readonly />
             <br />
 
-            <label for="article_id" class="required">Article n° </label>
-            <input type="number" name="article_id" id="article_id" value="' . $a['article_id'] . '" class="mini required" required />
             ' . $rayon_select . '
             <br />
             <br />

@@ -7,6 +7,8 @@
 - La recherche de clients depuis la caisse a été améliorée.
 - Les données structurées des pages article incluent désormais la politique de
   retour et les frais de livraison dans les offres.
+- Le changement d'un article associé à un exemplaire, depuis la page de gestion
+  de l'exemplaire, a été facilité.
 
 ## 3.17.4 (21 octobre 2026)
 
