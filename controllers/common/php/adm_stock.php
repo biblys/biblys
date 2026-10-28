@@ -444,7 +444,6 @@ return function (
                 </script>
             </div>
         </div>
-    </a>
 ';
 
     if (!empty($a['article_weight'])) {
