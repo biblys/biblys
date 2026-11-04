@@ -1,5 +1,7 @@
 # Historique des modifications
 
+## 3.19.0 (DEV)
+
 ## 3.18.0 (4 novembre 2026)
 
 ### Améliorations
