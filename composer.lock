@@ -272,16 +272,16 @@
         },
         {
             "name": "biblys/isbn",
-            "version": "3.2.87",
+            "version": "3.2.88",
             "source": {
                 "type": "git",
                 "url": "https://github.com/biblys/isbn.git",
-                "reference": "a1983effcd38b71408c3f646438e99851351c32e"
+                "reference": "ff69254a894c19c885c06261d01851dbd714224b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/biblys/isbn/zipball/a1983effcd38b71408c3f646438e99851351c32e",
-                "reference": "a1983effcd38b71408c3f646438e99851351c32e",
+                "url": "https://api.github.com/repos/biblys/isbn/zipball/ff69254a894c19c885c06261d01851dbd714224b",
+                "reference": "ff69254a894c19c885c06261d01851dbd714224b",
                 "shasum": ""
             },
             "require": {
@@ -319,7 +319,7 @@
             ],
             "support": {
                 "issues": "https://github.com/biblys/isbn/issues",
-                "source": "https://github.com/biblys/isbn/tree/3.2.87"
+                "source": "https://github.com/biblys/isbn/tree/3.2.88"
             },
             "funding": [
                 {
@@ -327,7 +327,8 @@
                     "type": "liberapay"
                 }
             ],
-            "time": "2022-11-26T00:00:00+00:00"
+            "time": "2022-11-26T00:00:00+00:00",
+            "published-time": "2026-11-04T17:13:50+00:00"
         },
         {
             "name": "brick/math",
