@@ -1,5 +1,13 @@
 # Historique des modifications
 
+## 3.18.1 (5 novembre 2026)
+
+### Corrections
+
+- La réinitialisation des termes de recherche des articles, depuis
+  l'administration, ne provoque plus d'erreur de mémoire sur les catalogues
+  volumineux.
+
 ## 3.18.0 (4 novembre 2026)
 
 ### Améliorations
