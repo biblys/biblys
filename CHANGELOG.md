@@ -2,6 +2,13 @@
 
 ## 3.19.0 (DEV)
 
+### Améliorations
+
+- Les cycles qui partagent la même adresse (créés par d'anciens imports
+  Noosfere) sont fusionnés à la mise à jour, ce qui rétablit l'affichage de tous
+  les livres de la série, et une même adresse ne peut plus être utilisée par
+  deux cycles.
+
 ## 3.18.0 (4 novembre 2026)
 
 ### Améliorations
