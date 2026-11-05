@@ -406,6 +406,9 @@
     <index name="cycle_name">
       <index-column name="cycle_name"/>
     </index>
+    <unique name="cycle_url">
+      <unique-column name="cycle_url" size="191"/>
+    </unique>
     <vendor type="mysql">
       <parameter name="Engine" value="InnoDB"/>
     </vendor>
