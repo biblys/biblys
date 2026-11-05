@@ -46,4 +46,15 @@ class ArticleRepository
             ->filterByTypeId(ArticleType::EBOOK)
             ->findOne();
     }
+
+    /**
+     * Resets generated search terms of all articles with a single query,
+     * without loading articles in memory.
+     *
+     * @throws PropelException
+     */
+    public function resetSearchTerms(): void
+    {
+        ArticleQuery::create()->update(["KeywordsGenerated" => null]);
+    }
 }

@@ -21,6 +21,7 @@ namespace Repository;
 use Biblys\Data\ArticleType;
 use Biblys\Service\CurrentSite;
 use Biblys\Test\ModelFactory;
+use DateTime;
 use Model\ArticleQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
@@ -120,5 +121,23 @@ class ArticleRepositoryTest extends TestCase
 
         // then
         $this->assertNull($result);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testResetSearchTerms(): void
+    {
+        // given
+        $article = ModelFactory::createArticle(keywordsGeneratedAt: new DateTime());
+        $otherArticle = ModelFactory::createArticle(url: "author/other", keywordsGeneratedAt: new DateTime());
+        $repository = new ArticleRepository();
+
+        // when
+        $repository->resetSearchTerms();
+
+        // then
+        $this->assertNull(ArticleQuery::create()->findPk($article->getId())->getKeywordsGenerated());
+        $this->assertNull(ArticleQuery::create()->findPk($otherArticle->getId())->getKeywordsGenerated());
     }
 }
