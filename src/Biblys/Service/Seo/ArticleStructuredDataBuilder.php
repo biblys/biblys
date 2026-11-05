@@ -37,6 +37,8 @@ class ArticleStructuredDataBuilder
 
     private const RETURN_WINDOW_DAYS = 14;
 
+    private const MAX_COUNTRIES_PER_RETURN_POLICY = 50;
+
     private const EU_COUNTRY_CODES = [
         "AT", "BE", "BG", "CY", "CZ", "DE", "DK", "EE", "ES", "FI", "FR", "GR", "HR", "HU", "IE",
         "IT", "LT", "LU", "LV", "MT", "NL", "PL", "PT", "RO", "SE", "SI", "SK",
@@ -249,13 +251,15 @@ class ArticleStructuredDataBuilder
                 "returnPolicyCategory" => "https://schema.org/MerchantReturnFiniteReturnWindow",
                 "merchantReturnDays" => self::RETURN_WINDOW_DAYS,
                 "returnFees" => "https://schema.org/ReturnFeesCustomerResponsibility",
+                "returnMethod" => "https://schema.org/ReturnByMail",
             ];
         }
 
-        if ($nonReturnableCountryCodes !== []) {
+        // Google refuse plus de 50 pays par politique de retour
+        foreach (array_chunk($nonReturnableCountryCodes, self::MAX_COUNTRIES_PER_RETURN_POLICY) as $countryCodes) {
             $policies[] = [
                 "@type" => "MerchantReturnPolicy",
-                "applicableCountry" => $nonReturnableCountryCodes,
+                "applicableCountry" => $countryCodes,
                 "returnPolicyCategory" => "https://schema.org/MerchantReturnNotPermitted",
             ];
         }
