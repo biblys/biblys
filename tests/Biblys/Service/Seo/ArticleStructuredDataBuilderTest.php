@@ -648,6 +648,21 @@ class ArticleStructuredDataBuilderTest extends TestCase
                 ["@type" => "DefinedRegion", "addressCountry" => "BE"],
                 ["@type" => "DefinedRegion", "addressCountry" => "FR"],
             ],
+            "deliveryTime" => [
+                "@type" => "ShippingDeliveryTime",
+                "handlingTime" => [
+                    "@type" => "QuantitativeValue",
+                    "minValue" => 1,
+                    "maxValue" => 3,
+                    "unitCode" => "DAY",
+                ],
+                "transitTime" => [
+                    "@type" => "QuantitativeValue",
+                    "minValue" => 2,
+                    "maxValue" => 5,
+                    "unitCode" => "DAY",
+                ],
+            ],
         ]], $data["offers"]["shippingDetails"]);
     }
 
