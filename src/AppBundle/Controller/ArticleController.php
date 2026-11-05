@@ -54,6 +54,7 @@ use Model\Tag;
 use Model\TagQuery;
 use Propel\Runtime\Exception\PropelException;
 use Psr\Http\Client\ClientExceptionInterface;
+use Repository\ArticleRepository;
 use Repository\ShippingOptionRepository;
 use Repository\StockRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -618,11 +619,7 @@ class ArticleController extends Controller
         ]);
 
         if ($request->getMethod() == 'POST') {
-            $articles = $am->getAll();
-            foreach ($articles as $article) {
-                $article->set('article_keywords_generated', null);
-                $am->update($article);
-            }
+            (new ArticleRepository())->resetSearchTerms();
 
             return new RedirectResponse(
                 $urlGenerator->generate("article_search_terms")

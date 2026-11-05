@@ -1,5 +1,18 @@
 # Historique des modifications
 
+## 3.18.1 (5 novembre 2026)
+
+### Corrections
+
+- La réinitialisation des termes de recherche des articles, depuis
+  l'administration, ne provoque plus d'erreur de mémoire sur les catalogues
+  volumineux.
+- Les données structurées des pages article précisent désormais que les
+  retours se font par courrier, un délai de livraison indicatif (1 à 3 jours
+  ouvrés de préparation, 2 à 5 jours d'acheminement) et n'indiquent plus plus
+  de 50 pays dans une même politique de retour, ce qui provoquait des
+  avertissements dans la Search Console de Google.
+
 ## 3.18.0 (4 novembre 2026)
 
 ### Améliorations

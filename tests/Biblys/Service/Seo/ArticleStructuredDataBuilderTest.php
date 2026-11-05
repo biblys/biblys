@@ -442,7 +442,45 @@ class ArticleStructuredDataBuilderTest extends TestCase
             "returnPolicyCategory" => "https://schema.org/MerchantReturnFiniteReturnWindow",
             "merchantReturnDays" => 14,
             "returnFees" => "https://schema.org/ReturnFeesCustomerResponsibility",
+            "returnMethod" => "https://schema.org/ReturnByMail",
         ]], $data["offers"]["hasMerchantReturnPolicy"]);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testBuildSplitsNonReturnableCountriesInPoliciesOfFiftyCountriesMax()
+    {
+        // given
+        $article = ModelFactory::createArticle(typeId: ArticleType::BOOK);
+        ModelFactory::createStockItem(article: $article, sellingPrice: 1500, condition: "Neuf");
+        $zone = ModelFactory::createShippingZone();
+        foreach (["X", "Y"] as $prefix) {
+            foreach (range("A", "Z") as $letter) {
+                ModelFactory::createCountry(
+                    name: "Pays $prefix$letter",
+                    code: "$prefix$letter",
+                    shippingZone: $zone,
+                );
+            }
+        }
+        ModelFactory::createShippingOption(fee: 1500, shippingZone: $zone);
+        $currentSite = $this->createMock(CurrentSite::class);
+        $currentSite->method("hasOptionEnabled")->willReturn(false);
+        $builder = new ArticleStructuredDataBuilder(new StockRepository(), new ShippingOptionRepository());
+
+        // when
+        $data = $builder->build($article, "/images/cover.jpg", $currentSite);
+
+        // then
+        $policies = $data["offers"]["hasMerchantReturnPolicy"];
+        $this->assertCount(2, $policies);
+        $this->assertCount(50, $policies[0]["applicableCountry"]);
+        $this->assertCount(2, $policies[1]["applicableCountry"]);
+        $this->assertEquals(
+            "https://schema.org/MerchantReturnNotPermitted",
+            $policies[1]["returnPolicyCategory"],
+        );
     }
 
     /**
@@ -609,6 +647,21 @@ class ArticleStructuredDataBuilderTest extends TestCase
             "shippingDestination" => [
                 ["@type" => "DefinedRegion", "addressCountry" => "BE"],
                 ["@type" => "DefinedRegion", "addressCountry" => "FR"],
+            ],
+            "deliveryTime" => [
+                "@type" => "ShippingDeliveryTime",
+                "handlingTime" => [
+                    "@type" => "QuantitativeValue",
+                    "minValue" => 1,
+                    "maxValue" => 3,
+                    "unitCode" => "DAY",
+                ],
+                "transitTime" => [
+                    "@type" => "QuantitativeValue",
+                    "minValue" => 2,
+                    "maxValue" => 5,
+                    "unitCode" => "DAY",
+                ],
             ],
         ]], $data["offers"]["shippingDetails"]);
     }
