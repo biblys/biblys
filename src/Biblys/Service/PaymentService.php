@@ -155,7 +155,6 @@ class PaymentService
             "amount" => $order->getAmountTobepaid(),
             "currency" => "eur",
             "customer" => $customer->id,
-            "payment_method_types" => ["card"],
             "metadata" => [
                 "order_id" => $order->getId(),
             ],

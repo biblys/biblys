@@ -12,6 +12,8 @@
   ouvrés de préparation, 2 à 5 jours d'acheminement) et n'indiquent plus plus
   de 50 pays dans une même politique de retour, ce qui provoquait des
   avertissements dans la Search Console de Google.
+- Le paiement par carte bancaire via Stripe fonctionne de nouveau : le
+  formulaire de paiement n'affiche plus d'erreur au chargement.
 
 ## 3.18.0 (4 novembre 2026)
 
