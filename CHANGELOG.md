@@ -14,6 +14,8 @@
   avertissements dans la Search Console de Google.
 - Le paiement par carte bancaire via Stripe fonctionne de nouveau : le
   formulaire de paiement n'affiche plus d'erreur au chargement.
+- L'import d'un livre depuis Noosfere ne crée plus de cycle en double lorsque
+  le nom de la série diffère légèrement d'un cycle existant (espaces en trop).
 
 ## 3.18.0 (4 novembre 2026)
 

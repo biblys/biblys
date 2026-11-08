@@ -22,6 +22,7 @@ use Biblys\Test\ModelFactory;
 use Exception;
 use Model\BookCollection;
 use Model\BookCollectionQuery;
+use Model\CycleQuery;
 use Model\People;
 use Model\PeopleQuery;
 use Model\Publisher;
@@ -43,6 +44,7 @@ class NoosfereTest extends TestCase
         PeopleQuery::create()->deleteAll();
         PublisherQuery::create()->deleteAll();
         BookCollectionQuery::create()->deleteAll();
+        CycleQuery::create()->deleteAll();
     }
 
     /** getOrCreateContributor */
@@ -266,6 +268,55 @@ class NoosfereTest extends TestCase
         // then
         $this->assertInstanceOf(BookCollection::class, $returnedCollection);
         $this->assertEquals($existingCollection->getId(), $returnedCollection->getId());
+    }
+
+    /** #getOrCreateCycle */
+
+    /**
+     * @throws PropelException
+     */
+    public function testGetOrCreateCycle(): void
+    {
+        // when
+        $cycle = Noosfere::getOrCreateCycle(1234, "Les Livres Magiques de  Xanth ");
+
+        // then
+        $this->assertNotNull($cycle->getId());
+        $this->assertEquals("Les Livres Magiques de Xanth", $cycle->getName());
+        $this->assertEquals("les-livres-magiques-de-xanth", $cycle->getUrl());
+        $this->assertEquals(1234, $cycle->getNoosfereId());
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testGetOrCreateCycleReusesCycleWithTheSameUrl(): void
+    {
+        // given
+        $existingCycle = Noosfere::getOrCreateCycle(0, "Les Livres Magiques de Xanth");
+
+        // when
+        $cycle = Noosfere::getOrCreateCycle(1234, "Les Livres Magiques de  Xanth ");
+
+        // then
+        $this->assertEquals($existingCycle->getId(), $cycle->getId());
+        $this->assertEquals(1, CycleQuery::create()->filterByUrl("les-livres-magiques-de-xanth")->count());
+        $this->assertEquals(1234, CycleQuery::create()->findPk($cycle->getId())->getNoosfereId());
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testGetOrCreateCycleReusesCycleWithTheSameNoosfereId(): void
+    {
+        // given
+        $existingCycle = Noosfere::getOrCreateCycle(1234, "Xanth");
+
+        // when
+        $cycle = Noosfere::getOrCreateCycle(1234, "Le cycle de Xanth");
+
+        // then
+        $this->assertEquals($existingCycle->getId(), $cycle->getId());
     }
 
     /** #buildArticlesFromXml */

@@ -27,10 +27,13 @@ use Biblys\Service\Slug\SlugService;
 use Exception;
 use Model\BookCollection;
 use Model\BookCollectionQuery;
+use Model\Cycle;
+use Model\CycleQuery;
 use Model\People;
 use Model\PeopleQuery;
 use Model\Publisher;
 use Model\PublisherQuery;
+use Propel\Runtime\Exception\PropelException;
 use SimpleXMLElement;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
@@ -198,6 +201,48 @@ class Noosfere
     }
 
     /**
+     * Finds a cycle by Noosfere id, then by URL, or creates it.
+     * Name is normalized so that the same series always gives the same URL.
+     *
+     * @throws PropelException
+     */
+    public static function getOrCreateCycle(int $noosfereId, string $name): Cycle
+    {
+        $name = self::normalizeCycleName($name);
+        $url = (new SlugService())->slugify($name);
+
+        $cycle = null;
+        if ($noosfereId) {
+            $cycle = CycleQuery::create()->filterByNoosfereId($noosfereId)->orderById()->findOne();
+        }
+        if (!$cycle) {
+            $cycle = CycleQuery::create()->filterByUrl($url)->findOne();
+        }
+
+        if ($cycle) {
+            if (!$cycle->getNoosfereId() && $noosfereId) {
+                $cycle->setNoosfereId($noosfereId);
+                $cycle->save();
+            }
+
+            return $cycle;
+        }
+
+        $cycle = new Cycle();
+        $cycle->setName($name);
+        $cycle->setUrl($url);
+        $cycle->setNoosfereId($noosfereId ?: null);
+        $cycle->save();
+
+        return $cycle;
+    }
+
+    public static function normalizeCycleName(string $name): string
+    {
+        return trim(preg_replace("/\s+/u", " ", $name));
+    }
+
+    /**
      * @throws Exception
      */
     public static function getOrCreateCollection(
@@ -334,6 +379,7 @@ class Noosfere
                 $cycle = ucfirst($cycle);
                 $builtArticle["article_cycle"] = str_replace("'  ", "'", $cycle);
             }
+            $builtArticle["article_cycle"] = self::normalizeCycleName($builtArticle["article_cycle"]);
             $builtArticle["article_tome"] = (string)$articleFromXml->Serie->Volume;
             $builtArticle["noosfere_IdSerie"] = (string)$articleFromXml->Serie["IdSerie"];
 

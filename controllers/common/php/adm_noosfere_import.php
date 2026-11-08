@@ -19,15 +19,12 @@
 use Biblys\Noosfere\Noosfere;
 use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
-use Biblys\Service\Slug\SlugService;
 use Model\PeopleQuery;
 use Model\PublisherQuery;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 return function(): JsonResponse
 {
-    $slugService = new SlugService();
-
     $noosfereId = $_GET["noosfere_id"];
 
     $noosfere = new Noosfere();
@@ -50,22 +47,13 @@ return function(): JsonResponse
 
     // Reconnaissance de cycle
     if (!empty($articleToCreate["article_cycle"])) {
-        $cym = new CycleManager();
-        $cycle = $cym->get(array('cycle_noosfere_id' => $articleToCreate["noosfere_IdSerie"]));
-        if (!$cycle) {
-            $cycle = $cym->get(array('cycle_name' => $articleToCreate["article_cycle"]));
-            if (!$cycle) {
-                $articleToCreate["cycle_url"] = $slugService->slugify($articleToCreate["article_cycle"]);
-                $cycle = $cym->create(array(
-                    'cycle_name' => $articleToCreate['article_cycle'],
-                    'cycle_url' => $slugService->slugify($articleToCreate["article_cycle"]),
-                    'cycle_noosfere_id' => $articleToCreate["noosfere_IdSerie"]
-                ));
-            }
-        }
+        $cycle = Noosfere::getOrCreateCycle(
+            (int) $articleToCreate["noosfere_IdSerie"],
+            $articleToCreate["article_cycle"],
+        );
 
-        $articleToCreate['article_cycle'] = $cycle->get('name');
-        $articleToCreate['cycle_id'] = $cycle->get('id');
+        $articleToCreate['article_cycle'] = $cycle->getName();
+        $articleToCreate['cycle_id'] = $cycle->getId();
     }
 
     // Reconnaissance des contributeurs
