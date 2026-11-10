@@ -1057,16 +1057,16 @@
         },
         {
             "name": "gitonomy/gitlib",
-            "version": "v1.7.1",
+            "version": "v1.7.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/gitonomy/gitlib.git",
-                "reference": "6da07267e07b240616ec8a016e1614eeb3a1016c"
+                "reference": "a208541eebe03af86a47c348771d32108b8e21a9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/gitonomy/gitlib/zipball/6da07267e07b240616ec8a016e1614eeb3a1016c",
-                "reference": "6da07267e07b240616ec8a016e1614eeb3a1016c",
+                "url": "https://api.github.com/repos/gitonomy/gitlib/zipball/a208541eebe03af86a47c348771d32108b8e21a9",
+                "reference": "a208541eebe03af86a47c348771d32108b8e21a9",
                 "shasum": ""
             },
             "require": {
@@ -1078,6 +1078,7 @@
             },
             "require-dev": {
                 "ext-fileinfo": "*",
+                "ext-zlib": "*",
                 "phpspec/prophecy-phpunit": "^2.1",
                 "phpunit/phpunit": "^7.5.20 || ^8.5.20 || ^9.5.9",
                 "psr/log": "^1.0",
@@ -1118,7 +1119,7 @@
             "description": "Library for accessing git",
             "support": {
                 "issues": "https://github.com/gitonomy/gitlib/issues",
-                "source": "https://github.com/gitonomy/gitlib/tree/v1.7.1"
+                "source": "https://github.com/gitonomy/gitlib/tree/v1.7.2"
             },
             "funding": [
                 {
@@ -1126,8 +1127,8 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-11-07T20:55:23+00:00",
-            "published-time": "2026-11-07T20:55:28+00:00"
+            "time": "2026-11-10T08:03:03+00:00",
+            "published-time": "2026-11-10T08:04:02+00:00"
         },
         {
             "name": "google/recaptcha",
