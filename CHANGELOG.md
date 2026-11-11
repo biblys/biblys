@@ -1,6 +1,6 @@
 # Historique des modifications
 
-## 3.18.1 (5 novembre 2026)
+## 3.18.1 (11 novembre 2026)
 
 ### Corrections
 
