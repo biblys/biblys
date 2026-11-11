@@ -2,6 +2,14 @@
 
 ## 3.19.0 (DEV)
 
+### Améliorations
+
+- Il est de nouveau possible de lier un contributeur (par exemple l'auteur
+  d'une critique) à un billet de blog, depuis la page « Liens du billet »
+  (bouton « Articles et contributeurs liés » de la page d'édition du billet).
+  Cette fonctionnalité avait disparu avec l'ancienne page de gestion des
+  liens, supprimée dans la version 3.6.1.
+
 ### Corrections
 
 - L'import d'un livre depuis Noosfere ne crée plus de cycle en double lorsque

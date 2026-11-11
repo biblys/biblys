@@ -600,6 +600,21 @@ post_articles_unlink:
     id: \d+
     articleId: \d+
 
+post_people_link:
+  methods: POST
+  path: /admin/posts/{id}/people
+  controller: AppBundle\Controller\PostController::peopleLinkAction
+  requirements:
+    id: \d+
+
+post_people_unlink:
+  methods: POST
+  path: /admin/posts/{id}/people/{peopleId}/unlink
+  controller: AppBundle\Controller\PostController::peopleUnlinkAction
+  requirements:
+    id: \d+
+    peopleId: \d+
+
 # PostCategory
 
 category_show:

@@ -30,6 +30,7 @@ use Biblys\Test\ModelFactory;
 use DateTime;
 use Exception;
 use Mockery;
+use Model\Link;
 use Model\LinkQuery;
 use Model\Post;
 use Model\PostQuery;
@@ -392,6 +393,30 @@ class PostControllerTest extends TestCase
         $this->assertStringContainsString("Un article lié", $response->getContent());
     }
 
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testArticlesActionListsLinkedPeople()
+    {
+        // given
+        $controller = new PostController();
+        $post = ModelFactory::createPost(title: "Une critique avec un auteur");
+        $people = ModelFactory::createPeople(["first_name" => "Ursula", "last_name" => "Reviewer"]);
+        ModelFactory::createLink(post: $post, people: $people);
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authPublisher");
+        $templateService = Helpers::getTemplateService();
+
+        // when
+        $response = $controller->articlesAction($currentUser, $templateService, $post->getId());
+
+        // then
+        $this->assertStringContainsString("Contributeurs liés", $response->getContent());
+        $this->assertStringContainsString("Ursula Reviewer", $response->getContent());
+    }
+
 
     /** articlesLinkAction **/
 
@@ -470,6 +495,166 @@ class PostControllerTest extends TestCase
         $linkExists = LinkQuery::create()
             ->filterByPostId($post->getId())
             ->filterByArticleId($article->getId())
+            ->exists();
+        $this->assertFalse($linkExists);
+    }
+
+
+    /** peopleLinkAction **/
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testPeopleLinkAction()
+    {
+        // given
+        $controller = new PostController();
+        $post = ModelFactory::createPost(title: "Une critique à signer");
+        $people = ModelFactory::createPeople(["first_name" => "Ursula", "last_name" => "Reviewer"]);
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authPublisher");
+        $bodyParamsService = Mockery::mock(BodyParamsService::class);
+        $bodyParamsService->expects("parse");
+        $bodyParamsService->expects("getInteger")->with("people_id")->andReturn($people->getId());
+        $flashMessagesService = Mockery::mock(FlashMessagesService::class);
+        $flashMessagesService->expects("add")->with("success", "Ursula Reviewer a été lié·e au billet.");
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate")->with("post_articles", ["id" => $post->getId()])->andReturn("/admin/post/1/articles");
+
+        // when
+        $response = $controller->peopleLinkAction(
+            $currentUser,
+            $bodyParamsService,
+            $flashMessagesService,
+            $urlGenerator,
+            $post->getId()
+        );
+
+        // then
+        $this->assertStringContainsString("/admin/post/1/articles", $response->getTargetUrl());
+        $linkExists = LinkQuery::create()
+            ->filterByPostId($post->getId())
+            ->filterByPeopleId($people->getId())
+            ->exists();
+        $this->assertTrue($linkExists);
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testPeopleLinkActionDoesNotCreateDuplicate()
+    {
+        // given
+        $controller = new PostController();
+        $post = ModelFactory::createPost(title: "Une critique déjà signée");
+        $people = ModelFactory::createPeople(["first_name" => "Ursula", "last_name" => "Reviewer"]);
+        ModelFactory::createLink(post: $post, people: $people);
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authPublisher");
+        $bodyParamsService = Mockery::mock(BodyParamsService::class);
+        $bodyParamsService->expects("parse");
+        $bodyParamsService->expects("getInteger")->with("people_id")->andReturn($people->getId());
+        $flashMessagesService = Mockery::mock(FlashMessagesService::class);
+        $flashMessagesService->expects("add")->with("success", "Ursula Reviewer a été lié·e au billet.");
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate")->andReturn("/admin/post/1/articles");
+
+        // when
+        $controller->peopleLinkAction(
+            $currentUser,
+            $bodyParamsService,
+            $flashMessagesService,
+            $urlGenerator,
+            $post->getId()
+        );
+
+        // then
+        $linksCount = LinkQuery::create()
+            ->filterByPostId($post->getId())
+            ->filterByPeopleId($people->getId())
+            ->count();
+        $this->assertEquals(1, $linksCount);
+    }
+
+
+    /** peopleUnlinkAction **/
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testPeopleUnlinkAction()
+    {
+        // given
+        $controller = new PostController();
+        $post = ModelFactory::createPost(title: "Une critique à détacher");
+        $people = ModelFactory::createPeople(["first_name" => "Ursula", "last_name" => "Reviewer"]);
+        ModelFactory::createLink(post: $post, people: $people);
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authPublisher");
+        $flashMessagesService = Mockery::mock(FlashMessagesService::class);
+        $flashMessagesService->expects("add")->with("success", "Ursula Reviewer a été détaché·e du billet.");
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate")->with("post_articles", ["id" => $post->getId()])->andReturn("/admin/post/1/articles");
+
+        // when
+        $response = $controller->peopleUnlinkAction(
+            $currentUser,
+            $flashMessagesService,
+            $urlGenerator,
+            $post->getId(),
+            $people->getId(),
+        );
+
+        // then
+        $this->assertStringContainsString("/admin/post/1/articles", $response->getTargetUrl());
+        $linkExists = LinkQuery::create()
+            ->filterByPostId($post->getId())
+            ->filterByPeopleId($people->getId())
+            ->exists();
+        $this->assertFalse($linkExists);
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testPeopleUnlinkActionWhenPeopleNoLongerExists()
+    {
+        // given
+        $controller = new PostController();
+        $post = ModelFactory::createPost(title: "Une critique dont l'auteur a disparu");
+        $missingPeopleId = 987654;
+        $link = new Link();
+        $link->setPostId($post->getId());
+        $link->setPeopleId($missingPeopleId);
+        $link->save();
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authPublisher");
+        $flashMessagesService = Mockery::mock(FlashMessagesService::class);
+        $flashMessagesService->expects("add")->with("success", "Le contributeur a été détaché·e du billet.");
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate")->andReturn("/admin/post/1/articles");
+
+        // when
+        $controller->peopleUnlinkAction(
+            $currentUser,
+            $flashMessagesService,
+            $urlGenerator,
+            $post->getId(),
+            $missingPeopleId,
+        );
+
+        // then
+        $linkExists = LinkQuery::create()
+            ->filterByPostId($post->getId())
+            ->filterByPeopleId($missingPeopleId)
             ->exists();
         $this->assertFalse($linkExists);
     }

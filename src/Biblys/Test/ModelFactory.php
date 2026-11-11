@@ -279,6 +279,7 @@ class ModelFactory
         ?Publisher       $publisher = null,
         ?Supplier        $supplier = null,
         ?Post            $post = null,
+        ?People          $people = null,
     ): Link
     {
         $link = new Link();
@@ -288,6 +289,7 @@ class ModelFactory
         $link->setPublisherId($publisher?->getId());
         $link->setSupplierId($supplier?->getId());
         $link->setPostId($post?->getId());
+        $link->setPeopleId($people?->getId());
         $link->save();
 
         return $link;

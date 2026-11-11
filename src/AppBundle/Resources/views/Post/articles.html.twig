@@ -17,7 +17,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 {% extends "layout:admin.html.twig" %}
 
 {% block title %}
-  Articles liés à &laquo; {{ post.title }} &raquo;
+  Liens du billet &laquo; {{ post.title }} &raquo;
 {% endblock %}
 
 {% block main %}
@@ -27,12 +27,15 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     Billets de blog
   </a>
 
-  <h1>
-    Articles liés à
+  <h1>Liens du billet</h1>
+
+  <p>
     <a href="{{ path("post_show", { slug: post.url }) }}">
       {{ post.title }}
     </a>
-  </h1>
+  </p>
+
+  <h2 class="mt-4">Articles liés</h2>
 
   <table class="table table-striped mt-4">
     <thead>
@@ -77,4 +80,45 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     } %}
   </form>
 
+  <h2 class="mt-5">Contributeurs liés</h2>
+
+  <table class="table table-striped mt-4">
+    <thead>
+    <tr>
+      <th>Id</th>
+      <th>Nom</th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for people in linked_people %}
+      <tr>
+        <td>{{ people.id }}</td>
+        <td>{{ people.fullName }}</td>
+        <td>
+          <form method="post" action="{{ path('post_people_unlink', { id: post.id, peopleId: people.id }) }}">
+            <button type="submit" class="btn btn-danger btn-sm" title="Délier le contributeur">
+              <i class="fa-solid fa-chain-broken"></i>
+            </button>
+          </form>
+        </td>
+      </tr>
+    {% else %}
+      <tr>
+        <td colspan="3">Aucun contributeur lié à ce billet.</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  <form id="add-people-form" action="{{ path('post_people_link', { id: post.id }) }}" method="post">
+    {% include "AppBundle:Utils:_entity-search-field.html.twig" with {
+      field_id: "people-search-field",
+      query_url: "/pages/article_people_search",
+      label: "Ajouter un contributeur lié…",
+      required: true,
+      input_name: "people_id",
+      submit_form: true,
+      autoload: true,
+    } %}
+  </form>
 {% endblock %}

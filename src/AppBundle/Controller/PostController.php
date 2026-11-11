@@ -35,6 +35,7 @@ use Model\ArticleQuery;
 use Model\BlogCategoryQuery;
 use Model\Link;
 use Model\LinkQuery;
+use Model\PeopleQuery;
 use Model\Post;
 use Model\PostQuery;
 use PostManager;
@@ -388,9 +389,18 @@ class PostController extends Controller
             ->joinWithArticle()
             ->find();
 
+        $peopleIds = LinkQuery::create()
+            ->filterByPostId($id)
+            ->filterByPeopleId(null, Criteria::NOT_EQUAL)
+            ->select("PeopleId")
+            ->find()
+            ->getData();
+        $linkedPeople = PeopleQuery::create()->filterById($peopleIds)->find();
+
         return $templateService->renderResponse("AppBundle:Post:articles.html.twig", [
             "post" => $post,
             "article_links" => $articleLinks,
+            "linked_people" => $linkedPeople,
             "articles" => [],
         ]);
     }
@@ -498,6 +508,76 @@ class PostController extends Controller
         $link->delete();
 
         $flashMessagesService->add("success", "L'article {$article->getTitle()} a été détaché du billet.");
+
+        $returnUrl = $urlGenerator->generate("post_articles", ["id" => $id]);
+        return new RedirectResponse($returnUrl);
+    }
+
+    /**
+     * @route POST /admin/posts/:id/people
+     * @throws Exception
+     */
+    public function peopleLinkAction(
+        CurrentUser $currentUser,
+        BodyParamsService $bodyParamsService,
+        FlashMessagesService $flashMessagesService,
+        UrlGenerator $urlGenerator,
+        int $id
+    ): RedirectResponse
+    {
+        $currentUser->authPublisher();
+
+        $bodyParamsService->parse(["people_id" => ["type" => "numeric"]]);
+        $peopleId = $bodyParamsService->getInteger("people_id");
+        $people = PeopleQuery::create()->findPk($peopleId);
+        if (!$people) {
+            throw new NotFoundException("Contributeur $peopleId introuvable.");
+        }
+
+        $linkExists = LinkQuery::create()
+            ->filterByPostId($id)
+            ->filterByPeopleId($peopleId)
+            ->exists();
+        if (!$linkExists) {
+            $link = new Link();
+            $link->setPostId($id);
+            $link->setPeopleId($peopleId);
+            $link->save();
+        }
+
+        $flashMessagesService->add("success", "{$people->getFullName()} a été lié·e au billet.");
+
+        $returnUrl = $urlGenerator->generate("post_articles", ["id" => $id]);
+        return new RedirectResponse($returnUrl);
+    }
+
+    /**
+     * @route POST /admin/posts/:id/people/:peopleId/unlink
+     * @throws Exception
+     */
+    public function peopleUnlinkAction(
+        CurrentUser $currentUser,
+        FlashMessagesService $flashMessagesService,
+        UrlGenerator $urlGenerator,
+        int $id,
+        int $peopleId
+    ): RedirectResponse
+    {
+        $currentUser->authPublisher();
+        $people = PeopleQuery::create()->findPk($peopleId);
+
+        $link = LinkQuery::create()
+            ->filterByPostId($id)
+            ->filterByPeopleId($peopleId)
+            ->findOne();
+        if (!$link) {
+            throw new Exception("Ce contributeur n'est pas lié à ce billet.");
+        }
+        $link->delete();
+
+        // Le contributeur a pu être supprimé alors que le lien existe encore
+        $name = $people ? $people->getFullName() : "Le contributeur";
+        $flashMessagesService->add("success", "$name a été détaché·e du billet.");
 
         $returnUrl = $urlGenerator->generate("post_articles", ["id" => $id]);
         return new RedirectResponse($returnUrl);
