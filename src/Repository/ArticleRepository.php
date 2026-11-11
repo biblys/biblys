@@ -57,4 +57,36 @@ class ArticleRepository
     {
         ArticleQuery::create()->update(["KeywordsGenerated" => null]);
     }
+
+    /**
+     * Searches articles whose search terms contain every word of the term,
+     * restricted to the publishers and collections allowed on the current site.
+     *
+     * @return Article[]
+     * @throws PropelException
+     */
+    public function search(string $term, CurrentSite $currentSite, int $limit = 100): array
+    {
+        $keywords = preg_split('/\s+/', trim($term), flags: PREG_SPLIT_NO_EMPTY);
+        if (empty($keywords)) {
+            return [];
+        }
+
+        $query = ArticleQuery::create();
+        foreach ($keywords as $keyword) {
+            $query->filterByKeywords("%$keyword%", Criteria::LIKE);
+        }
+
+        $publisherFilter = $currentSite->getOption("publisher_filter");
+        if ($publisherFilter) {
+            $query->filterByPublisherId(explode(",", $publisherFilter));
+        }
+
+        $hiddenCollections = $currentSite->getOption("collection_filter_hide");
+        if ($hiddenCollections) {
+            $query->filterByCollectionId(explode(",", $hiddenCollections), Criteria::NOT_IN);
+        }
+
+        return $query->limit($limit)->find()->getArrayCopy();
+    }
 }
