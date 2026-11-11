@@ -31,7 +31,14 @@ function buildElement({ required = true, withValueInput = true, value = '', labe
     '.EntitySearchField__value-input': valueInput,
     button,
     '.help-text': { classList: classList() },
-    '.autocomplete-results': { innerHTML: '', querySelectorAll: () => [] },
+    '.autocomplete-results': {
+      innerHTML: '',
+      children: [],
+      appendChild(child) {
+        this.children.push(child);
+      },
+      querySelectorAll: () => [],
+    },
   };
   const element = {
     dataset: { query_url: '/search' },
@@ -39,7 +46,7 @@ function buildElement({ required = true, withValueInput = true, value = '', labe
     closest: () => null,
   };
 
-  return { element, searchInput, valueInput };
+  return { element, searchInput, valueInput, subMenu: parts['.autocomplete-results'] };
 }
 
 describe('EntitySearchField', () => {
@@ -101,5 +108,98 @@ describe('EntitySearchField', () => {
     new EntitySearchField(element);
 
     expect(searchInput.validationMessage).toBe('');
+  });
+
+  describe('search results', () => {
+    const results = [{ label: 'Premier', value: '1' }, { label: 'Second', value: '2' }];
+
+    function stubDocument() {
+      const listeners = {};
+      globalThis.document = {
+        addEventListener: (type, callback) => (listeners[type] = callback),
+        createElement: () => ({
+          style: {},
+          children: [],
+          appendChild(child) {
+            this.children.push(child);
+          },
+          addEventListener: vi.fn(),
+        }),
+      };
+      return listeners;
+    }
+
+    function stubFetch(searchResults) {
+      globalThis.fetch = vi.fn().mockResolvedValue({
+        json: async () => ({ results: searchResults }),
+      });
+    }
+
+    async function pressEnter(listeners, searchInput) {
+      searchInput.value = 'query';
+      await listeners.keydown({ key: 'Enter', preventDefault: vi.fn() });
+    }
+
+    it('displays the label of each result by default', async () => {
+      const listeners = stubDocument();
+      stubFetch(results);
+      const { element, searchInput, subMenu } = buildElement();
+      new EntitySearchField(element);
+
+      await pressEnter(listeners, searchInput);
+
+      expect(subMenu.children.map((item) => item.textContent)).toEqual(['Premier', 'Second']);
+    });
+
+    it('displays the element returned by renderItem when provided', async () => {
+      const listeners = stubDocument();
+      stubFetch(results);
+      const { element, searchInput, subMenu } = buildElement();
+      const renderItem = (result) => ({ rendered: result.label });
+      new EntitySearchField(element, { renderItem });
+
+      await pressEnter(listeners, searchInput);
+
+      expect(subMenu.children.map((item) => item.children[0])).toEqual([
+        { rendered: 'Premier' },
+        { rendered: 'Second' },
+      ]);
+    });
+
+    it('selects the only result of a submitted search when autoSelectSingleResult is set', async () => {
+      const listeners = stubDocument();
+      stubFetch([results[0]]);
+      const { element, searchInput } = buildElement();
+      const onResultSelected = vi.fn();
+      new EntitySearchField(element, { autoSelectSingleResult: true, onResultSelected });
+
+      await pressEnter(listeners, searchInput);
+
+      expect(onResultSelected).toHaveBeenCalledWith(expect.anything(), results[0]);
+    });
+
+    it('does not select automatically when there are several results', async () => {
+      const listeners = stubDocument();
+      stubFetch(results);
+      const { element, searchInput } = buildElement();
+      const onResultSelected = vi.fn();
+      new EntitySearchField(element, { autoSelectSingleResult: true, onResultSelected });
+
+      await pressEnter(listeners, searchInput);
+
+      expect(onResultSelected).not.toHaveBeenCalled();
+    });
+
+    it('does not select automatically unless autoSelectSingleResult is set', async () => {
+      const listeners = stubDocument();
+      stubFetch([results[0]]);
+      const { element, searchInput } = buildElement();
+      const onResultSelected = vi.fn();
+      new EntitySearchField(element, { onResultSelected });
+
+      await pressEnter(listeners, searchInput);
+
+      expect(onResultSelected).not.toHaveBeenCalled();
+    });
   });
 });
