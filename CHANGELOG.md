@@ -10,8 +10,20 @@
   Cette fonctionnalité avait disparu avec l'ancienne page de gestion des
   liens, supprimée dans la version 3.6.1.
 
+## 3.18.1 (11 novembre 2026)
+
 ### Corrections
 
+- La réinitialisation des termes de recherche des articles, depuis
+  l'administration, ne provoque plus d'erreur de mémoire sur les catalogues
+  volumineux.
+- Les données structurées des pages article précisent désormais que les
+  retours se font par courrier, un délai de livraison indicatif (1 à 3 jours
+  ouvrés de préparation, 2 à 5 jours d'acheminement) et n'indiquent plus plus
+  de 50 pays dans une même politique de retour, ce qui provoquait des
+  avertissements dans la Search Console de Google.
+- Le paiement par carte bancaire via Stripe fonctionne de nouveau : le
+  formulaire de paiement n'affiche plus d'erreur au chargement.
 - L'import d'un livre depuis Noosfere ne crée plus de cycle en double lorsque
   le nom de la série diffère légèrement d'un cycle existant (espaces en trop).
 

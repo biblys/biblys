@@ -37,6 +37,14 @@ class ArticleStructuredDataBuilder
 
     private const RETURN_WINDOW_DAYS = 14;
 
+    private const MAX_COUNTRIES_PER_RETURN_POLICY = 50;
+
+    // Délais indicatifs en jours ouvrés (Biblys ne connaît pas les délais réels)
+    private const HANDLING_TIME_MIN_DAYS = 1;
+    private const HANDLING_TIME_MAX_DAYS = 3;
+    private const TRANSIT_TIME_MIN_DAYS = 2;
+    private const TRANSIT_TIME_MAX_DAYS = 5;
+
     private const EU_COUNTRY_CODES = [
         "AT", "BE", "BG", "CY", "CZ", "DE", "DK", "EE", "ES", "FI", "FR", "GR", "HR", "HU", "IE",
         "IT", "LT", "LU", "LV", "MT", "NL", "PL", "PT", "RO", "SE", "SI", "SK",
@@ -225,9 +233,35 @@ class ArticleStructuredDataBuilder
                     ],
                     $rate["countryCodes"],
                 ),
+                "deliveryTime" => $this->_buildDeliveryTime(),
             ],
             $entryRates,
         );
+    }
+
+    private function _buildDeliveryTime(): array
+    {
+        return [
+            "@type" => "ShippingDeliveryTime",
+            "handlingTime" => $this->_buildBusinessDays(
+                self::HANDLING_TIME_MIN_DAYS,
+                self::HANDLING_TIME_MAX_DAYS,
+            ),
+            "transitTime" => $this->_buildBusinessDays(
+                self::TRANSIT_TIME_MIN_DAYS,
+                self::TRANSIT_TIME_MAX_DAYS,
+            ),
+        ];
+    }
+
+    private function _buildBusinessDays(int $min, int $max): array
+    {
+        return [
+            "@type" => "QuantitativeValue",
+            "minValue" => $min,
+            "maxValue" => $max,
+            "unitCode" => "DAY",
+        ];
     }
 
     /**
@@ -249,13 +283,15 @@ class ArticleStructuredDataBuilder
                 "returnPolicyCategory" => "https://schema.org/MerchantReturnFiniteReturnWindow",
                 "merchantReturnDays" => self::RETURN_WINDOW_DAYS,
                 "returnFees" => "https://schema.org/ReturnFeesCustomerResponsibility",
+                "returnMethod" => "https://schema.org/ReturnByMail",
             ];
         }
 
-        if ($nonReturnableCountryCodes !== []) {
+        // Google refuse plus de 50 pays par politique de retour
+        foreach (array_chunk($nonReturnableCountryCodes, self::MAX_COUNTRIES_PER_RETURN_POLICY) as $countryCodes) {
             $policies[] = [
                 "@type" => "MerchantReturnPolicy",
-                "applicableCountry" => $nonReturnableCountryCodes,
+                "applicableCountry" => $countryCodes,
                 "returnPolicyCategory" => "https://schema.org/MerchantReturnNotPermitted",
             ];
         }

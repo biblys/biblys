@@ -293,7 +293,6 @@ class PaymentServiceTest extends TestCase
             "amount" => 999,
             "currency" => "eur",
             "customer"=> "cus_1234",
-            "payment_method_types" => ["card"],
             "metadata" => [
                 "order_id" => $order->getId(),
             ],
