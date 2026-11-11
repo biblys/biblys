@@ -282,6 +282,81 @@ class PointOfSaleControllerTest extends TestCase
     /**
      * @throws PropelException
      */
+    public function testSearchArticlesActionGroupsNewCopiesAndListsUsedCopies(): void
+    {
+        // given
+        $controller = $this->_getController();
+        $publisher = ModelFactory::createPublisher(name: "Paronymie");
+        $article = ModelFactory::createArticle(
+            title: "Les Nécrophores du Bois-Joli",
+            publisher: $publisher,
+        );
+        ModelFactory::createStockItem(article: $article, sellingPrice: 1899);
+        ModelFactory::createStockItem(article: $article, sellingPrice: 1899);
+        $usedCopy = ModelFactory::createStockItem(
+            article: $article,
+            sellingPrice: 700,
+            condition: "Bon état",
+        );
+
+        $request = new Request(query: ["term" => "Nécrophores"]);
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authAdmin");
+
+        // when
+        $response = $controller->searchArticlesAction(
+            $currentUser,
+            $this->_getCurrentSiteMock(),
+            new QueryParamsService($request),
+        );
+
+        // then
+        $results = json_decode($response->getContent(), true)["results"];
+        $this->assertCount(2, $results);
+
+        $this->assertEquals("Les Nécrophores du Bois-Joli", $results[0]["title"]);
+        $this->assertEquals($publisher->getName(), $results[0]["publisher"]);
+        $this->assertEquals(2, $results[0]["count"]);
+        $this->assertEquals("Neuf", $results[0]["condition"]);
+        $this->assertEquals("18,99\u{00A0}€", $results[0]["price"]);
+
+        $this->assertEquals($usedCopy->getId(), $results[1]["value"]);
+        $this->assertEquals(1, $results[1]["count"]);
+        $this->assertEquals("Bon état", $results[1]["condition"]);
+        $this->assertStringContainsString("Les Nécrophores du Bois-Joli", $results[1]["label"]);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testSearchArticlesActionDoesNotReturnArticlesWithoutAvailableCopy(): void
+    {
+        // given
+        $controller = $this->_getController();
+        $article = ModelFactory::createArticle(title: "Épuisé et introuvable");
+        ModelFactory::createStockItem(
+            article: $article,
+            sellingDate: new \DateTime(),
+        );
+
+        $request = new Request(query: ["term" => "introuvable"]);
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authAdmin");
+
+        // when
+        $response = $controller->searchArticlesAction(
+            $currentUser,
+            $this->_getCurrentSiteMock(),
+            new QueryParamsService($request),
+        );
+
+        // then
+        $this->assertEquals([], json_decode($response->getContent(), true)["results"]);
+    }
+
+    /**
+     * @throws PropelException
+     */
     public function testAddItemActionAddsStockAndReturnsJsonLine(): void
     {
         // given

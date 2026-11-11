@@ -137,19 +137,17 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         Panier en cours (<span id="cart_count">{{ cart_count }}</span> article<span id="cart_count_s">{% if cart_count > 1 %}s{% endif %}</span>)
       </h3>
 
-      <form id="checkout_add" class="event">
-        <fieldset>
-          <div class="form-group row">
-            <label for="checkout_add_input" class="col-2 col-form-label">Ajouter un article</label>
-            <div class="col">
-              <input type="text" name="checkout_add_input" id="checkout_add_input" class="form-control event" autocomplete="off" autofocus>
-            </div>
-          </div>
-        </fieldset>
-      </form>
-
-      <table id="checkout_add_results" class="table table-hover">
-      </table>
+      <div class="form-group row">
+        <div class="col-2 col-form-label">Ajouter un article</div>
+        <div class="col">
+          {% include "AppBundle:Utils:_entity-search-field.html.twig" with {
+            field_id: "article",
+            query_url: path("point_of_sale_search_articles"),
+            label: "Rechercher un article (titre, auteur, code-barres…)",
+            autofocus: true,
+          } %}
+        </div>
+      </div>
 
       <table id="checkout_cart" class="table table-hover mb-0">
         <thead>
