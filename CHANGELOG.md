@@ -10,6 +10,15 @@
   Cette fonctionnalité avait disparu avec l'ancienne page de gestion des
   liens, supprimée dans la version 3.6.1.
 
+## 3.18.2 (11 novembre 2026)
+
+### Corrections
+
+- Le paiement par carte bancaire via Stripe fonctionne de nouveau : le
+  formulaire de paiement n'affiche plus d'erreur au chargement.
+- L'import d'un livre depuis Noosfere ne crée plus de cycle en double lorsque
+  le nom de la série diffère légèrement d'un cycle existant (espaces en trop).
+
 ## 3.18.1 (11 novembre 2026)
 
 ### Corrections
@@ -22,10 +31,6 @@
   ouvrés de préparation, 2 à 5 jours d'acheminement) et n'indiquent plus plus
   de 50 pays dans une même politique de retour, ce qui provoquait des
   avertissements dans la Search Console de Google.
-- Le paiement par carte bancaire via Stripe fonctionne de nouveau : le
-  formulaire de paiement n'affiche plus d'erreur au chargement.
-- L'import d'un livre depuis Noosfere ne crée plus de cycle en double lorsque
-  le nom de la série diffère légèrement d'un cycle existant (espaces en trop).
 
 ## 3.18.0 (4 novembre 2026)
 

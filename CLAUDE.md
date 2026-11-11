@@ -92,6 +92,8 @@ Tests use PHPUnit 10. Test setup in `tests/setUp.php` initializes Propel and cre
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md) for the git flow branching model, versioning, and commit conventions used in this repository.
 
+A release or hotfix tag must be placed on the last commit of `main` after the rebase merge: the version bump commit must always be the last commit of the branch (re-do or move it after any cherry-pick), and the tag must be checked to contain every fix before deploying.
+
 ### Langue — règle critique
 
 - **Titres de PR et issues** : en français, **sans** préfixe Conventional Commits (`feat:`, `fix:`, `chore:`…)
