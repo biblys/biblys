@@ -20,6 +20,7 @@ namespace Usecase;
 
 use Biblys\Exception\InvalidEmailAddressException;
 use Biblys\Exception\UnreachableExternalServiceException;
+use Biblys\Service\LoggerService;
 use Biblys\Service\Mailer;
 use Biblys\Service\TemplateService;
 use DateTime;
@@ -43,6 +44,7 @@ class MarkOrderAsPaidUsecase
         private TemplateService                $templateService,
         private Mailer                         $mailer,
         private AddArticleToUserLibraryUsecase $addArticleToUserLibraryUsecase,
+        private LoggerService                  $loggerService = new LoggerService(),
     )
     {
     }
@@ -69,7 +71,16 @@ class MarkOrderAsPaidUsecase
             $order->setPaymentDate(new DateTime());
             $order->save();
 
-            $this->sendPaymentConfirmationEmail($order, $payedAmountInCents, $paymentMode);
+            // The payment is valid whether or not the confirmation email can be sent
+            try {
+                $this->sendPaymentConfirmationEmail($order, $payedAmountInCents, $paymentMode);
+            } catch (UnreachableExternalServiceException|TransportExceptionInterface $exception) {
+                $this->loggerService->log(
+                    logger: "errors",
+                    level: "ERROR",
+                    message: "Order {$order->getId()} was marked as paid but its payment confirmation email could not be sent: " . $exception->getMessage(),
+                );
+            }
 
             if ($order->containsDownloadableArticles()) {
 
