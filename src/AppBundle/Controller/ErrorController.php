@@ -248,7 +248,12 @@ class ErrorController extends Controller
             "URL" => $currentUrl,
             "File" => $exception->getFile(),
             "Line" => $exception->getLine(),
-            "Trace" => $exception->getTrace(),
+            // Function arguments are left out: they can embed whole objects and
+            // make a single log entry weigh hundreds of kilobytes
+            "Trace" => array_map(
+                fn(array $frame) => array_diff_key($frame, ["args" => true]),
+                $exception->getTrace()
+            ),
         ]);
 
         // This handler swallows the exception, so Sentry would never see it otherwise

@@ -763,6 +763,46 @@ class ErrorControllerTest extends TestCase
      * @throws RuntimeError
      * @throws SyntaxError
      */
+    public function testHandleServerErrorDoesNotLogFunctionArgumentsInTheTrace()
+    {
+        // given
+        ini_set("zend.exception_ignore_args", "0");
+        $logFile = __DIR__ . "/../../../app/logs/errors.log";
+        $linesBefore = file_exists($logFile) ? count(file($logFile)) : 0;
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService->shouldReceive("renderResponse")->andReturn(new Response("An error occurred"));
+        $throwingFunction = function (string $hugeArgument) {
+            throw new Exception("Something failed");
+        };
+        try {
+            $throwingFunction("SECRET-ARGUMENT-THAT-MUST-NOT-BE-LOGGED");
+        } catch (Exception $exception) {
+        }
+
+        // when
+        (new ErrorController())->exception(
+            new Request(),
+            Mockery::mock(Config::class),
+            Mockery::mock(CurrentSite::class),
+            Mockery::mock(CurrentUrlService::class),
+            Mockery::mock(UrlGenerator::class),
+            Mockery::mock(Session::class),
+            $templateService,
+            $exception,
+        );
+
+        // then
+        $newLines = array_slice(file($logFile), $linesBefore);
+        $this->assertStringContainsString("Something failed", implode("", $newLines));
+        $this->assertStringNotContainsString("SECRET-ARGUMENT-THAT-MUST-NOT-BE-LOGGED", implode("", $newLines));
+    }
+
+    /**
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
     public function testHandleServerErrorAsJson()
     {
         // given
