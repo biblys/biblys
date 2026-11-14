@@ -1,5 +1,31 @@
 # Historique des modifications
 
+## 3.18.3 (20 novembre 2026)
+
+### Corrections
+
+- Quand l'envoi du mail de confirmation de paiement échoue (service d'envoi
+  d'e-mails momentanément injoignable), la commande est tout de même marquée
+  comme payée au lieu de rester impayée avec une erreur renvoyée à PayPlug.
+- Une notification de paiement PayPlug rejouée n'ajoute plus plusieurs fois le
+  même montant à la commande, et reprend le marquage comme payée d'une commande
+  restée impayée après une première notification en échec.
+- Les erreurs serveur (HTTP 500) sont désormais transmises à Sentry : elles
+  n'étaient jusqu'ici écrites que dans le journal d'erreurs du site.
+- Le journal d'erreurs n'enregistre plus les arguments des fonctions dans les
+  traces, ce qui évite des entrées de plusieurs centaines de kilo-octets et un
+  fichier de plusieurs gigaoctets.
+- Une erreur du service de liste de contacts (Brevo, par exemple une clé API
+  refusée) n'empêche plus d'afficher la page de livraison, de valider une
+  commande ni de télécharger un livre gratuit. La case d'inscription à la
+  newsletter reste affichée et l'erreur est enregistrée dans les journaux et
+  signalée dans Sentry.
+- Le mail « Paiement pour votre commande bien reçu » n'est plus envoyé que
+  lorsqu'une commande est marquée comme payée depuis la liste des commandes.
+  L'ajout d'un paiement depuis la page d'une commande, les notifications Stripe
+  et PayPlug et la capture PayPal n'envoient plus ce mail, ce qui évite aussi
+  une erreur sur les commandes sans adresse e-mail.
+
 ## 3.18.2 (11 novembre 2026)
 
 ### Corrections
