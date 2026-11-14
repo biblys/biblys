@@ -20,7 +20,9 @@ namespace Usecase;
 
 use Biblys\Data\ArticleType;
 use Biblys\Exception\InvalidEmailAddressException;
+use Biblys\Exception\UnreachableExternalServiceException;
 use Biblys\Service\CurrentSite;
+use Biblys\Service\LoggerService;
 use Biblys\Service\Mailer;
 use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
@@ -296,5 +298,36 @@ class MarkOrderAsPaidUsecaseTest extends TestCase
 
         // then
         $this->assertTrue($order->isPaid(), "order is marked as paid");
+    }
+
+    public function testMarkingAsPaidWhenConfirmationEmailCannotBeSent(): void
+    {
+        // given
+        $order = ModelFactory::createOrder(slug: "order-123");
+        $order->addStockItem(ModelFactory::createStockItem());
+
+        $urlGenerator = $this->createMock(UrlGeneratorInterface::class);
+        $urlGenerator->method("generate")->willReturn("https://paronymie.fr/order/order-123");
+        $mailer = $this->createMock(Mailer::class);
+        $mailer->method("send")->willThrowException(
+            new UnreachableExternalServiceException("Le service d'envoi d'emails est injoignable.")
+        );
+        $loggerService = $this->createMock(LoggerService::class);
+        $loggerService->expects($this->once())->method("log")->with("errors", "ERROR");
+
+        $usecase = new MarkOrderAsPaidUsecase(
+            urlGenerator: $urlGenerator,
+            templateService: Helpers::getTemplateService(),
+            mailer: $mailer,
+            addArticleToUserLibraryUsecase: $this->createMock(AddArticleToUserLibraryUsecase::class),
+            loggerService: $loggerService,
+        );
+
+        // when
+        $usecase->execute($order, payedAmountInCents: 999, paymentMode: "Carte");
+
+        // then
+        $order->reload();
+        $this->assertTrue($order->isPaid(), "order is marked as paid despite the mail failure");
     }
 }
