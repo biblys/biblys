@@ -47,6 +47,14 @@ class AddPaymentToOrderAndExecuteUsecase
      */
     public function execute(Order $order, Payment $payment): void
     {
+        // A payment can be received several times (e.g. Payplug replays its
+        // notification after an error): only count it once, but still try to
+        // mark the order as paid in case a previous attempt failed.
+        if ($payment->isExecuted()) {
+            $this->markOrderAsPaidIfFullyPaid($order, $payment);
+            return;
+        }
+
         $payment->setOrder($order);
         $payment->setExecuted(new DateTime());
         $payment->save();
@@ -79,7 +87,22 @@ class AddPaymentToOrderAndExecuteUsecase
         $order->setPaymentMode($payment->getMode());
         $order->save();
 
-        if ($order->getAmountLeftToPay() === 0) {
+        $this->markOrderAsPaidIfFullyPaid($order, $payment);
+    }
+
+    /**
+     * @throws BusinessRuleException
+     * @throws PropelException
+     * @throws InvalidEmailAddressException
+     * @throws UnreachableExternalServiceException
+     * @throws TransportExceptionInterface
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
+    private function markOrderAsPaidIfFullyPaid(Order $order, Payment $payment): void
+    {
+        if ($order->getAmountLeftToPay() === 0 && !$order->isPaid()) {
             $this->markOrderAsPaidUsecase->execute(
                 $order,
                 payedAmountInCents: $payment->getAmount(),

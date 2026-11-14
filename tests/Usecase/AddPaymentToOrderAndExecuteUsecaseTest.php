@@ -48,7 +48,7 @@ class AddPaymentToOrderAndExecuteUsecaseTest extends TestCase
     {
         // given
         $order = ModelFactory::createOrder(amount: 999, amountToBePaid: 999);
-        $payment = ModelFactory::createPayment(amount: 499, mode: Payment::MODE_CARD);
+        $payment = ModelFactory::createPayment(amount: 499, mode: Payment::MODE_CARD, executedAt: null);
         $markOrderAsPaidUsecase = $this->createMock(MarkOrderAsPaidUsecase::class);
         $markOrderAsPaidUsecase->expects($this->never())->method('execute');
 
@@ -84,6 +84,7 @@ class AddPaymentToOrderAndExecuteUsecaseTest extends TestCase
         $payment = ModelFactory::createPayment(
             amount: 999,
             mode: Payment::MODE_CASH,
+            executedAt: null,
         );
         $markOrderAsPaidUsecase = $this->createMock(MarkOrderAsPaidUsecase::class);
         $markOrderAsPaidUsecase->expects($this->once())->method('execute')->with(
@@ -125,6 +126,7 @@ class AddPaymentToOrderAndExecuteUsecaseTest extends TestCase
         $newPayment = ModelFactory::createPayment(
             amount: 499,
             mode: Payment::MODE_CHECK,
+            executedAt: null,
         );
         $markOrderAsPaidUsecase = $this->createMock(MarkOrderAsPaidUsecase::class);
         $markOrderAsPaidUsecase->expects($this->once())->method('execute')->with(
@@ -162,7 +164,7 @@ class AddPaymentToOrderAndExecuteUsecaseTest extends TestCase
     {
         // given
         $order = ModelFactory::createOrder(amount: 400, amountToBePaid: 100);
-        $payment = ModelFactory::createPayment(amount: 500, mode: Payment::MODE_TRANSFER);
+        $payment = ModelFactory::createPayment(amount: 500, mode: Payment::MODE_TRANSFER, executedAt: null);
         $markOrderAsPaidUsecase = $this->createMock(MarkOrderAsPaidUsecase::class);
         $markOrderAsPaidUsecase->expects($this->once())->method('execute');
 
@@ -175,5 +177,62 @@ class AddPaymentToOrderAndExecuteUsecaseTest extends TestCase
         $this->assertEquals(0, $order->getAmountTobepaid());
         $this->assertEquals(500, $order->getPaymentTransfer());
         $this->assertEquals(Payment::MODE_TRANSFER, $order->getPaymentMode());
+    }
+
+    /**
+     * Payplug replays its notification when the endpoint answers with an error:
+     * replaying must not count the same payment twice, and must retry marking
+     * the order as paid when it failed the first time.
+     */
+    public function testReplayingAPaymentDoesNotCountItTwiceAndRetriesMarkingAsPaid(): void
+    {
+        // given
+        $order = ModelFactory::createOrder(amount: 999, amountToBePaid: 999);
+        $payment = ModelFactory::createPayment(amount: 999, mode: Payment::MODE_PAYPLUG, executedAt: null);
+        $markOrderAsPaidUsecase = $this->createMock(MarkOrderAsPaidUsecase::class);
+        $markOrderAsPaidUsecase->expects($this->exactly(2))->method('execute')
+            ->willReturnOnConsecutiveCalls(
+                $this->throwException(new UnreachableExternalServiceException("SMTP down")),
+                null,
+            );
+        $usecase = new AddPaymentToOrderAndExecuteUsecase($markOrderAsPaidUsecase);
+
+        // when
+        try {
+            $usecase->execute($order, $payment);
+        } catch (UnreachableExternalServiceException) {
+            // first notification fails, Payplug replays it
+        }
+        $usecase->execute($order, $payment);
+
+        // then
+        $order->reload();
+        $this->assertEquals(0, $order->getAmountTobepaid());
+        $this->assertEquals(999, $order->getPaymentPayplug());
+    }
+
+    public function testReplayingAPaymentOfAnOrderAlreadyMarkedAsPaidDoesNothing(): void
+    {
+        // given
+        $order = ModelFactory::createOrder(amount: 999, amountToBePaid: 0);
+        $order->setPaymentDate(new DateTime());
+        $order->setPaymentPayplug(999);
+        $order->save();
+        $payment = ModelFactory::createPayment(
+            order: $order,
+            amount: 999,
+            mode: Payment::MODE_PAYPLUG,
+            executedAt: new DateTime(),
+        );
+        $markOrderAsPaidUsecase = $this->createMock(MarkOrderAsPaidUsecase::class);
+        $markOrderAsPaidUsecase->expects($this->never())->method('execute');
+
+        // when
+        $usecase = new AddPaymentToOrderAndExecuteUsecase($markOrderAsPaidUsecase);
+        $usecase->execute($order, $payment);
+
+        // then
+        $order->reload();
+        $this->assertEquals(999, $order->getPaymentPayplug());
     }
 }
