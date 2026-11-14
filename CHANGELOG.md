@@ -10,6 +10,15 @@
   Cette fonctionnalité avait disparu avec l'ancienne page de gestion des
   liens, supprimée dans la version 3.6.1.
 
+### Corrections
+
+- Quand l'envoi du mail de confirmation de paiement échoue (service d'envoi
+  d'e-mails momentanément injoignable), la commande est tout de même marquée
+  comme payée au lieu de rester impayée avec une erreur renvoyée à PayPlug.
+- Une notification de paiement PayPlug rejouée n'ajoute plus plusieurs fois le
+  même montant à la commande, et reprend le marquage comme payée d'une commande
+  restée impayée après une première notification en échec.
+
 ## 3.18.2 (11 novembre 2026)
 
 ### Corrections
