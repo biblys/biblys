@@ -51,6 +51,7 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use function get_class;
+use function Sentry\captureException;
 
 class ErrorController extends Controller
 {
@@ -249,6 +250,9 @@ class ErrorController extends Controller
             "Line" => $exception->getLine(),
             "Trace" => $exception->getTrace(),
         ]);
+
+        // This handler swallows the exception, so Sentry would never see it otherwise
+        captureException($exception);
 
         if (
             $request->headers->get("Accept") === "application/json" ||
