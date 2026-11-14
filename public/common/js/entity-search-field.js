@@ -46,6 +46,10 @@ export default class EntitySearchField {
    * @param {object} options
    * @param {(field: EntitySearchField, result: Result) => {}} options.onResultSelected
    * @param {(field: EntitySearchField) => {}} options.onReset called when the user unlocks the field to change the selection
+   * @param {(result: Result) => HTMLElement} options.renderItem custom rendering of a result in the list,
+   *   used instead of the result's label (which stays the default)
+   * @param {boolean} options.autoSelectSingleResult select the result automatically when a search
+   *   submitted with the Enter key returns exactly one result (e.g. a scanned barcode)
    * @param {object} options.action
    * @param {string} options.action.label
    * @param {(field: EntitySearchField, query: string) => {}} options.action.onSelect
@@ -80,6 +84,8 @@ export default class EntitySearchField {
 
     this.onResultSelectedCallback = options.onResultSelected;
     this.onResetCallback = options.onReset;
+    this.renderItem = options.renderItem;
+    this.autoSelectSingleResult = options.autoSelectSingleResult ?? false;
 
     this.shouldSubmitParentForm = element.dataset.submit_form !== undefined;
     this.parentForm = element.closest('form');
@@ -136,7 +142,7 @@ export default class EntitySearchField {
 
   #onKeyDown(event) {
     if (event.key === 'Enter' && this.#focusItemIndex === -1) {
-      return this.#search(event);
+      return this.#search(event, { submitted: true });
     }
 
     if (!this.#subMenuDisplayed) {
@@ -174,7 +180,7 @@ export default class EntitySearchField {
     this.helpText.classList.add('d-none');
   }
 
-  async #search(event) {
+  async #search(event, { submitted = false } = {}) {
     event.preventDefault();
 
     const query = this.searchInput.value.trim();
@@ -211,7 +217,11 @@ export default class EntitySearchField {
     this.#results.forEach((result, index) => {
       const item = document.createElement('a');
       item.style.cursor = 'pointer';
-      item.textContent = result.label;
+      if (this.renderItem) {
+        item.appendChild(this.renderItem(result));
+      } else {
+        item.textContent = result.label;
+      }
       item.className = 'list-group-item list-group-item-action';
       this.subMenu.appendChild(item);
       item.addEventListener('focus', (event) => {
@@ -239,6 +249,10 @@ export default class EntitySearchField {
     }
 
     this.#subMenuDisplayed = true;
+
+    if (submitted && this.autoSelectSingleResult && this.#results.length === 1) {
+      this.selectResult(this.#results[0]);
+    }
   }
 
   /**

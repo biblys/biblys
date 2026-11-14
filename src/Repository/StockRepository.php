@@ -48,6 +48,22 @@ class StockRepository
     }
 
     /**
+     * Available copies that are not reserved in a point of sale cart.
+     *
+     * @return \Model\Stock[]
+     * @throws PropelException
+     */
+    public function getItemsAvailableAtPointOfSaleFor(Article $article, CurrentSite $currentSite): array
+    {
+        $availableItems = $this->getAvailableItemsFor($article, $currentSite);
+
+        return array_values(array_filter(
+            $availableItems,
+            fn(Stock $item) => $item->getCart()?->getType() !== "shop",
+        ));
+    }
+
+    /**
      * @return \Model\Stock[]
      * @throws PropelException
      */

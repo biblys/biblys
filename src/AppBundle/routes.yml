@@ -397,6 +397,11 @@ point_of_sale_index:
   controller: AppBundle\Controller\PointOfSaleController::indexAction
   methods: [GET]
 
+point_of_sale_search_articles:
+  path: /admin/pos/articles/search
+  controller: AppBundle\Controller\PointOfSaleController::searchArticlesAction
+  methods: [GET]
+
 point_of_sale_add_item:
   path: /admin/pos/carts/{cartId}/items
   controller: AppBundle\Controller\PointOfSaleController::addItemAction
@@ -895,10 +900,6 @@ stock_items_new:
 stock_add_to_cart:
   path: /stock/{stock_id}/add-to-cart
   controller: AppBundle\Controller\StockItemController::addToCartAction
-
-stock_search:
-  path: /stock/search/{query}
-  controller: AppBundle\Controller\StockItemController::searchAction
 
 stock_cancel_return:
   path: /admin/stock/{stockId}/cancel-return

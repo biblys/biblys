@@ -1385,6 +1385,7 @@ class ArticleManager extends EntityManager
     }
 
     /**
+     * @deprecated Use \Repository\ArticleRepository::search() instead.
      * @throws Exception
      */
     public function search($keywords, $options = []): array

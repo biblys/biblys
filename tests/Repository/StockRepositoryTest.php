@@ -184,4 +184,32 @@ class StockRepositoryTest extends TestCase
         $this->assertCount(1, $items);
         $this->assertEquals($inActiveStock->getId(), $items[0]->getId());
     }
+
+    /**
+     * @throws PropelException
+     */
+    public function testGetItemsAvailableAtPointOfSaleForExcludesCopiesInAShopCart(): void
+    {
+        // given
+        $article = ModelFactory::createArticle();
+        $free = ModelFactory::createStockItem(article: $article, sellingPrice: 500);
+        $shopCart = ModelFactory::createCart();
+        $shopCart->setType("shop");
+        $shopCart->save();
+        ModelFactory::createStockItem(article: $article, sellingPrice: 500, cart: $shopCart);
+        $webCart = ModelFactory::createCart();
+        $webCart->setType("web");
+        $webCart->save();
+        $inWebCart = ModelFactory::createStockItem(article: $article, sellingPrice: 500, cart: $webCart);
+        ModelFactory::createStockItem(article: $article, sellingPrice: 500, sellingDate: new \DateTime());
+        $currentSite = $this->createMock(CurrentSite::class);
+        $repository = new StockRepository();
+
+        // when
+        $items = $repository->getItemsAvailableAtPointOfSaleFor($article, $currentSite);
+
+        // then
+        $ids = array_map(fn($item) => $item->getId(), $items);
+        $this->assertEqualsCanonicalizing([$free->getId(), $inWebCart->getId()], $ids);
+    }
 }

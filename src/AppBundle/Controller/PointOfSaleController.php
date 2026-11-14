@@ -29,13 +29,17 @@ use Biblys\Service\QueryParamsService;
 use Biblys\Service\TemplateService;
 use CartManager;
 use Framework\Controller;
+use Model\Article;
 use Model\Cart;
 use Model\CartQuery;
 use Model\CustomerQuery;
+use Model\Stock;
 use Model\StockQuery;
 use Model\UserQuery;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Exception\PropelException;
+use Repository\ArticleRepository;
+use Repository\StockRepository;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -157,6 +161,73 @@ class PointOfSaleController extends Controller
             'customer' => $customer,
             'point_of_sale_carts' => $pointOfSaleCarts,
         ], isPrivate: true);
+    }
+
+    /**
+     * Searches for articles available in stock, one result per available
+     * item (all new copies of an article are grouped in a single result).
+     *
+     * @throws PropelException
+     */
+    public function searchArticlesAction(
+        CurrentUser        $currentUser,
+        CurrentSite        $currentSite,
+        QueryParamsService $queryParams,
+    ): JsonResponse
+    {
+        $currentUser->authAdmin();
+
+        $queryParams->parse(["term" => ["type" => "string", "default" => ""]]);
+
+        $articles = (new ArticleRepository())->search($queryParams->get("term"), $currentSite);
+        $stockRepository = new StockRepository();
+
+        $results = [];
+        foreach ($articles as $article) {
+            $availableItems = $stockRepository->getItemsAvailableAtPointOfSaleFor($article, $currentSite);
+            $newItems = array_values(array_filter(
+                $availableItems,
+                fn(Stock $item) => $item->getCondition() === Stock::CONDITION_NEW,
+            ));
+            $usedItems = array_filter(
+                $availableItems,
+                fn(Stock $item) => $item->getCondition() !== Stock::CONDITION_NEW,
+            );
+
+            if (count($newItems) > 0) {
+                $results[] = $this->_buildArticleSearchResult($article, $newItems[0], count($newItems));
+            }
+
+            foreach ($usedItems as $usedItem) {
+                $results[] = $this->_buildArticleSearchResult($article, $usedItem, 1);
+            }
+        }
+
+        return new JsonResponse(["results" => $results]);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    private function _buildArticleSearchResult(Article $article, Stock $stockItem, int $count): array
+    {
+        $title = $article->getTitle();
+        $publisher = $article->getPublisher()->getName();
+        $condition = $stockItem->getCondition();
+        // currency() returns HTML entities (&nbsp;, &euro;): decode them
+        // because the result is displayed as plain text
+        $price = html_entity_decode(currency($stockItem->getSellingPrice() / 100));
+
+        return [
+            "label" => sprintf("%s (%s, %s, %s)", $title, $publisher, $condition, $price),
+            "value" => $stockItem->getId(),
+            "title" => $title,
+            "authors" => $article->getAuthors(),
+            "publisher" => $publisher,
+            "count" => $count,
+            "condition" => $condition,
+            "price" => $price,
+        ];
     }
 
     /**
