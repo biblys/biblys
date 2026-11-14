@@ -28,6 +28,12 @@ use Mockery;
 use Model\Map\RedirectionTableMap;
 use Model\RedirectionQuery;
 use PHPUnit\Framework\TestCase;
+use Sentry\ClientBuilder;
+use Sentry\Event;
+use Sentry\SentrySdk;
+use Sentry\Transport\Result;
+use Sentry\Transport\ResultStatus;
+use Sentry\Transport\TransportInterface;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
@@ -699,6 +705,56 @@ class ErrorControllerTest extends TestCase
             "it should response with HTTP status 500"
         );
         $this->assertStringContainsString("An error occurred", $response->getContent());
+    }
+
+    /**
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
+    public function testHandleServerErrorSendsTheExceptionToSentry()
+    {
+        // given
+        $sentryTransport = new class implements TransportInterface {
+            public array $events = [];
+
+            public function send(Event $event): Result
+            {
+                $this->events[] = $event;
+                return new Result(ResultStatus::success(), $event);
+            }
+
+            public function close(?int $timeout = null): Result
+            {
+                return new Result(ResultStatus::success());
+            }
+        };
+        $sentryClient = ClientBuilder::create(["dsn" => "https://key@sentry.example.com/1", "default_integrations" => false])
+            ->setTransport($sentryTransport)
+            ->getClient();
+        SentrySdk::init()->bindClient($sentryClient);
+
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService->shouldReceive("renderResponse")->andReturn(new Response("An error occurred"));
+
+        // when
+        (new ErrorController())->exception(
+            new Request(),
+            Mockery::mock(Config::class),
+            Mockery::mock(CurrentSite::class),
+            Mockery::mock(CurrentUrlService::class),
+            Mockery::mock(UrlGenerator::class),
+            Mockery::mock(Session::class),
+            $templateService,
+            new Exception("Order 123 could not be saved"),
+        );
+
+        // then
+        SentrySdk::getCurrentHub()->getClient()->flush();
+        $this->assertCount(1, $sentryTransport->events, "it should send one event to Sentry");
+        $exceptions = $sentryTransport->events[0]->getExceptions();
+        $this->assertEquals("Order 123 could not be saved", $exceptions[0]->getValue());
     }
 
     /**
