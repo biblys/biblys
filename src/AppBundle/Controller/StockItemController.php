@@ -18,7 +18,6 @@
 
 namespace AppBundle\Controller;
 
-use ArticleManager;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\FlashMessagesService;
@@ -60,50 +59,6 @@ class StockItemController extends Controller
         $currentUser->authAdmin();
 
         return $templateService->renderResponse("AppBundle:StockItem:new.html.twig");
-    }
-
-    /**
-     * @throws PropelException
-     * @throws Exception
-     */
-    public function searchAction($query): JsonResponse
-    {
-        $am = new ArticleManager();
-        $articles = $am->search($query, ["limit" => 100]);
-
-        $results = [];
-        foreach ($articles as $article) {
-            $new = $article->getAvailableItems('new');
-            $used = $article->getAvailableItems('used');
-
-            if (count($new) > 0) {
-                $results[] = [
-                    'title' => $article->get('title'),
-                    'authors' => $article->get('authors'),
-                    'publisher' => $article->get('publisher')->get('name'),
-                    'count' => count($new),
-                    'condition' => 'Neuf',
-                    'price' => currency($new[0]->get('selling_price') / 100),
-                    'id' => $new[0]->get('id')
-                ];
-            }
-
-            if (count($used) > 0) {
-                foreach ($used as $copy) {
-                    $results[] = [
-                        'title' => $article->get('title'),
-                        'authors' => $article->get('authors'),
-                        'publisher' => $article->get('publisher')->get('name'),
-                        'count' => 1,
-                        'condition' => $copy->get('condition'),
-                        'price' => currency($copy->get('selling_price') / 100),
-                        'id' => $copy->get('id')
-                    ];
-                }
-            }
-        }
-
-        return new JsonResponse($results);
     }
 
     /**
