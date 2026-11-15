@@ -397,6 +397,11 @@ point_of_sale_index:
   controller: AppBundle\Controller\PointOfSaleController::indexAction
   methods: [GET]
 
+point_of_sale_search_articles:
+  path: /admin/pos/articles/search
+  controller: AppBundle\Controller\PointOfSaleController::searchArticlesAction
+  methods: [GET]
+
 point_of_sale_add_item:
   path: /admin/pos/carts/{cartId}/items
   controller: AppBundle\Controller\PointOfSaleController::addItemAction
