@@ -259,9 +259,9 @@ class CartManager extends EntityManager
         if ($otherCart = $stock->get("cart")) {
 
             // If the other cart is a shop cart, throw error
-            if ($otherCart->get("type") === "shop") {
+            if ($otherCart->get("type") === \Model\Cart::TYPE_SHOP) {
                 $errorMessage = "Cet article est réservé en magasin.";
-                if ($cart->get('type') === "shop") {
+                if ($cart->get('type') === \Model\Cart::TYPE_SHOP) {
                     $otherCartTitle = $otherCart->get('cart_title');
                     $errorMessage = "Impossible d'ajouter l'article car il est déjà dans le panier caisse '$otherCartTitle'.";
                 }
