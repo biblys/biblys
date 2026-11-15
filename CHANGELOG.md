@@ -4,6 +4,11 @@
 
 ### Améliorations
 
+- La recherche d'article de la caisse utilise désormais le même champ de
+  recherche que le reste de l'administration. Les résultats affichent toujours
+  le titre, l'éditeur, le nombre d'exemplaires, l'état et le prix, et appuyer
+  sur Entrée ajoute directement l'article au panier lorsqu'un seul résultat
+  correspond (par exemple après un scan de code-barres).
 - Il est de nouveau possible de lier un contributeur (par exemple l'auteur
   d'une critique) à un billet de blog, depuis la page « Liens du billet »
   (bouton « Articles et contributeurs liés » de la page d'édition du billet).
