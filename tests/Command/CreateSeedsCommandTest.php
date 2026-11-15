@@ -41,6 +41,7 @@ class CreateSeedsCommandTest extends TestCase
     private const SEEDED_ORDERED_CATALOG_TITLE = "Au-revoir Mao";
     private const SEEDED_GOODIES_TITLE = "Tote bag Paronymie";
     private const SEEDED_TO_BE_PAID_CATALOG_TITLE = "Papeete";
+    private const SEEDED_USED_COPIES_TITLE = "Les Occasions multiples";
 
     /**
      * The command is not idempotent: Publisher, BookCollection and People
@@ -59,7 +60,7 @@ class CreateSeedsCommandTest extends TestCase
         CustomerQuery::create()->deleteAll();
 
         $seededTitles = array_merge(
-            [self::SEEDED_ARTICLE_TITLE, self::SEEDED_GOODIES_TITLE],
+            [self::SEEDED_ARTICLE_TITLE, self::SEEDED_GOODIES_TITLE, self::SEEDED_USED_COPIES_TITLE],
             array_column(CreateSeedsCommand::CATALOG_ARTICLES, "title"),
         );
         foreach ($seededTitles as $seededTitle) {
@@ -97,7 +98,8 @@ class CreateSeedsCommandTest extends TestCase
         $this->assertStringContainsString("Seeds generated!", $commandTester->getDisplay());
 
         $stockItems = StockQuery::create()->orderById()->find();
-        $expectedCount = 4 + count(CreateSeedsCommand::CATALOG_ARTICLES);
+        // 1 + catalog articles + 5 copies of the article with used copies + 3 ordered items
+        $expectedCount = 9 + count(CreateSeedsCommand::CATALOG_ARTICLES);
         $this->assertCount($expectedCount, $stockItems);
 
         $availableItem = $stockItems[0];
@@ -227,5 +229,42 @@ class CreateSeedsCommandTest extends TestCase
             $slugService->validateArticleSlug($url);
         }
         $this->addToAssertionCount(count($urls));
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testExecuteSeedsAnArticleWithSeveralUsedCopiesAtDifferentPrices(): void
+    {
+        // given
+        $commandTester = new CommandTester(new CreateSeedsCommand());
+
+        // when
+        $commandTester->execute([]);
+
+        // then
+        $article = ArticleQuery::create()->findOneByTitle(self::SEEDED_USED_COPIES_TITLE);
+        $copies = StockQuery::create()->filterByArticleId($article->getId())->orderById()->find();
+        $this->assertEquals(
+            [["Neuf", 1500], ["Neuf", 1500], ["Très bon état", 900], ["Bon état", 600], ["État correct", 300]],
+            array_map(fn($copy) => [$copy->getCondition(), $copy->getSellingPrice()], $copies->getData()),
+        );
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testExecuteSeedsArticlesWithSearchTermsIncludingTheirEan(): void
+    {
+        // given
+        $commandTester = new CommandTester(new CreateSeedsCommand());
+
+        // when
+        $commandTester->execute([]);
+
+        // then
+        $article = ArticleQuery::create()->findOneByTitle(self::SEEDED_ARTICLE_TITLE);
+        $this->assertEquals("9781234567897", $article->getEan());
+        $this->assertStringContainsString($article->getEan(), $article->getKeywords());
     }
 }

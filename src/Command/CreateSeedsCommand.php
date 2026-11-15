@@ -25,6 +25,7 @@ use Biblys\Service\CurrentSite;
 use Biblys\Service\Slug\SlugService;
 use Biblys\Test\ModelFactory;
 use DateTime;
+use Model\ArticleQuery;
 use Model\Payment;
 use Model\Publisher;
 use Model\Right;
@@ -143,6 +144,7 @@ class CreateSeedsCommand extends Command
         $article = ModelFactory::createArticle(
             title: "L'Ordure du jeu",
             authors: [$contributor],
+            ean: "9781234567897",
             publisher: $publisher,
             collection: $collection,
         );
@@ -192,6 +194,27 @@ class CreateSeedsCommand extends Command
             $output->writeln(["Inserted article with stock item: {$catalogArticle["title"]}"]);
         }
 
+        // Article with a new copy and several used copies at different prices
+        $usedCopiesArticle = ModelFactory::createArticle(
+            title: "Les Occasions multiples",
+            authors: [$contributor],
+            ean: "9782000000013",
+            url: "aymeric-buvard/les-occasions-multiples",
+            price: 1500,
+            publisher: $publisher,
+            collection: $collection,
+        );
+        ModelFactory::createStockItem(article: $usedCopiesArticle, sellingPrice: 1500);
+        ModelFactory::createStockItem(article: $usedCopiesArticle, sellingPrice: 1500);
+        foreach ([["Très bon état", 900], ["Bon état", 600], ["État correct", 300]] as [$condition, $price]) {
+            ModelFactory::createStockItem(
+                article: $usedCopiesArticle,
+                sellingPrice: $price,
+                condition: $condition,
+            );
+        }
+        $output->writeln(["Inserted article with new and used stock items: Les Occasions multiples"]);
+
         // Goodies article
         $goodiesArticle = ModelFactory::createArticle(
             title: "Tote bag Paronymie",
@@ -202,6 +225,19 @@ class CreateSeedsCommand extends Command
             collection: $collection,
         );
         $output->writeln(["Inserted article: Tote bag Paronymie"]);
+
+        // Search terms of seeded articles must include their EAN, so they can be found by scanning it
+        foreach (ArticleQuery::create()->find() as $seededArticle) {
+            $seededArticle->setKeywords(implode(" ", array_filter([
+                $seededArticle->getTitle(),
+                $seededArticle->getEan(),
+                $seededArticle->getCollectionName(),
+                $seededArticle->getPublisherName(),
+                $seededArticle->getAuthors(),
+            ])));
+            $seededArticle->save();
+        }
+        $output->writeln(["Generated search terms for seeded articles"]);
 
         // Order, shipped with the seeded shipping option so the invoice shows a shipping line
         $order = ModelFactory::createOrder(
