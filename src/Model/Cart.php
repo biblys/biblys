@@ -33,6 +33,7 @@ use Propel\Runtime\Exception\PropelException;
  */
 class Cart extends BaseCart
 {
+    public const TYPE_SHOP = "shop";
 
     /**
      * @throws PropelException

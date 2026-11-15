@@ -92,7 +92,7 @@ class PointOfSaleController extends Controller
             }
 
             $newCart = new Cart();
-            $newCart->setType('shop');
+            $newCart->setType(Cart::TYPE_SHOP);
             $newCart->setSellerId($currentUser->getUser()->getId());
             $newCart->save();
             return new RedirectResponse("/admin/caisse?cart_id={$newCart->getId()}");
