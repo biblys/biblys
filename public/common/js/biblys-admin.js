@@ -445,6 +445,22 @@ function reloadAdminEvents() {
     update_cart();
   });
 
+  // Afficher un résultat de recherche d'article : titre, éditeur, nombre
+  // d'exemplaires, état (en couleur) et prix
+  function renderArticleSearchResult(result) {
+    const conditionColor = result.condition === 'Neuf' ? 'green' : 'orange';
+
+    return safeHtml`
+      <div class="d-flex justify-content-between">
+        <span class="flex-grow-1">${result.title}</span>
+        <span class="mx-3">${result.publisher}</span>
+        <span class="mx-3">${result.count}</span>
+        <span class="mx-3 ${conditionColor}">${result.condition}</span>
+        <span class="text-right">${result.price}</span>
+      </div>
+    `;
+  }
+
   // Ajouter un exemplaire au panier
   async function add_to_cart(cartId, stockId) {
     const response = await fetch(`/admin/pos/carts/${cartId}/items`, {
@@ -455,8 +471,6 @@ function reloadAdminEvents() {
       },
       body: `stock_id=${stockId}`,
     });
-
-    $('#checkout_add_input').removeClass('loading');
 
     if (!response.ok) {
       let message = "L'exemplaire n'a pas pu être ajouté au panier.";
@@ -472,8 +486,6 @@ function reloadAdminEvents() {
 
     const json = await response.json();
 
-    $('#checkout_add_results').html('');
-    $('#checkout_add_input').val('');
     $('#checkout_cart tbody').prepend(json.line);
     notify(json.success);
     reloadAdminEvents();
@@ -571,93 +583,20 @@ function reloadAdminEvents() {
     return await response.json();
   }
 
-  // Rechercher un article
-  function checkout_lookup(event) {
-    var input = $('#checkout_add_input').val();
-    $('#checkout_add_results').html('');
-
-    if (input.length >= 3) {
-      $('#checkout_add_input').addClass('loading');
-      $.ajax({
-        type: 'GET',
-        url: '/stock/search/' + input + '?_=' + Date.now(),
-        dataType: 'json',
-        success: function(r) {
-          $('#checkout_add_input').removeClass('loading');
-          if (r.error) {
-            _alert('Erreur : ' + r.error);
-          } else {
-            if (r.length == 1 && event == 'submit') {
-              add_to_cart($('#cart_id').val(), r[0].id);
-            } else {
-              var results = r.length,
-                div = null;
-              for (var i = 0; i < results; i++) {
-                var color = 'orange',
-                  selected = '';
-                if (r[i].condition == 'Neuf') color = 'green';
-
-                div =
-                  '<tr class="pointer event' +
-                  selected +
-                  '" data-add_to_checkout=' +
-                  r[i].id +
-                  '>' +
-                  '<td>' +
-                  r[i].title +
-                  '</td>' +
-                  '<td>' +
-                  r[i].publisher +
-                  '</td>' +
-                  '<td>' +
-                  r[i].count +
-                  '</td>' +
-                  '<td class=' +
-                  color +
-                  '>' +
-                  r[i].condition +
-                  '</td>' +
-                  '<td class="right">' +
-                  r[i].price +
-                  '</td>' +
-                  '</tr>' +
-                  div;
-              }
-              $('#checkout_add_results').html(div);
-              reloadAdminEvents();
-            }
-          }
-        }
+  // Rechercher un article et l'ajouter au panier
+  const articleField = document.querySelector('#article.EntitySearchField');
+  if (articleField) {
+    import('/common/js/entity-search-field.js').then(({ default: EntitySearchField }) => {
+      new EntitySearchField(articleField, {
+        autoSelectSingleResult: true,
+        renderItem: renderArticleSearchResult,
+        onResultSelected: async (field, { value }) => {
+          await add_to_cart($('#cart_id').val(), value);
+          field.reset();
+        },
       });
-    }
+    });
   }
-
-  // Rechercher un article (touche entrée)
-  $('#checkout_add.event')
-    .submit(function(e) {
-      e.preventDefault();
-      checkout_lookup('submit');
-    })
-    .removeClass('event');
-
-  // Rechercher un article (entrée texte)
-  var timer = 0;
-  $('#checkout_add_input.event')
-    .keyup(function() {
-      clearTimeout(timer);
-      timer = setTimeout(function() {
-        checkout_lookup('keyup');
-      }, 500);
-    })
-    .removeClass('event');
-
-  // Ajouter un article au panier
-  $('[data-add_to_checkout].event')
-    .click(function() {
-      var stock_id = $(this).attr('data-add_to_checkout');
-      add_to_cart($('#cart_id').val(), stock_id);
-    })
-    .removeClass('event');
 
   // Sauvegarder le titre du panier
   $('#cart_title.event')
@@ -698,7 +637,7 @@ function reloadAdminEvents() {
           }
 
           notify(res.success);
-          $('#article').focus();
+          $('#article .EntitySearchField__search-input').focus();
         },
         onReset: () => update_cart_info($('#cart_id').val(), 'customer_id', 0),
         action: {
