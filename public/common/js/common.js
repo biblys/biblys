@@ -25,6 +25,31 @@ function createElementFromHTML(htmlString) {
   return template.content.firstChild;
 }
 
+const HTML_ESCAPES = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
+
+function escapeHtml(value) {
+  return String(value).replace(/[&<>"']/g, (char) => HTML_ESCAPES[char]);
+}
+
+/**
+ * Tagged template that builds an element from HTML, escaping every
+ * interpolated value to prevent HTML injection.
+ * Prefer it to createElementFromHTML whenever a value comes from data.
+ *
+ * Escaping protects text and quoted attribute values only, not unquoted
+ * attributes nor URLs (href, src) that could start with "javascript:".
+ *
+ * @example safeHtml`<span class="title">${article.title}</span>`
+ */
+function safeHtml(strings, ...values) {
+  const markup = strings.reduce(
+    (result, string, index) =>
+      result + string + (index < values.length ? escapeHtml(values[index]) : ''),
+    '',
+  );
+  return createElementFromHTML(markup);
+}
+
 /* NOTIFICATIONS */
 
 /**
