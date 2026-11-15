@@ -20,6 +20,7 @@ namespace Repository;
 
 use Biblys\Service\CurrentSite;
 use Model\Article;
+use Model\Cart;
 use Model\Stock;
 use Propel\Runtime\ActiveQuery\Criteria;
 use Propel\Runtime\Exception\PropelException;
@@ -33,8 +34,47 @@ class StockRepository
      */
     public function getAvailableItemsFor(Article $article, CurrentSite $currentSite): array
     {
-        $query = StockQuery::create()
+        return $this->buildAvailableItemsQuery($currentSite)
             ->filterByArticle($article)
+            ->find()
+            ->getArrayCopy();
+    }
+
+    /**
+     * Available copies that are not reserved in a point of sale cart,
+     * for several articles at once (a single query), grouped by article id.
+     *
+     * @param Article[] $articles
+     * @return array<int, \Model\Stock[]>
+     * @throws PropelException
+     */
+    public function getItemsAvailableAtPointOfSaleForArticles(array $articles, CurrentSite $currentSite): array
+    {
+        if (empty($articles)) {
+            return [];
+        }
+
+        $articleIds = array_map(fn(Article $article) => $article->getId(), $articles);
+        $items = $this->buildAvailableItemsQuery($currentSite)
+            ->filterByArticleId($articleIds)
+            ->useCartQuery()
+                ->filterByType(Cart::TYPE_SHOP, Criteria::NOT_EQUAL)
+                ->_or()
+                ->filterByType(null, Criteria::ISNULL)
+            ->endUse()
+            ->find();
+
+        $itemsByArticleId = [];
+        foreach ($items as $item) {
+            $itemsByArticleId[$item->getArticleId()][] = $item;
+        }
+
+        return $itemsByArticleId;
+    }
+
+    private function buildAvailableItemsQuery(CurrentSite $currentSite): StockQuery
+    {
+        $query = StockQuery::create()
             ->filterBySellingDate(null, Criteria::ISNULL)
             ->filterByReturnDate(null, Criteria::ISNULL)
             ->filterByLostDate(null, Criteria::ISNULL);
@@ -44,7 +84,7 @@ class StockRepository
             $query->filterByStockage(explode(",", $activeStock));
         }
 
-        return $query->find()->getArrayCopy();
+        return $query;
     }
 
     /**
