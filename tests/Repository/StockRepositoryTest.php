@@ -184,4 +184,69 @@ class StockRepositoryTest extends TestCase
         $this->assertCount(1, $items);
         $this->assertEquals($inActiveStock->getId(), $items[0]->getId());
     }
+
+    /**
+     * @throws PropelException
+     */
+    public function testGetItemsAvailableAtPointOfSaleForArticlesExcludesCopiesInAShopCart(): void
+    {
+        // given
+        $article = ModelFactory::createArticle();
+        $free = ModelFactory::createStockItem(article: $article, sellingPrice: 500);
+        $shopCart = ModelFactory::createCart();
+        $shopCart->setType("shop");
+        $shopCart->save();
+        ModelFactory::createStockItem(article: $article, sellingPrice: 500, cart: $shopCart);
+        $webCart = ModelFactory::createCart();
+        $webCart->setType("web");
+        $webCart->save();
+        $inWebCart = ModelFactory::createStockItem(article: $article, sellingPrice: 500, cart: $webCart);
+        ModelFactory::createStockItem(article: $article, sellingPrice: 500, sellingDate: new \DateTime());
+        $currentSite = $this->createMock(CurrentSite::class);
+        $repository = new StockRepository();
+
+        // when
+        $itemsByArticleId = $repository->getItemsAvailableAtPointOfSaleForArticles([$article], $currentSite);
+
+        // then
+        $ids = array_map(fn($item) => $item->getId(), $itemsByArticleId[$article->getId()]);
+        $this->assertEqualsCanonicalizing([$free->getId(), $inWebCart->getId()], $ids);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testGetItemsAvailableAtPointOfSaleForArticlesGroupsItemsByArticle(): void
+    {
+        // given
+        $article = ModelFactory::createArticle();
+        $otherArticle = ModelFactory::createArticle(url: "author/other");
+        $itemOfArticle = ModelFactory::createStockItem(article: $article, sellingPrice: 500);
+        $itemOfOtherArticle = ModelFactory::createStockItem(article: $otherArticle, sellingPrice: 700);
+        $currentSite = $this->createMock(CurrentSite::class);
+        $repository = new StockRepository();
+
+        // when
+        $itemsByArticleId = $repository->getItemsAvailableAtPointOfSaleForArticles(
+            [$article, $otherArticle],
+            $currentSite,
+        );
+
+        // then
+        $this->assertCount(2, $itemsByArticleId);
+        $this->assertEquals($itemOfArticle->getId(), $itemsByArticleId[$article->getId()][0]->getId());
+        $this->assertEquals($itemOfOtherArticle->getId(), $itemsByArticleId[$otherArticle->getId()][0]->getId());
+    }
+
+    public function testGetItemsAvailableAtPointOfSaleForArticlesReturnsNothingWithoutArticles(): void
+    {
+        // given
+        $repository = new StockRepository();
+
+        // when
+        $itemsByArticleId = $repository->getItemsAvailableAtPointOfSaleForArticles([], $this->createMock(CurrentSite::class));
+
+        // then
+        $this->assertSame([], $itemsByArticleId);
+    }
 }
