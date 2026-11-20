@@ -10,6 +10,9 @@
   le titre, l'éditeur, le nombre d'exemplaires, l'état et le prix, et appuyer
   sur Entrée ajoute directement l'article au panier lorsqu'un seul résultat
   correspond (par exemple après un scan de code-barres).
+- Le JavaScript de la caisse a été réécrit en JavaScript natif, sans jQuery,
+  et fait désormais partie des assets compilés. Les montants saisis sont
+  arrondis au centime et les totaux sont calculés dès l'ouverture de la page.
 - Il est de nouveau possible de lier un contributeur (par exemple l'auteur
   d'une critique) à un billet de blog, depuis la page « Liens du billet »
   (bouton « Articles et contributeurs liés » de la page d'édition du billet).
