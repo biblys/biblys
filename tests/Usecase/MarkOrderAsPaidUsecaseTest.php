@@ -79,7 +79,7 @@ class MarkOrderAsPaidUsecaseTest extends TestCase
         );
 
         // when
-        $usecase->execute($order, payedAmountInCents: 999, paymentMode: "Carte bancaire");
+        $usecase->execute($order, payedAmountInCents: 999, paymentMode: "Carte bancaire", sendConfirmationEmail: true);
 
         // then
         $this->assertTrue($order->isPaid(), "order is marked as paid");
@@ -143,7 +143,7 @@ class MarkOrderAsPaidUsecaseTest extends TestCase
         );
 
         // when
-        $usecase->execute($order, payedAmountInCents: 999, paymentMode: "Carte bancaire");
+        $usecase->execute($order, payedAmountInCents: 999, paymentMode: "Carte bancaire", sendConfirmationEmail: true);
 
         // then
         $order->reload();
@@ -192,7 +192,7 @@ class MarkOrderAsPaidUsecaseTest extends TestCase
         );
 
         // when
-        $usecase->execute($order, payedAmountInCents: 999, paymentMode: "Carte bancaire");
+        $usecase->execute($order, payedAmountInCents: 999, paymentMode: "Carte bancaire", sendConfirmationEmail: true);
 
         // then
         $order->reload();
@@ -260,7 +260,7 @@ class MarkOrderAsPaidUsecaseTest extends TestCase
         );
 
         // when
-        $usecase->execute($order, payedAmountInCents: 999, paymentMode: "Carte bancaire");
+        $usecase->execute($order, payedAmountInCents: 999, paymentMode: "Carte bancaire", sendConfirmationEmail: true);
 
         // then
         $this->assertTrue($order->isPaid(), "order is marked as paid");
@@ -294,7 +294,7 @@ class MarkOrderAsPaidUsecaseTest extends TestCase
         );
 
         // when
-        $usecase->execute($order, payedAmountInCents: 999, paymentMode: "Espèces");
+        $usecase->execute($order, payedAmountInCents: 999, paymentMode: "Espèces", sendConfirmationEmail: true);
 
         // then
         $this->assertTrue($order->isPaid(), "order is marked as paid");
@@ -324,10 +324,33 @@ class MarkOrderAsPaidUsecaseTest extends TestCase
         );
 
         // when
-        $usecase->execute($order, payedAmountInCents: 999, paymentMode: "Carte");
+        $usecase->execute($order, payedAmountInCents: 999, paymentMode: "Carte", sendConfirmationEmail: true);
 
         // then
         $order->reload();
         $this->assertTrue($order->isPaid(), "order is marked as paid despite the mail failure");
+    }
+
+    public function testMarkingAsPaidDoesNotSendConfirmationEmailByDefault(): void
+    {
+        // given
+        $order = ModelFactory::createOrder(slug: "order-123", email: "payer@paronymie.fr");
+        $order->addStockItem(ModelFactory::createStockItem());
+
+        $mailer = $this->createMock(Mailer::class);
+        $mailer->expects($this->never())->method("send");
+
+        $usecase = new MarkOrderAsPaidUsecase(
+            urlGenerator: $this->createMock(UrlGeneratorInterface::class),
+            templateService: Helpers::getTemplateService(),
+            mailer: $mailer,
+            addArticleToUserLibraryUsecase: $this->createMock(AddArticleToUserLibraryUsecase::class),
+        );
+
+        // when
+        $usecase->execute($order, payedAmountInCents: 999, paymentMode: "Carte");
+
+        // then
+        $this->assertTrue($order->isPaid(), "order is marked as paid");
     }
 }

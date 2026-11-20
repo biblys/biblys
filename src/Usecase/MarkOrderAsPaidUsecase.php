@@ -53,6 +53,7 @@ class MarkOrderAsPaidUsecase
      * @param Order $order
      * @param int $payedAmountInCents
      * @param string $paymentMode
+     * @param bool $sendConfirmationEmail
      * @throws BusinessRuleException
      * @throws InvalidEmailAddressException
      * @throws LoaderError
@@ -62,7 +63,12 @@ class MarkOrderAsPaidUsecase
      * @throws TransportExceptionInterface
      * @throws UnreachableExternalServiceException
      */
-    public function execute(Order $order, int $payedAmountInCents, string $paymentMode): void
+    public function execute(
+        Order  $order,
+        int    $payedAmountInCents,
+        string $paymentMode,
+        bool   $sendConfirmationEmail = false,
+    ): void
     {
         $con = Propel::getWriteConnection(UserTableMap::DATABASE_NAME);
         $con->beginTransaction();
@@ -71,15 +77,17 @@ class MarkOrderAsPaidUsecase
             $order->setPaymentDate(new DateTime());
             $order->save();
 
-            // The payment is valid whether or not the confirmation email can be sent
-            try {
-                $this->sendPaymentConfirmationEmail($order, $payedAmountInCents, $paymentMode);
-            } catch (UnreachableExternalServiceException|TransportExceptionInterface $exception) {
-                $this->loggerService->log(
-                    logger: "errors",
-                    level: "ERROR",
-                    message: "Order {$order->getId()} was marked as paid but its payment confirmation email could not be sent: " . $exception->getMessage(),
-                );
+            if ($sendConfirmationEmail) {
+                // The payment is valid whether or not the confirmation email can be sent
+                try {
+                    $this->sendPaymentConfirmationEmail($order, $payedAmountInCents, $paymentMode);
+                } catch (UnreachableExternalServiceException|TransportExceptionInterface $exception) {
+                    $this->loggerService->log(
+                        logger: "errors",
+                        level: "ERROR",
+                        message: "Order {$order->getId()} was marked as paid but its payment confirmation email could not be sent: " . $exception->getMessage(),
+                    );
+                }
             }
 
             if ($order->containsDownloadableArticles()) {
