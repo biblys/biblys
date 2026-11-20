@@ -1,0 +1,1 @@
+"use strict";(Array.isArray(self.webpackChunk)?self.webpackChunk:self.webpackChunk=[]).push([[347],{347(e,u,r){function s(e){const u=Math.round(100*Number(e));return Number.isNaN(u)?0:u}r.d(u,{default:()=>s})}}]);

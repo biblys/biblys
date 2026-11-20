@@ -1,0 +1,1 @@
+"use strict";(Array.isArray(self.webpackChunk)?self.webpackChunk:self.webpackChunk=[]).push([[676],{676(e,a,t){var r=t(985);document.addEventListener("DOMContentLoaded",function(){(0,r.default)("lightbox","[rel=lightbox]"),(0,r.default)("readmore","[data-readmore]")})}}]);
