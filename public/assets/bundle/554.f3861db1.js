@@ -1,0 +1,1 @@
+"use strict";(Array.isArray(self.webpackChunk)?self.webpackChunk:self.webpackChunk=[]).push([[554],{554(e,r,u){u.d(r,{default:()=>n});function n(e){const r=Number(e);if(!Number.isFinite(r))throw new Error("Amount must be a number of cents");return`${(r/100).toFixed(2).replace(".",",")} €`}}}]);

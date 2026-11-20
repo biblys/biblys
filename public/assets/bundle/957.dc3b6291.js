@@ -1,0 +1,1 @@
+"use strict";(Array.isArray(self.webpackChunk)?self.webpackChunk:self.webpackChunk=[]).push([[957],{957(t,e,n){function a({itemPrices:t,payments:e}){const n=r(t),a=r(e);return{count:t.length,total:n,toPay:Math.max(n-a,0),toGive:Math.max(a-n,0)}}function r(t){return t.reduce((t,e)=>t+e,0)}n.d(e,{k:()=>a})}}]);
