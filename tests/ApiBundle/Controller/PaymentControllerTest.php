@@ -125,10 +125,9 @@ class PaymentControllerTest extends TestCase
         $controller->expects("_createPayPalClient")->andReturn($mockPaypalClient);
 
         $mailer = Mockery::mock(Mailer::class);
-        $mailer->expects("send")->once();
+        $mailer->expects("send")->never();
         $currentSite = Mockery::mock(CurrentSite::class);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
-        $urlGenerator->expects("generate");
         $templateService = Helpers::getTemplateService();
         $loggerService = Mockery::mock(LoggerService::class);
         $loggerService->shouldReceive("log");
@@ -212,10 +211,9 @@ class PaymentControllerTest extends TestCase
         $controller->expects("_createPayPalClient")->andReturn($mockPaypalClient);
 
         $mailer = Mockery::mock(Mailer::class);
-        $mailer->expects("send")->once();
+        $mailer->expects("send")->never();
         $currentSite = Mockery::mock(CurrentSite::class);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
-        $urlGenerator->expects("generate");
         $templateService = Helpers::getTemplateService();
         $loggerService = Mockery::mock(LoggerService::class);
         $loggerService->shouldReceive("log");

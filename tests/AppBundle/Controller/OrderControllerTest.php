@@ -153,7 +153,7 @@ class OrderControllerTest extends TestCase
         $templateService = Mockery::mock(TemplateService::class);
         $templateService->expects("render");
         $mailer = Mockery::mock(Mailer::class);
-        $mailer->expects("send");
+        $mailer->expects("send")->once()->with("silas.coade@paronymie.fr", Mockery::any(), Mockery::any());
         $urlGenerator = Mockery::mock(UrlGenerator::class);
         $urlGenerator->expects("generate");
 
