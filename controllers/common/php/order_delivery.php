@@ -43,6 +43,8 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
+use function Sentry\captureException;
+
 return function (
     Request            $request,
     CurrentSite        $currentSite,
@@ -51,6 +53,7 @@ return function (
     Mailer             $mailer,
     QueryParamsService $queryParamsService,
     Config             $config,
+    MailingListService $mailingListService,
 ): Response|RedirectResponse {
     $orderManager = new OrderManager();
     $stockItemManager = new StockManager();
@@ -159,7 +162,6 @@ return function (
     }
 
     $mailingList = null;
-    $mailingListService = new MailingListService($config);
     if ($mailingListService->isConfigured()) {
         $mailingList = $mailingListService->getMailingList();
     }
@@ -182,7 +184,16 @@ return function (
             $newsletter_checked = $request->request->get('newsletter', false);
             $orderEmail = $request->request->get('order_email');
             if ($newsletter_checked && $mailingListService->isConfigured()) {
-                $mailingList->addContact($orderEmail, true);
+                try {
+                    $mailingList->addContact($orderEmail, true);
+                } catch (Exception $exception) {
+                    (new LoggerService())->log(
+                        logger: "errors",
+                        level: "ERROR",
+                        message: "Could not subscribe to newsletter: " . $exception->getMessage(),
+                    );
+                    captureException($exception);
+                }
             }
 
             try {
@@ -490,10 +501,19 @@ return function (
         $checked = null;
         $showCheckbox = true;
 
-        if ($currentUser->isAuthenticated()
-            && $mailingListService->isConfigured()
-            && $mailingList->hasContact($currentUser->getUser()->getEmail())) {
-            $showCheckbox = false;
+        if ($currentUser->isAuthenticated() && $mailingListService->isConfigured()) {
+            try {
+                if ($mailingList->hasContact($currentUser->getUser()->getEmail())) {
+                    $showCheckbox = false;
+                }
+            } catch (Exception $exception) {
+                (new LoggerService())->log(
+                    logger: "errors",
+                    level: "ERROR",
+                    message: "Could not check newsletter subscription: " . $exception->getMessage(),
+                );
+                captureException($exception);
+            }
         }
 
         if ($showCheckbox) {
