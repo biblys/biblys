@@ -37,12 +37,15 @@ use Biblys\Test\EntityFactory;
 use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
+use Biblys\Test\SentrySpy;
+use Brevo\Exceptions\BrevoApiException;
 use Exception;
 use LemonInk\Models\Transaction;
 use Mockery;
 use Model\ArticleQuery;
 use Model\BookCollectionQuery;
 use Model\PublisherQuery;
+use Model\StockQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Psr\Http\Client\ClientExceptionInterface;
@@ -1111,6 +1114,137 @@ class ArticleControllerTest extends TestCase
             "Je souhaite recevoir la newsletter pour être tenu·e",
             $response->getContent(),
             "includes newsletter prompt"
+        );
+    }
+
+    /**
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws TransportExceptionInterface
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
+    public function testFreeDownloadActionStillShowsNewsletterPromptWhenMailingListFails()
+    {
+        // given
+        $sentry = SentrySpy::install();
+        $request = RequestFactory::createAuthRequest();
+        $article = ModelFactory::createArticle(price: 0, typeId: ArticleType::EBOOK);
+        $user = ModelFactory::createUser(email: "free-reader@example.org");
+        $controller = new ArticleController();
+        $currentSiteService = $this->createMock(CurrentSite::class);
+        $currentSiteService->method("getOption")->with("newsletter")->willReturn("1");
+        $currentUserService = $this->createMock(CurrentUser::class);
+        $currentUserService->method("getUser")->willReturn($user);
+        $mailingList = $this->createMock(MailingListInterface::class);
+        $mailingList
+            ->method("hasContact")
+            ->willThrowException(new BrevoApiException("Unauthorized", 401, null));
+        $mailingListService = $this->createMock(MailingListService::class);
+        $mailingListService->method("isConfigured")->willReturn(true);
+        $mailingListService->method("getMailingList")->willReturn($mailingList);
+        $templateService = Mockery::mock(TemplateService::class);
+        $templateService
+            ->shouldReceive("renderResponse")
+            ->with(
+                "AppBundle:Article:freeDownload.html.twig",
+                Mockery::on(fn(array $params) => $params["newsletter"] === true
+                    && !$params["newsletter_checked"])
+            )
+            ->andReturn(new Response("Je souhaite recevoir la newsletter pour être tenu·e"));
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->expects("generate")->with("user_library")->andReturn("/user_library");
+
+        // when
+        $response = $controller->freeDownloadAction(
+            request: $request,
+            currentSiteService: $currentSiteService,
+            currentUserService: $currentUserService,
+            mailingListService: $mailingListService,
+            templateService: $templateService,
+            mailer: Mockery::mock(Mailer::class),
+            session: Mockery::mock(Session::class),
+            urlGenerator: $urlGenerator,
+            id: $article->getId(),
+        );
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode(), "returns HTTP 200");
+        $this->assertStringContainsString(
+            "Je souhaite recevoir la newsletter",
+            $response->getContent(),
+            "includes newsletter prompt"
+        );
+        $this->assertEquals(
+            ["Unauthorized"],
+            $sentry->getReportedExceptionMessages(),
+            "reports the mailing list error to Sentry"
+        );
+    }
+
+    /**
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws TransportExceptionInterface
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
+    public function testFreeDownloadActionStillAddsArticleToLibraryWhenSubscribingFails()
+    {
+        // given
+        $sentry = SentrySpy::install();
+        $request = RequestFactory::createAuthRequest();
+        $request->setMethod("POST");
+        $request->request->set("newsletter", "1");
+        $article = ModelFactory::createArticle(price: 0, typeId: ArticleType::EBOOK);
+        $user = ModelFactory::createUser(email: "free-reader@example.org");
+        $controller = new ArticleController();
+        $currentSiteService = $this->createMock(CurrentSite::class);
+        $currentSiteService
+            ->method("getOption")
+            ->willReturnMap([
+                ["newsletter", null, null],
+                ["downloadable_publishers", null, (string) $article->getPublisherId()],
+            ]);
+        $currentUserService = $this->createMock(CurrentUser::class);
+        $currentUserService->method("getUser")->willReturn($user);
+        $mailingList = $this->createMock(MailingListInterface::class);
+        $mailingList
+            ->method("addContact")
+            ->willThrowException(new BrevoApiException("Server error", 500, null));
+        $mailingListService = $this->createMock(MailingListService::class);
+        $mailingListService->method("isConfigured")->willReturn(true);
+        $mailingListService->method("getMailingList")->willReturn($mailingList);
+        $urlGenerator = Mockery::mock(UrlGenerator::class);
+        $urlGenerator->shouldReceive("generate")->with("user_library")->andReturn("/user_library");
+
+        // when
+        $response = $controller->freeDownloadAction(
+            request: $request,
+            currentSiteService: $currentSiteService,
+            currentUserService: $currentUserService,
+            mailingListService: $mailingListService,
+            templateService: Mockery::mock(TemplateService::class),
+            mailer: Mockery::mock(Mailer::class),
+            session: Mockery::mock(Session::class),
+            urlGenerator: $urlGenerator,
+            id: $article->getId(),
+        );
+
+        // then
+        $this->assertInstanceOf(RedirectResponse::class, $response);
+        $this->assertEquals("/user_library", $response->getTargetUrl());
+        $this->assertEquals(
+            1,
+            StockQuery::create()->filterByUser($user)->filterByArticle($article)->count(),
+            "adds the article to the user library"
+        );
+        $this->assertEquals(
+            ["Server error"],
+            $sentry->getReportedExceptionMessages(),
+            "reports the mailing list error to Sentry"
         );
     }
 
