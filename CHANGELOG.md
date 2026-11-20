@@ -4,6 +4,7 @@
 
 ### Améliorations
 
+- Biblys supporte désormais PHP 8.6.
 - La recherche d'article de la caisse utilise désormais le même champ de
   recherche que le reste de l'administration. Les résultats affichent toujours
   le titre, l'éditeur, le nombre d'exemplaires, l'état et le prix, et appuyer
