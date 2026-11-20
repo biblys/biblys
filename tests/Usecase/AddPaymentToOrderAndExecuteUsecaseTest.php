@@ -90,7 +90,8 @@ class AddPaymentToOrderAndExecuteUsecaseTest extends TestCase
         $markOrderAsPaidUsecase->expects($this->once())->method('execute')->with(
             $order,
             payedAmountInCents: $payment->getAmount(),
-            paymentMode: $payment->getMode()
+            paymentMode: $payment->getMode(),
+            sendConfirmationEmail: false,
         );
 
         // when
@@ -105,6 +106,39 @@ class AddPaymentToOrderAndExecuteUsecaseTest extends TestCase
         $this->assertEquals(0, $order->getAmountTobepaid());
         $this->assertEquals(999, $order->getPaymentCash());
         $this->assertEquals(Payment::MODE_CASH, $order->getPaymentMode());
+    }
+
+    /**
+     * @throws BusinessRuleException
+     * @throws Exception
+     * @throws InvalidEmailAddressException
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws TransportExceptionInterface
+     * @throws UnreachableExternalServiceException
+     */
+    public function testAddPaymentToOrderAndAskingForConfirmationEmail(): void
+    {
+        // given
+        $order = ModelFactory::createOrder(amount: 999, amountToBePaid: 999);
+        $payment = ModelFactory::createPayment(
+            amount: 999,
+            mode: Payment::MODE_CASH,
+            executedAt: null,
+        );
+        $markOrderAsPaidUsecase = $this->createMock(MarkOrderAsPaidUsecase::class);
+        $markOrderAsPaidUsecase->expects($this->once())->method('execute')->with(
+            $order,
+            payedAmountInCents: $payment->getAmount(),
+            paymentMode: $payment->getMode(),
+            sendConfirmationEmail: true,
+        );
+
+        // when
+        $usecase = new AddPaymentToOrderAndExecuteUsecase($markOrderAsPaidUsecase);
+        $usecase->execute($order, $payment, sendConfirmationEmail: true);
     }
 
     /**
