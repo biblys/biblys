@@ -71,6 +71,7 @@ use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
+use function Sentry\captureException;
 use Usecase\AddArticleToUserLibraryUsecase;
 use Usecase\BusinessRuleException;
 
@@ -368,8 +369,17 @@ class ArticleController extends Controller
             $mailingList = $mailingListService->getMailingList();
             if ($currentSiteService->getOption("newsletter") === "1") {
                 $newsletter = true;
-                if ($mailingList->hasContact($currentUser->getEmail())) {
-                    $newsletter_checked = null;
+                try {
+                    if ($mailingList->hasContact($currentUser->getEmail())) {
+                        $newsletter_checked = null;
+                    }
+                } catch (Exception $exception) {
+                    (new LoggerService())->log(
+                        logger: "errors",
+                        level: "ERROR",
+                        message: "Could not check newsletter subscription: " . $exception->getMessage(),
+                    );
+                    captureException($exception);
                 }
             }
         }
@@ -382,8 +392,13 @@ class ArticleController extends Controller
                 try {
                     $mailingList = $mailingListService->getMailingList();
                     $mailingList->addContact($email, true);
-                } catch (Exception) {
-                    // Ignore errors
+                } catch (Exception $exception) {
+                    (new LoggerService())->log(
+                        logger: "errors",
+                        level: "ERROR",
+                        message: "Could not subscribe to newsletter: " . $exception->getMessage(),
+                    );
+                    captureException($exception);
                 }
             }
 
