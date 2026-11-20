@@ -20,6 +20,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 {% block main %}
 
+  <div id="point-of-sale">
+
     {% if is_tva_enabled %}
       <div class="pos-legal-notice alert alert-warning mb-4">
         <p class="mb-1">
@@ -52,7 +54,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     </h1>
 
     <h3 class="mt-4 mb-3">
-      <span id="cart_title" class="event pointer" contenteditable>{{ cart.get('cart_title')|raw }}</span>
+      <span id="cart_title" class="pointer" contenteditable>{{ cart.get('cart_title')|raw }}</span>
     </h3>
 
     <section class="pos-section">
@@ -123,7 +125,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           </tbody>
         </table>
 
-        <form id="checkout" class="event mb-0">
+        <form id="checkout" class="mb-0">
           <fieldset class="text-center">
             <button class="btn btn-primary" type="submit">Enregistrer la vente</button>
           </fieldset>
@@ -195,7 +197,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
               <td class="text-right">{{ pointOfSaleCart.amount|currency(true)|raw }}</td>
               <td class="text-center">
                 <button data-clear_cart="{{ pointOfSaleCart.id }}"
-                   data-confirm="Voulez-vous vraiment VIDER ce panier et remettre {{ pointOfSaleCart.count }} exemplaire{% if pointOfSaleCart.count > 1 %}s{% endif %} en vente ?"
+                   data-clear_cart_confirmation="Voulez-vous vraiment VIDER ce panier et remettre {{ pointOfSaleCart.count }} exemplaire{% if pointOfSaleCart.count > 1 %}s{% endif %} en vente ?"
                    title="Vider le panier et remettre {{ pointOfSaleCart.count }} exemplaire{% if pointOfSaleCart.count > 1 %}s{% endif %} en vente."
                    class="btn btn-danger btn-sm">
                   <i class="fa fa-trash-can"></i>
@@ -207,5 +209,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       </table>
 
     </section>
+
+  </div>
 
 {% endblock %}

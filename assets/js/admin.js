@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
   loadModuleForElements('admin-shortcuts/admin-shortcuts-manager', '#shortcuts-form');
   loadModuleForElements('cron-task', '.cron-execute-task');
   loadModuleForElements('orders/orders-manager', '#orders');
+  loadModuleForElements('point-of-sale/point-of-sale', '#point-of-sale');
   loadModuleForElements('search-terms-manager', '#searchable-articles-table');
   loadModuleForElements('shipping', '#shipping-table');
   loadModuleForElements('table-to-csv', '[data-table-to-csv]');
