@@ -190,7 +190,7 @@ class OrderController extends Controller
         $requestBody = json_decode($request->getContent());
 
         if ($action == "payed") {
-            $amount = $orderEntity->get('amount_tobepaid');
+            $amount = $order->getAmountLeftToPay();
 
             $payment = new Payment();
             $payment->setOrder($order);
@@ -212,7 +212,7 @@ class OrderController extends Controller
             $usecase = new AddPaymentToOrderAndExecuteUsecase(
                 markOrderAsPaidUsecase: $markOrderAsPaidUsecase,
             );
-            $usecase->execute($order, $payment);
+            $usecase->execute($order, $payment, sendConfirmationEmail: true);
             $notice = 'La commande n°&nbsp;'.$orderEntity->get('id').' de '.$orderEntity->get('firstname').' '.$orderEntity->get('lastname').' a été marquée comme payée.';
         }
 

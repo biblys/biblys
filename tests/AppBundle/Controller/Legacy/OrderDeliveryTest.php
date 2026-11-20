@@ -24,6 +24,10 @@ use Biblys\Service\Config;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\Mailer;
+use Biblys\Service\MailingList\MailingListInterface;
+use Biblys\Service\MailingList\MailingListService;
+use Biblys\Test\SentrySpy;
+use Brevo\Exceptions\BrevoApiException;
 use Biblys\Service\QueryParamsService;
 use Biblys\Test\ModelFactory;
 use EntityManager;
@@ -103,7 +107,7 @@ class OrderDeliveryTest extends TestCase
         $config = new Config();
 
         // when
-        $response = $controller($request, $currentSite, $urlGenerator, $currentUser, $mailer, $queryParamsService, $config);
+        $response = $controller($request, $currentSite, $urlGenerator, $currentUser, $mailer, $queryParamsService, $config, new MailingListService($config));
 
         // then
         $om = new OrderManager();
@@ -189,7 +193,7 @@ class OrderDeliveryTest extends TestCase
         $config = new Config();
 
         // when
-        $response = $controller($request, $currentSite, $urlGenerator, $currentUser, $mailer, $queryParamsService, $config);
+        $response = $controller($request, $currentSite, $urlGenerator, $currentUser, $mailer, $queryParamsService, $config, new MailingListService($config));
 
         // then
         $om = new OrderManager();
@@ -270,7 +274,7 @@ class OrderDeliveryTest extends TestCase
         $config = new Config();
 
         // when
-        $response = $controller($request, $currentSite, $urlGenerator, $currentUser, $mailer, $queryParamsService, $config);
+        $response = $controller($request, $currentSite, $urlGenerator, $currentUser, $mailer, $queryParamsService, $config, new MailingListService($config));
 
         // then
         $this->assertInstanceOf(
@@ -340,7 +344,7 @@ class OrderDeliveryTest extends TestCase
         $config = new Config();
 
         // when
-        $response = $controller($request, $currentSite, $urlGenerator, $currentUser, $mailer, $queryParamsService, $config);
+        $response = $controller($request, $currentSite, $urlGenerator, $currentUser, $mailer, $queryParamsService, $config, new MailingListService($config));
 
         // then
         $this->assertEquals(200, $response->getStatusCode(), "it should answer with http status 200");
@@ -428,7 +432,7 @@ class OrderDeliveryTest extends TestCase
         $config = new Config();
 
         // when
-        $response = $controller($request, $currentSite, $urlGenerator, $currentUser, $mailer, $queryParamsService, $config);
+        $response = $controller($request, $currentSite, $urlGenerator, $currentUser, $mailer, $queryParamsService, $config, new MailingListService($config));
 
         // then
         $this->assertInstanceOf(
@@ -504,7 +508,7 @@ class OrderDeliveryTest extends TestCase
         $config = new Config();
 
         // when
-        $response = $controller($request, $currentSite, $urlGenerator, $currentUser, $mailer, $queryParamsService, $config);
+        $response = $controller($request, $currentSite, $urlGenerator, $currentUser, $mailer, $queryParamsService, $config, new MailingListService($config));
 
         // then
         $this->assertInstanceOf(
@@ -562,10 +566,169 @@ class OrderDeliveryTest extends TestCase
         $config->set("mailing", ["service" => "brevo", "api_key" => "api_key"]);
 
         // when
-        $response = $controller($request, $currentSite, $urlGenerator, $currentUser, $mailer, $queryParamsService, $config);
+        $response = $controller($request, $currentSite, $urlGenerator, $currentUser, $mailer, $queryParamsService, $config, new MailingListService($config));
 
         // then
         $this->assertEquals(200, $response->getStatusCode(), "it should answer with http status 200");
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testDisplayingDeliveryPageWhenMailingListFails()
+    {
+        // given
+        $sentry = SentrySpy::install();
+        $controller = require __DIR__ . "/../../../../controllers/common/php/order_delivery.php";
+
+        $site = ModelFactory::createSite();
+        $user = ModelFactory::createUser(email: "customer@biblys.fr");
+        $cart = ModelFactory::createCart();
+        $article = ModelFactory::createArticle();
+        ModelFactory::createStockItem(article: $article, cart: $cart);
+        $shipping = ModelFactory::createShippingOption(type: "colissimo");
+        $country = ModelFactory::createCountry();
+
+        $queryParamsService = Mockery::mock(QueryParamsService::class);
+        $queryParamsService->shouldReceive("parse");
+        $queryParamsService->shouldReceive("getInteger")->with("country_id")
+            ->andReturn($country->getId());
+        $queryParamsService->shouldReceive("getInteger")->with("shipping_id")
+            ->andReturn($shipping->getId());
+
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getOption")->with("newsletter")->andReturn("1");
+        $currentSite->shouldReceive("getOption")->andReturn(null);
+        $currentSite->shouldReceive("getSite")->andReturn($site);
+        $currentSite->shouldReceive("hasOptionEnabled")->andReturn(false);
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("getCart")->andReturn($cart);
+        $currentUser->shouldReceive("isAuthenticated")->andReturn(true);
+        $currentUser->shouldReceive("getUser")->andReturn($user);
+
+        $mailingList = $this->createMock(MailingListInterface::class);
+        $mailingList
+            ->method("hasContact")
+            ->willThrowException(new BrevoApiException("Unauthorized", 401, null));
+        $mailingListService = $this->createMock(MailingListService::class);
+        $mailingListService->method("isConfigured")->willReturn(true);
+        $mailingListService->method("getMailingList")->willReturn($mailingList);
+
+        // when
+        $response = $controller(
+            new Request(),
+            $currentSite,
+            $this->createMock(UrlGenerator::class),
+            $currentUser,
+            Mockery::mock(Mailer::class),
+            $queryParamsService,
+            new Config(),
+            $mailingListService,
+        );
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode(), "it should answer with http status 200");
+        $this->assertStringContainsString(
+            'name="newsletter"',
+            $response->getContent(),
+            "it should display the newsletter checkbox"
+        );
+        $this->assertEquals(
+            ["Unauthorized"],
+            $sentry->getReportedExceptionMessages(),
+            "it should report the mailing list error to Sentry"
+        );
+    }
+
+    /**
+     * @throws PropelException
+     * @throws Exception
+     */
+    public function testValidatingAnOrderWhenSubscribingToMailingListFails()
+    {
+        // given
+        $sentry = SentrySpy::install();
+        $controller = require __DIR__ . "/../../../../controllers/common/php/order_delivery.php";
+
+        $site = ModelFactory::createSite();
+        $siteManager = new SiteManager();
+        $GLOBALS["LEGACY_CURRENT_SITE"] = $siteManager->getById($site->getId());
+        $cart = ModelFactory::createCart();
+        $article = ModelFactory::createArticle();
+        ModelFactory::createStockItem(article: $article, cart: $cart);
+        $shipping = ModelFactory::createShippingOption(type: "colissimo");
+        $_POST["order_email"] = "subscriber@biblys.fr";
+        $country = ModelFactory::createCountry();
+
+        $queryParamsService = Mockery::mock(QueryParamsService::class);
+        $queryParamsService->shouldReceive("parse");
+        $queryParamsService->shouldReceive("getInteger")->with("country_id")
+            ->andReturn($country->getId());
+        $queryParamsService->shouldReceive("getInteger")->with("shipping_id")
+            ->andReturn($shipping->getId());
+
+        $request = new Request();
+        $request->setMethod("POST");
+        $request->headers->set("X-HTTP-METHOD-OVERRIDE", "POST");
+        $request->query->set("page", "order_delivery");
+        $request->request->set("order_firstname", "Barnabé");
+        $request->request->set("order_lastname", "Famagouste");
+        $request->request->set("order_address1", "123 rue des Peupliers");
+        $request->request->set("order_postalcode", "69009");
+        $request->request->set("order_city", "Lyon");
+        $request->request->set("order_email", "subscriber@biblys.fr");
+        $request->request->set("country_id", 1);
+        $request->request->set("cgv_checkbox", 1);
+        $request->request->set("newsletter", 1);
+
+        $mailer = Mockery::mock(Mailer::class);
+        $mailer->shouldReceive("send")->andReturn(true);
+
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->shouldReceive("getOption")->andReturn(null);
+        $currentSite->shouldReceive("getSite")->andReturn($site);
+        $currentSite->shouldReceive("hasOptionEnabled")->andReturn(false);
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->shouldReceive("getCart")->andReturn($cart);
+        $currentUser->shouldReceive("isAuthenticated")->andReturn(false);
+        $currentUser->shouldReceive("getUser")->andReturn(null);
+
+        $mailingList = $this->createMock(MailingListInterface::class);
+        $mailingList
+            ->method("addContact")
+            ->willThrowException(new BrevoApiException("Server error", 500, null));
+        $mailingListService = $this->createMock(MailingListService::class);
+        $mailingListService->method("isConfigured")->willReturn(true);
+        $mailingListService->method("getMailingList")->willReturn($mailingList);
+
+        // when
+        $response = $controller(
+            $request,
+            $currentSite,
+            $this->createMock(UrlGenerator::class),
+            $currentUser,
+            $mailer,
+            $queryParamsService,
+            new Config(),
+            $mailingListService,
+        );
+
+        // then
+        $order = (new OrderManager())->get(["order_email" => "subscriber@biblys.fr"]);
+        $this->assertNotNull($order, "it should create the order");
+        $this->assertEquals(
+            "/order/" . $order->get("url") . "?created=1",
+            $response->headers->get("Location"),
+            "it should redirect to the created order"
+        );
+        $this->assertEquals(
+            ["Server error"],
+            $sentry->getReportedExceptionMessages(),
+            "it should report the mailing list error to Sentry"
+        );
     }
 
     /**

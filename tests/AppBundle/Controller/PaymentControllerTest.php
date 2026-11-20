@@ -208,10 +208,9 @@ class PaymentControllerTest extends TestCase
         $currentUser->shouldReceive("authAdmin")->once()->andReturn();
 
         $mailer = Mockery::mock(Mailer::class);
-        $mailer->expects("send")->once();
+        $mailer->expects("send")->never();
         $currentSite = Mockery::mock(CurrentSite::class);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
-        $urlGenerator->expects("generate");
         $templateService = Helpers::getTemplateService();
 
         $flashMessagesService = Mockery::mock(FlashMessagesService::class);
@@ -482,10 +481,9 @@ class PaymentControllerTest extends TestCase
         $request = Request::create("/", "POST", [], [], [], [], $payload);
         $request->headers->set("stripe-signature", "t=$timestamp,v1=$signature");
         $mailer = Mockery::mock(Mailer::class);
-        $mailer->expects("send")->once()->with("customer@example.com", Mockery::any(), Mockery::any());
+        $mailer->expects("send")->never();
         $currentSite = Mockery::mock(CurrentSite::class);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
-        $urlGenerator->expects("generate")->with("legacy_order", ["url" => $order->getSlug()])->andReturn("/order/order-slug");
         $templateService = Helpers::getTemplateService();
 
         // when
@@ -1330,10 +1328,9 @@ class PaymentControllerTest extends TestCase
         $httpMock->shouldReceive("close");
         HttpClient::$REQUEST_HANDLER = $httpMock;
         $mailer = Mockery::mock(Mailer::class);
-        $mailer->expects("send")->once();
+        $mailer->expects("send")->never();
         $currentSite = Mockery::mock(CurrentSite::class);
         $urlGenerator = Mockery::mock(UrlGenerator::class);
-        $urlGenerator->expects("generate");
         $templateService = Helpers::getTemplateService();
 
         // when
