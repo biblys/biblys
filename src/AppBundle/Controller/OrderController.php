@@ -190,7 +190,7 @@ class OrderController extends Controller
         $requestBody = json_decode($request->getContent());
 
         if ($action == "payed") {
-            $amount = $orderEntity->get('amount_tobepaid');
+            $amount = $order->getAmountLeftToPay();
 
             $payment = new Payment();
             $payment->setOrder($order);
