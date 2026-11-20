@@ -45,13 +45,13 @@ class AddPaymentToOrderAndExecuteUsecase
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function execute(Order $order, Payment $payment): void
+    public function execute(Order $order, Payment $payment, bool $sendConfirmationEmail = false): void
     {
         // A payment can be received several times (e.g. Payplug replays its
         // notification after an error): only count it once, but still try to
         // mark the order as paid in case a previous attempt failed.
         if ($payment->isExecuted()) {
-            $this->markOrderAsPaidIfFullyPaid($order, $payment);
+            $this->markOrderAsPaidIfFullyPaid($order, $payment, $sendConfirmationEmail);
             return;
         }
 
@@ -87,7 +87,7 @@ class AddPaymentToOrderAndExecuteUsecase
         $order->setPaymentMode($payment->getMode());
         $order->save();
 
-        $this->markOrderAsPaidIfFullyPaid($order, $payment);
+        $this->markOrderAsPaidIfFullyPaid($order, $payment, $sendConfirmationEmail);
     }
 
     /**
@@ -100,13 +100,14 @@ class AddPaymentToOrderAndExecuteUsecase
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    private function markOrderAsPaidIfFullyPaid(Order $order, Payment $payment): void
+    private function markOrderAsPaidIfFullyPaid(Order $order, Payment $payment, bool $sendConfirmationEmail): void
     {
         if ($order->getAmountLeftToPay() === 0 && !$order->isPaid()) {
             $this->markOrderAsPaidUsecase->execute(
                 $order,
                 payedAmountInCents: $payment->getAmount(),
-                paymentMode: $payment->getMode()
+                paymentMode: $payment->getMode(),
+                sendConfirmationEmail: $sendConfirmationEmail,
             );
         }
     }
