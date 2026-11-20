@@ -143,7 +143,8 @@ class OrderControllerTest extends TestCase
     {
         // given
         $controller = new OrderController();
-        $order = ModelFactory::createOrder(amountToBePaid: 999);
+        $order = ModelFactory::createOrder(amount: 999, amountToBePaid: 999);
+        ModelFactory::createPayment(order: $order, amount: 400, mode: Payment::MODE_CASH);
 
         $payload = json_encode(["payment_mode" => Payment::MODE_CARD, "tracking_number" => null]);
         $request = new Request(content: $payload);
@@ -173,10 +174,12 @@ class OrderControllerTest extends TestCase
         $this->assertEquals(200, $response->getStatusCode());
         $order->reload();
         $this->assertTrue($order->isPaid());
-        $payment = PaymentQuery::create()->findOneByOrderId($order->getId());
+        $payment = PaymentQuery::create()
+            ->filterByOrderId($order->getId())
+            ->filterByMode(Payment::MODE_CARD)
+            ->findOne();
         $this->assertNotNull($payment);
-        $this->assertEquals(Payment::MODE_CARD, $payment->getMode());
-        $this->assertEquals(999, $payment->getAmount());
+        $this->assertEquals(599, $payment->getAmount(), "payment covers the amount left to pay");
         $this->assertTrue($payment->isExecuted());
     }
 
