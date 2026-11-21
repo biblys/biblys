@@ -747,6 +747,46 @@ class ArticleTest extends PHPUnit\Framework\TestCase
     }
 
     /**
+     * @dataProvider invalidTitlesProvider
+     * @throws Exception
+     */
+    public function testUpdatingArticleWithFalsyTitle($title)
+    {
+        // then
+        $this->expectException("Biblys\Exception\InvalidEntityException");
+        $this->expectExceptionMessage("Le titre de l'article ne peut pas être vide ni égal à 0.");
+
+        // given
+        $am = new ArticleManager();
+        $article = $am->create(["publisher_id" => 1, "article_url" => "auteur/titre-vide"]);
+        $article->set("article_title", $title);
+
+        // when
+        $am->update($article);
+    }
+
+    public static function invalidTitlesProvider(): array
+    {
+        return [[""], ["0"]];
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testUpdatingArticleBeingEditedWithoutTitle()
+    {
+        // given
+        $am = new ArticleManager();
+        $article = $am->create(["publisher_id" => 1, "article_editing_user" => 1]);
+
+        // when
+        $am->update($article);
+
+        // then
+        $this->expectNotToPerformAssertions();
+    }
+
+    /**
      * Test that updating an article without an url throws
      * @throws Exception
      */
