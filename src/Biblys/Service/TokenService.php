@@ -20,7 +20,9 @@ namespace Biblys\Service;
 
 use Biblys\Exception\InvalidConfigurationException;
 use DateTime;
+use DomainException;
 use Exception;
+use InvalidArgumentException;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 use Model\User;
@@ -56,7 +58,7 @@ class TokenService
     {
         try {
             $decodedToken = JWT::decode($token, new Key($this->config->getAuthenticationSecret(), "HS256"));
-        } catch (UnexpectedValueException) {
+        } catch (UnexpectedValueException|DomainException|InvalidArgumentException) {
             throw new InvalidTokenException("Invalid token");
         }
 
