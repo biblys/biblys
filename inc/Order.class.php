@@ -436,6 +436,11 @@ class OrderManager extends EntityManager
         // If the copy is in the order
         if ($stock->get('order_id') == $order->get('order_id')) {
             $sm = new StockManager();
+            // Aucun parcours ne retire d'exemplaire d'une vente de caisse pour l'instant (une
+            // commande payée ne peut pas être annulée) : on restaure le prix d'origine pour quand il existera.
+            if ($order->get('type') === 'shop') {
+                $stock->restoreSavedPrice();
+            }
             $stock->set('order_id', null);
             $stock->set('user_id', null);
             $stock->set('customer_id', null);
