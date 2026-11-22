@@ -45,6 +45,7 @@ class RemoveStockItemFromPointOfSaleCartUsecase
 
         $cm = new CartManager();
         $cart = $cm->getById($cartId);
+        $stock->restoreSavedPrice();
         $cm->removeStock($stock);
         $cm->updateFromStock($cart);
     }

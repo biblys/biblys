@@ -60,6 +60,32 @@ class ClearPointOfSaleCartUsecaseTest extends TestCase
     /**
      * @throws PropelException
      */
+    public function testRestoresOriginalPriceOfStockItemsWhenCleared(): void
+    {
+        // given
+        $cart = ModelFactory::createCart();
+        $cart->setType("shop");
+        $cart->save();
+        $discountedStock = ModelFactory::createStockItem(cart: $cart, sellingPrice: 800, condition: "Bon état");
+        $discountedStock->setSellingPriceSaved(1000);
+        $discountedStock->save();
+        $regularStock = ModelFactory::createStockItem(cart: $cart, sellingPrice: 1299, condition: "Bon état");
+        $usecase = new ClearPointOfSaleCartUsecase();
+
+        // when
+        $usecase->execute($cart->getId());
+
+        // then
+        $discountedStock->reload();
+        $this->assertEquals(1000, $discountedStock->getSellingPrice());
+        $this->assertNull($discountedStock->getSellingPriceSaved());
+        $regularStock->reload();
+        $this->assertEquals(1299, $regularStock->getSellingPrice());
+    }
+
+    /**
+     * @throws PropelException
+     */
     public function testClearsAlreadyEmptyCartWithoutError(): void
     {
         // given
