@@ -3,10 +3,10 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import PointOfSale from '../../assets/js/point-of-sale/point-of-sale';
 
 const cartLine = (stockId, price) => `
-  <tr id="stock_${stockId}">
-    <td class="stock_selling_price" data-price="${price}">Neuf</td>
-    <td><button data-remove_from_cart="${stockId}"></button></td>
-  </tr>`;
+  <li id="stock_${stockId}">
+    <span class="stock_selling_price" data-price="${price}">Neuf</span>
+    <button data-remove_from_cart="${stockId}"></button>
+  </li>`;
 
 function renderPage(lines = [cartLine(1, 1000), cartLine(2, 550)]) {
   document.body.innerHTML = `
@@ -32,7 +32,7 @@ function renderPage(lines = [cartLine(1, 1000), cartLine(2, 550)]) {
         </tr>
       </table>
       <form id="checkout"><button type="submit"></button></form>
-      <table id="checkout_cart"><tbody>${lines.join('')}</tbody></table>
+      <ul id="checkout_cart">${lines.join('')}</ul>
       <button id="clear" data-clear_cart="5" data-clear_cart_confirmation="Vider ?"></button>
     </div>`;
   return document.getElementById('point-of-sale');

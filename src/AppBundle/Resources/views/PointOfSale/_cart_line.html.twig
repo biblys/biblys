@@ -16,30 +16,46 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 {% set articleCoverUrl = stockItem.article|imageUrl(null, 100) %}
 {% set stockItemPhotoUrl = stockItem|imageUrl(null, 100) %}
+{% set authors = stockItem.article.authors|default('')|authors %}
+{% set isNew = stockItem.condition == constant('Model\\Stock::CONDITION_NEW') %}
 
-<tr id="stock_{{ stockItem.id }}">
-  <td class="va-middle right">
-    <a href="/pages/adm_stock?id={{ stockItem.id }}">{{ stockItem.id }}</a>
-  </td>
-  <td class="va-middle center">
+<li id="stock_{{ stockItem.id }}" class="pos-cart-line">
+  <div class="pos-cart-line__cover">
     {% if articleCoverUrl %}
-      <img src="{{ articleCoverUrl }}" height="55" alt="{{ stockItem.article.title }}">
+      <img src="{{ articleCoverUrl }}" alt="{{ stockItem.article.title }}">
     {% elseif stockItemPhotoUrl %}
-      <img src="{{ stockItemPhotoUrl }}" height="55" alt="{{ stockItem.article.title }}">
+      <img src="{{ stockItemPhotoUrl }}" alt="{{ stockItem.article.title }}">
     {% endif %}
-  </td>
-  <td class="va-middle">
-    <a href="{{ path('article_show', { slug: stockItem.article.url }) }}">{{ stockItem.article.title }}</a><br>
-    de {{ stockItem.article.authors|default('')|authors }}<br>
-    Ed. {{ stockItem.article.publisher.name }}
-  </td>
-  <td class="va-middle right stock_selling_price" data-price="{{ stockItem.sellingPrice ?? 0 }}">
-    {{ stockItem.condition }}
+  </div>
+
+  <a class="pos-cart-line__title" href="{{ path('article_show', { slug: stockItem.article.url }) }}">
+    {{ stockItem.article.title }}
+  </a>
+
+  <span class="pos-cart-line__byline">
+    {% if authors %}{{ authors }} · {% endif %}{{ stockItem.article.publisher.name }}
+  </span>
+
+  <span class="pos-cart-line__meta">
+    <span class="pos-cart-line__condition pos-cart-line__condition--{{ isNew ? 'new' : 'used' }}">
+      {{ stockItem.condition }}
+    </span>
+    <a href="/pages/adm_stock?id={{ stockItem.id }}" title="Exemplaire n° {{ stockItem.id }}">
+      <span class="d-none d-md-inline">Exemplaire </span>n° {{ stockItem.id }}
+    </a>
+  </span>
+
+  <span class="pos-cart-line__price stock_selling_price" data-price="{{ stockItem.sellingPrice ?? 0 }}">
     {{ (stockItem.sellingPrice ?? 0)|currency(true)|raw }}
-  </td>
-  <td class="center va-middle">
-    <button title="Retirer du panier" data-remove_from_cart="{{ stockItem.id }}" class="btn btn-warning btn-sm">
-      <i class="fa fa-close"></i>
-    </button>
-  </td>
-</tr>
+  </span>
+
+  <button
+    type="button"
+    title="Retirer du panier"
+    aria-label="Retirer {{ stockItem.article.title }} du panier"
+    data-remove_from_cart="{{ stockItem.id }}"
+    class="pos-cart-line__remove btn btn-outline-secondary"
+  >
+    <i class="fa fa-close"></i>
+  </button>
+</li>

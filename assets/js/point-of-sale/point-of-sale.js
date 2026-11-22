@@ -174,7 +174,7 @@ export default class PointOfSale {
       return;
     }
 
-    this.#find('#checkout_cart tbody').prepend(createElementFromHTML(response.line));
+    this.#find('#checkout_cart').prepend(createElementFromHTML(response.line));
     this.notify(response.success);
     this.#updateTotals();
   }
