@@ -13,6 +13,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+import '../../css/point-of-sale/point-of-sale.css';
 import Notification from '../notification';
 import createElementFromHTML from '../helpers/createElementFromHTML';
 import eurosToCents from '../helpers/eurosToCents';

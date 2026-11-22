@@ -16,8 +16,6 @@
 
 import loadModuleForElements from './loadModuleForElements';
 
-import '../css/admin.css';
-
 document.addEventListener('DOMContentLoaded', function() {
   loadModuleForElements('admin-shortcuts/admin-shortcuts-manager', '#shortcuts-form');
   loadModuleForElements('cron-task', '.cron-execute-task');
