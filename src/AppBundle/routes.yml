@@ -417,6 +417,14 @@ point_of_sale_remove_item:
     cartId: \d+
     stockId: \d+
 
+point_of_sale_update_item_price:
+  path: /admin/pos/carts/{cartId}/items/{stockItemId}
+  controller: AppBundle\Controller\PointOfSaleController::updateItemPriceAction
+  methods: [PATCH]
+  requirements:
+    cartId: \d+
+    stockItemId: \d+
+
 point_of_sale_clear_cart:
   path: /admin/pos/carts/{cartId}/items
   controller: AppBundle\Controller\PointOfSaleController::clearCartAction

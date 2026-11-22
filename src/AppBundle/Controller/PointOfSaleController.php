@@ -21,6 +21,7 @@ namespace AppBundle\Controller;
 use Biblys\Exception\CannotAddStockItemToCartException;
 use Biblys\Exception\CannotFindCustomerException;
 use Biblys\Exception\CannotRemoveStockItemFromCartException;
+use Biblys\Exception\CannotUpdateStockItemPriceException;
 use Biblys\Service\BodyParamsService;
 use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
@@ -51,6 +52,7 @@ use Usecase\AddStockItemToPointOfSaleCartUsecase;
 use Usecase\ClearPointOfSaleCartUsecase;
 use Usecase\CreatePointOfSaleOrderUsecase;
 use Usecase\RemoveStockItemFromPointOfSaleCartUsecase;
+use Usecase\UpdatePointOfSaleCartItemPriceUsecase;
 use Usecase\UpdatePointOfSaleCartUsecase;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -308,6 +310,42 @@ class PointOfSaleController extends Controller
         }
 
         return new RedirectResponse("/admin/caisse?cart_id=$cartId");
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function updateItemPriceAction(
+        Request         $request,
+        CurrentUser     $currentUser,
+        TemplateService $templateService,
+        int             $cartId,
+        int             $stockItemId,
+    ): Response
+    {
+        $currentUser->authAdmin();
+
+        if (!CartQuery::create()->filterById($cartId)->exists()) {
+            throw new NotFoundHttpException("Panier $cartId introuvable");
+        }
+
+        $bodyParams = new BodyParamsService($request);
+        $bodyParams->parse(["price" => ["type" => "numeric"]]);
+
+        try {
+            $usecase = new UpdatePointOfSaleCartItemPriceUsecase();
+            $stockItem = $usecase->execute($cartId, $stockItemId, $bodyParams->getInteger("price"));
+        } catch (CannotUpdateStockItemPriceException $exception) {
+            throw new BadRequestHttpException($exception->getMessage(), $exception);
+        }
+
+        return new JsonResponse([
+            "success" => "Le prix de l'exemplaire n° $stockItemId a été modifié.",
+            "line" => $templateService->render(
+                "AppBundle:PointOfSale:_cart_line.html.twig",
+                ["stockItem" => $stockItem],
+            ),
+        ]);
     }
 
     /**
