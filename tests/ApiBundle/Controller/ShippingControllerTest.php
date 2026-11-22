@@ -23,6 +23,7 @@ use Biblys\Service\CurrentSite;
 use Biblys\Service\CurrentUser;
 use Biblys\Test\ModelFactory;
 use Biblys\Test\RequestFactory;
+use Framework\RouteLoader;
 use Exception;
 use Mockery;
 use Model\ShippingOption;
@@ -31,6 +32,9 @@ use Model\ShippingZoneQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\Routing\Matcher\UrlMatcher;
+use Symfony\Component\Routing\RequestContext;
 
 require_once __DIR__ . "/../../setUp.php";
 
@@ -444,5 +448,26 @@ class ShippingControllerTest extends TestCase
             $response->getContent(),
             "returns all shipping zones"
         );
+    }
+
+    public function testGetRouteOnlyMatchesNumericIds(): void
+    {
+        // given
+        $matcher = new UrlMatcher(RouteLoader::load(), new RequestContext("", "GET"));
+
+        // when
+        $route = $matcher->match("/api/shipping/12");
+        $searchRoute = $matcher->match("/api/shipping/search");
+
+        // then
+        $this->assertEquals("api_shipping_get", $route["_route"]);
+        $this->assertEquals("12", $route["id"]);
+        $this->assertEquals("api_shipping_search", $searchRoute["_route"], "should not shadow the search route");
+
+        // then
+        $this->expectException(ResourceNotFoundException::class);
+
+        // when
+        $matcher->match('/api/shipping/${shippingId}');
     }
 }

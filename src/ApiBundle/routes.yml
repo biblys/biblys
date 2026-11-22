@@ -121,6 +121,8 @@ api_shipping_get:
   path: /api/shipping/{id}
   methods: GET
   controller: ApiBundle\Controller\ShippingController::get
+  requirements:
+    id: \d+
 
 api_shipping_zones:
   methods: GET
