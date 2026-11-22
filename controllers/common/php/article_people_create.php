@@ -16,10 +16,12 @@
  */
 
 
+use Biblys\Exception\EntityAlreadyExistsException;
 use Biblys\Service\BodyParamsService;
 use Biblys\Service\CurrentUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\ConflictHttpException;
 
 /**
  * @throws Exception
@@ -35,7 +37,11 @@ return function (CurrentUser $currentUser, BodyParamsService $params): JsonRespo
     $people = new \Model\People();
     $people->setFirstName($params->get("people_first_name"));
     $people->setLastName($params->get("people_last_name"));
-    $people->save();
+    try {
+        $people->save();
+    } catch (EntityAlreadyExistsException $exception) {
+        throw new ConflictHttpException($exception->getMessage());
+    }
 
     return new JsonResponse([
         "people_id" => $people->getId(),
