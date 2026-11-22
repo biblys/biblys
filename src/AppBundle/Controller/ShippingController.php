@@ -25,6 +25,7 @@ use Biblys\Service\FlashMessagesService;
 use Biblys\Service\QueryParamsService;
 use Biblys\Service\TemplateService;
 use DansMaCulotte\MondialRelay\DeliveryChoice;
+use DansMaCulotte\MondialRelay\Exceptions\Exception as MondialRelayException;
 use Exception;
 use Framework\Controller;
 use Model\CountryQuery;
@@ -32,6 +33,7 @@ use Model\ShippingZone;
 use Model\ShippingZoneQuery;
 use Payplug\Exception\NotFoundException;
 use Propel\Runtime\Exception\PropelException;
+use SoapFault;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -287,13 +289,13 @@ class ShippingController extends Controller
             $countryId = $queryParams->getInteger("country_id");
             $country = CountryQuery::create()->findPk($countryId);
             try {
-                $delivery = new DeliveryChoice([
-                    "site_id" => $config->get("mondial_relay.code_enseigne"),
-                    "site_key" => $config->get("mondial_relay.private_key"),
-                ]);
-                $pickupPoints = $delivery->findPickupPoints(country: $country->getCode(), zipCode: $postalCode, nbResults: 20);
-            } catch (\DansMaCulotte\MondialRelay\Exceptions\Exception $e) {
+                $pickupPoints = $this->findPickupPoints($config, $country->getCode(), $postalCode);
+            } catch (MondialRelayException $e) {
                 $error = "Une erreur est survenue lors de la recherche des points relais : " . $e->getMessage();
+            } catch (SoapFault) {
+                // Le service Mondial Relay est injoignable (WSDL inaccessible, par exemple) :
+                // ce n'est pas une erreur de Biblys, on prévient simplement le client.
+                $error = "Le service Mondial Relay est momentanément indisponible. Merci de réessayer plus tard.";
             }
         }
 
@@ -304,5 +306,18 @@ class ShippingController extends Controller
             "shipping_id" => $queryParams->getInteger("shipping_id"),
             "error" => $error,
         ]);
+    }
+
+    /**
+     * @throws MondialRelayException
+     * @throws SoapFault
+     */
+    protected function findPickupPoints(Config $config, string $countryCode, string $postalCode): array
+    {
+        $delivery = new DeliveryChoice([
+            "site_id" => $config->get("mondial_relay.code_enseigne"),
+            "site_key" => $config->get("mondial_relay.private_key"),
+        ]);
+        return $delivery->findPickupPoints(country: $countryCode, zipCode: $postalCode, nbResults: 20);
     }
 }
