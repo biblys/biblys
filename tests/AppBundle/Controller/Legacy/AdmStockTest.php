@@ -525,4 +525,60 @@ class AdmStockTest extends TestCase
             "stock_num" => 1,
         ], Mockery::mock(FlashMessagesService::class));
     }
+
+    /**
+     * @throws PropelException
+     */
+    public function testPostWithArticleAlreadyInRayonStillCreatesStockItem(): void
+    {
+        // given
+        ModelFactory::createSite();
+        $article = ModelFactory::createArticle(title: "Grey Beard");
+        $rayon = \Biblys\Test\EntityFactory::createRayon(["rayon_name" => "VO English"]);
+        $articleEntity = (new \ArticleManager())->getById($article->getId());
+        $rayon->addArticle($articleEntity);
+
+        $flashBag = $this
+            ->getMockBuilder("Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface")
+            ->getMock();
+        $flashBag->expects($this->once())->method("add")->with(
+            "warning",
+            "L&#039;article « Grey Beard » est déjà dans le rayon « VO English »."
+        );
+        $session = $this
+            ->getMockBuilder("Symfony\Component\HttpFoundation\Session\Session")
+            ->getMock();
+        $session->method("getFlashBag")->willReturn($flashBag);
+        $flashMessagesService = Mockery::mock(FlashMessagesService::class);
+        $flashMessagesService->shouldReceive("add")->once();
+
+        $postData = [
+            "article_id" => $article->getId(),
+            "add_to_rayon" => $rayon->get("id"),
+            "stock_num" => 1,
+            "stock_condition" => "Neuf",
+            "stock_selling_price" => 1500,
+        ];
+        $_POST = $postData;
+
+        // when
+        $response = $this->getController()(
+            Request::create("/pages/adm_stock", "POST", $postData),
+            $session,
+            $this->buildCurrentSite(),
+            Mockery::mock(Mailer::class),
+            Mockery::mock(UrlGenerator::class),
+            $flashMessagesService,
+            $this->buildImagesService(),
+            Mockery::mock(TemplateService::class),
+        );
+
+        // then
+        $this->assertCount(
+            1,
+            $this->findStockItemsForArticle($article->getId()),
+            "should still create the stock item"
+        );
+        $this->assertEquals(302, $response->getStatusCode(), "should redirect");
+    }
 }
