@@ -218,6 +218,70 @@ class PointOfSaleControllerTest extends TestCase
     /**
      * @throws PropelException
      */
+    public function testIndexActionRendersOriginalPriceForDiscountedStockItem(): void
+    {
+        // given
+        $controller = $this->_getController();
+        $cart = EntityFactory::createCart();
+        $stockItem = ModelFactory::createStockItem(sellingPrice: 800, condition: "Bon état");
+        $stockItem->setSellingPriceSaved(1000);
+        $stockItem->setCartId($cart->get("id"));
+        $stockItem->save();
+        $request = new Request(query: ['cart_id' => $cart->get('id')]);
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authAdmin");
+
+        // when
+        $response = $controller->indexAction(
+            $request,
+            $currentUser,
+            $this->_getCurrentSiteMock(),
+            Helpers::getTemplateService(),
+            Mockery::mock(UrlGenerator::class),
+            new QueryParamsService($request),
+        );
+
+        // then
+        $content = $response->getContent();
+        $this->assertStringContainsString('data-price="800"', $content);
+        $this->assertStringContainsString('pos-cart-line__original-price', $content);
+        $this->assertStringContainsString('10,00&nbsp;&euro;', $content);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testIndexActionDoesNotRenderOriginalPriceForRegularStockItem(): void
+    {
+        // given
+        $controller = $this->_getController();
+        $cart = EntityFactory::createCart();
+        $stockItem = ModelFactory::createStockItem(sellingPrice: 800, condition: "Bon état");
+        $stockItem->setCartId($cart->get("id"));
+        $stockItem->save();
+        $request = new Request(query: ['cart_id' => $cart->get('id')]);
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authAdmin");
+
+        // when
+        $response = $controller->indexAction(
+            $request,
+            $currentUser,
+            $this->_getCurrentSiteMock(),
+            Helpers::getTemplateService(),
+            Mockery::mock(UrlGenerator::class),
+            new QueryParamsService($request),
+        );
+
+        // then
+        $this->assertStringNotContainsString('pos-cart-line__original-price', $response->getContent());
+    }
+
+    /**
+     * @throws PropelException
+     */
     public function testIndexActionRendersFallbackTitleForOtherCartWithoutTitle(): void
     {
         // given

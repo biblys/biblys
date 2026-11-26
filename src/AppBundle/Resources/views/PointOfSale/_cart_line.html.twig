@@ -45,8 +45,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     </a>
   </span>
 
-  <span class="pos-cart-line__price stock_selling_price" data-price="{{ stockItem.sellingPrice ?? 0 }}">
-    {{ (stockItem.sellingPrice ?? 0)|currency(true)|raw }}
+  <span class="pos-cart-line__price-block">
+    {% if stockItem.sellingPriceSaved is not null and stockItem.sellingPriceSaved != stockItem.sellingPrice %}
+      <s class="pos-cart-line__original-price">{{ stockItem.sellingPriceSaved|currency(true)|raw }}</s>
+    {% endif %}
+    <span class="pos-cart-line__price stock_selling_price" data-price="{{ stockItem.sellingPrice ?? 0 }}">
+      {{ (stockItem.sellingPrice ?? 0)|currency(true)|raw }}
+    </span>
   </span>
 
   <button
