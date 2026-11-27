@@ -364,9 +364,9 @@ function reloadAdminEvents() {
         create_sale($('#cart_id').val(), {
           seller_id: $('#seller_id').val(),
           customer_id: $('#customer input[name=customer_id]').val(),
-          cart_cash: $('#cart_cash').val() * 100,
-          cart_cheque: $('#cart_cheque').val() * 100,
-          cart_card: $('#cart_card').val() * 100,
+          cart_cash: Math.round($('#cart_cash').val() * 100),
+          cart_cheque: Math.round($('#cart_cheque').val() * 100),
+          cart_card: Math.round($('#cart_card').val() * 100),
           cart_topay: $('#cart_topay').attr('data-value'),
           cart_togive: $('#cart_togive').attr('data-value')
         });
