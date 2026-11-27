@@ -16,6 +16,8 @@
   interceptée en dehors de ce champ.
 - Les résultats d'un champ de recherche peuvent être fermés avec la touche
   Échap, d'un clic à l'extérieur ou en quittant le champ avec Tab.
+- Les résultats d'un champ de recherche s'affichent par-dessus la page, sans
+  décaler son contenu.
 - Biblys supporte désormais PHP 8.6.
 - La recherche d'article de la caisse utilise désormais le même champ de
   recherche que le reste de l'administration. Les résultats affichent toujours

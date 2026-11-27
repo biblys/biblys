@@ -61,4 +61,21 @@ describe('EntitySearchField keyboard', () => {
     expect(event.defaultPrevented).toBe(true);
     expect(fetchMock).toHaveBeenCalledWith('/search?term=query', { method: 'GET' });
   });
+
+  it('scrolls the highlighted result into view', async () => {
+    // given
+    fetchMock.mockResolvedValue({ json: async () => ({ results: [{ label: 'Premier' }] }) });
+    pressEnter('.EntitySearchField__search-input');
+    await vi.waitFor(() => expect(document.querySelector('.autocomplete-results > a')).not.toBeNull());
+    const firstResult = document.querySelector('.autocomplete-results > a');
+    firstResult.scrollIntoView = vi.fn();
+
+    // when
+    document
+      .querySelector('.EntitySearchField__search-input')
+      .dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }));
+
+    // then
+    expect(firstResult.scrollIntoView).toHaveBeenCalledWith({ block: 'nearest' });
+  });
 });

@@ -14,6 +14,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+const RESULTS_MAX_SCREEN_RATIO = 0.6;
+const RESULTS_MIN_HEIGHT = 200;
+const RESULTS_BOTTOM_MARGIN = 16;
+
 /**
  * A component to search for entities with completion and select them.
  *
@@ -110,6 +114,11 @@ export default class EntitySearchField {
         this.#hideResults();
       }
     });
+
+    const fitResults = () => this.#fitResultsToViewport();
+    document.addEventListener('scroll', fitResults, true);
+    window.visualViewport?.addEventListener('resize', fitResults);
+    window.visualViewport?.addEventListener('scroll', fitResults);
 
     this.customAction = options.action;
 
@@ -272,10 +281,23 @@ export default class EntitySearchField {
     }
 
     this.#subMenuDisplayed = true;
+    this.#fitResultsToViewport();
 
     if (submitted && this.autoSelectSingleResult && this.#results.length === 1) {
       this.selectResult(this.#results[0]);
     }
+  }
+
+  #fitResultsToViewport() {
+    if (!this.#subMenuDisplayed) {
+      return;
+    }
+
+    const viewport = window.visualViewport;
+    const visibleBottom = viewport ? viewport.offsetTop + viewport.height : window.innerHeight;
+    const spaceBelow = visibleBottom - this.subMenu.getBoundingClientRect().top - RESULTS_BOTTOM_MARGIN;
+    const maxHeight = Math.min(spaceBelow, window.innerHeight * RESULTS_MAX_SCREEN_RATIO);
+    this.subMenu.style.maxHeight = `${Math.max(maxHeight, RESULTS_MIN_HEIGHT)}px`;
   }
 
   /**
@@ -291,6 +313,7 @@ export default class EntitySearchField {
     if (this.#focusItemIndex > -1 && this.#focusItemIndex < items.length) {
       const focusedItem = items[this.#focusItemIndex];
       focusedItem.classList.add('active');
+      focusedItem.scrollIntoView({ block: 'nearest' });
     }
   }
 
@@ -371,7 +394,7 @@ export default class EntitySearchField {
   }
 
   #hideResults() {
-    clearTimeout(this.#debounceTimeout);
+    window.clearTimeout(this.#debounceTimeout);
     this.#latestSearchId += 1;
     this.subMenu.innerHTML = '';
     this.#subMenuDisplayed = false;

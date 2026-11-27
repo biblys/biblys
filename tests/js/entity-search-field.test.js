@@ -33,6 +33,8 @@ function buildElement({ required = true, withValueInput = true, value = '', labe
     '.help-text': { classList: classList() },
     '.autocomplete-results': {
       innerHTML: '',
+      style: {},
+      getBoundingClientRect: () => ({ top: 0 }),
       children: [],
       appendChild(child) {
         this.children.push(child);
@@ -54,6 +56,7 @@ function buildElement({ required = true, withValueInput = true, value = '', labe
 describe('EntitySearchField', () => {
   beforeEach(() => {
     globalThis.document = { addEventListener: vi.fn() };
+    globalThis.window = { clearTimeout: vi.fn(), innerHeight: 800 };
   });
 
   it('is invalid while no result is selected', () => {
