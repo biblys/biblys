@@ -254,8 +254,18 @@ class UserControllerTest extends TestCase
 
         // then
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertStringContainsString("S'identifier par e-mail", $response->getContent());
-        $this->assertStringNotContainsString("Se connecter avec Axys", $response->getContent());
+        $siteTitle = htmlspecialchars(CurrentSite::buildFromConfig(Config::load())->getTitle());
+        $this->assertStringContainsString("Connexion ou création de votre", $response->getContent());
+        $siteDomain = CurrentSite::buildFromConfig(Config::load())->getSite()->getDomain();
+        $this->assertStringContainsString("compte $siteDomain", $response->getContent());
+        $this->assertMatchesRegularExpression(
+            '/<input[^>]*type="email".*Vous recevrez un lien pour vous connecter ou créer votre compte\..*Continuer/s',
+            $response->getContent()
+        );
+        $this->assertStringContainsString("Continuer", $response->getContent());
+        $this->assertStringNotContainsString("Pas encore de compte", $response->getContent());
+        $this->assertStringNotContainsString("S'identifier avec Axys", $response->getContent());
+        $this->assertStringNotContainsString("Utiliser Axys", $response->getContent());
         $this->assertStringNotContainsString("https://axys.me/a-propos", $response->getContent());
     }
 
@@ -288,8 +298,15 @@ class UserControllerTest extends TestCase
 
         // then
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertStringContainsString("S'identifier par e-mail", $response->getContent());
-        $this->assertStringContainsString("Se connecter avec Axys", $response->getContent());
+        $siteTitle = htmlspecialchars(CurrentSite::buildFromConfig(Config::load())->getTitle());
+        $this->assertStringContainsString("Utiliser Axys</h2>", $response->getContent());
+        $this->assertStringContainsString(
+            "Axys est un autre moyen d'accéder à votre compte $siteTitle.",
+            $response->getContent()
+        );
+        $this->assertStringContainsString("Utilisez Axys pour vous connecter en un clic", $response->getContent());
+        $this->assertStringNotContainsString("facultatif", $response->getContent());
+        $this->assertStringContainsString("S'identifier avec Axys", $response->getContent());
         $this->assertStringContainsString("https://axys.me/a-propos", $response->getContent());
     }
 
