@@ -36,7 +36,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   {% endif %}
 
   {% if display_pickup_notice %}
-    <p>Retrouvez les coordonnées et horaires d'ouverture du magasin sur notre site.</p>
+    {% if pickup_info %}
+      <p>{{ pickup_info }}</p>
+    {% else %}
+      <p>Retrouvez les coordonnées et horaires d'ouverture du magasin sur notre site.</p>
+    {% endif %}
   {% endif %}
 
   <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
