@@ -19,6 +19,11 @@
   Cette fonctionnalité avait disparu avec l'ancienne page de gestion des
   liens, supprimée dans la version 3.6.1.
 
+### Maintenance
+
+- L'intégration continue teste désormais les versions des dépendances
+  verrouillées dans `composer.lock`, et non plus les plus récentes disponibles.
+
 ## 3.18.3 (20 novembre 2026)
 
 ### Corrections
