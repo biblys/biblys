@@ -16,30 +16,80 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 {% set articleCoverUrl = stockItem.article|imageUrl(null, 100) %}
 {% set stockItemPhotoUrl = stockItem|imageUrl(null, 100) %}
+{% set authors = stockItem.article.authors|default('')|authors %}
+{% set isNew = stockItem.condition == constant('Model\\Stock::CONDITION_NEW') %}
 
-<tr id="stock_{{ stockItem.id }}">
-  <td class="va-middle right">
-    <a href="/pages/adm_stock?id={{ stockItem.id }}">{{ stockItem.id }}</a>
-  </td>
-  <td class="va-middle center">
+<li id="stock_{{ stockItem.id }}" class="pos-cart-line">
+  <div class="pos-cart-line__cover">
     {% if articleCoverUrl %}
-      <img src="{{ articleCoverUrl }}" height="55" alt="{{ stockItem.article.title }}">
+      <img src="{{ articleCoverUrl }}" alt="{{ stockItem.article.title }}">
     {% elseif stockItemPhotoUrl %}
-      <img src="{{ stockItemPhotoUrl }}" height="55" alt="{{ stockItem.article.title }}">
+      <img src="{{ stockItemPhotoUrl }}" alt="{{ stockItem.article.title }}">
     {% endif %}
-  </td>
-  <td class="va-middle">
-    <a href="{{ path('article_show', { slug: stockItem.article.url }) }}">{{ stockItem.article.title }}</a><br>
-    de {{ stockItem.article.authors|default('')|authors }}<br>
-    Ed. {{ stockItem.article.publisher.name }}
-  </td>
-  <td class="va-middle right stock_selling_price" data-price="{{ stockItem.sellingPrice ?? 0 }}">
-    {{ stockItem.condition }}
-    {{ (stockItem.sellingPrice ?? 0)|currency(true)|raw }}
-  </td>
-  <td class="center va-middle">
-    <button title="Retirer du panier" data-remove_from_cart="{{ stockItem.id }}" class="btn btn-warning btn-sm">
-      <i class="fa fa-close"></i>
+  </div>
+
+  <a class="pos-cart-line__title" href="{{ path('article_show', { slug: stockItem.article.url }) }}">
+    {{ stockItem.article.title }}
+  </a>
+
+  <span class="pos-cart-line__byline">
+    {% if authors %}{{ authors }} · {% endif %}{{ stockItem.article.publisher.name }}
+  </span>
+
+  <span class="pos-cart-line__meta">
+    <span class="pos-cart-line__condition pos-cart-line__condition--{{ isNew ? 'new' : 'used' }}">
+      {{ stockItem.condition }}
+    </span>
+    <a href="/pages/adm_stock?id={{ stockItem.id }}" title="Exemplaire n° {{ stockItem.id }}">
+      <span class="d-none d-md-inline">Exemplaire </span>n° {{ stockItem.id }}
+    </a>
+  </span>
+
+  <span class="pos-cart-line__price-block">
+    {% if stockItem.sellingPriceSaved is not null and stockItem.sellingPriceSaved != stockItem.sellingPrice %}
+      <s class="pos-cart-line__original-price">{{ stockItem.sellingPriceSaved|currency(true)|raw }}</s>
+    {% endif %}
+    <span class="pos-cart-line__price stock_selling_price" data-price="{{ stockItem.sellingPrice ?? 0 }}">
+      {{ (stockItem.sellingPrice ?? 0)|currency(true)|raw }}
+    </span>
+  </span>
+
+  {% if not isNew %}
+    <button
+      type="button"
+      title="Modifier le prix"
+      aria-label="Modifier le prix de {{ stockItem.article.title }}"
+      data-edit_price="{{ stockItem.id }}"
+      class="pos-cart-line__edit btn btn-outline-secondary"
+    >
+      <i class="fa fa-pencil"></i>
     </button>
-  </td>
-</tr>
+
+    <form class="pos-cart-line__edit-form" data-edit_price_form="{{ stockItem.id }}" novalidate hidden>
+      <div class="input-group">
+        <input
+          type="text"
+          name="price"
+          inputmode="decimal"
+          autocomplete="off"
+          aria-label="Nouveau prix de {{ stockItem.article.title }}"
+          value="{{ ((stockItem.sellingPrice ?? 0) / 100)|number_format(2, ',', '') }}"
+          class="form-control text-right"
+        >
+        <div class="input-group-append">
+          <span class="input-group-text">€</span>
+        </div>
+      </div>
+    </form>
+  {% endif %}
+
+  <button
+    type="button"
+    title="Retirer du panier"
+    aria-label="Retirer {{ stockItem.article.title }} du panier"
+    data-remove_from_cart="{{ stockItem.id }}"
+    class="pos-cart-line__remove btn btn-outline-secondary"
+  >
+    <i class="fa fa-close"></i>
+  </button>
+</li>

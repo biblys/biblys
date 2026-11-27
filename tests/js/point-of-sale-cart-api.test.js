@@ -6,6 +6,7 @@ import {
   createSale,
   removeItem,
   updateCart,
+  updateItemPrice,
 } from '../../assets/js/point-of-sale/cart-api';
 
 function stubFetch(response) {
@@ -51,6 +52,24 @@ describe('cart api', () => {
     expect(fetchMock).toHaveBeenCalledWith('/admin/pos/carts/12/items/345', {
       method: 'DELETE',
       headers: { Accept: 'application/json' },
+    });
+  });
+
+  it('updates the price of an item with a form-encoded PATCH', async () => {
+    // given
+    const fetchMock = stubFetch(jsonResponse({ success: 'Modifié', line: '<li></li>' }));
+
+    // when
+    await updateItemPrice(12, 345, 850);
+
+    // then
+    expect(fetchMock).toHaveBeenCalledWith('/admin/pos/carts/12/items/345', {
+      method: 'PATCH',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: 'price=850',
     });
   });
 

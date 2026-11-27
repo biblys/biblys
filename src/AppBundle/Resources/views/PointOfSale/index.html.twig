@@ -151,22 +151,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         </div>
       </div>
 
-      <table id="checkout_cart" class="table table-hover mb-0">
-        <thead>
-          <tr>
-            <th>Ref.</th>
-            <th></th>
-            <th>Article</th>
-            <th>Prix</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for stockItem in cart_stock_items %}
-            {% include 'AppBundle:PointOfSale:_cart_line.html.twig' %}
-          {% endfor %}
-        </tbody>
-      </table>
+      <ul id="checkout_cart" class="pos-cart">
+        {% for stockItem in cart_stock_items %}
+          {% include 'AppBundle:PointOfSale:_cart_line.html.twig' %}
+        {% endfor %}
+      </ul>
 
     </section>
 

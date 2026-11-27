@@ -47,6 +47,14 @@ export function addItem(cartId, stockId) {
   });
 }
 
+export function updateItemPrice(cartId, stockItemId, price) {
+  return request(`/admin/pos/carts/${cartId}/items/${stockItemId}`, {
+    method: 'PATCH',
+    fields: { price },
+    errorMessage: "Le prix de l'exemplaire n'a pas pu être modifié.",
+  });
+}
+
 export function removeItem(cartId, stockId) {
   return request(`/admin/pos/carts/${cartId}/items/${stockId}`, {
     method: 'DELETE',

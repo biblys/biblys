@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import EntitySearchField from '../../public/common/js/entity-search-field.js';
 
 const classList = () => ({ add: vi.fn(), remove: vi.fn() });
@@ -40,20 +40,18 @@ function buildElement({ required = true, withValueInput = true, value = '', labe
       querySelectorAll: () => [],
     },
   };
+  const listeners = {};
   const element = {
+    addEventListener: (type, callback) => (listeners[type] = callback),
     dataset: { query_url: '/search' },
     querySelector: (selector) => parts[selector],
     closest: () => null,
   };
 
-  return { element, searchInput, valueInput, subMenu: parts['.autocomplete-results'] };
+  return { element, listeners, searchInput, valueInput, subMenu: parts['.autocomplete-results'] };
 }
 
 describe('EntitySearchField', () => {
-  beforeEach(() => {
-    globalThis.document = { addEventListener: vi.fn() };
-  });
-
   it('is invalid while no result is selected', () => {
     const { element, searchInput } = buildElement();
 
@@ -114,9 +112,7 @@ describe('EntitySearchField', () => {
     const results = [{ label: 'Premier', value: '1' }, { label: 'Second', value: '2' }];
 
     function stubDocument() {
-      const listeners = {};
       globalThis.document = {
-        addEventListener: (type, callback) => (listeners[type] = callback),
         createElement: () => ({
           style: {},
           children: [],
@@ -126,7 +122,6 @@ describe('EntitySearchField', () => {
           addEventListener: vi.fn(),
         }),
       };
-      return listeners;
     }
 
     function stubFetch(searchResults) {
@@ -141,9 +136,9 @@ describe('EntitySearchField', () => {
     }
 
     it('displays the label of each result by default', async () => {
-      const listeners = stubDocument();
+      stubDocument();
       stubFetch(results);
-      const { element, searchInput, subMenu } = buildElement();
+      const { element, listeners, searchInput, subMenu } = buildElement();
       new EntitySearchField(element);
 
       await pressEnter(listeners, searchInput);
@@ -152,9 +147,9 @@ describe('EntitySearchField', () => {
     });
 
     it('displays the element returned by renderItem when provided', async () => {
-      const listeners = stubDocument();
+      stubDocument();
       stubFetch(results);
-      const { element, searchInput, subMenu } = buildElement();
+      const { element, listeners, searchInput, subMenu } = buildElement();
       const renderItem = (result) => ({ rendered: result.label });
       new EntitySearchField(element, { renderItem });
 
@@ -167,9 +162,9 @@ describe('EntitySearchField', () => {
     });
 
     it('selects the only result of a submitted search when autoSelectSingleResult is set', async () => {
-      const listeners = stubDocument();
+      stubDocument();
       stubFetch([results[0]]);
-      const { element, searchInput } = buildElement();
+      const { element, listeners, searchInput } = buildElement();
       const onResultSelected = vi.fn();
       new EntitySearchField(element, { autoSelectSingleResult: true, onResultSelected });
 
@@ -179,9 +174,9 @@ describe('EntitySearchField', () => {
     });
 
     it('does not select automatically when there are several results', async () => {
-      const listeners = stubDocument();
+      stubDocument();
       stubFetch(results);
-      const { element, searchInput } = buildElement();
+      const { element, listeners, searchInput } = buildElement();
       const onResultSelected = vi.fn();
       new EntitySearchField(element, { autoSelectSingleResult: true, onResultSelected });
 
@@ -191,9 +186,9 @@ describe('EntitySearchField', () => {
     });
 
     it('does not select automatically unless autoSelectSingleResult is set', async () => {
-      const listeners = stubDocument();
+      stubDocument();
       stubFetch([results[0]]);
-      const { element, searchInput } = buildElement();
+      const { element, listeners, searchInput } = buildElement();
       const onResultSelected = vi.fn();
       new EntitySearchField(element, { onResultSelected });
 

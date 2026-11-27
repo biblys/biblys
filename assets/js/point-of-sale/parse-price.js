@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2024 Clément Latzarus
+ * Copyright (C) 2026 Clément Latzarus
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published
@@ -13,34 +13,12 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+import eurosToCents from '../helpers/eurosToCents';
 
-/* Point of sale (caisse) */
+const PRICE_PATTERN = /^\d+([.,]\d{1,2})?$/;
 
-.pos-section {
-  padding: 1.25rem 0;
-  border-bottom: 1px solid #e5e5e5;
+export default function parsePrice(input) {
+  const price = input.trim();
+  const decimalPrice = price.replace(',', '.');
+  return PRICE_PATTERN.test(price) ? eurosToCents(decimalPrice) : null;
 }
-
-.pos-section:first-of-type {
-  padding-top: 0;
-}
-
-.pos-section:last-of-type {
-  border-bottom: none;
-  padding-bottom: 0;
-}
-
-.pos-section-title {
-  font-size: 0.9rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
-  color: #666;
-  margin-bottom: 0.75rem;
-}
-
-.pos-legal-notice {
-  padding: 0.6rem 0.9rem;
-}
-
-

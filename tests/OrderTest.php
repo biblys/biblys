@@ -449,6 +449,56 @@ class OrderTest extends PHPUnit\Framework\TestCase
     /**
      * @throws Exception
      */
+    public function testRemoveStockRestoresOriginalPriceForPointOfSaleOrder()
+    {
+        // given
+        $stock = EntityFactory::createStock([
+            "stock_selling_price" => 800,
+            "stock_selling_price_saved" => 1000,
+        ]);
+        $order = EntityFactory::createOrder();
+        $om = new OrderManager();
+        $order->set("order_type", "shop");
+        $om->update($order);
+        $om->addStock($order, $stock);
+
+        // when
+        $om->removeStock($order, $stock);
+
+        // then
+        $sm = new StockManager();
+        $updatedStock = $sm->getById($stock->get("id"));
+        $this->assertEquals(1000, $updatedStock->get("selling_price"));
+        $this->assertNull($updatedStock->get("selling_price_saved"));
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function testRemoveStockKeepsDiscountedPriceForWebOrder()
+    {
+        // given
+        $stock = EntityFactory::createStock([
+            "stock_selling_price" => 800,
+            "stock_selling_price_saved" => 1000,
+        ]);
+        $order = EntityFactory::createOrder();
+        $om = new OrderManager();
+        $om->addStock($order, $stock);
+
+        // when
+        $om->removeStock($order, $stock);
+
+        // then
+        $sm = new StockManager();
+        $updatedStock = $sm->getById($stock->get("id"));
+        $this->assertEquals(800, $updatedStock->get("selling_price"));
+        $this->assertEquals(1000, $updatedStock->get("selling_price_saved"));
+    }
+
+    /**
+     * @throws Exception
+     */
     public function testRemoveStockAssociatedWithReward()
     {
         // given

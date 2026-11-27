@@ -13,15 +13,27 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+import '../../css/point-of-sale/point-of-sale.css';
 import Notification from '../notification';
 import createElementFromHTML from '../helpers/createElementFromHTML';
 import eurosToCents from '../helpers/eurosToCents';
 import formatAmount from '../helpers/formatAmount';
 import safeHtml from '../helpers/safeHtml';
-import { addItem, CartApiError, clearCart, createSale, removeItem, updateCart } from './cart-api';
+import {
+  addItem,
+  CartApiError,
+  clearCart,
+  createSale,
+  removeItem,
+  updateCart,
+  updateItemPrice,
+} from './cart-api';
+import parsePrice from './parse-price';
 import { calculateCartTotals } from './payments';
 
 const POINT_OF_SALE_URL = '/admin/caisse';
+const REQUEST_FAILURE_MESSAGE =
+  'La communication avec le serveur a échoué. Rechargez la page pour vérifier avant de réessayer.';
 
 const ENTITY_SEARCH_FIELD_URL = '/common/js/entity-search-field.js';
 
@@ -47,6 +59,8 @@ function renderArticleSearchResult(result) {
 }
 
 export default class PointOfSale {
+  #pendingPriceSaves = Promise.resolve();
+
   constructor(element, dependencies = {}) {
     this.element = element;
     this.loadEntitySearchField = dependencies.loadEntitySearchField ?? loadEntitySearchField;
@@ -91,9 +105,33 @@ export default class PointOfSale {
         return;
       }
 
+      const editButton = event.target.closest('[data-edit_price]');
+      if (editButton) {
+        this.#openPriceEditor(editButton.getAttribute('data-edit_price'));
+        return;
+      }
+
       const clearButton = event.target.closest('[data-clear_cart]');
       if (clearButton) {
         this.#clearCartAfterConfirmation(clearButton);
+      }
+    });
+
+    this.element.addEventListener('submit', (event) => {
+      const priceForm = event.target.closest('[data-edit_price_form]');
+      if (priceForm) {
+        event.preventDefault();
+        priceForm.querySelector('input[name=price]').blur();
+      }
+    });
+
+    this.element.addEventListener('focusout', (event) => {
+      const priceForm = event.target.closest('[data-edit_price_form]');
+      if (priceForm) {
+        this.#pendingPriceSaves = Promise.allSettled([
+          this.#pendingPriceSaves,
+          this.#savePrice(priceForm),
+        ]);
       }
     });
 
@@ -148,10 +186,12 @@ export default class PointOfSale {
     try {
       return await request();
     } catch (error) {
-      if (!(error instanceof CartApiError)) {
-        throw error;
+      if (error instanceof CartApiError) {
+        this.showAlert(error.message);
+      } else {
+        console.error(error);
+        this.showAlert(REQUEST_FAILURE_MESSAGE);
       }
-      this.showAlert(error.message);
       return null;
     }
   }
@@ -173,7 +213,7 @@ export default class PointOfSale {
       return;
     }
 
-    this.#find('#checkout_cart tbody').prepend(createElementFromHTML(response.line));
+    this.#find('#checkout_cart').prepend(createElementFromHTML(response.line));
     this.notify(response.success);
     this.#updateTotals();
   }
@@ -185,6 +225,46 @@ export default class PointOfSale {
     }
 
     this.#find(`#stock_${stockId}`)?.remove();
+    this.notify(response.success);
+    this.#updateTotals();
+  }
+
+  #openPriceEditor(stockItemId) {
+    const form = this.#find(`[data-edit_price_form="${stockItemId}"]`);
+    form.hidden = false;
+    this.#find(`#stock_${stockItemId}`).classList.add('pos-cart-line--editing');
+
+    const input = form.querySelector('input[name=price]');
+    input.focus();
+    input.select();
+  }
+
+  #closePriceEditor(form) {
+    form.reset();
+    form.hidden = true;
+    form.closest('li').classList.remove('pos-cart-line--editing');
+  }
+
+  async #savePrice(form) {
+    const stockItemId = form.dataset.edit_price_form;
+    const input = form.querySelector('input[name=price]');
+    if (input.value === input.defaultValue) {
+      this.#closePriceEditor(form);
+      return;
+    }
+
+    const price = parsePrice(input.value);
+    if (price === null) {
+      this.showAlert('Veuillez saisir un prix valide.');
+      return;
+    }
+
+    const response = await this.#callApi(() => updateItemPrice(this.#cartId, stockItemId, price));
+    if (!response) {
+      return;
+    }
+
+    this.#find(`#stock_${stockItemId}`)?.replaceWith(createElementFromHTML(response.line));
     this.notify(response.success);
     this.#updateTotals();
   }
@@ -201,6 +281,12 @@ export default class PointOfSale {
   }
 
   async #saveSale() {
+    await this.#pendingPriceSaves;
+    if (this.#find('[data-edit_price_form]:not([hidden])')) {
+      this.showAlert("Un prix n'a pas été enregistré : corrigez-le avant d'enregistrer la vente.");
+      return;
+    }
+
     const toPay = Number(this.#find('#cart_topay').dataset.value);
     const total = Number(this.#find('#cart_total').dataset.value);
 

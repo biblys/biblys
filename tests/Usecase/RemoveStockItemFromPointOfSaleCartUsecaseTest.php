@@ -54,6 +54,29 @@ class RemoveStockItemFromPointOfSaleCartUsecaseTest extends TestCase
     /**
      * @throws PropelException
      */
+    public function testRestoresOriginalPriceOfStockItemWhenRemoved(): void
+    {
+        // given
+        $cart = ModelFactory::createCart();
+        $cart->setType("shop");
+        $cart->save();
+        $stock = ModelFactory::createStockItem(cart: $cart, sellingPrice: 800, condition: "Bon état");
+        $stock->setSellingPriceSaved(1000);
+        $stock->save();
+        $usecase = new RemoveStockItemFromPointOfSaleCartUsecase();
+
+        // when
+        $usecase->execute($cart->getId(), $stock->getId());
+
+        // then
+        $stock->reload();
+        $this->assertEquals(1000, $stock->getSellingPrice());
+        $this->assertNull($stock->getSellingPriceSaved());
+    }
+
+    /**
+     * @throws PropelException
+     */
     public function testThrowsWhenStockItemNotInGivenCart(): void
     {
         // given

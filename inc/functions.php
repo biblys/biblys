@@ -662,7 +662,7 @@ function loadEncoreAssets(string $env, string $fileType, string $userLevel = 'ap
     }
 
     if ($fileType === 'css') {
-        foreach ($entrypointsArray['entrypoints'][$userLevel]['css'] as $asset) {
+        foreach ($entrypointsArray['entrypoints'][$userLevel]['css'] ?? [] as $asset) {
             $calls[] = "screen:$asset";
         }
     }

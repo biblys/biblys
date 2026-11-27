@@ -28,6 +28,7 @@ use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
 use Mockery;
 use Model\Cart;
+use Model\Stock;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
@@ -213,6 +214,134 @@ class PointOfSaleControllerTest extends TestCase
         $this->assertStringContainsString("stock_{$stockItem->getId()}", $content);
         $this->assertStringContainsString("Le Horla", $content);
         $this->assertStringContainsString('data-price="1899"', $content);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testIndexActionRendersOriginalPriceForDiscountedStockItem(): void
+    {
+        // given
+        $controller = $this->_getController();
+        $cart = EntityFactory::createCart();
+        $stockItem = ModelFactory::createStockItem(sellingPrice: 800, condition: "Bon état");
+        $stockItem->setSellingPriceSaved(1000);
+        $stockItem->setCartId($cart->get("id"));
+        $stockItem->save();
+        $request = new Request(query: ['cart_id' => $cart->get('id')]);
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authAdmin");
+
+        // when
+        $response = $controller->indexAction(
+            $request,
+            $currentUser,
+            $this->_getCurrentSiteMock(),
+            Helpers::getTemplateService(),
+            Mockery::mock(UrlGenerator::class),
+            new QueryParamsService($request),
+        );
+
+        // then
+        $content = $response->getContent();
+        $this->assertStringContainsString('data-price="800"', $content);
+        $this->assertStringContainsString('pos-cart-line__original-price', $content);
+        $this->assertStringContainsString('10,00&nbsp;&euro;', $content);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testIndexActionDoesNotRenderOriginalPriceForRegularStockItem(): void
+    {
+        // given
+        $controller = $this->_getController();
+        $cart = EntityFactory::createCart();
+        $stockItem = ModelFactory::createStockItem(sellingPrice: 800, condition: "Bon état");
+        $stockItem->setCartId($cart->get("id"));
+        $stockItem->save();
+        $request = new Request(query: ['cart_id' => $cart->get('id')]);
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authAdmin");
+
+        // when
+        $response = $controller->indexAction(
+            $request,
+            $currentUser,
+            $this->_getCurrentSiteMock(),
+            Helpers::getTemplateService(),
+            Mockery::mock(UrlGenerator::class),
+            new QueryParamsService($request),
+        );
+
+        // then
+        $this->assertStringNotContainsString('pos-cart-line__original-price', $response->getContent());
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testIndexActionRendersPriceEditorForUsedStockItem(): void
+    {
+        // given
+        $controller = $this->_getController();
+        $cart = EntityFactory::createCart();
+        $stockItem = ModelFactory::createStockItem(sellingPrice: 800, condition: "Bon état");
+        $stockItem->setCartId($cart->get("id"));
+        $stockItem->save();
+        $request = new Request(query: ['cart_id' => $cart->get('id')]);
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authAdmin");
+
+        // when
+        $response = $controller->indexAction(
+            $request,
+            $currentUser,
+            $this->_getCurrentSiteMock(),
+            Helpers::getTemplateService(),
+            Mockery::mock(UrlGenerator::class),
+            new QueryParamsService($request),
+        );
+
+        // then
+        $content = $response->getContent();
+        $this->assertStringContainsString("data-edit_price=\"{$stockItem->getId()}\"", $content);
+        $this->assertStringContainsString("data-edit_price_form=\"{$stockItem->getId()}\"", $content);
+        $this->assertStringContainsString('value="8,00"', $content);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testIndexActionDoesNotRenderPriceEditorForNewStockItem(): void
+    {
+        // given
+        $controller = $this->_getController();
+        $cart = EntityFactory::createCart();
+        $stockItem = ModelFactory::createStockItem(sellingPrice: 800, condition: Stock::CONDITION_NEW);
+        $stockItem->setCartId($cart->get("id"));
+        $stockItem->save();
+        $request = new Request(query: ['cart_id' => $cart->get('id')]);
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authAdmin");
+
+        // when
+        $response = $controller->indexAction(
+            $request,
+            $currentUser,
+            $this->_getCurrentSiteMock(),
+            Helpers::getTemplateService(),
+            Mockery::mock(UrlGenerator::class),
+            new QueryParamsService($request),
+        );
+
+        // then
+        $content = $response->getContent();
+        $this->assertStringNotContainsString('data-edit_price', $content);
     }
 
     /**
@@ -646,6 +775,126 @@ class PointOfSaleControllerTest extends TestCase
             $currentUser,
             $secondCart->getId(),
             $stock->getId(),
+        );
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testUpdateItemPriceActionUpdatesPriceAndReturnsJsonLine(): void
+    {
+        // given
+        $controller = $this->_getController();
+        $cart = ModelFactory::createCart();
+        $cart->setType("shop");
+        $cart->save();
+        $stock = ModelFactory::createStockItem(cart: $cart, sellingPrice: 1000, condition: "Bon état");
+
+        $request = new Request(request: ['price' => 800]);
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authAdmin");
+
+        // when
+        $response = $controller->updateItemPriceAction(
+            $request,
+            $currentUser,
+            Helpers::getTemplateService(),
+            $cart->getId(),
+            $stock->getId(),
+        );
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $data = json_decode($response->getContent(), true);
+        $this->assertStringContainsString('data-price="800"', $data['line']);
+        $stock->reload();
+        $this->assertEquals(800, $stock->getSellingPrice());
+        $this->assertEquals(1000, $stock->getSellingPriceSaved());
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testUpdateItemPriceActionReturns400WhenStockItemIsNew(): void
+    {
+        // given
+        $controller = $this->_getController();
+        $cart = ModelFactory::createCart();
+        $cart->setType("shop");
+        $cart->save();
+        $stock = ModelFactory::createStockItem(cart: $cart, sellingPrice: 1000);
+
+        $request = new Request(request: ['price' => 800]);
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authAdmin");
+
+        // then
+        $this->expectException(\Symfony\Component\HttpKernel\Exception\BadRequestHttpException::class);
+
+        // when
+        $controller->updateItemPriceAction(
+            $request,
+            $currentUser,
+            Helpers::getTemplateService(),
+            $cart->getId(),
+            $stock->getId(),
+        );
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testUpdateItemPriceActionReturns400WhenPriceIsMissing(): void
+    {
+        // given
+        $controller = $this->_getController();
+        $cart = ModelFactory::createCart();
+        $cart->setType("shop");
+        $cart->save();
+        $stock = ModelFactory::createStockItem(cart: $cart, sellingPrice: 1000, condition: "Bon état");
+
+        $request = new Request();
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authAdmin");
+
+        // then
+        $this->expectException(\Symfony\Component\HttpKernel\Exception\BadRequestHttpException::class);
+
+        // when
+        $controller->updateItemPriceAction(
+            $request,
+            $currentUser,
+            Helpers::getTemplateService(),
+            $cart->getId(),
+            $stock->getId(),
+        );
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testUpdateItemPriceActionReturns404WhenCartNotFound(): void
+    {
+        // given
+        $controller = $this->_getController();
+        $request = new Request(request: ['price' => 800]);
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authAdmin");
+
+        // then
+        $this->expectException(\Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class);
+
+        // when
+        $controller->updateItemPriceAction(
+            $request,
+            $currentUser,
+            Helpers::getTemplateService(),
+            99999,
+            1,
         );
     }
 

@@ -37,6 +37,7 @@ class ClearPointOfSaleCartUsecase
         $cart = $cm->getById($cartId);
 
         foreach ($cm->getStock($cart) as $stock) {
+            $stock->restoreSavedPrice();
             $cm->removeStock($stock);
         }
 
