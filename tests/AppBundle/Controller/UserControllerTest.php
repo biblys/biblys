@@ -256,6 +256,7 @@ class UserControllerTest extends TestCase
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertStringContainsString("S'identifier par e-mail", $response->getContent());
         $this->assertStringNotContainsString("Se connecter avec Axys", $response->getContent());
+        $this->assertStringNotContainsString("https://axys.me/a-propos", $response->getContent());
     }
 
     /**
@@ -289,6 +290,7 @@ class UserControllerTest extends TestCase
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertStringContainsString("S'identifier par e-mail", $response->getContent());
         $this->assertStringContainsString("Se connecter avec Axys", $response->getContent());
+        $this->assertStringContainsString("https://axys.me/a-propos", $response->getContent());
     }
 
     /**

@@ -37,6 +37,8 @@
 - L'e-mail « Votre commande est disponible en magasin » affiche le commentaire
   du mode d'expédition, par exemple l'adresse et les horaires de retrait. Quand
   ce commentaire est vide, la phrase renvoyant au site est conservée.
+- La page de connexion affiche, sous le bouton « Se connecter avec Axys », un
+  lien « Qu'est-ce que Axys ? » vers https://axys.me/a-propos.
 
 ### Maintenance
 
