@@ -42,6 +42,7 @@ use Model\OptionQuery;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Generator\UrlGenerator;
@@ -442,6 +443,113 @@ class MainControllerTest extends TestCase
             "Invitations de téléchargement",
             $response->getContent(),
             "hides ebooks section",
+        );
+    }
+
+    /**
+     * @throws PropelException
+     * @throws GuzzleException|\PHPUnit\Framework\MockObject\Exception
+     */
+    public function testAdminDoesNotDisplayUpdateAlertAfterPatchUpdate()
+    {
+        // given
+        [$major, $minor] = explode(".", BIBLYS_VERSION);
+        $lastVersionKnown = "$major.$minor.999";
+
+        // when
+        $response = $this->_renderAdminForLastVersionKnown($lastVersionKnown);
+
+        // then
+        $this->assertStringNotContainsString(
+            "Biblys a été mis à jour",
+            $response->getContent(),
+            "hides update alert",
+        );
+    }
+
+    /**
+     * @throws PropelException
+     * @throws GuzzleException|\PHPUnit\Framework\MockObject\Exception
+     */
+    public function testAdminDisplaysUpdateAlertAfterMinorUpdate()
+    {
+        // given
+        [$major, $minor] = explode(".", BIBLYS_VERSION);
+        $lastVersionKnown = $major . "." . ($minor - 1) . ".0";
+
+        // when
+        $response = $this->_renderAdminForLastVersionKnown($lastVersionKnown);
+
+        // then
+        $this->assertStringContainsString(
+            "Biblys a été mis à jour",
+            $response->getContent(),
+            "displays update alert",
+        );
+    }
+
+    /**
+     * @throws PropelException
+     * @throws GuzzleException|\PHPUnit\Framework\MockObject\Exception
+     */
+    public function testAdminDisplaysUpdateAlertAfterMajorUpdate()
+    {
+        // given
+        [$major, $minor] = explode(".", BIBLYS_VERSION);
+        $lastVersionKnown = ($major - 1) . ".$minor.0";
+
+        // when
+        $response = $this->_renderAdminForLastVersionKnown($lastVersionKnown);
+
+        // then
+        $this->assertStringContainsString(
+            "Biblys a été mis à jour",
+            $response->getContent(),
+            "displays update alert",
+        );
+    }
+
+    /**
+     * @throws PropelException
+     * @throws GuzzleException|\PHPUnit\Framework\MockObject\Exception
+     */
+    public function testAdminDisplaysUpdateAlertOnFirstVisit()
+    {
+        // given
+        $lastVersionKnown = null;
+
+        // when
+        $response = $this->_renderAdminForLastVersionKnown($lastVersionKnown);
+
+        // then
+        $this->assertStringContainsString(
+            "Biblys a été mis à jour",
+            $response->getContent(),
+            "displays update alert",
+        );
+    }
+
+    /**
+     * @throws PropelException
+     * @throws GuzzleException|\PHPUnit\Framework\MockObject\Exception
+     */
+    private function _renderAdminForLastVersionKnown(?string $lastVersionKnown): Response
+    {
+        $config = new Config();
+        $config->set("environment", "test");
+        $urlGenerator = $this->createMock(UrlGenerator::class);
+        $urlGenerator->method("generate")->willReturn("/");
+        $currentUser = $this->createMock(CurrentUser::class);
+        $currentUser->method("getOption")->willReturnCallback(
+            fn(string $key) => $key === "last_version_known" ? $lastVersionKnown : null
+        );
+
+        return (new MainController())->adminAction(
+            $config,
+            $urlGenerator,
+            new CloudService($config, new Client()),
+            $currentUser,
+            $this->createMock(CurrentSite::class),
         );
     }
 

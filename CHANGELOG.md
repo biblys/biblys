@@ -4,6 +4,9 @@
 
 ### Améliorations
 
+- La notification de mise à jour de Biblys ne s'affiche plus dans
+  l'administration que pour les nouvelles versions majeures ou mineures, et non
+  plus pour les correctifs.
 - Il est possible de modifier le prix d'un exemplaire d'occasion directement
   depuis la caisse, avec le bouton crayon de la ligne du panier. Le prix
   d'origine reste affiché, barré, et il est rétabli si l'exemplaire est retiré

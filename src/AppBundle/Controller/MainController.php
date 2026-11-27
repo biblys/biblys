@@ -302,11 +302,10 @@ class MainController extends Controller
             return $this->render("AppBundle:Main:adminCloudSubscriptionExpired.html.twig", isPrivate: true);
         }
 
-        // Display alert if Biblys has been updated since last visit
-        $updatedAlert = false;
-        if ($currentUser->getOption("last_version_known") != BIBLYS_VERSION) {
+        $lastVersionKnown = $currentUser->getOption("last_version_known");
+        $updatedAlert = $this->_getMinorVersion($lastVersionKnown) !== $this->_getMinorVersion(BIBLYS_VERSION);
+        if ($lastVersionKnown !== BIBLYS_VERSION) {
             $currentUser->setOption("last_version_known", BIBLYS_VERSION);
-            $updatedAlert = true;
         }
 
         $smtpAlert = false;
@@ -527,6 +526,14 @@ class MainController extends Controller
         } catch(GuzzleException) {
             return [];
         }
+    }
+
+    private function _getMinorVersion(?string $version): string
+    {
+        $versionSegments = explode(".", $version ?? "");
+        $majorAndMinorSegments = array_slice($versionSegments, 0, 2);
+
+        return implode(".", $majorAndMinorSegments);
     }
 
 }
