@@ -79,6 +79,7 @@ readonly class MarkOrderAsShippedUsecase
                 "message" => $mailMessage,
                 "tracking_link" => $order->getTrackingLink(),
                 "display_pickup_notice" => $isPickup,
+                "pickup_info" => $order->getShippingOption()->getInfo(),
                 "order_url" => $orderUrl,
             ]
         );

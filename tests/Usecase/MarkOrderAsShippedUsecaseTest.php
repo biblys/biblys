@@ -216,6 +216,47 @@ class MarkOrderAsShippedUsecaseTest extends TestCase
         $this->assertNotNull($order->getShippingDate());
     }
 
+    /**
+     * @throws Exception
+     * @throws InvalidEmailAddressException
+     * @throws PropelException
+     * @throws TransportExceptionInterface
+     * @throws \Exception
+     */
+    public function testExecuteWithPickupShippingDisplaysShippingOptionInfo()
+    {
+        // given
+        $shipping = ModelFactory::createShippingOption(
+            type: "magasin",
+            info: "Librairie Paronymie, 8 rue des Homonymes, 75012 Paris",
+        );
+        $order = ModelFactory::createOrder(shippingOption: $shipping, email: "customer@paronymie.fr");
+        $site = ModelFactory::createSite();
+
+        $currentSite = Mockery::mock(CurrentSite::class);
+        $currentSite->expects("getSite")->andReturn($site);
+        $currentSite->expects("getOption")->with("shipped_mail_message")->andReturn(null);
+        $currentSite->expects("getOption")->with("shipped_mail_subject")->andReturn(null);
+        $mailer = $this->createMock(Mailer::class);
+        $mailer->expects($this->once())->method("send")->with(
+            "customer@paronymie.fr",
+            "Votre commande est disponible en magasin !",
+            $this->callback(function (string $body) {
+                return str_contains($body, "Librairie Paronymie, 8 rue des Homonymes, 75012 Paris")
+                    && !str_contains($body, "Retrouvez les coordonnées et horaires");
+            }),
+        );
+        $templateService = Helpers::getTemplateService();
+        $usecase = new MarkOrderAsShippedUsecase($currentSite, $templateService, $mailer);
+
+        // when
+        $usecase->execute($order, null);
+
+        // then
+        $order->reload();
+        $this->assertNotNull($order->getShippingDate());
+    }
+
     private function contains(array $needles): Callback
     {
         return $this->callback(function ($arg) use ($needles) {

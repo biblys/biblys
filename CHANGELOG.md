@@ -34,6 +34,9 @@
   (bouton « Articles et contributeurs liés » de la page d'édition du billet).
   Cette fonctionnalité avait disparu avec l'ancienne page de gestion des
   liens, supprimée dans la version 3.6.1.
+- L'e-mail « Votre commande est disponible en magasin » affiche le commentaire
+  du mode d'expédition, par exemple l'adresse et les horaires de retrait. Quand
+  ce commentaire est vide, la phrase renvoyant au site est conservée.
 
 ### Maintenance
 
