@@ -39,6 +39,7 @@
 
 - L'intégration continue teste désormais les versions des dépendances
   verrouillées dans `composer.lock`, et non plus les plus récentes disponibles.
+- L'intégration continue exécute désormais les tests JavaScript.
 
 ## 3.18.3 (20 novembre 2026)
 
