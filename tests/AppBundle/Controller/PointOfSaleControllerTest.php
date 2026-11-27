@@ -28,6 +28,7 @@ use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
 use Mockery;
 use Model\Cart;
+use Model\Stock;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
 use Symfony\Component\HttpFoundation\Request;
@@ -277,6 +278,70 @@ class PointOfSaleControllerTest extends TestCase
 
         // then
         $this->assertStringNotContainsString('pos-cart-line__original-price', $response->getContent());
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testIndexActionRendersPriceEditorForUsedStockItem(): void
+    {
+        // given
+        $controller = $this->_getController();
+        $cart = EntityFactory::createCart();
+        $stockItem = ModelFactory::createStockItem(sellingPrice: 800, condition: "Bon état");
+        $stockItem->setCartId($cart->get("id"));
+        $stockItem->save();
+        $request = new Request(query: ['cart_id' => $cart->get('id')]);
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authAdmin");
+
+        // when
+        $response = $controller->indexAction(
+            $request,
+            $currentUser,
+            $this->_getCurrentSiteMock(),
+            Helpers::getTemplateService(),
+            Mockery::mock(UrlGenerator::class),
+            new QueryParamsService($request),
+        );
+
+        // then
+        $content = $response->getContent();
+        $this->assertStringContainsString("data-edit_price=\"{$stockItem->getId()}\"", $content);
+        $this->assertStringContainsString("data-edit_price_form=\"{$stockItem->getId()}\"", $content);
+        $this->assertStringContainsString('value="8,00"', $content);
+    }
+
+    /**
+     * @throws PropelException
+     */
+    public function testIndexActionDoesNotRenderPriceEditorForNewStockItem(): void
+    {
+        // given
+        $controller = $this->_getController();
+        $cart = EntityFactory::createCart();
+        $stockItem = ModelFactory::createStockItem(sellingPrice: 800, condition: Stock::CONDITION_NEW);
+        $stockItem->setCartId($cart->get("id"));
+        $stockItem->save();
+        $request = new Request(query: ['cart_id' => $cart->get('id')]);
+
+        $currentUser = Mockery::mock(CurrentUser::class);
+        $currentUser->expects("authAdmin");
+
+        // when
+        $response = $controller->indexAction(
+            $request,
+            $currentUser,
+            $this->_getCurrentSiteMock(),
+            Helpers::getTemplateService(),
+            Mockery::mock(UrlGenerator::class),
+            new QueryParamsService($request),
+        );
+
+        // then
+        $content = $response->getContent();
+        $this->assertStringNotContainsString('data-edit_price', $content);
     }
 
     /**

@@ -54,7 +54,7 @@
   grid-template-areas:
     "cover title title remove"
     "cover byline byline remove"
-    "cover meta price remove";
+    "cover meta price edit";
   align-items: center;
   column-gap: 0.75rem;
   row-gap: 0.125rem;
@@ -144,20 +144,51 @@
   white-space: nowrap;
 }
 
+.pos-cart-line__edit {
+  grid-area: edit;
+}
+
 .pos-cart-line__remove {
   grid-area: remove;
+}
+
+.pos-cart-line__edit,
+.pos-cart-line__remove {
   width: 44px;
   height: 44px;
   padding: 0;
 }
 
+.pos-cart-line__edit-form {
+  grid-row: 3;
+  grid-column: 2 / -1;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.pos-cart-line__edit-form .input-group {
+  flex-wrap: nowrap;
+  width: 9rem;
+}
+
+.pos-cart-line__edit-form .form-control {
+  height: 44px;
+}
+
+.pos-cart-line--editing .pos-cart-line__meta,
+.pos-cart-line--editing .pos-cart-line__price-block,
+.pos-cart-line--editing .pos-cart-line__edit,
+.pos-cart-line--editing .pos-cart-line__remove {
+  display: none;
+}
+
 @media (min-width: 768px) {
   .pos-cart-line {
-    grid-template-columns: 54px minmax(0, 1fr) auto 32px;
+    grid-template-columns: 54px minmax(0, 1fr) auto 32px 32px;
     grid-template-areas:
-      "cover title price remove"
-      "cover byline price remove"
-      "cover meta price remove";
+      "cover title price edit remove"
+      "cover byline price edit remove"
+      "cover meta price edit remove";
     padding-right: 0.75rem;
   }
 
@@ -172,9 +203,25 @@
     font-size: 1.25rem;
   }
 
+  .pos-cart-line__edit,
   .pos-cart-line__remove {
     width: 32px;
     height: 32px;
     font-size: 0.875rem;
+  }
+
+  .pos-cart-line__edit-form {
+    grid-row: 1 / -1;
+    grid-column: 3 / 5;
+    align-items: center;
+  }
+
+  .pos-cart-line__edit-form .form-control,
+  .pos-cart-line__edit-form .input-group-text {
+    height: 32px;
+  }
+
+  .pos-cart-line--editing .pos-cart-line__meta {
+    display: flex;
   }
 }

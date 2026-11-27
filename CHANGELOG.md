@@ -4,6 +4,12 @@
 
 ### Améliorations
 
+- Il est possible de modifier le prix d'un exemplaire d'occasion directement
+  depuis la caisse, avec le bouton crayon de la ligne du panier. Le prix
+  d'origine reste affiché, barré, et il est rétabli si l'exemplaire est retiré
+  du panier.
+- La liste des articles du panier de la caisse a été redessinée, avec la
+  couverture de chaque article et un affichage adapté aux petits écrans.
 - Biblys supporte désormais PHP 8.6.
 - La recherche d'article de la caisse utilise désormais le même champ de
   recherche que le reste de l'administration. Les résultats affichent toujours

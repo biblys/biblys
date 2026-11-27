@@ -5,6 +5,10 @@ import PointOfSale from '../../assets/js/point-of-sale/point-of-sale';
 const cartLine = (stockId, price) => `
   <li id="stock_${stockId}">
     <span class="stock_selling_price" data-price="${price}">Neuf</span>
+    <button type="button" data-edit_price="${stockId}"></button>
+    <form data-edit_price_form="${stockId}" hidden>
+      <input name="price" value="${(price / 100).toFixed(2).replace('.', ',')}">
+    </form>
     <button data-remove_from_cart="${stockId}"></button>
   </li>`;
 
@@ -190,6 +194,179 @@ describe('PointOfSale cart', () => {
   });
 });
 
+describe('PointOfSale item price', () => {
+  const find = (selector) => document.querySelector(`#stock_2 ${selector}`);
+  const openEditor = () => find('[data-edit_price]').click();
+  const fillPrice = (value) => {
+    find('input[name=price]').value = value;
+  };
+  const leaveInput = () => find('input[name=price]').blur();
+  const savedPriceResponse = () =>
+    jsonResponse({ success: 'Modifié', line: cartLine(2, 400) });
+
+  it('opens the price editor and focuses its input', async () => {
+    // given
+    await startPointOfSale();
+
+    // when
+    openEditor();
+
+    // then
+    expect(find('form').hidden).toBe(false);
+    expect(document.getElementById('stock_2').classList).toContain('pos-cart-line--editing');
+    expect(document.activeElement).toBe(find('input[name=price]'));
+  });
+
+  it('saves the price on focus out, replaces the line and updates the totals', async () => {
+    // given
+    const dependencies = buildDependencies();
+    await startPointOfSale(dependencies);
+    fetchMock.mockResolvedValue(savedPriceResponse());
+    openEditor();
+    fillPrice('4');
+
+    // when
+    leaveInput();
+
+    // then
+    await vi.waitFor(() => expect(dependencies.notify).toHaveBeenCalledWith('Modifié'));
+    const [url, options] = fetchMock.mock.calls[0];
+    expect(url).toBe('/admin/pos/carts/12/items/2');
+    expect(options.method).toBe('PATCH');
+    expect(new URLSearchParams(options.body).get('price')).toBe('400');
+    expect(document.querySelectorAll('#stock_2')).toHaveLength(1);
+    expect(find('form').hidden).toBe(true);
+    expect(text('#cart_total')).toBe('14,00 €');
+  });
+
+  it('saves the price only once when the form is submitted with Enter', async () => {
+    // given
+    const dependencies = buildDependencies();
+    await startPointOfSale(dependencies);
+    fetchMock.mockResolvedValue(savedPriceResponse());
+    openEditor();
+    fillPrice('4');
+
+    // when
+    find('form').dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+
+    // then
+    await vi.waitFor(() => expect(dependencies.notify).toHaveBeenCalledWith('Modifié'));
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('closes the editor without calling the server when the price is unchanged', async () => {
+    // given
+    await startPointOfSale();
+    openEditor();
+
+    // when
+    leaveInput();
+
+    // then
+    expect(find('form').hidden).toBe(true);
+    expect(document.getElementById('stock_2').classList).not.toContain('pos-cart-line--editing');
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('refuses an invalid price without calling the server', async () => {
+    // given
+    const dependencies = buildDependencies();
+    await startPointOfSale(dependencies);
+    openEditor();
+    fillPrice('abc');
+
+    // when
+    leaveInput();
+
+    // then
+    expect(dependencies.showAlert).toHaveBeenCalledWith('Veuillez saisir un prix valide.');
+    expect(find('form').hidden).toBe(false);
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('keeps the editor open and shows the error when the price cannot be saved', async () => {
+    // given
+    const dependencies = buildDependencies();
+    await startPointOfSale(dependencies);
+    fetchMock.mockResolvedValue(jsonResponse({ message: 'Prix refusé' }, false));
+    openEditor();
+    fillPrice('4');
+
+    // when
+    leaveInput();
+
+    // then
+    await vi.waitFor(() => expect(dependencies.showAlert).toHaveBeenCalledWith('Prix refusé'));
+    expect(find('form').hidden).toBe(false);
+    expect(text('#cart_total')).toBe('15,50 €');
+  });
+
+  it('ignores the saved price when the line has been removed meanwhile', async () => {
+    // given
+    const dependencies = buildDependencies();
+    await startPointOfSale(dependencies);
+    let respond;
+    fetchMock.mockReturnValue(new Promise((resolve) => (respond = resolve)));
+    openEditor();
+    fillPrice('4');
+    leaveInput();
+    document.getElementById('stock_2').remove();
+
+    // when
+    respond(savedPriceResponse());
+
+    // then
+    await vi.waitFor(() => expect(dependencies.notify).toHaveBeenCalledWith('Modifié'));
+    expect(document.getElementById('stock_2')).toBeNull();
+    expect(text('#cart_total')).toBe('10,00 €');
+  });
+
+  it('waits for the price to be saved before saving the sale', async () => {
+    // given
+    const dependencies = buildDependencies();
+    await startPointOfSale(dependencies);
+    let respond;
+    fetchMock.mockReturnValueOnce(new Promise((resolve) => (respond = resolve)));
+    fetchMock.mockResolvedValue(jsonResponse({ success: true }));
+    type('#cart_cash', '14');
+    openEditor();
+    fillPrice('4');
+    leaveInput();
+
+    // when
+    submitCheckout();
+    respond(savedPriceResponse());
+
+    // then
+    await vi.waitFor(() => expect(dependencies.redirectTo).toHaveBeenCalled());
+    const [url, options] = fetchMock.mock.calls[1];
+    expect(url).toBe('/admin/pos/carts/12/sale');
+    expect(new URLSearchParams(options.body).get('cart_topay')).toBe('0');
+    expect(dependencies.confirm).not.toHaveBeenCalled();
+  });
+
+  it('does not save the sale while a price could not be saved', async () => {
+    // given
+    const dependencies = buildDependencies();
+    await startPointOfSale(dependencies);
+    openEditor();
+    fillPrice('abc');
+    leaveInput();
+
+    // when
+    submitCheckout();
+
+    // then
+    await vi.waitFor(() =>
+      expect(dependencies.showAlert).toHaveBeenCalledWith(
+        "Un prix n'a pas été enregistré : corrigez-le avant d'enregistrer la vente.",
+      ),
+    );
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+});
+
 describe('PointOfSale customer', () => {
   it('attaches the selected customer to the cart and focuses the article search', async () => {
     // given
@@ -246,8 +423,10 @@ describe('PointOfSale sale', () => {
     submitCheckout();
 
     // then
-    expect(dependencies.showAlert).toHaveBeenCalledWith(
-      "Impossible d'enregistrer la vente : le panier est vide.",
+    await vi.waitFor(() =>
+      expect(dependencies.showAlert).toHaveBeenCalledWith(
+        "Impossible d'enregistrer la vente : le panier est vide.",
+      ),
     );
     expect(fetchMock).not.toHaveBeenCalled();
   });
@@ -262,8 +441,10 @@ describe('PointOfSale sale', () => {
     submitCheckout();
 
     // then
-    expect(dependencies.confirm).toHaveBeenCalledWith(
-      'Il reste 5,50 € à payer, enregistrer quand même la vente ?',
+    await vi.waitFor(() =>
+      expect(dependencies.confirm).toHaveBeenCalledWith(
+        'Il reste 5,50 € à payer, enregistrer quand même la vente ?',
+      ),
     );
     expect(fetchMock).not.toHaveBeenCalled();
   });
