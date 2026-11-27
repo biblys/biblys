@@ -1,5 +1,13 @@
 # Historique des modifications
 
+## 3.18.5 (27 novembre 2026)
+
+### Corrections
+
+- Sur la page de choix du mode de paiement, le titre du site est de nouveau
+  affiché comme ordre du chèque quand l'option `name_for_check_payment` n'est
+  pas renseignée.
+
 ## 3.18.4 (27 novembre 2026)
 
 ### Corrections
