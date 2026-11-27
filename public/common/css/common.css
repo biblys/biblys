@@ -1596,3 +1596,24 @@ table.unfold tbody {
 .gap-3 { gap: 1rem; }
 .gap-4 { gap: 1.5rem; }
 .gap-5 { gap: 3rem; }
+
+/** ENTITY SEARCH FIELD **/
+
+.EntitySearchField__dropdown {
+  position: relative;
+}
+
+.EntitySearchField .autocomplete-results {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 1050;
+  max-height: 60vh;
+  overflow-y: auto;
+  background: #fff;
+}
+
+.EntitySearchField .autocomplete-results:empty {
+  display: none;
+}

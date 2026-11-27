@@ -14,6 +14,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+const RESULTS_MAX_SCREEN_RATIO = 0.6;
+const RESULTS_MIN_HEIGHT = 200;
+const RESULTS_BOTTOM_MARGIN = 16;
+
 /**
  * A component to search for entities with completion and select them.
  *
@@ -39,6 +43,7 @@ export default class EntitySearchField {
   #lockedMode = false;
   #debounceTimeout = null;
   #currentQuery = '';
+  #latestSearchId = 0;
 
   /**
    *
@@ -67,18 +72,12 @@ export default class EntitySearchField {
     this.searchInput = element.querySelector('.EntitySearchField__search-input');
     this.searchInput.addEventListener('input', this.#onInput.bind(this));
     this.searchInput.addEventListener('focus', this.#onInputFocus.bind(this));
-    this.searchInput.addEventListener('blur', this.#onInputBlur.bind(this));
 
     this.valueInput = element.querySelector('.EntitySearchField__value-input');
 
     this.button = element.querySelector('button');
     this.buttonIcon = this.button.querySelector('i');
     this.button.addEventListener('click', this.#onButtonClick.bind(this));
-
-    this.helpText = element.querySelector('.help-text');
-    if (this.searchInput.autofocus) {
-      this.helpText.classList.remove('d-none');
-    }
 
     this.subMenu = element.querySelector('.autocomplete-results');
 
@@ -99,6 +98,21 @@ export default class EntitySearchField {
     }
 
     element.addEventListener('keydown', this.#onKeyDown.bind(this));
+    element.addEventListener('focusout', (event) => {
+      if (event.relatedTarget && !element.contains(event.relatedTarget)) {
+        this.#hideResults();
+      }
+    });
+    document.addEventListener('click', (event) => {
+      if (!element.contains(event.target)) {
+        this.#hideResults();
+      }
+    });
+
+    const fitResults = () => this.#fitResultsToViewport();
+    document.addEventListener('scroll', fitResults, true);
+    window.visualViewport?.addEventListener('resize', fitResults);
+    window.visualViewport?.addEventListener('scroll', fitResults);
 
     this.customAction = options.action;
 
@@ -106,15 +120,9 @@ export default class EntitySearchField {
   }
 
   #onInputFocus() {
-    this.#showHelpText();
-
     if (this.#lockedMode) {
       this.#unlock();
     }
-  }
-
-  #onInputBlur() {
-    this.#hideHelpText();
   }
 
   #onButtonClick(event) {
@@ -141,6 +149,14 @@ export default class EntitySearchField {
   }
 
   #onKeyDown(event) {
+    if (event.key === 'Escape') {
+      if (this.#subMenuDisplayed) {
+        event.preventDefault();
+      }
+      this.#hideResults();
+      return;
+    }
+
     if (event.key === 'Enter' && this.#focusItemIndex === -1) {
       return this.#search(event, { submitted: true });
     }
@@ -168,18 +184,6 @@ export default class EntitySearchField {
     }
   }
 
-  #showHelpText() {
-    if (this.#subMenuDisplayed) {
-      return;
-    }
-
-    this.helpText.classList.remove('d-none');
-  }
-
-  #hideHelpText() {
-    this.helpText.classList.add('d-none');
-  }
-
   async #search(event, { submitted = false } = {}) {
     event.preventDefault();
 
@@ -189,6 +193,7 @@ export default class EntitySearchField {
     }
 
     this.#currentQuery = query;
+    const searchId = ++this.#latestSearchId;
     const response = await fetch(`${this.queryUrl}?term=${query}`, {
       method: 'GET'
     });
@@ -199,6 +204,9 @@ export default class EntitySearchField {
      * @property {Result[]} results - Array of search results.
      */
     const responseData = await response.json();
+    if (searchId !== this.#latestSearchId) {
+      return;
+    }
 
     if (responseData.error) {
       window._alert(responseData.error, { title: 'Erreur lors de la recherche' });
@@ -207,7 +215,6 @@ export default class EntitySearchField {
     }
 
     this.subMenu.innerHTML = '';
-    this.helpText.classList.add('d-none');
 
     this.#results = responseData.results;
     if (!this.#results) {
@@ -249,10 +256,23 @@ export default class EntitySearchField {
     }
 
     this.#subMenuDisplayed = true;
+    this.#fitResultsToViewport();
 
     if (submitted && this.autoSelectSingleResult && this.#results.length === 1) {
       this.selectResult(this.#results[0]);
     }
+  }
+
+  #fitResultsToViewport() {
+    if (!this.#subMenuDisplayed) {
+      return;
+    }
+
+    const viewport = window.visualViewport;
+    const visibleBottom = viewport ? viewport.offsetTop + viewport.height : window.innerHeight;
+    const spaceBelow = visibleBottom - this.subMenu.getBoundingClientRect().top - RESULTS_BOTTOM_MARGIN;
+    const maxHeight = Math.min(spaceBelow, window.innerHeight * RESULTS_MAX_SCREEN_RATIO);
+    this.subMenu.style.maxHeight = `${Math.max(maxHeight, RESULTS_MIN_HEIGHT)}px`;
   }
 
   /**
@@ -268,6 +288,7 @@ export default class EntitySearchField {
     if (this.#focusItemIndex > -1 && this.#focusItemIndex < items.length) {
       const focusedItem = items[this.#focusItemIndex];
       focusedItem.classList.add('active');
+      focusedItem.scrollIntoView({ block: 'nearest' });
     }
   }
 
@@ -348,8 +369,11 @@ export default class EntitySearchField {
   }
 
   #hideResults() {
+    window.clearTimeout(this.#debounceTimeout);
+    this.#latestSearchId += 1;
     this.subMenu.innerHTML = '';
     this.#subMenuDisplayed = false;
+    this.#focusItemIndex = -1;
   }
 
   /**

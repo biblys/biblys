@@ -26,7 +26,6 @@ beforeEach(() => {
     <div id="field" class="EntitySearchField" data-query_url="/search">
       <input class="EntitySearchField__search-input" value="query">
       <button type="button"><i></i></button>
-      <span class="help-text d-none"></span>
       <div class="autocomplete-results"></div>
     </div>
     <input id="outside">`;
@@ -60,5 +59,36 @@ describe('EntitySearchField keyboard', () => {
     // then
     expect(event.defaultPrevented).toBe(true);
     expect(fetchMock).toHaveBeenCalledWith('/search?term=query', { method: 'GET' });
+  });
+
+  it('does not need to drive the help text of an autofocused field', () => {
+    // given
+    const element = document.getElementById('field').cloneNode(true);
+    element.removeAttribute('data-loaded');
+    element.querySelector('input').setAttribute('autofocus', '');
+    document.body.appendChild(element);
+
+    // when
+    const createField = () => new EntitySearchField(element);
+
+    // then
+    expect(createField).not.toThrow();
+  });
+
+  it('scrolls the highlighted result into view', async () => {
+    // given
+    fetchMock.mockResolvedValue({ json: async () => ({ results: [{ label: 'Premier' }] }) });
+    pressEnter('.EntitySearchField__search-input');
+    await vi.waitFor(() => expect(document.querySelector('.autocomplete-results > a')).not.toBeNull());
+    const firstResult = document.querySelector('.autocomplete-results > a');
+    firstResult.scrollIntoView = vi.fn();
+
+    // when
+    document
+      .querySelector('.EntitySearchField__search-input')
+      .dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }));
+
+    // then
+    expect(firstResult.scrollIntoView).toHaveBeenCalledWith({ block: 'nearest' });
   });
 });
