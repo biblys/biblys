@@ -98,7 +98,7 @@ export default class EntitySearchField {
       });
     }
 
-    document.addEventListener('keydown', this.#onKeyDown.bind(this));
+    element.addEventListener('keydown', this.#onKeyDown.bind(this));
 
     this.customAction = options.action;
 
