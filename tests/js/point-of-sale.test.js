@@ -194,6 +194,39 @@ describe('PointOfSale cart', () => {
   });
 });
 
+describe('PointOfSale request failure', () => {
+  const unreadableResponse = {
+    ok: true,
+    json: async () => {
+      throw new SyntaxError('Unexpected token');
+    },
+  };
+
+  it.each([
+    ['the network is down', () => Promise.reject(new TypeError('Failed to fetch'))],
+    ['the response cannot be read', () => Promise.resolve(unreadableResponse)],
+  ])('shows an error and logs it when %s', async (_, failingFetch) => {
+    // given
+    const logError = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const dependencies = buildDependencies();
+    await startPointOfSale(dependencies);
+    fetchMock.mockImplementation(failingFetch);
+
+    // when
+    document.querySelector('[data-remove_from_cart="2"]').click();
+
+    // then
+    await vi.waitFor(() =>
+      expect(dependencies.showAlert).toHaveBeenCalledWith(
+        'La communication avec le serveur a échoué. Rechargez la page pour vérifier avant de réessayer.',
+      ),
+    );
+    expect(logError).toHaveBeenCalledWith(expect.any(Error));
+    expect(document.getElementById('stock_2')).not.toBeNull();
+    logError.mockRestore();
+  });
+});
+
 describe('PointOfSale item price', () => {
   const find = (selector) => document.querySelector(`#stock_2 ${selector}`);
   const openEditor = () => find('[data-edit_price]').click();

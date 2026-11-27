@@ -32,6 +32,8 @@ import parsePrice from './parse-price';
 import { calculateCartTotals } from './payments';
 
 const POINT_OF_SALE_URL = '/admin/caisse';
+const REQUEST_FAILURE_MESSAGE =
+  'La communication avec le serveur a échoué. Rechargez la page pour vérifier avant de réessayer.';
 
 const ENTITY_SEARCH_FIELD_URL = '/common/js/entity-search-field.js';
 
@@ -184,10 +186,12 @@ export default class PointOfSale {
     try {
       return await request();
     } catch (error) {
-      if (!(error instanceof CartApiError)) {
-        throw error;
+      if (error instanceof CartApiError) {
+        this.showAlert(error.message);
+      } else {
+        console.error(error);
+        this.showAlert(REQUEST_FAILURE_MESSAGE);
       }
-      this.showAlert(error.message);
       return null;
     }
   }

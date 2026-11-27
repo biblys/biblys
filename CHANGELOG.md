@@ -10,6 +10,8 @@
   du panier.
 - La liste des articles du panier de la caisse a été redessinée, avec la
   couverture de chaque article et un affichage adapté aux petits écrans.
+- La caisse affiche désormais un message d'erreur lorsque la communication avec
+  le serveur échoue.
 - Biblys supporte désormais PHP 8.6.
 - La recherche d'article de la caisse utilise désormais le même champ de
   recherche que le reste de l'administration. Les résultats affichent toujours
