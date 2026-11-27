@@ -16,6 +16,7 @@
  */
 
 
+use Biblys\Exception\ArticleAlreadyInRayonException;
 use Biblys\Exception\InvalidEmailAddressException;
 use Biblys\Legacy\LegacyCodeHelper;
 use Biblys\Service\CurrentSite;
@@ -99,8 +100,12 @@ return function (
             if (!$rayon) {
                 throw new Exception("Cannot find rayon with id $rayon_id");
             }
-            $rayon->addArticle($articleModel);
-            $session->getFlashBag()->add('info', 'L\'article <strong>' . $articleModel->get('title') . '</strong> a été ajouté au rayon <strong>' . $rayon->get('name') . '</strong>.');
+            try {
+                $rayon->addArticle($articleModel);
+                $session->getFlashBag()->add('info', 'L\'article <strong>' . $articleModel->get('title') . '</strong> a été ajouté au rayon <strong>' . $rayon->get('name') . '</strong>.');
+            } catch (ArticleAlreadyInRayonException $exception) {
+                $session->getFlashBag()->add('warning', htmlspecialchars($exception->getMessage()));
+            }
         }
 
         $stockId = $request->request->get("stock_id");

@@ -1716,6 +1716,11 @@ class ArticleManager extends EntityManager
         if (!$article->has("url")) {
             throw new InvalidEntityException("L'article doit avoir une url.");
         }
+
+        // has() considère « 0 » comme vide : un tel titre fait échouer l'affichage
+        if (!$article->has("title")) {
+            throw new InvalidEntityException("Le titre de l'article ne peut pas être vide ni égal à 0.");
+        }
     }
 
     /**

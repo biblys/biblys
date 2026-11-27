@@ -54,7 +54,7 @@ class Rayon extends Entity
         // Check if article is already in rayon
         $link = $lm->get(['rayon_id' => $this->get('id'), 'article_id' => $article->get('id')]);
         if ($link) {
-            throw new Exception("L'article « ".$article->get('title')." » est déjà dans le rayon « ".$this->get('name')." ».");
+            throw new \Biblys\Exception\ArticleAlreadyInRayonException($article->get('title'), $this->get('name'));
         }
 
         // Create link

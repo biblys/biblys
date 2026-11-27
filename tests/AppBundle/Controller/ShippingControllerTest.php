@@ -19,8 +19,10 @@
 namespace AppBundle\Controller;
 
 use Biblys\Service\BodyParamsService;
+use Biblys\Service\Config;
 use Biblys\Service\CurrentUser;
 use Biblys\Service\FlashMessagesService;
+use Biblys\Service\QueryParamsService;
 use Biblys\Test\Helpers;
 use Biblys\Test\ModelFactory;
 use Mockery;
@@ -29,6 +31,8 @@ use Payplug\Exception\NotFoundException;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use Propel\Runtime\Exception\PropelException;
+use SoapFault;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -292,5 +296,41 @@ class ShippingControllerTest extends TestCase
         $this->assertEquals("redirect_url", $response->getTargetUrl());
         $zoneHasCountry = $zone->getCountries()->contains($country);
         $this->assertFalse($zoneHasCountry, "removes country from the zone");
+    }
+
+    /**
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
+     * @throws PropelException
+     * @throws \Exception
+     */
+    public function testSelectPickupPointActionWhenMondialRelayIsUnreachable(): void
+    {
+        // given
+        $controller = new class extends ShippingController {
+            protected function findPickupPoints(Config $config, string $countryCode, string $postalCode): array
+            {
+                throw new SoapFault("Client", "SOAP-ERROR: Parsing WSDL: Couldn't load from 'https://api.mondialrelay.com/Web_Services.asmx?WSDL'");
+            }
+        };
+        $country = ModelFactory::createCountry(name: "Nevada", code: "NV");
+        $config = Mockery::mock(Config::class);
+        $config->expects("isMondialRelayEnabled")->andReturn(true);
+        $queryParams = new QueryParamsService(
+            new Request([
+                "country_id" => $country->getId(),
+                "shipping_id" => "1",
+                "postal_code" => "89101",
+            ])
+        );
+
+        // when
+        $response = $controller->selectPickupPointAction($config, $queryParams, Helpers::getTemplateService());
+
+        // then
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertStringContainsString("momentanément indisponible", $response->getContent());
+        $this->assertStringNotContainsString("Parsing WSDL", $response->getContent());
     }
 }

@@ -41,6 +41,25 @@
   verrouillées dans `composer.lock`, et non plus les plus récentes disponibles.
 - L'intégration continue exécute désormais les tests JavaScript.
 
+## 3.18.4 (27 novembre 2026)
+
+### Corrections
+
+- La mise à jour d'un article refuse un titre vide ou égal à « 0 », qui
+  provoquait une erreur sur les pages listant cet article, comme la page d'un
+  auteur. Un brouillon d'article peut toujours être enregistré sans titre.
+- Un lien d'inscription incomplet ou corrompu affiche le message de lien
+  invalide au lieu d'une erreur serveur.
+- Quand Mondial Relay est injoignable, la recherche de points relais affiche un
+  message d'indisponibilité au lieu d'une page d'erreur.
+- Depuis la fiche d'un exemplaire, choisir un rayon qui contient déjà l'article
+  affiche un avertissement et enregistre l'exemplaire, au lieu d'une erreur
+  serveur qui faisait perdre la saisie.
+- La création d'un contributeur qui existe déjà affiche un message
+  d'explication au lieu d'une erreur serveur.
+- Une adresse d'expédition dont l'identifiant n'est pas un nombre répond
+  « page introuvable » au lieu d'une erreur serveur.
+
 ## 3.18.3 (20 novembre 2026)
 
 ### Corrections
