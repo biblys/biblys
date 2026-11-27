@@ -72,18 +72,12 @@ export default class EntitySearchField {
     this.searchInput = element.querySelector('.EntitySearchField__search-input');
     this.searchInput.addEventListener('input', this.#onInput.bind(this));
     this.searchInput.addEventListener('focus', this.#onInputFocus.bind(this));
-    this.searchInput.addEventListener('blur', this.#onInputBlur.bind(this));
 
     this.valueInput = element.querySelector('.EntitySearchField__value-input');
 
     this.button = element.querySelector('button');
     this.buttonIcon = this.button.querySelector('i');
     this.button.addEventListener('click', this.#onButtonClick.bind(this));
-
-    this.helpText = element.querySelector('.help-text');
-    if (this.searchInput.autofocus) {
-      this.helpText.classList.remove('d-none');
-    }
 
     this.subMenu = element.querySelector('.autocomplete-results');
 
@@ -126,15 +120,9 @@ export default class EntitySearchField {
   }
 
   #onInputFocus() {
-    this.#showHelpText();
-
     if (this.#lockedMode) {
       this.#unlock();
     }
-  }
-
-  #onInputBlur() {
-    this.#hideHelpText();
   }
 
   #onButtonClick(event) {
@@ -196,18 +184,6 @@ export default class EntitySearchField {
     }
   }
 
-  #showHelpText() {
-    if (this.#subMenuDisplayed) {
-      return;
-    }
-
-    this.helpText.classList.remove('d-none');
-  }
-
-  #hideHelpText() {
-    this.helpText.classList.add('d-none');
-  }
-
   async #search(event, { submitted = false } = {}) {
     event.preventDefault();
 
@@ -239,7 +215,6 @@ export default class EntitySearchField {
     }
 
     this.subMenu.innerHTML = '';
-    this.helpText.classList.add('d-none');
 
     this.#results = responseData.results;
     if (!this.#results) {

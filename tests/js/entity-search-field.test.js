@@ -30,7 +30,6 @@ function buildElement({ required = true, withValueInput = true, value = '', labe
     '.EntitySearchField__search-input': searchInput,
     '.EntitySearchField__value-input': valueInput,
     button,
-    '.help-text': { classList: classList() },
     '.autocomplete-results': {
       innerHTML: '',
       style: {},

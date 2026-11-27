@@ -32,7 +32,6 @@ beforeEach(() => {
     <div id="field" class="EntitySearchField" data-query_url="/search">
       <input class="EntitySearchField__search-input" value="query">
       <button type="button"><i></i></button>
-      <span class="help-text d-none"></span>
       <div class="autocomplete-results"></div>
     </div>`;
   resultsList().getBoundingClientRect = () => ({ top: resultsTop });
