@@ -272,16 +272,16 @@
         },
         {
             "name": "biblys/isbn",
-            "version": "3.2.89",
+            "version": "3.2.90",
             "source": {
                 "type": "git",
                 "url": "https://github.com/biblys/isbn.git",
-                "reference": "e17dc81bae4c7029f15b5546155c14e19be7f682"
+                "reference": "bea1dc0f927b596c5f83d30cc6d3b55d49c34403"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/biblys/isbn/zipball/e17dc81bae4c7029f15b5546155c14e19be7f682",
-                "reference": "e17dc81bae4c7029f15b5546155c14e19be7f682",
+                "url": "https://api.github.com/repos/biblys/isbn/zipball/bea1dc0f927b596c5f83d30cc6d3b55d49c34403",
+                "reference": "bea1dc0f927b596c5f83d30cc6d3b55d49c34403",
                 "shasum": ""
             },
             "require": {
@@ -319,7 +319,7 @@
             ],
             "support": {
                 "issues": "https://github.com/biblys/isbn/issues",
-                "source": "https://github.com/biblys/isbn/tree/3.2.89"
+                "source": "https://github.com/biblys/isbn/tree/3.2.90"
             },
             "funding": [
                 {
@@ -327,7 +327,8 @@
                     "type": "liberapay"
                 }
             ],
-            "time": "2022-11-26T00:00:00+00:00"
+            "time": "2022-11-26T00:00:00+00:00",
+            "published-time": "2026-11-27T12:54:04+00:00"
         },
         {
             "name": "brick/math",
