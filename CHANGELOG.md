@@ -4,6 +4,8 @@
 
 ### Corrections
 
+- La caisse n'enregistre plus certains montants avec 1 centime de moins que la
+  somme saisie, comme 19,99 €.
 - Sur la page de choix du mode de paiement, le titre du site est de nouveau
   affiché comme ordre du chèque quand l'option `name_for_check_payment` n'est
   pas renseignée.
