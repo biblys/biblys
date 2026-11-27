@@ -39,6 +39,7 @@ export default class EntitySearchField {
   #lockedMode = false;
   #debounceTimeout = null;
   #currentQuery = '';
+  #latestSearchId = 0;
 
   /**
    *
@@ -99,6 +100,16 @@ export default class EntitySearchField {
     }
 
     element.addEventListener('keydown', this.#onKeyDown.bind(this));
+    element.addEventListener('focusout', (event) => {
+      if (event.relatedTarget && !element.contains(event.relatedTarget)) {
+        this.#hideResults();
+      }
+    });
+    document.addEventListener('click', (event) => {
+      if (!element.contains(event.target)) {
+        this.#hideResults();
+      }
+    });
 
     this.customAction = options.action;
 
@@ -141,6 +152,14 @@ export default class EntitySearchField {
   }
 
   #onKeyDown(event) {
+    if (event.key === 'Escape') {
+      if (this.#subMenuDisplayed) {
+        event.preventDefault();
+      }
+      this.#hideResults();
+      return;
+    }
+
     if (event.key === 'Enter' && this.#focusItemIndex === -1) {
       return this.#search(event, { submitted: true });
     }
@@ -189,6 +208,7 @@ export default class EntitySearchField {
     }
 
     this.#currentQuery = query;
+    const searchId = ++this.#latestSearchId;
     const response = await fetch(`${this.queryUrl}?term=${query}`, {
       method: 'GET'
     });
@@ -199,6 +219,9 @@ export default class EntitySearchField {
      * @property {Result[]} results - Array of search results.
      */
     const responseData = await response.json();
+    if (searchId !== this.#latestSearchId) {
+      return;
+    }
 
     if (responseData.error) {
       window._alert(responseData.error, { title: 'Erreur lors de la recherche' });
@@ -348,8 +371,11 @@ export default class EntitySearchField {
   }
 
   #hideResults() {
+    clearTimeout(this.#debounceTimeout);
+    this.#latestSearchId += 1;
     this.subMenu.innerHTML = '';
     this.#subMenuDisplayed = false;
+    this.#focusItemIndex = -1;
   }
 
   /**

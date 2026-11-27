@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import EntitySearchField from '../../public/common/js/entity-search-field.js';
 
 const classList = () => ({ add: vi.fn(), remove: vi.fn() });
@@ -52,6 +52,10 @@ function buildElement({ required = true, withValueInput = true, value = '', labe
 }
 
 describe('EntitySearchField', () => {
+  beforeEach(() => {
+    globalThis.document = { addEventListener: vi.fn() };
+  });
+
   it('is invalid while no result is selected', () => {
     const { element, searchInput } = buildElement();
 
@@ -113,6 +117,7 @@ describe('EntitySearchField', () => {
 
     function stubDocument() {
       globalThis.document = {
+        addEventListener: vi.fn(),
         createElement: () => ({
           style: {},
           children: [],

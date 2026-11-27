@@ -14,6 +14,8 @@
   le serveur échoue.
 - Sur les pages contenant un champ de recherche, la touche Entrée n'est plus
   interceptée en dehors de ce champ.
+- Les résultats d'un champ de recherche peuvent être fermés avec la touche
+  Échap, d'un clic à l'extérieur ou en quittant le champ avec Tab.
 - Biblys supporte désormais PHP 8.6.
 - La recherche d'article de la caisse utilise désormais le même champ de
   recherche que le reste de l'administration. Les résultats affichent toujours
